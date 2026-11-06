@@ -1,4 +1,13 @@
 # Local integration only. Password is supplied through the process environment.
+siteplatform:
+  analytics:
+    clickhouse:
+      enabled: ${CLICKHOUSE_ENABLED:false}
+      endpoint: ${CLICKHOUSE_ENDPOINT:http://127.0.0.1:18123}
+      writer-user: ${CLICKHOUSE_WRITER_USER:}
+      writer-password: ${CLICKHOUSE_WRITER_PASSWORD:}
+      reader-user: ${CLICKHOUSE_READER_USER:}
+      reader-password: ${CLICKHOUSE_READER_PASSWORD:}
 server:
   address: 127.0.0.1
   port: 18080

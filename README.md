@@ -16,11 +16,12 @@
 - 两服务器部署：`docs/deployment/two-server-deployment.md`
 - 站点资源：`docs/deployment/site-resources-runbook.md`
 - 分流发布：`docs/deployment/routing-publication-runbook.md`
+- ClickHouse 统计接入：`docs/deployment/clickhouse-runbook.md`
 - 能力范围：`docs/baseline/capability-matrix.md`
 
 本地 `.runtime`、凭证、依赖和构建输出不纳入版本控制。克隆后需依据运行手册创建环境配置并安装依赖。生产模板中的域名、IP和凭证须自行配置。
 
-当前未实现 ClickHouse 统计集成，也尚未验证对外 API 的容量目标；相关讨论不能视为已交付功能。
+ClickHouse 首期接入提供 OpenAPI 调用元数据的异步批量采集与平台管理员汇总接口，默认关闭，通过受保护配置启用。队列为有界内存、尽力交付，不能用于计费或安全审计；尚无统计前端看板、站点PV/UV及代理访问采集，也尚未验证对外 API 的容量目标。
 
 ## 来源与许可证
 

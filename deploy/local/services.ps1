@@ -100,13 +100,29 @@ if ($Action -eq 'Start') {
     $taskPasswordLine = @(Get-Content -LiteralPath $taskEnvFile | Where-Object { $_.StartsWith('JEECG_LOCAL_DB_PASSWORD=') })
     if ($taskPasswordLine.Count -ne 1) { throw 'Local database password entry missing or duplicated.' }
     $taskPreviousPassword = $env:JEECG_LOCAL_DB_PASSWORD
+    $taskAnalyticsPrevious = @{}
+    $taskAnalyticsEnv = Join-Path $taskRoot 'deploy/clickhouse/.runtime/clickhouse.env'
     try {
         $env:JEECG_LOCAL_DB_PASSWORD = $taskPasswordLine[0].Substring('JEECG_LOCAL_DB_PASSWORD='.Length)
+        if (Test-Path -LiteralPath $taskAnalyticsEnv) {
+            foreach ($line in Get-Content -LiteralPath $taskAnalyticsEnv) {
+                if ($line -match '^(CLICKHOUSE_(?:ENABLED|ENDPOINT|WRITER_USER|WRITER_PASSWORD|READER_USER|READER_PASSWORD))=(.*)$') {
+                    $taskName = $Matches[1]; $taskValue = $Matches[2]
+                    $taskAnalyticsPrevious[$taskName] = [Environment]::GetEnvironmentVariable($taskName, 'Process')
+                    [Environment]::SetEnvironmentVariable($taskName, $taskValue, 'Process')
+                }
+            }
+        }
         Start-ManagedProcess 'backend' 18080 $taskJava @(
             ('"-Djdk.net.unixdomain.tmpdir=' + $taskTmp + '"'), '-jar', ('"' + $taskJar + '"'),
             '--spring.profiles.active=dev', ('"--spring.config.additional-location=file:' + $taskConfig + '"')
         ) $taskRoot $taskJar
-    } finally { $env:JEECG_LOCAL_DB_PASSWORD = $taskPreviousPassword }
+    } finally {
+        $env:JEECG_LOCAL_DB_PASSWORD = $taskPreviousPassword
+        foreach ($taskName in $taskAnalyticsPrevious.Keys) {
+            [Environment]::SetEnvironmentVariable($taskName, $taskAnalyticsPrevious[$taskName], 'Process')
+        }
+    }
     # Match pnpm's generated Vite launcher without leaving a wrapper process running.
     $taskPreviousNodePath = $env:NODE_PATH
     try {

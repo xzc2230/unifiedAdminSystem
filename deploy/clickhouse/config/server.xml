@@ -1,0 +1,28 @@
+<clickhouse>
+    <listen_host replace="replace">0.0.0.0</listen_host>
+    <timezone>UTC</timezone>
+    <max_server_memory_usage>2684354560</max_server_memory_usage>
+    <max_server_memory_usage_to_ram_ratio>0</max_server_memory_usage_to_ram_ratio>
+    <background_pool_size>2</background_pool_size>
+    <background_move_pool_size>1</background_move_pool_size>
+    <background_schedule_pool_size>4</background_schedule_pool_size>
+    <background_fetches_pool_size>2</background_fetches_pool_size>
+    <merge_tree>
+        <number_of_free_entries_in_pool_to_execute_mutation>1</number_of_free_entries_in_pool_to_execute_mutation>
+        <number_of_free_entries_in_pool_to_execute_optimize_entire_partition>1</number_of_free_entries_in_pool_to_execute_optimize_entire_partition>
+        <number_of_free_entries_in_pool_to_lower_max_size_of_merge>1</number_of_free_entries_in_pool_to_lower_max_size_of_merge>
+    </merge_tree>
+    <logger>
+        <level>warning</level>
+        <console>true</console>
+        <log remove="remove"/>
+        <errorlog remove="remove"/>
+    </logger>
+    <!-- Avoid unnecessary system log writes on the shared host. -->
+    <query_log remove="remove"/>
+    <query_thread_log remove="remove"/>
+    <text_log remove="remove"/>
+    <trace_log remove="remove"/>
+    <metric_log remove="remove"/>
+    <asynchronous_metric_log remove="remove"/>
+</clickhouse>

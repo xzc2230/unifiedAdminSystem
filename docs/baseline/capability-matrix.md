@@ -9,6 +9,7 @@
 | 数据权限 | `jeecg-boot/jeecg-boot-base-core/src/main/java/org/jeecg/common/aspect/PermissionDataAspect.java` | 复用机制；站点、字段读写、导出与批量接口另做后端校验 |
 | 定制 API | `jeecg-boot/jeecg-module-system/jeecg-system-biz/src/main/java/org/jeecg/modules/openapi` | 已有凭证、授权、日志、过滤器与文档代码；首期增加业务范围与限流验证 |
 | 报表与 BI | `jeecg-boot/jeecg-module-system/jeecg-system-biz/pom.xml` 中的外部组件 | 组件安全及授权核验后复用；访问采集自行建设 |
+| ClickHouse API统计基础 | `jeecg-boot/jeecg-module-system/jeecg-system-biz/src/main/java/org/jeecg/modules/analytics`；工作区 `deploy/clickhouse` | 新增脱敏调用事件、有界异步队列、批量写入、平台管理员汇总查询及同机部署模板；默认关闭，非持久队列不用于审计/计费，站点统计和前端看板尚未交付 |
 | AI | `jeecg-boot/jeecg-boot-module/jeecg-boot-module-airag` | 仅测试环境；提案、工具白名单与发布审批另开发 |
 | 站点、目标地址、域名归属 | 新增 `jeecg-boot/jeecg-module-system/jeecg-system-biz/src/main/java/org/jeecg/modules/siteplatform`；页面 `jeecgboot-vue3/src/views/siteplatform/resources` | 已交付资源登记、DNS 挑战验证、成员授权与操作记录；安装见 `docs/deployment/site-resources-runbook.md` |
 | 证书管理 | 项目业务尚未实现 | 生产 Nginx 模板使用运维提供的证书，尚无平台证书管理 |

@@ -27,6 +27,8 @@ flowchart LR
 
 首期不部署 Nacos、RabbitMQ、Kafka、Elasticsearch、XXL-Job、MinIO 或向量库；现有业务不依赖它们。上传暂存 B，另做异机备份。AI、报表设计器等在本模板中先关闭入口；需要这些能力时逐项完成组件、权限和依赖验收后开放。
 
+可选 ClickHouse 统计接入使用独立 `deploy/clickhouse` Compose 项目，运行说明见 `clickhouse-runbook.md`。最新同机方案把 Java、MySQL、Redis、ClickHouse 放在同一宿主机，ClickHouse HTTP仅绑定loopback18123；旧的两服务器初始资源预算不能据此沿用。跨机器统计服务须独立配置受限私网HTTPS入口及备份，不能直接扩大本模板端口暴露范围。
+
 | 入站规则 | 来源 | 目标 |
 | --- | --- | --- |
 | SSH 22 | 运维固定 IP 或堡垒机 | A、B |

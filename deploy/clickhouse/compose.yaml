@@ -1,0 +1,38 @@
+name: jeecg-analytics
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:25.8.24.21@sha256:0fa332a9a05ce4138b16d883f9c9d124c8d9d81cf4e52046878d537558626e49
+    restart: unless-stopped
+    env_file:
+      - .runtime/clickhouse.env
+    environment:
+      CLICKHOUSE_SKIP_USER_SETUP: '1'
+      TZ: UTC
+    ports:
+      - '127.0.0.1:18123:8123'
+    cpus: 2.0
+    mem_limit: 3g
+    memswap_limit: 3g
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    volumes:
+      - clickhouse-data:/var/lib/clickhouse
+      - ./config/server.xml:/etc/clickhouse-server/config.d/jeecg.xml:ro
+      - ./config/users.xml:/etc/clickhouse-server/users.d/zz-jeecg.xml:ro
+      - ./init:/opt/jeecg-init:ro
+      - ./init/01-schema.sh:/docker-entrypoint-initdb.d/01-schema.sh:ro
+    healthcheck:
+      test: ['CMD', 'wget', '--quiet', '--spider', 'http://127.0.0.1:8123/ping']
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '3'
+volumes:
+  clickhouse-data:

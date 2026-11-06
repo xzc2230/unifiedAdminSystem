@@ -1,0 +1,42 @@
+<clickhouse>
+    <profiles>
+        <default>
+            <max_memory_usage>1073741824</max_memory_usage>
+            <max_threads>2</max_threads>
+            <async_insert>0</async_insert>
+            <log_queries>0</log_queries>
+        </default>
+        <analytics_writer>
+            <max_memory_usage>536870912</max_memory_usage>
+            <max_threads>2</max_threads>
+            <async_insert>0</async_insert>
+            <log_queries>0</log_queries>
+            <max_execution_time>15</max_execution_time>
+        </analytics_writer>
+        <analytics_reader>
+            <max_memory_usage>268435456</max_memory_usage>
+            <max_threads>2</max_threads>
+            <readonly>1</readonly>
+            <max_execution_time>3</max_execution_time>
+            <max_rows_to_read>10000000</max_rows_to_read>
+            <read_overflow_mode>throw</read_overflow_mode>
+            <max_result_rows>1000</max_result_rows>
+            <result_overflow_mode>throw</result_overflow_mode>
+            <max_concurrent_queries_for_user>1</max_concurrent_queries_for_user>
+            <log_queries>0</log_queries>
+        </analytics_reader>
+    </profiles>
+    <users>
+        <default remove="remove"/>
+        <jeecg_bootstrap>
+            <password_sha256_hex from_env="CLICKHOUSE_ADMIN_SHA256"/>
+            <networks>
+                <ip>127.0.0.1</ip>
+                <ip>::1</ip>
+            </networks>
+            <profile>default</profile>
+            <quota>default</quota>
+            <access_management>1</access_management>
+        </jeecg_bootstrap>
+    </users>
+</clickhouse>

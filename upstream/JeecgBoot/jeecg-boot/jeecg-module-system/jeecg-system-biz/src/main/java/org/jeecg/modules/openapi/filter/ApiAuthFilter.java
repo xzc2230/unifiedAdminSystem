@@ -14,6 +14,7 @@ import org.jeecg.modules.openapi.service.OpenApiAuthService;
 import org.jeecg.modules.openapi.service.OpenApiLogService;
 import org.jeecg.modules.openapi.service.OpenApiPermissionService;
 import org.jeecg.modules.openapi.service.OpenApiService;
+import org.jeecg.modules.analytics.AnalyticsService;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -35,6 +36,7 @@ public class ApiAuthFilter implements Filter {
     private OpenApiAuthService openApiAuthService;
     private OpenApiPermissionService openApiPermissionService;
     private OpenApiService openApiService;
+    private AnalyticsService analyticsService;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -94,6 +96,12 @@ public class ApiAuthFilter implements Filter {
             //update-begin---author:jeecg ---date:2026-05-27  for：【增加header日志记录】传入requestHeaders参数-----------
             saveLog(openApi, openApiAuth, appkey, requestPath, requestMethod, ip, requestParams,
                     requestHeaders, responseCode, errorMsg, callTime, endTime - startTime);
+            try {
+                if (analyticsService != null) analyticsService.record(openApi == null ? null : openApi.getId(),
+                        requestMethod, responseCode, endTime - startTime);
+            } catch (RuntimeException ignored) {
+                // Optional telemetry must never alter the caller's business response.
+            }
             //update-end---author:jeecg ---date:2026-05-27  for：【增加header日志记录】传入requestHeaders参数-----------
         }
     }
@@ -198,6 +206,7 @@ public class ApiAuthFilter implements Filter {
         this.openApiLogService = applicationContext.getBean(OpenApiLogService.class);
         this.openApiAuthService = applicationContext.getBean(OpenApiAuthService.class);
         this.openApiPermissionService = applicationContext.getBean(OpenApiPermissionService.class);
+        this.analyticsService = applicationContext.getBean(AnalyticsService.class);
     }
 
     //update-begin---author:scott ---date:20260416  for：【PR/9083】OpenAPI白名单增强，支持CIDR网段和通配符匹配-----------
