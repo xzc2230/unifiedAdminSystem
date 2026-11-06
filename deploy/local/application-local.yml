@@ -1,0 +1,25 @@
+# Local integration only. Password is supplied through the process environment.
+server:
+  address: 127.0.0.1
+  port: 18080
+spring:
+  datasource:
+    dynamic:
+      datasource:
+        master:
+          url: jdbc:mysql://127.0.0.1:13316/jeecg-boot?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+          username: root
+          password: ${JEECG_LOCAL_DB_PASSWORD}
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 16389
+      password: ''
+jeecg:
+  airag:
+    allow-sensitive-nodes: ''
+  ai-rag:
+    allow-sensitive-nodes: ''
+  path:
+    upload: D:/workspace/JEECG/.runtime/uploads
+    webapp: D:/workspace/JEECG/.runtime/webapp

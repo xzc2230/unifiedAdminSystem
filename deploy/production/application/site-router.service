@@ -1,0 +1,27 @@
+[Unit]
+Description=JEECG site traffic executor
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=jeecg-router
+Group=jeecg-router
+WorkingDirectory=/opt/jeecg/site-router/current
+EnvironmentFile=/etc/jeecg/site-router.env
+ExecStart=/usr/bin/node /opt/jeecg/site-router/current/src/main.mjs
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=10
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/jeecg/site-router
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

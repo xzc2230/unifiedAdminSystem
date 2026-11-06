@@ -1,0 +1,30 @@
+[Unit]
+Description=JEECG management backend
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=jeecg
+Group=jeecg
+WorkingDirectory=/srv/jeecg/work
+EnvironmentFile=/etc/jeecg/jeecg.env
+Environment=TZ=Asia/Shanghai
+ExecStart=/usr/bin/java -Xms1g -Xmx2g -Dfile.encoding=UTF-8 -jar /opt/jeecg/current/backend/jeecg.jar --spring.profiles.active=prod --spring.config.additional-location=file:/etc/jeecg/application-server.yml
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=90
+SuccessExitStatus=143
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/srv/jeecg
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

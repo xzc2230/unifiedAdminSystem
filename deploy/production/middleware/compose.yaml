@@ -1,0 +1,55 @@
+name: jeecg-prod
+services:
+  mysql:
+    image: ${MYSQL_IMAGE:?Set tested MySQL 8.0 image tag or digest}
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      TZ: Asia/Shanghai
+    secrets:
+      - mysql_root_password
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --lower_case_table_names=1
+      - --max_allowed_packet=128M
+      - --log-bin=mysql-bin
+      - --server-id=1
+      - --binlog-expire-logs-seconds=604800
+    ports:
+      - ${MIDDLEWARE_PRIVATE_IP:?Set private IP}:3306:3306
+    volumes:
+      - /srv/jeecg/mysql:/var/lib/mysql
+    healthcheck:
+      test: [CMD-SHELL, 'MYSQL_PWD=$$(cat /run/secrets/mysql_root_password) mysql -h127.0.0.1 -uroot -Nse "SELECT 1" > /dev/null']
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    logging:
+      driver: json-file
+      options:
+        max-size: 20m
+        max-file: '5'
+  redis:
+    image: ${REDIS_IMAGE:?Set tested Redis 7.2 image tag or digest}
+    restart: unless-stopped
+    command: [redis-server, /usr/local/etc/redis/redis.conf]
+    ports:
+      - ${MIDDLEWARE_PRIVATE_IP:?Set private IP}:6379:6379
+    volumes:
+      - /srv/jeecg/redis:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - ./redis-users.acl:/usr/local/etc/redis/users.acl:ro
+    healthcheck:
+      test: [CMD-SHELL, 'redis-cli ping 2>&1 | grep -q NOAUTH']
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    logging:
+      driver: json-file
+      options:
+        max-size: 20m
+        max-file: '5'
+secrets:
+  mysql_root_password:
+    file: ./secrets/mysql_root_password

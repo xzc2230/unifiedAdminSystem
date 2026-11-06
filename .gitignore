@@ -1,0 +1,16 @@
+.runtime/
+**/node_modules/
+**/target/
+**/dist/
+**/logs/
+**/.env.local
+**/.env.*.local
+deploy/production/middleware/.env
+deploy/production/middleware/secrets/
+deploy/production/middleware/redis-users.acl
+deploy/production/application/jeecg.env
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/.DS_Store

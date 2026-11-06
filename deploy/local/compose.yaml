@@ -1,0 +1,40 @@
+name: jeecg-baseline
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${JEECG_LOCAL_DB_PASSWORD:?Set local database password}
+      MYSQL_DATABASE: jeecg-boot
+      TZ: Asia/Shanghai
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --lower_case_table_names=1
+      - --max_allowed_packet=128M
+    ports:
+      - 127.0.0.1:13316:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ../../upstream/JeecgBoot/jeecg-boot/db/jeecgboot-mysql-5.7.sql:/docker-entrypoint-initdb.d/01-jeecg.sql:ro
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          MYSQL_PWD=$$MYSQL_ROOT_PASSWORD mysql -h127.0.0.1 -uroot -Nse
+          "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'jeecg-boot' AND table_name = 'sys_user'"
+          | grep -q 1
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  redis:
+    image: redis:7.2
+    command: [redis-server, --save, '', --appendonly, 'no']
+    ports:
+      - 127.0.0.1:16389:6379
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  mysql-data:

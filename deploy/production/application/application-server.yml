@@ -1,0 +1,76 @@
+server:
+  address: 127.0.0.1
+  port: 18080
+  servlet:
+    context-path: /jeecg-boot
+  forward-headers-strategy: framework
+spring:
+  flyway:
+    enabled: false
+    clean-disabled: true
+  datasource:
+    druid:
+      stat-view-servlet:
+        enabled: false
+      web-stat-filter:
+        enabled: false
+    dynamic:
+      datasource:
+        master:
+          # This example assumes an isolated, trusted private network.
+          # Across untrusted networks use validated MySQL TLS and Redis TLS/VPN.
+          url: jdbc:mysql://${MIDDLEWARE_HOST}:3306/jeecg-boot?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+          username: jeecg_app
+          password: ${JEECG_DB_PASSWORD}
+  data:
+    redis:
+      host: ${MIDDLEWARE_HOST}
+      port: 6379
+      database: 0
+      password: ${JEECG_REDIS_PASSWORD}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+knife4j:
+  enable: false
+  production: true
+  basic:
+    enable: false
+justauth:
+  enabled: false
+jeecg:
+  signatureSecret: ${JEECG_SIGNATURE_SECRET}
+  uploadType: local
+  domainUrl:
+    pc: ${JEECG_PUBLIC_URL}
+  path:
+    upload: /srv/jeecg/uploads
+    webapp: /srv/jeecg/webapp
+  firewall:
+    lowCodeMode: prod
+    dataSourceSafe: true
+    enableStrongPwd: true
+    enableLoginCaptcha: true
+    enableDefaultPwdCheck: true
+  ai-chat:
+    enabled: false
+  airag:
+    allow-sensitive-nodes: ''
+  ai-rag:
+    allow-sensitive-nodes: ''
+  redisson:
+    address: ${MIDDLEWARE_HOST}:6379
+    password: ${JEECG_REDIS_PASSWORD}
+    type: STANDALONE
+    enabled: true
+  jmreport:
+    firewall:
+      lowCodeMode: prod
+      dataSourceSafe: true
+  xxljob:
+    enabled: false
+logging:
+  level:
+    org.flywaydb: info
