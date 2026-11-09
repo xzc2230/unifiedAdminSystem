@@ -237,4 +237,19 @@ public class AppManager extends PackageEntity {
                 .append("userId", getUserId())
                 .toString();
     }
+    private Integer gaidAidThreshold;
+    public Integer getGaidAidThreshold() { return gaidAidThreshold; }
+    public void setGaidAidThreshold(Integer value) { this.gaidAidThreshold = value; }
+    private Integer aidDeviceThreshold;
+    public Integer getAidDeviceThreshold() { return aidDeviceThreshold; }
+    public void setAidDeviceThreshold(Integer value) { this.aidDeviceThreshold = value; }
+    private Integer aidGaidSwitchThreshold;
+    public Integer getAidGaidSwitchThreshold() { return aidGaidSwitchThreshold; }
+    public void setAidGaidSwitchThreshold(Integer value) { this.aidGaidSwitchThreshold = value; }
+    private Integer riskWindowSeconds;
+    public Integer getRiskWindowSeconds() { return riskWindowSeconds; }
+    public void setRiskWindowSeconds(Integer value) { this.riskWindowSeconds = value; }
+    private String referrerBlacklistJson;
+    public String getReferrerBlacklistJson() { return referrerBlacklistJson; }
+    public void setReferrerBlacklistJson(String value) { this.referrerBlacklistJson = value; }
 }

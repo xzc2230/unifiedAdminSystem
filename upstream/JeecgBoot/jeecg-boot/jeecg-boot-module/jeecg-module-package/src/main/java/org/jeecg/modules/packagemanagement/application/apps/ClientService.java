@@ -30,6 +30,6 @@ public interface ClientService {
 
     Object app1(HttpServletRequest request);
 //
-//    Object app2(HttpServletRequest request);
+    Object app2(HttpServletRequest request);
 
 }

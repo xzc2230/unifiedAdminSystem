@@ -31,6 +31,8 @@ public class LegacyClientController {
     public Object home(HttpServletRequest request) { return service.base64Data(original(request)); }
     @RequestMapping("/app/start")
     public Object start(HttpServletRequest request) { return service.getUserInfo(original(request)); }
+    @PostMapping(value="/{q}/{w}/{e}/{r}", consumes="application/json")
+    public Object fourPath(HttpServletRequest request) { return service.app2(original(request)); }
     @RequestMapping("/{a}/{b}/{c}")
     public Object triple(HttpServletRequest request) { return service.app1(original(request)); }
     @RequestMapping("/{l}/{a}")

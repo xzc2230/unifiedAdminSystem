@@ -20,6 +20,11 @@
         <result property="whetherRestrict" column="whether_restrict"/>
         <result property="whetherUs" column="whether_us"/>
         <result property="whetherUse" column="whether_use"/>
+        <result property="gaidAidThreshold" column="gaid_aid_threshold"/>
+        <result property="aidDeviceThreshold" column="aid_device_threshold"/>
+        <result property="aidGaidSwitchThreshold" column="aid_gaid_switch_threshold"/>
+        <result property="riskWindowSeconds" column="risk_window_seconds"/>
+        <result property="referrerBlacklistJson" column="referrer_blacklist_json"/>
     </resultMap>
 
     <sql id="selectAppManagerVo">
@@ -37,6 +42,11 @@
                whether_us,
                user_id,
                user_name,
+               gaid_aid_threshold,
+               aid_device_threshold,
+               aid_gaid_switch_threshold,
+               risk_window_seconds,
+               referrer_blacklist_json,
                whether_use
         from pkg_app_manager
     </sql>
@@ -101,6 +111,11 @@
             <if test="userName != null ">user_name,</if>
             <if test="whetherRestrict != null">whether_restrict,</if>
             <if test="whetherUs != null">whether_us,</if>
+            <if test="gaidAidThreshold != null">gaid_aid_threshold,</if>
+            <if test="aidDeviceThreshold != null">aid_device_threshold,</if>
+            <if test="aidGaidSwitchThreshold != null">aid_gaid_switch_threshold,</if>
+            <if test="riskWindowSeconds != null">risk_window_seconds,</if>
+            <if test="referrerBlacklistJson != null">referrer_blacklist_json,</if>
             <if test="whetherUse != null">whether_use,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -118,6 +133,11 @@
             <if test="userName != null ">#{userName},</if>
             <if test="whetherRestrict != null">#{whetherRestrict},</if>
             <if test="whetherUs != null">#{whetherUs},</if>
+            <if test="gaidAidThreshold != null">#{gaidAidThreshold},</if>
+            <if test="aidDeviceThreshold != null">#{aidDeviceThreshold},</if>
+            <if test="aidGaidSwitchThreshold != null">#{aidGaidSwitchThreshold},</if>
+            <if test="riskWindowSeconds != null">#{riskWindowSeconds},</if>
+            <if test="referrerBlacklistJson != null">#{referrerBlacklistJson},</if>
             <if test="whetherUse != null">#{whetherUse},</if>
         </trim>
     </insert>
@@ -138,6 +158,11 @@
             <if test="userName != null">user_name = #{userName},</if>
             <if test="whetherRestrict != null">whether_restrict = #{whetherRestrict},</if>
             <if test="whetherUs != null">whether_us = #{whetherUs},</if>
+            <if test="gaidAidThreshold != null">gaid_aid_threshold = #{gaidAidThreshold},</if>
+            <if test="aidDeviceThreshold != null">aid_device_threshold = #{aidDeviceThreshold},</if>
+            <if test="aidGaidSwitchThreshold != null">aid_gaid_switch_threshold = #{aidGaidSwitchThreshold},</if>
+            <if test="riskWindowSeconds != null">risk_window_seconds = #{riskWindowSeconds},</if>
+            <if test="referrerBlacklistJson != null">referrer_blacklist_json = #{referrerBlacklistJson},</if>
             <if test="whetherUse != null">whether_use = #{whetherUse},</if>
         </trim>
         where id = #{id}

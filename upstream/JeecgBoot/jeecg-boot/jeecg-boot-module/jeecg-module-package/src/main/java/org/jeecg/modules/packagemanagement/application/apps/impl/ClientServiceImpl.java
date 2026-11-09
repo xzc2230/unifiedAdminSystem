@@ -40,6 +40,9 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     AppLogPort esAppLogRepository;
 
+    @Autowired private org.jeecg.modules.packagemanagement.application.apps.risk.app2.App2ClientService app2ClientService;
+    @Override public Object app2(HttpServletRequest request) { return app2ClientService.execute(request); }
+
     @Override
     public Object api(HttpServletRequest request) {
         String ipAddress = geo.getIpAddress(request);

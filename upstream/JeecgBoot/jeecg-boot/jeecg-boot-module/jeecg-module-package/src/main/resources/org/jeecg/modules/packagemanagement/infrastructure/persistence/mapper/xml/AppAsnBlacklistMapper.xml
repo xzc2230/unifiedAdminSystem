@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.AppAsnBlacklistMapper">
+
+    <resultMap type="org.jeecg.modules.packagemanagement.domain.app.AppAsnBlacklist" id="AppAsnBlacklistResult">
+        <id property="id" column="id"/>
+        <result property="asn" column="asn"/>
+        <result property="asnName" column="asn_name"/>
+        <result property="orgKeyword" column="org_keyword"/>
+        <result property="matchType" column="match_type"/>
+        <result property="action" column="action"/>
+        <result property="enabled" column="enabled"/>
+        <result property="priority" column="priority"/>
+        <result property="remark" column="remark"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectVo">
+        select id, asn, asn_name, org_keyword, match_type, action, enabled, priority,
+               remark, create_by, create_time, update_by, update_time
+        from pkg_app_asn_blacklist
+    </sql>
+
+    <select id="selectAppAsnBlacklistList" parameterType="org.jeecg.modules.packagemanagement.domain.app.AppAsnBlacklist" resultMap="AppAsnBlacklistResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="asn != null and asn != ''">and asn like concat('%', #{asn}, '%')</if>
+            <if test="asnName != null and asnName != ''">and asn_name like concat('%', #{asnName}, '%')</if>
+            <if test="orgKeyword != null and orgKeyword != ''">and org_keyword like concat('%', #{orgKeyword}, '%')</if>
+            <if test="matchType != null and matchType != ''">and match_type = #{matchType}</if>
+            <if test="action != null and action != ''">and action = #{action}</if>
+            <if test="enabled != null">and enabled = #{enabled}</if>
+        </where>
+        order by priority desc, id desc
+    </select>
+
+    <select id="selectAppAsnBlacklistById" parameterType="Long" resultMap="AppAsnBlacklistResult">
+        <include refid="selectVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAppAsnBlacklist" parameterType="org.jeecg.modules.packagemanagement.domain.app.AppAsnBlacklist" useGeneratedKeys="true" keyProperty="id">
+        insert into pkg_app_asn_blacklist
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="asn != null">asn,</if>
+            <if test="asnName != null">asn_name,</if>
+            <if test="orgKeyword != null">org_keyword,</if>
+            <if test="matchType != null">match_type,</if>
+            <if test="action != null">action,</if>
+            <if test="enabled != null">enabled,</if>
+            <if test="priority != null">priority,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="asn != null">#{asn},</if>
+            <if test="asnName != null">#{asnName},</if>
+            <if test="orgKeyword != null">#{orgKeyword},</if>
+            <if test="matchType != null">#{matchType},</if>
+            <if test="action != null">#{action},</if>
+            <if test="enabled != null">#{enabled},</if>
+            <if test="priority != null">#{priority},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateAppAsnBlacklist" parameterType="org.jeecg.modules.packagemanagement.domain.app.AppAsnBlacklist">
+        update pkg_app_asn_blacklist
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="asn != null">asn = #{asn},</if>
+            <if test="asnName != null">asn_name = #{asnName},</if>
+            <if test="orgKeyword != null">org_keyword = #{orgKeyword},</if>
+            <if test="matchType != null">match_type = #{matchType},</if>
+            <if test="action != null">action = #{action},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
+            <if test="priority != null">priority = #{priority},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAppAsnBlacklistById" parameterType="Long">
+        delete from pkg_app_asn_blacklist where id = #{id}
+    </delete>
+
+    <delete id="deleteAppAsnBlacklistByIds" parameterType="Long">
+        delete from pkg_app_asn_blacklist where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

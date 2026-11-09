@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.AppDeviceBrandBlacklistMapper">
+
+    <resultMap type="org.jeecg.modules.packagemanagement.domain.app.AppDeviceBrandBlacklist" id="AppDeviceBrandBlacklistResult">
+        <id property="id" column="id"/>
+        <result property="brandKeyword" column="brand_keyword"/>
+        <result property="matchMode" column="match_mode"/>
+        <result property="caseSensitive" column="case_sensitive"/>
+        <result property="action" column="action"/>
+        <result property="enabled" column="enabled"/>
+        <result property="priority" column="priority"/>
+        <result property="remark" column="remark"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectVo">
+        select id, brand_keyword, match_mode, case_sensitive, action, enabled, priority,
+               remark, create_by, create_time, update_by, update_time
+        from pkg_app_device_brand_blacklist
+    </sql>
+
+    <select id="selectAppDeviceBrandBlacklistList" parameterType="org.jeecg.modules.packagemanagement.domain.app.AppDeviceBrandBlacklist" resultMap="AppDeviceBrandBlacklistResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="brandKeyword != null and brandKeyword != ''">and brand_keyword like concat('%', #{brandKeyword}, '%')</if>
+            <if test="matchMode != null and matchMode != ''">and match_mode = #{matchMode}</if>
+            <if test="caseSensitive != null">and case_sensitive = #{caseSensitive}</if>
+            <if test="action != null and action != ''">and action = #{action}</if>
+            <if test="enabled != null">and enabled = #{enabled}</if>
+        </where>
+        order by priority desc, id desc
+    </select>
+
+    <select id="selectAppDeviceBrandBlacklistById" parameterType="Long" resultMap="AppDeviceBrandBlacklistResult">
+        <include refid="selectVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAppDeviceBrandBlacklist" parameterType="org.jeecg.modules.packagemanagement.domain.app.AppDeviceBrandBlacklist" useGeneratedKeys="true" keyProperty="id">
+        insert into pkg_app_device_brand_blacklist
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="brandKeyword != null">brand_keyword,</if>
+            <if test="matchMode != null">match_mode,</if>
+            <if test="caseSensitive != null">case_sensitive,</if>
+            <if test="action != null">action,</if>
+            <if test="enabled != null">enabled,</if>
+            <if test="priority != null">priority,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="brandKeyword != null">#{brandKeyword},</if>
+            <if test="matchMode != null">#{matchMode},</if>
+            <if test="caseSensitive != null">#{caseSensitive},</if>
+            <if test="action != null">#{action},</if>
+            <if test="enabled != null">#{enabled},</if>
+            <if test="priority != null">#{priority},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateAppDeviceBrandBlacklist" parameterType="org.jeecg.modules.packagemanagement.domain.app.AppDeviceBrandBlacklist">
+        update pkg_app_device_brand_blacklist
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="brandKeyword != null">brand_keyword = #{brandKeyword},</if>
+            <if test="matchMode != null">match_mode = #{matchMode},</if>
+            <if test="caseSensitive != null">case_sensitive = #{caseSensitive},</if>
+            <if test="action != null">action = #{action},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
+            <if test="priority != null">priority = #{priority},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAppDeviceBrandBlacklistById" parameterType="Long">
+        delete from pkg_app_device_brand_blacklist where id = #{id}
+    </delete>
+
+    <delete id="deleteAppDeviceBrandBlacklistByIds" parameterType="Long">
+        delete from pkg_app_device_brand_blacklist where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

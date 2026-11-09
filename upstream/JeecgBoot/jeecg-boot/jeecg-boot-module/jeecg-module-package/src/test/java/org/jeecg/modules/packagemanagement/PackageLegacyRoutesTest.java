@@ -24,6 +24,18 @@ class PackageLegacyRoutesTest {
         String base64 = mvc.perform(get("/package-legacy/system/check")).andReturn().getResponse().getContentAsString();
         assertEquals("{\"status\":0}", new String(Base64.getDecoder().decode(base64), StandardCharsets.UTF_8));
     }
+    @Test void fourSegmentPathAcceptsOnlyJsonPostAndKeepsSpecificLogin() throws Exception {
+        ClientService service = mock(ClientService.class);
+        var mvc = MockMvcBuilders.standaloneSetup(new LegacyClientController(service)).build();
+        assertEquals(200, mvc.perform(post("/package-legacy/a/b/c/d")
+            .contentType("application/json").content("{\"t\":1,\"p\":\"x\"}"))
+            .andReturn().getResponse().getStatus());
+        assertEquals(405, mvc.perform(get("/package-legacy/a/b/c/d")).andReturn().getResponse().getStatus());
+        assertEquals(415, mvc.perform(post("/package-legacy/a/b/c/d").contentType("text/plain").content("x"))
+            .andReturn().getResponse().getStatus());
+        mvc.perform(post("/package-legacy/v2/api/user/login").contentType("application/json").content("{}"));
+        verify(service).login(any());
+    }
     @Test void publicRoutesPreserveAnyAndSpecificRouting() throws Exception {
         var statistics = mock(org.jeecg.modules.packagemanagement.application.statistics.IAppStatisticsService.class);
         when(statistics.getDetails(any())).thenReturn("switch");

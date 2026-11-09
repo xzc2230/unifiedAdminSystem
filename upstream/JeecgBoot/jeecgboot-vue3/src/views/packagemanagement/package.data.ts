@@ -25,7 +25,10 @@ const historyFields = Object.entries(historyLabels).map(([key,label]) => field(k
 export const definitions: Record<string,PackageDefinition> = {
   apps:{domain:'apps',title:'应用管理',filters:['packageCode'],fields:[field('appName','应用名称',{required:true}),field('author','出包人'),pkg,field('url','链接',{required:true}),status,
     field('whetherRestrict','白名单',{type:'dict',dict:'app_where'}),field('areas','白名单地区',{type:'dict',dict:'app_area',multiple:true}),
-    field('whetherUs','禁用美国',{type:'dict',dict:'app_where'}),field('whetherUse','是否自用',{type:'dict',dict:'app_where'}),field('mark','备注',{type:'textarea'})]},
+    field('whetherUs','禁用美国',{type:'dict',dict:'app_where'}),field('whetherUse','是否自用',{type:'dict',dict:'app_where'}),field('mark','备注',{type:'textarea'}),
+    field('gaidAidThreshold','同一 GAID 关联 AID 阈值',{type:'number'}),field('aidDeviceThreshold','同一 AID 设备数阈值',{type:'number'}),
+    field('aidGaidSwitchThreshold','同一 AID 的 GAID 切换阈值',{type:'number'}),field('riskWindowSeconds','风控计数窗口（秒）',{type:'number'}),
+    field('referrerBlacklistJson','InstallReferrer 黑名单模板（JSON）',{type:'textarea'})]},
   store:{domain:'store',title:'上架状态',export:false,filters:['packageCode','status'],fields:[{...pkg,immutable:false},field('status','上架状态',{type:'number'}),
     field('successEmail','过审邮箱'),field('failEmail','下架邮箱'),field('storeUrl','市场链接',{readonly:true}),
     field('successDate','过审日期',{readonly:true}),field('failDate','下架日期',{readonly:true})]},

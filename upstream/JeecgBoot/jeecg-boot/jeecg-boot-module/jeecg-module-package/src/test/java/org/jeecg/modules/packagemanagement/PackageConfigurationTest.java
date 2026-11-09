@@ -18,10 +18,11 @@ class PackageConfigurationTest {
    context.getEnvironment().getPropertySources().addFirst(new MapPropertySource("test",Map.of("PACKAGE_DEFAULT_AES_KEY","test-externalized-key")));
    context.registerBean(org.springframework.transaction.PlatformTransactionManager.class,()->mock(org.springframework.transaction.PlatformTransactionManager.class));
    context.registerBean(JdbcTemplate.class,()->mock(JdbcTemplate.class));
-   for(String name:new String[]{"AppManager","AppStatistics","StoreStatus","EventConfig","EventError","EvnetHistory","LoadCount","AppPwa","AppPwaSub","AppNotify","AppEventRecord","ReviewsRecord"}){
+   for(String name:new String[]{"AppManager","AppStatistics","StoreStatus","EventConfig","EventError","EvnetHistory","LoadCount","AppPwa","AppPwaSub","AppNotify","AppEventRecord","ReviewsRecord","AppAsnBlacklist","AppDeviceBrandBlacklist","AppCpuAbiBlacklist","AppDeviceNameBlacklist"}){
     Class<?> type=Class.forName("org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper."+name+"Mapper");
     register(context,Character.toLowerCase(name.charAt(0))+name.substring(1)+"Mapper",type);
    }
+   context.registerBean(org.springframework.data.redis.core.StringRedisTemplate.class,()->mock(org.springframework.data.redis.core.StringRedisTemplate.class));
    context.scan("org.jeecg.modules.packagemanagement.application");
    context.register(PackageManagementConfiguration.class);context.refresh();
    assertNotNull(context.getBean(ClientService.class));assertNotNull(context.getBean(PackageAccess.class));

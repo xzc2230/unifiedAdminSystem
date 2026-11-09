@@ -20,6 +20,11 @@ CREATE TABLE IF NOT EXISTS `pkg_app_manager` (
   `whether_restrict` INT NULL,
   `whether_us` INT NULL,
   `whether_use` INT NULL,
+  gaid_aid_threshold INT NOT NULL DEFAULT 1,
+  aid_device_threshold INT NOT NULL DEFAULT 1,
+  aid_gaid_switch_threshold INT NOT NULL DEFAULT 1,
+  risk_window_seconds INT NOT NULL DEFAULT 86400,
+  referrer_blacklist_json TEXT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_pkg_app_manager_package_code` (`package_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
