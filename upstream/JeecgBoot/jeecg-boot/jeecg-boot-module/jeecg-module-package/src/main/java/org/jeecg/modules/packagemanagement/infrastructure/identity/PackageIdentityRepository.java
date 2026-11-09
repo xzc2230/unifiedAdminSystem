@@ -33,6 +33,22 @@ public class PackageIdentityRepository  {
         if(jdbc.queryForObject("SELECT COUNT(*) FROM "+type+" WHERE "+TABLES.get(type)+"=?",Long.class,id)!=1)throw new PackageFailure(404,"Created resource not found");
         jdbc.update("INSERT INTO pkg_resource_owner(resource_type,resource_id,tenant_id,owner_user_id) VALUES (?,?,?,?)",type,id,actor.tenantId(),actor.userId());
     }
+    public void lockTenantParent(PackageActor actor,String type,long id) {
+        validateType(type);
+        var ids=jdbc.queryForList("SELECT resource_id FROM pkg_resource_owner WHERE resource_type=? AND resource_id=? AND tenant_id=? FOR UPDATE",Long.class,type,id,actor.tenantId());
+        if(ids.size()!=1)throw new PackageFailure(403,"关联资源未映射或不属于当前租户");
+    }
+    public void reassignReviewToParent(PackageActor actor,long reviewId,long parentId) {
+        int changed=jdbc.update("UPDATE pkg_resource_owner child JOIN pkg_resource_owner parent ON parent.resource_type='pkg_pwa' AND parent.resource_id=? AND parent.tenant_id=child.tenant_id SET child.owner_user_id=parent.owner_user_id WHERE child.resource_type='pkg_review' AND child.resource_id=? AND child.tenant_id=?",parentId,reviewId,actor.tenantId());
+        if(changed!=1)throw new PackageFailure(409,"评论或PWA归属已变化");
+    }
+    public void claimCreatedFromParent(PackageActor actor,String child,long id,String parent,long parentId) {
+        validateType(child);validateType(parent);
+        if(jdbc.queryForObject("SELECT COUNT(*) FROM "+child+" WHERE "+TABLES.get(child)+"=?",Long.class,id)!=1)
+            throw new PackageFailure(404,"Created resource not found");
+        int inserted=jdbc.update("INSERT INTO pkg_resource_owner(resource_type,resource_id,tenant_id,owner_user_id) SELECT ?,?,tenant_id,owner_user_id FROM pkg_resource_owner WHERE resource_type=? AND resource_id=? AND tenant_id=?",child,id,parent,parentId,actor.tenantId());
+        if(inserted!=1)throw new PackageFailure(409,"Parent ownership changed");
+    }
     public void transfer(PackageActor actor,String type,Collection<Long> ids,String targetUser) {
         validateType(type);
         List<Long> legacy=legacyIds(actor.tenantId(),targetUser);

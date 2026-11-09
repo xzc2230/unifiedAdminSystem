@@ -1,0 +1,3496 @@
+{
+  "date": "2026-11-09",
+  "files": [
+    {
+      "source": "PackClient/src/views/error/401.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/sys/exception/NotAccessException.vue"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [
+        "back"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/error/404.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/sys/exception/Exception.vue"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/index.vue",
+      "disposition": "空首页复用宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/dashboard/analysis/index.vue"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/login.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/sys/login/Login.vue"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [
+        "handleLogin",
+        "getCode",
+        "getCookie"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/monitor/cache/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/redis/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getList"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/monitor/cache/list.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/redis/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getCacheNames",
+        "refreshCacheNames",
+        "handleClearCacheName",
+        "getCacheKeys",
+        "refreshCacheKeys",
+        "handleClearCacheKey",
+        "nameFormatter",
+        "keyFormatter",
+        "handleCacheValue",
+        "handleClearCacheAll"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/monitor/druid/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/sys/iframe/FrameBlank.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/monitor/job/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/quartz/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getList",
+        "jobGroupFormat",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleCommand",
+        "handleStatusChange",
+        "handleRun",
+        "handleView",
+        "handleShowCron",
+        "crontabFill",
+        "handleJobLog",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handleExport"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/monitor/job/log.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/quartz/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getList",
+        "handleClose",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleView",
+        "handleDelete",
+        "handleClean",
+        "handleExport"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/monitor/logininfor/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/log/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getList",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleSortChange",
+        "handleDelete",
+        "handleClean",
+        "handleUnlock",
+        "handleExport"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/monitor/online/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/onlineuser/OnlineUserList.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getList",
+        "handleQuery",
+        "resetQuery",
+        "handleForceLogout"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/monitor/operlog/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/log/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getList",
+        "typeFormat",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleSortChange",
+        "handleView",
+        "handleDelete",
+        "handleClean",
+        "handleExport"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/monitor/server/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/server/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getList"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/redirect/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/sys/redirect/index.vue"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/register.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/sys/login/RegisterForm.vue"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [
+        "handleRegister",
+        "getCode"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/applog/index.vue",
+      "disposition": "业务页面重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/request-logs/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handleClean",
+        "handleExport"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/views/system/config/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/appconfig/ThirdAppBindWeEnterpriseModal.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handleExport",
+        "handleRefreshCache"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/count/index.vue",
+      "disposition": "业务页面重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/landing-counts/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handleExport"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/views/system/dept/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/depart/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleAdd",
+        "toggleExpandAll",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/dict/data.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/dict/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getTypes",
+        "getTypeList",
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "handleClose",
+        "resetQuery",
+        "handleAdd",
+        "handleSelectionChange",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handleExport"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/dict/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/dict/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleAdd",
+        "handleSelectionChange",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handleExport",
+        "handleRefreshCache"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/error/index.vue",
+      "disposition": "业务页面重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/event-errors/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handleExport"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/views/system/event_config/index.vue",
+      "disposition": "业务页面重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/event-configs/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handleExport"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/views/system/history/index.vue",
+      "disposition": "业务页面重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/event-history/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handleExport"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/views/system/manager/index.vue",
+      "disposition": "业务页面重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/apps/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleAreasChange",
+        "handleTransferChange",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handlerTransfer",
+        "handlerTransferCancel",
+        "submitTransfer"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/views/system/menu/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/menu/DataRuleList.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getList",
+        "getTreeselect",
+        "cancel",
+        "reset",
+        "showSelectIcon",
+        "selected",
+        "hideSelectIcon",
+        "handleQuery",
+        "resetQuery",
+        "handleAdd",
+        "toggleExpandAll",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/notice/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/notice/DetailModal.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/notify/index.vue",
+      "disposition": "业务页面重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/notifications/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handleExport",
+        "getPwaList",
+        "handlePWANameChange"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/views/system/post/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/position/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handleExport"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/pwa/index.vue",
+      "disposition": "业务页面重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/pwa/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PwaEditor.vue"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "setup",
+        "created",
+        "delAllTag",
+        "tagClose",
+        "addTag",
+        "deleteComment",
+        "addComment",
+        "scoreValue",
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handleExport",
+        "getSubHost",
+        "formatDateTime",
+        "padZero"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/views/system/record/index.vue",
+      "disposition": "业务页面重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/app-events/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handleExport"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/views/system/role/authUser.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/role/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getList",
+        "handleClose",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "openSelectUser",
+        "cancelAuthUser",
+        "cancelAuthUserAll"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/role/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/role/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getList",
+        "handleQuery",
+        "resetQuery",
+        "handleDelete",
+        "handleExport",
+        "handleSelectionChange",
+        "handleStatusChange",
+        "handleCommand",
+        "handleAuthUser",
+        "getMenuTreeselect",
+        "getDeptAllCheckedKeys",
+        "reset",
+        "handleAdd",
+        "handleUpdate",
+        "getRoleMenuTreeselect",
+        "getDeptTree",
+        "handleCheckedTreeExpand",
+        "handleCheckedTreeNodeAll",
+        "handleCheckedTreeConnect",
+        "getMenuAllCheckedKeys",
+        "submitForm",
+        "cancel",
+        "dataScopeSelectChange",
+        "handleDataScope",
+        "submitDataScope",
+        "cancelDataScope"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/role/selectUser.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/role/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "show",
+        "clickRow",
+        "handleSelectionChange",
+        "getList",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectUser"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/statistics/index.vue",
+      "disposition": "业务页面重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/statistics/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "setup",
+        "created",
+        "getList",
+        "checkMoney",
+        "getTotal",
+        "cancel",
+        "reset",
+        "resetTotal",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handleExport"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/views/system/store/index.vue",
+      "disposition": "业务页面重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/store/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "setup",
+        "created",
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleAdd",
+        "submitForm",
+        "handleDelete",
+        "handleUpdate"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/views/system/user/authRole.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/user/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "clickRow",
+        "handleSelectionChange",
+        "getRowKey",
+        "close",
+        "submitForm"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/user/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/user/index.vue"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getDeptTree",
+        "getList",
+        "handleNodeClick",
+        "handleQuery",
+        "resetQuery",
+        "handleDelete",
+        "handleExport",
+        "handleStatusChange",
+        "handleCommand",
+        "handleAuthRole",
+        "handleResetPwd",
+        "handleSelectionChange",
+        "handleImport",
+        "importTemplate",
+        "submitFileForm",
+        "reset",
+        "cancel",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/user/profile/index.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/usersetting/UserSetting.vue"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [
+        "getUser"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/user/profile/resetPwd.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/usersetting/commponents/UserPasswordModal.vue"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [
+        "submit",
+        "close"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/user/profile/userAvatar.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/usersetting/BaseSetting.vue"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [
+        "editCropper",
+        "modalOpened",
+        "requestUpload",
+        "rotateLeft",
+        "rotateRight",
+        "changeScale",
+        "beforeUpload",
+        "uploadImg",
+        "realTime",
+        "closeDialog"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/user/profile/userInfo.vue",
+      "disposition": "基础页面复用",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/usersetting/BaseSetting.vue"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [
+        "submit",
+        "close"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/system/w2a/index.vue",
+      "disposition": "业务页面重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/w2a/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PwaEditor.vue"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "setup",
+        "created",
+        "delAllTag",
+        "tagClose",
+        "addTag",
+        "deleteComment",
+        "addComment",
+        "scoreValue",
+        "getList",
+        "cancel",
+        "reset",
+        "handleQuery",
+        "resetQuery",
+        "handleSelectionChange",
+        "handleAdd",
+        "handleUpdate",
+        "submitForm",
+        "handleDelete",
+        "handleExport",
+        "getSubHost",
+        "formatDateTime",
+        "padZero"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/views/tool/build/index.vue",
+      "disposition": "工具页面差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/CgformCopyList.vue"
+      ],
+      "reason": "工具差异登记：使用 JEECG Online/接口文档工作流，RuoYi 生成模板与预览数据结构不照搬。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/tool/gen/basicInfoForm.vue",
+      "disposition": "工具页面差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/CgformCopyList.vue"
+      ],
+      "reason": "工具差异登记：使用 JEECG Online/接口文档工作流，RuoYi 生成模板与预览数据结构不照搬。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/tool/gen/editTable.vue",
+      "disposition": "工具页面差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/CgformCopyList.vue"
+      ],
+      "reason": "工具差异登记：使用 JEECG Online/接口文档工作流，RuoYi 生成模板与预览数据结构不照搬。",
+      "sourceActions": [
+        "submitForm",
+        "getFormPromise",
+        "close"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/tool/gen/genInfoForm.vue",
+      "disposition": "工具页面差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/CgformCopyList.vue"
+      ],
+      "reason": "工具差异登记：使用 JEECG Online/接口文档工作流，RuoYi 生成模板与预览数据结构不照搬。",
+      "sourceActions": [
+        "subSelectChange",
+        "tplSelectChange",
+        "setSubTableColumns",
+        "getMenuTreeselect"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/tool/gen/importTable.vue",
+      "disposition": "工具页面差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/CgformCopyList.vue"
+      ],
+      "reason": "工具差异登记：使用 JEECG Online/接口文档工作流，RuoYi 生成模板与预览数据结构不照搬。",
+      "sourceActions": [
+        "show",
+        "clickRow",
+        "handleSelectionChange",
+        "getList",
+        "handleQuery",
+        "resetQuery",
+        "handleImportTable"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/tool/gen/index.vue",
+      "disposition": "工具页面差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/CgformCopyList.vue"
+      ],
+      "reason": "工具差异登记：使用 JEECG Online/接口文档工作流，RuoYi 生成模板与预览数据结构不照搬。",
+      "sourceActions": [
+        "getList",
+        "handleQuery",
+        "handleGenTable",
+        "handleSynchDb",
+        "openImportTable",
+        "resetQuery",
+        "handlePreview",
+        "copyTextSuccess",
+        "handleSelectionChange",
+        "handleEditTable",
+        "handleDelete"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/views/tool/swagger/index.vue",
+      "disposition": "工具页面差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/sys/iframe/FrameBlank.vue"
+      ],
+      "reason": "工具差异登记：使用 JEECG Online/接口文档工作流，RuoYi 生成模板与预览数据结构不照搬。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/login.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/sys/user.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [
+        "login",
+        "register",
+        "getInfo",
+        "logout",
+        "getCodeImg"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/menu.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/sys/menu.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/monitor/cache.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/redis/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/redis/redis.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getCache",
+        "listCacheName",
+        "listCacheKey",
+        "getCacheValue",
+        "clearCacheName",
+        "clearCacheKey",
+        "clearCacheAll"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/monitor/job.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/quartz/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/quartz/quartz.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "listJob",
+        "getJob",
+        "addJob",
+        "updateJob",
+        "delJob",
+        "changeJobStatus",
+        "runJob"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/monitor/jobLog.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/log/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/log/log.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "listJobLog",
+        "delJobLog",
+        "cleanJobLog"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/monitor/logininfor.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/log/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/log/log.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "list",
+        "delLogininfor",
+        "unlockLogininfor",
+        "cleanLogininfor"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/monitor/online.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/onlineuser/OnlineUserList.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/onlineuser/OnlineUser.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "list",
+        "forceLogout"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/monitor/operlog.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/log/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/log/log.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "list",
+        "delOperlog",
+        "cleanOperlog"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/monitor/server.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/server/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/monitor/server/server.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "getServer"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/system/applog.js",
+      "disposition": "业务 API 重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/request-logs/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "listLog",
+        "getLog",
+        "addLog",
+        "updateLog",
+        "delLog",
+        "cleanAppLogs"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/api/system/comment_record.js",
+      "disposition": "业务 API 重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/reviews/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "listReviewsRecord",
+        "getReviewsRecord",
+        "addReviewsRecord",
+        "updateReviewsRecord",
+        "delReviewsRecord"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/api/system/config.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/appconfig/ThirdAppBindWeEnterpriseModal.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/appconfig/ThirdApp.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "listConfig",
+        "getConfig",
+        "getConfigKey",
+        "addConfig",
+        "updateConfig",
+        "delConfig",
+        "refreshCache"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/system/count.js",
+      "disposition": "业务 API 重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/landing-counts/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "listCount",
+        "getCount",
+        "addCount",
+        "updateCount",
+        "delCount"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/api/system/dept.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/depart/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/depart/depart.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "listDept",
+        "listDeptExcludeChild",
+        "getDept",
+        "addDept",
+        "updateDept",
+        "delDept"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/system/dict/data.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/dict/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/dict/dict.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "listData",
+        "getData",
+        "getDicts",
+        "addData",
+        "updateData",
+        "delData"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/system/dict/type.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/dict/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/dict/dict.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "listType",
+        "getType",
+        "addType",
+        "updateType",
+        "delType",
+        "refreshCache",
+        "optionselect"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/system/error.js",
+      "disposition": "业务 API 重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/event-errors/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "listError",
+        "getError",
+        "addError",
+        "updateError",
+        "delError"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/api/system/event_config.js",
+      "disposition": "业务 API 重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/event-configs/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "listEvent_config",
+        "getEvent_config",
+        "addEvent_config",
+        "updateEvent_config",
+        "delEvent_config"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/api/system/history.js",
+      "disposition": "业务 API 重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/event-history/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "listHistory",
+        "getHistory",
+        "addHistory",
+        "updateHistory",
+        "delHistory"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/api/system/manager.js",
+      "disposition": "业务 API 重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/apps/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "listManager",
+        "getManager",
+        "addManager",
+        "handleAreasToStr",
+        "updateManager",
+        "delManager",
+        "transferApp"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/api/system/menu.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/menu/DataRuleList.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/menu/menu.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "listMenu",
+        "getMenu",
+        "treeselect",
+        "roleMenuTreeselect",
+        "addMenu",
+        "updateMenu",
+        "delMenu"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/system/notice.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/notice/DetailModal.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/notice/notice.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "listNotice",
+        "getNotice",
+        "addNotice",
+        "updateNotice",
+        "delNotice"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/system/notify.js",
+      "disposition": "业务 API 重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/notifications/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "listNotify",
+        "getNotify",
+        "addNotify",
+        "updateNotify",
+        "delNotify",
+        "listPwa"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/api/system/post.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/position/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/position/position.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "listPost",
+        "getPost",
+        "addPost",
+        "updatePost",
+        "delPost"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/system/pwa.js",
+      "disposition": "业务 API 重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/pwa/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PwaEditor.vue"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "listPwa",
+        "getPwa",
+        "addPwa",
+        "updatePwa",
+        "delPwa"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/api/system/record.js",
+      "disposition": "业务 API 重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/app-events/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "listRecord",
+        "getRecord",
+        "addRecord",
+        "updateRecord",
+        "delRecord"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/api/system/role.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/role/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/role/role.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "listRole",
+        "getRole",
+        "addRole",
+        "updateRole",
+        "dataScope",
+        "changeRoleStatus",
+        "delRole",
+        "allocatedUserList",
+        "unallocatedUserList",
+        "authUserCancel",
+        "authUserCancelAll",
+        "authUserSelectAll",
+        "deptTreeSelect"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/system/statistics.js",
+      "disposition": "业务 API 重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/statistics/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "listStatistics",
+        "listStatisticsNum",
+        "getStatistics",
+        "addStatistics",
+        "updateStatistics",
+        "delStatistics"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/api/system/store.js",
+      "disposition": "业务 API 重建",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/store/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/package.data.ts",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackagePage.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "重建活跃查询、详情、校验、权限和操作；采用 Task 3 的 Result/records/total 与 pageNo/pageSize 契约。源注释脚手架不作为必须开放功能。",
+      "sourceActions": [
+        "listStore",
+        "getStore",
+        "addStore",
+        "delStore",
+        "updateStore"
+      ],
+      "verification": "转换/菜单单测与 Vue SFC 编译通过；实际 UI 操作由根代理联调记录。"
+    },
+    {
+      "source": "PackClient/src/api/system/user.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/user/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/system/user/user.api.ts"
+      ],
+      "reason": "基础能力适配：对应 JEECG 页面使用宿主模型与权限；RuoYi 操作参数、任务调用方式、日志分类等差异保留于基础迁移登记，不声明原协议兼容。",
+      "sourceActions": [
+        "listUser",
+        "getUser",
+        "addUser",
+        "updateUser",
+        "delUser",
+        "resetUserPwd",
+        "changeUserStatus",
+        "getUserProfile",
+        "updateUserProfile",
+        "updateUserPwd",
+        "uploadAvatar",
+        "getAuthRole",
+        "updateAuthRole",
+        "deptTreeSelect"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/api/tool/gen.js",
+      "disposition": "宿主能力适配/工具差异登记",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/CgformCopyList.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/cgform.api.ts"
+      ],
+      "reason": "工具差异登记：使用 JEECG Online/接口文档工作流，RuoYi 生成模板与预览数据结构不照搬。",
+      "sourceActions": [
+        "listTable",
+        "listDbTable",
+        "getGenTable",
+        "updateGenTable",
+        "importTable",
+        "previewTable",
+        "delTable",
+        "genCode",
+        "synchDb"
+      ],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/App.vue",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/App.vue"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/401_images/401.gif",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/404_images/404.png",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/404_images/404_cloud.png",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/404.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/bug.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/build.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/button.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/cascader.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/chart.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/checkbox.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/clipboard.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/code.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/color.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/component.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/dashboard.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/date-range.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/date.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/dict.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/documentation.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/download.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/drag.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/druid.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/edit.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/education.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/email.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/example.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/excel.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/exit-fullscreen.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/eye-open.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/eye.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/form.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/fullscreen.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/github.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/guide.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/icon.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/input.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/international.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/job.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/language.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/link.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/list.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/lock.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/log.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/logininfor.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/message.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/money.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/monitor.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/nested.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/number.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/online.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/password.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/pdf.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/people.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/peoples.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/phone.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/post.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/qq.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/question.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/radio.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/rate.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/redis-list.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/redis.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/row.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/search.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/select.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/server.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/shopping.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/size.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/skill.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/slider.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/star.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/swagger.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/switch.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/system.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/tab.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/table.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/textarea.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/theme.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/time-range.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/time.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/tool.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/tree-table.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/tree.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/upload.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/user.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/validCode.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/wechat.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/icons/svg/zip.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/images/dark.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/images/light.svg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/images/login-background.jpg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/images/login-background.webp",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/images/profile.jpg",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/logo/logo.png",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/styles/btn.scss",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/styles/element-ui.scss",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/styles/index.scss",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/styles/mixin.scss",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/styles/ruoyi.scss",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/styles/sidebar.scss",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/styles/transition.scss",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/assets/styles/variables.module.scss",
+      "disposition": "样式/图标/图片按业务引用核对；主题使用宿主；保留必要资源",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/design/index.less",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "源登录/异常/主题/图标资源由 JEECG 当前主题与图标能力替代，业务界面不引用此源资源；业务上传图片仍使用持久化 URL，不嵌入或丢弃用户图片。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/Breadcrumb/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/header/components/Breadcrumb.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/Crontab/day.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Form/src/jeecg/components/JEasyCron/EasyCronInput.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/Crontab/hour.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Form/src/jeecg/components/JEasyCron/EasyCronInput.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/Crontab/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Form/src/jeecg/components/JEasyCron/EasyCronInput.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/Crontab/min.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Form/src/jeecg/components/JEasyCron/EasyCronInput.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/Crontab/month.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Form/src/jeecg/components/JEasyCron/EasyCronInput.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/Crontab/result.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Form/src/jeecg/components/JEasyCron/EasyCronInput.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/Crontab/second.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Form/src/jeecg/components/JEasyCron/EasyCronInput.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/Crontab/week.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Form/src/jeecg/components/JEasyCron/EasyCronInput.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/Crontab/year.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Form/src/jeecg/components/JEasyCron/EasyCronInput.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/DictTag/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/utils/dict/JDictSelectUtil.js"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/Editor/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Tinymce/index.ts"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/FileUpload/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Upload/index.ts"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/Hamburger/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/header/index.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/HeaderSearch/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Application/src/search/AppSearch.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/IconSelect/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/IconSelect/requireIcons.js",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/iFrame/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/sys/iframe/index.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/ImagePreview/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackageImageUpload.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/ImageUpload/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/packagemanagement/components/PackageImageUpload.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/Pagination/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Table/index.ts"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/ParentView/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/index.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/RightToolbar/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Table/index.ts"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/RuoYi/Doc/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/sys/about/index.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/RuoYi/Git/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/sys/about/index.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/Screenfull/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/header/index.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/SizeSelect/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/settings/componentSetting.ts"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/SvgIcon/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/SvgIcon/svgicon.js",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Icon/index.ts"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/TopNav/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/header/index.vue"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/components/TreeSelect/index.vue",
+      "disposition": "复用 JEECG 组件；逐项适配属性、上传/预览、编辑器、分页与回调行为",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/components/Tree/index.ts"
+      ],
+      "reason": "替换为宿主组件能力；参数及事件遵循 JEECG。图片上传/预览、表格分页、权限、日期和导出已在新业务页面显式接入。RuoYi 品牌组件仅保留宿主关于页面，不复制旧品牌链接。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/directive/common/copyText.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/hooks/web/useCopyToClipboard.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/directive/index.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/directives/index.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/directive/permission/hasPermi.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/directives/permission.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/directive/permission/hasRole.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/hooks/web/usePermission.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/layout/components/AppMain.vue",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/permission.ts"
+      ],
+      "reason": "使用 JEECG 当前布局、侧栏与标签页；package-management 根菜单归一化仅作用于新业务根，不改变其他菜单。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/layout/components/IframeToggle/index.vue",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/permission.ts"
+      ],
+      "reason": "使用 JEECG 当前布局、侧栏与标签页；package-management 根菜单归一化仅作用于新业务根，不改变其他菜单。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/layout/components/index.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/permission.ts"
+      ],
+      "reason": "使用 JEECG 当前布局、侧栏与标签页；package-management 根菜单归一化仅作用于新业务根，不改变其他菜单。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/layout/components/InnerLink/index.vue",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/permission.ts"
+      ],
+      "reason": "使用 JEECG 当前布局、侧栏与标签页；package-management 根菜单归一化仅作用于新业务根，不改变其他菜单。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/layout/components/Navbar.vue",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/permission.ts"
+      ],
+      "reason": "使用 JEECG 当前布局、侧栏与标签页；package-management 根菜单归一化仅作用于新业务根，不改变其他菜单。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/layout/components/Settings/index.vue",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/permission.ts"
+      ],
+      "reason": "使用 JEECG 当前布局、侧栏与标签页；package-management 根菜单归一化仅作用于新业务根，不改变其他菜单。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/layout/components/Sidebar/index.vue",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/permission.ts"
+      ],
+      "reason": "使用 JEECG 当前布局、侧栏与标签页；package-management 根菜单归一化仅作用于新业务根，不改变其他菜单。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/layout/components/Sidebar/Link.vue",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/permission.ts"
+      ],
+      "reason": "使用 JEECG 当前布局、侧栏与标签页；package-management 根菜单归一化仅作用于新业务根，不改变其他菜单。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/layout/components/Sidebar/Logo.vue",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/permission.ts"
+      ],
+      "reason": "使用 JEECG 当前布局、侧栏与标签页；package-management 根菜单归一化仅作用于新业务根，不改变其他菜单。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/layout/components/Sidebar/SidebarItem.vue",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/permission.ts"
+      ],
+      "reason": "使用 JEECG 当前布局、侧栏与标签页；package-management 根菜单归一化仅作用于新业务根，不改变其他菜单。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/layout/components/TagsView/index.vue",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/permission.ts"
+      ],
+      "reason": "使用 JEECG 当前布局、侧栏与标签页；package-management 根菜单归一化仅作用于新业务根，不改变其他菜单。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/layout/components/TagsView/ScrollPane.vue",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/permission.ts"
+      ],
+      "reason": "使用 JEECG 当前布局、侧栏与标签页；package-management 根菜单归一化仅作用于新业务根，不改变其他菜单。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/layout/index.vue",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/layouts/default/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/permission.ts"
+      ],
+      "reason": "使用 JEECG 当前布局、侧栏与标签页；package-management 根菜单归一化仅作用于新业务根，不改变其他菜单。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/main.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/main.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/permission.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/router/guard/permissionGuard.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/plugins/auth.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/hooks/web/usePermission.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/plugins/cache.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/utils/cache/index.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/plugins/download.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/api/packagemanagement/index.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/plugins/index.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/main.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/plugins/modal.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/hooks/web/useMessage.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/plugins/tab.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/hooks/web/useTabs.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/router/index.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/router/index.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/settings.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/settings/projectSetting.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/store/index.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/index.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/store/modules/app.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/app.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/store/modules/dict.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/utils/dict/index.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/store/modules/permission.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/permission.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/store/modules/settings.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/app.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/store/modules/tagsView.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/multipleTab.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/store/modules/user.js",
+      "disposition": "使用 JEECG 对应基础设施；菜单、路由、权限及状态按独立业务域接入",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/store/modules/user.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/utils/auth.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/utils/auth/index.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/utils/dict.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/utils/dict/JDictSelectUtil.js"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/utils/dynamicTitle.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/hooks/web/useTitle.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/utils/errorCode.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/utils/http/axios/checkStatus.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/utils/index.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/utils/index.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/utils/jsencrypt.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/utils/cipher.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/utils/permission.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/hooks/web/usePermission.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/utils/request.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/utils/http/axios/index.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/utils/ruoyi.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/utils/dateUtil.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/utils/scroll-to.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/utils/domUtils.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/utils/theme.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/settings/designSetting.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    },
+    {
+      "source": "PackClient/src/utils/validate.js",
+      "disposition": "公共工具按调用点适配；业务值转换需保留；HTTP/Token/导出接入宿主",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecgboot-vue3/src/utils/is.ts"
+      ],
+      "reason": "使用现有 JEECG 对应能力，采用宿主鉴权、状态与组件交互；不保留 RuoYi 路径或响应协议。基础功能差异详见 foundation-adaptation.md 和 foundation-targets.json，未宣称逐项同义。",
+      "sourceActions": [],
+      "verification": "目标文件存在；宿主功能复用与差异登记，不声称已执行所有旧功能场景。"
+    }
+  ]
+}

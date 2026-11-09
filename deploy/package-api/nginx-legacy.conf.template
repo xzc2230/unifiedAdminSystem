@@ -1,0 +1,22 @@
+# Dedicated legacy API virtual host. Do not install this catch-all on the JEECG host.
+# Render ${PACKAGE_API_HOST} and ${PACKAGE_UPSTREAM} with your deployment templater.
+server {
+    listen 443 ssl;
+    server_name ${PACKAGE_API_HOST};
+    # ssl_certificate /etc/nginx/tls/fullchain.pem;
+    # ssl_certificate_key /etc/nginx/tls/privkey.pem;
+    client_max_body_size 21m; # envelope headroom; Spring enforces the source 20MB aggregate
+    location / {
+        proxy_pass http://${PACKAGE_UPSTREAM}/jeecg-boot/package-legacy/;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        # Replace untrusted incoming headers; only this immediate proxy is trusted by the module.
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Original-URI $request_uri;
+        proxy_redirect off;
+    }
+    # Management is available only on the existing authenticated JEECG host.
+    location ^~ /package-admin { return 404; }
+    location ^~ /jeecg-boot { return 404; }
+}

@@ -16,6 +16,7 @@ class PackageConfigurationTest {
  @Test void explicitImportStartsWithoutCircularDependencyOrExternalCalls()throws Exception{
   try(var context=new AnnotationConfigApplicationContext()){
    context.getEnvironment().getPropertySources().addFirst(new MapPropertySource("test",Map.of("PACKAGE_DEFAULT_AES_KEY","test-externalized-key")));
+   context.registerBean(org.springframework.transaction.PlatformTransactionManager.class,()->mock(org.springframework.transaction.PlatformTransactionManager.class));
    context.registerBean(JdbcTemplate.class,()->mock(JdbcTemplate.class));
    for(String name:new String[]{"AppManager","AppStatistics","StoreStatus","EventConfig","EventError","EvnetHistory","LoadCount","AppPwa","AppPwaSub","AppNotify","AppEventRecord","ReviewsRecord"}){
     Class<?> type=Class.forName("org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper."+name+"Mapper");

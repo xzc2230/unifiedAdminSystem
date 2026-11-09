@@ -8,6 +8,7 @@ import org.jeecg.modules.packagemanagement.application.port.*;import org.jeecg.m
 @ComponentScan(basePackages="org.jeecg.modules.packagemanagement.application",useDefaultFilters=false,
  includeFilters=@ComponentScan.Filter(org.springframework.stereotype.Service.class))
 public class PackageManagementConfiguration {
+ @Bean public org.springframework.transaction.support.TransactionTemplate packageTransactionTemplate(org.springframework.transaction.PlatformTransactionManager manager){return new org.springframework.transaction.support.TransactionTemplate(manager);}
  @Bean public java.time.Clock packageClock(){return java.time.Clock.system(java.time.ZoneId.of("Asia/Shanghai"));}
  @Bean public PackageSnowflake packageSnowflake(){return new PackageSnowflake();}
  @Bean public HttpPort packageHttpPort(){return new JdkHttpAdapter();}

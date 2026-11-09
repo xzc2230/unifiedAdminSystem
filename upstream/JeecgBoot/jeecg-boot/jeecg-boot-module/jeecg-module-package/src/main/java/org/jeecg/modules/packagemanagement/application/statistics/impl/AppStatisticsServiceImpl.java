@@ -87,6 +87,10 @@ public class AppStatisticsServiceImpl implements IAppStatisticsService {
                 storeStatusMapper.insertStoreStatus(ss);
             }
             appStatistics.setCreateTime(DateUtils.getNowDate());
+            // The source creation form supplied these defaults; SDK counters are server owned.
+            appStatistics.setReigisterNum(0L);
+            appStatistics.setPaymentNum(0L);
+            appStatistics.setPaymentTotal(new BigDecimal("0.00"));
             return appStatisticsMapper.insertAppStatistics(appStatistics);
         }
     }

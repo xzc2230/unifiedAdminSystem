@@ -13,7 +13,7 @@ WHERE NOT EXISTS (
   SELECT 1 FROM sys_user_tenant m
   JOIN sys_tenant t ON t.id=m.tenant_id JOIN sys_user u ON u.id=m.user_id
   WHERE m.tenant_id=i.tenant_id
-    AND m.user_id COLLATE utf8mb4_general_ci=i.jeecg_user_id COLLATE utf8mb4_general_ci
+    AND CONVERT(m.user_id USING utf8mb4) COLLATE utf8mb4_general_ci=CONVERT(i.jeecg_user_id USING utf8mb4) COLLATE utf8mb4_general_ci
     AND m.status='1' AND t.status=1 AND t.del_flag=0 AND u.status=1 AND u.del_flag=0
     AND (t.begin_date IS NULL OR t.begin_date<=NOW()) AND (t.end_date IS NULL OR t.end_date>NOW())
 );

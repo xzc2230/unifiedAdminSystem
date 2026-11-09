@@ -1,0 +1,216 @@
+{
+  "note": "17条工具差异和示例排除；与99条迁移及119条宿主基础处置合计235条，不将差异当成实现。",
+  "endpoints": [
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/tool/gen/list",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/gen/controller/GenController.java",
+      "disposition": "工具差异登记",
+      "targetFiles": [
+        "docs/migration/package-api/foundation-adaptation.md",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/cgform.api.ts"
+      ],
+      "reason": "使用宿主 Online 设计与代码生成流程。RuoYi模板、表元信息和这些12条后台工具协议不迁入；此项为明确差异，不标记为旧协议等价。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/tool/gen/{talbleId}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/gen/controller/GenController.java",
+      "disposition": "工具差异登记",
+      "targetFiles": [
+        "docs/migration/package-api/foundation-adaptation.md",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/cgform.api.ts"
+      ],
+      "reason": "使用宿主 Online 设计与代码生成流程。RuoYi模板、表元信息和这些12条后台工具协议不迁入；此项为明确差异，不标记为旧协议等价。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/tool/gen/db/list",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/gen/controller/GenController.java",
+      "disposition": "工具差异登记",
+      "targetFiles": [
+        "docs/migration/package-api/foundation-adaptation.md",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/cgform.api.ts"
+      ],
+      "reason": "使用宿主 Online 设计与代码生成流程。RuoYi模板、表元信息和这些12条后台工具协议不迁入；此项为明确差异，不标记为旧协议等价。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/tool/gen/column/{tableId}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/gen/controller/GenController.java",
+      "disposition": "工具差异登记",
+      "targetFiles": [
+        "docs/migration/package-api/foundation-adaptation.md",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/cgform.api.ts"
+      ],
+      "reason": "使用宿主 Online 设计与代码生成流程。RuoYi模板、表元信息和这些12条后台工具协议不迁入；此项为明确差异，不标记为旧协议等价。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/tool/gen/importTable",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/gen/controller/GenController.java",
+      "disposition": "工具差异登记",
+      "targetFiles": [
+        "docs/migration/package-api/foundation-adaptation.md",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/cgform.api.ts"
+      ],
+      "reason": "使用宿主 Online 设计与代码生成流程。RuoYi模板、表元信息和这些12条后台工具协议不迁入；此项为明确差异，不标记为旧协议等价。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/tool/gen",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/gen/controller/GenController.java",
+      "disposition": "工具差异登记",
+      "targetFiles": [
+        "docs/migration/package-api/foundation-adaptation.md",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/cgform.api.ts"
+      ],
+      "reason": "使用宿主 Online 设计与代码生成流程。RuoYi模板、表元信息和这些12条后台工具协议不迁入；此项为明确差异，不标记为旧协议等价。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/tool/gen/{tableIds}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/gen/controller/GenController.java",
+      "disposition": "工具差异登记",
+      "targetFiles": [
+        "docs/migration/package-api/foundation-adaptation.md",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/cgform.api.ts"
+      ],
+      "reason": "使用宿主 Online 设计与代码生成流程。RuoYi模板、表元信息和这些12条后台工具协议不迁入；此项为明确差异，不标记为旧协议等价。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/tool/gen/preview/{tableId}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/gen/controller/GenController.java",
+      "disposition": "工具差异登记",
+      "targetFiles": [
+        "docs/migration/package-api/foundation-adaptation.md",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/cgform.api.ts"
+      ],
+      "reason": "使用宿主 Online 设计与代码生成流程。RuoYi模板、表元信息和这些12条后台工具协议不迁入；此项为明确差异，不标记为旧协议等价。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/tool/gen/download/{tableName}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/gen/controller/GenController.java",
+      "disposition": "工具差异登记",
+      "targetFiles": [
+        "docs/migration/package-api/foundation-adaptation.md",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/cgform.api.ts"
+      ],
+      "reason": "使用宿主 Online 设计与代码生成流程。RuoYi模板、表元信息和这些12条后台工具协议不迁入；此项为明确差异，不标记为旧协议等价。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/tool/gen/genCode/{tableName}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/gen/controller/GenController.java",
+      "disposition": "工具差异登记",
+      "targetFiles": [
+        "docs/migration/package-api/foundation-adaptation.md",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/cgform.api.ts"
+      ],
+      "reason": "使用宿主 Online 设计与代码生成流程。RuoYi模板、表元信息和这些12条后台工具协议不迁入；此项为明确差异，不标记为旧协议等价。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/tool/gen/synchDb/{tableName}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/gen/controller/GenController.java",
+      "disposition": "工具差异登记",
+      "targetFiles": [
+        "docs/migration/package-api/foundation-adaptation.md",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/cgform.api.ts"
+      ],
+      "reason": "使用宿主 Online 设计与代码生成流程。RuoYi模板、表元信息和这些12条后台工具协议不迁入；此项为明确差异，不标记为旧协议等价。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/tool/gen/batchGenCode",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/gen/controller/GenController.java",
+      "disposition": "工具差异登记",
+      "targetFiles": [
+        "docs/migration/package-api/foundation-adaptation.md",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/index.vue",
+        "upstream/JeecgBoot/jeecgboot-vue3/src/views/super/online/cgform/cgform.api.ts"
+      ],
+      "reason": "使用宿主 Online 设计与代码生成流程。RuoYi模板、表元信息和这些12条后台工具协议不迁入；此项为明确差异，不标记为旧协议等价。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/test/user/list",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/swagger/TestController.java",
+      "disposition": "示例不迁移",
+      "targetFiles": [
+        "docs/migration/package-api/coverage-review.md"
+      ],
+      "reason": "源Swagger演示内存用户CRUD；无业务页面依赖，按已确认方案排除。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/test/user/{userId}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/swagger/TestController.java",
+      "disposition": "示例不迁移",
+      "targetFiles": [
+        "docs/migration/package-api/coverage-review.md"
+      ],
+      "reason": "源Swagger演示内存用户CRUD；无业务页面依赖，按已确认方案排除。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/test/user/save",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/swagger/TestController.java",
+      "disposition": "示例不迁移",
+      "targetFiles": [
+        "docs/migration/package-api/coverage-review.md"
+      ],
+      "reason": "源Swagger演示内存用户CRUD；无业务页面依赖，按已确认方案排除。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/test/user/update",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/swagger/TestController.java",
+      "disposition": "示例不迁移",
+      "targetFiles": [
+        "docs/migration/package-api/coverage-review.md"
+      ],
+      "reason": "源Swagger演示内存用户CRUD；无业务页面依赖，按已确认方案排除。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/test/user/{userId}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/tool/swagger/TestController.java",
+      "disposition": "示例不迁移",
+      "targetFiles": [
+        "docs/migration/package-api/coverage-review.md"
+      ],
+      "reason": "源Swagger演示内存用户CRUD；无业务页面依赖，按已确认方案排除。",
+      "verification": "源码及差异登记核对；未主张迁移旧工具/示例接口。"
+    }
+  ]
+}

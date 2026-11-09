@@ -56,10 +56,26 @@ public class PackageAccess  {
         active(actor);
         validateRows(ids,repository.lockOwnedIds(actor,type));
     }
+    /** Existing independently owned store/statistics rows may keep their transferred app association. */
+    public void lockIndependentPackageParent(PackageActor actor,long appId) {
+        active(actor);
+        repository.lockTenantParent(actor,"pkg_app_manager",appId);
+    }
+    /** Called after an authorized standalone review move, inside its update transaction. */
+    public void reassignReviewToParent(PackageActor actor,long reviewId,long parentId) {
+        lockRows(actor,"pkg_review",List.of(reviewId));
+        lockRows(actor,"pkg_pwa",List.of(parentId));
+        repository.reassignReviewToParent(actor,reviewId,parentId);
+    }
     /** Only for rows just inserted by trusted application code in the current transaction. Historical claims require verified migration. */
     public void claimCreated(PackageActor actor,String type,long id) {
         active(actor);
         repository.claimCreated(actor,type,id);
+    }
+    /** Newly inserted children follow the locked, verified parent's registry owner. */
+    public void claimCreatedFromParent(PackageActor actor,String child,long id,String parent,long parentId) {
+        lockRows(actor,parent,List.of(parentId));
+        repository.claimCreatedFromParent(actor,child,id,parent,parentId);
     }
     public long effectiveLegacyUserId(PackageActor actor) {
         active(actor);

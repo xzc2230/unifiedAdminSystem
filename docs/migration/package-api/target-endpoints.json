@@ -1,0 +1,1404 @@
+{
+  "generatedAt": "2026-11-09",
+  "endpointCount": 99,
+  "endpoints": [
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/manager/list",
+      "sourceController": "AppManagerController",
+      "sourceAction": "list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/apps/list",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#list",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/manager/export",
+      "sourceController": "AppManagerController",
+      "sourceAction": "export",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/apps/export",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#export",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/manager/selbyid/{id}",
+      "sourceController": "AppManagerController",
+      "sourceAction": "getInfo",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/apps/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#detail",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/manager/add",
+      "sourceController": "AppManagerController",
+      "sourceAction": "add",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/apps",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#add",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/manager/update",
+      "sourceController": "AppManagerController",
+      "sourceAction": "edit",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/apps/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#edit",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/manager/delete/{ids}",
+      "sourceController": "AppManagerController",
+      "sourceAction": "remove",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/apps/{ids}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#delete",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/manager/transfer/{id}/{userId}/{userName}",
+      "sourceController": "AppManagerController",
+      "sourceAction": "transfer",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/apps/transfer",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminActionsController.java",
+      "targetHandler": "PackageAdminActionsController#transfer",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/v2/api/user/login",
+      "sourceController": "Client1Controller",
+      "sourceAction": "login",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/v2/api/user/login",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyClientController.java",
+      "targetHandler": "LegacyClientController#login",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/v2/api/retry/{a}",
+      "sourceController": "Client1Controller",
+      "sourceAction": "redirected",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/v2/api/retry/{a}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyClientController.java",
+      "targetHandler": "LegacyClientController#redirected",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/v2/api/banner/list/{a}",
+      "sourceController": "Client1Controller",
+      "sourceAction": "getBanner",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/v2/api/banner/list/{a}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyClientController.java",
+      "targetHandler": "LegacyClientController#banner",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/v2/api/check/url",
+      "sourceController": "Client1Controller",
+      "sourceAction": "getUrlBy",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/v2/api/check/url",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyClientController.java",
+      "targetHandler": "LegacyClientController#checkUrl",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/{a}/{b}/{c}",
+      "sourceController": "Client2Controller",
+      "sourceAction": "getAesData",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/{a}/{b}/{c}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyClientController.java",
+      "targetHandler": "LegacyClientController#triple",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/system/{a}",
+      "sourceController": "ClientController",
+      "sourceAction": "api4",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/system/{a}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyClientController.java",
+      "targetHandler": "LegacyClientController#system",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/dynamic/{a}",
+      "sourceController": "ClientController",
+      "sourceAction": "loadAdj",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/dynamic/{a}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyClientController.java",
+      "targetHandler": "LegacyClientController#dynamic",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/home/index/jsp",
+      "sourceController": "ClientController",
+      "sourceAction": "base64Data",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/home/index/jsp",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyClientController.java",
+      "targetHandler": "LegacyClientController#home",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/{l}",
+      "sourceController": "ClientController",
+      "sourceAction": "base64Data2",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/{l}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyClientController.java",
+      "targetHandler": "LegacyClientController#single",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/{l}/{a}",
+      "sourceController": "ClientController",
+      "sourceAction": "base64Data3",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/{l}/{a}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyClientController.java",
+      "targetHandler": "LegacyClientController#doublePath",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/app/start",
+      "sourceController": "ClientController",
+      "sourceAction": "getUserInfo",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/app/start",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyClientController.java",
+      "targetHandler": "LegacyClientController#start",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/applog/list",
+      "sourceController": "EsAppLogController",
+      "sourceAction": "list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/request-logs/list",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageRequestLogController.java",
+      "targetHandler": "PackageRequestLogController#list",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/applog/export",
+      "sourceController": "EsAppLogController",
+      "sourceAction": "export",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/request-logs/export",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageRequestLogController.java",
+      "targetHandler": "PackageRequestLogController#export",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/applog/{id}",
+      "sourceController": "EsAppLogController",
+      "sourceAction": "getInfo",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/request-logs/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageRequestLogController.java",
+      "targetHandler": "PackageRequestLogController#detail",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/applog/add",
+      "sourceController": "EsAppLogController",
+      "sourceAction": "add",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/request-logs",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageRequestLogController.java",
+      "targetHandler": "PackageRequestLogController#add",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/applog/update",
+      "sourceController": "EsAppLogController",
+      "sourceAction": "edit",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/request-logs/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageRequestLogController.java",
+      "targetHandler": "PackageRequestLogController#edit",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/applog/{ids}",
+      "sourceController": "EsAppLogController",
+      "sourceAction": "remove",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/request-logs/{ids}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageRequestLogController.java",
+      "targetHandler": "PackageRequestLogController#delete",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/applog/clean",
+      "sourceController": "EsAppLogController",
+      "sourceAction": "clean",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/request-logs/clean",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageRequestLogController.java",
+      "targetHandler": "PackageRequestLogController#clean",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/event_config/list",
+      "sourceController": "EventConfigController",
+      "sourceAction": "list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/event-configs/list",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#list",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/event_config/export",
+      "sourceController": "EventConfigController",
+      "sourceAction": "export",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/event-configs/export",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#export",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/event_config/{id}",
+      "sourceController": "EventConfigController",
+      "sourceAction": "getInfo",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/event-configs/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#detail",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/event_config",
+      "sourceController": "EventConfigController",
+      "sourceAction": "add",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/event-configs",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#add",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/event_config",
+      "sourceController": "EventConfigController",
+      "sourceAction": "edit",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/event-configs/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#edit",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/event_config/{ids}",
+      "sourceController": "EventConfigController",
+      "sourceAction": "remove",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/event-configs/{ids}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#delete",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/error/list",
+      "sourceController": "EventErrorController",
+      "sourceAction": "list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/event-errors/list",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#list",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/error/export",
+      "sourceController": "EventErrorController",
+      "sourceAction": "export",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/event-errors/export",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#export",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/error/{id}",
+      "sourceController": "EventErrorController",
+      "sourceAction": "getInfo",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/event-errors/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#detail",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/error",
+      "sourceController": "EventErrorController",
+      "sourceAction": "add",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/event-errors",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#add",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/error",
+      "sourceController": "EventErrorController",
+      "sourceAction": "edit",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/event-errors/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#edit",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/error/{ids}",
+      "sourceController": "EventErrorController",
+      "sourceAction": "remove",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/event-errors/{ids}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#delete",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/history/list",
+      "sourceController": "EvnetHistoryController",
+      "sourceAction": "list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/event-history/list",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#list",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/history/export",
+      "sourceController": "EvnetHistoryController",
+      "sourceAction": "export",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/event-history/export",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#export",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/history/{id}",
+      "sourceController": "EvnetHistoryController",
+      "sourceAction": "getInfo",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/event-history/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#detail",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/history",
+      "sourceController": "EvnetHistoryController",
+      "sourceAction": "add",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/event-history",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#add",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/history",
+      "sourceController": "EvnetHistoryController",
+      "sourceAction": "edit",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/event-history/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#edit",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/history/{ids}",
+      "sourceController": "EvnetHistoryController",
+      "sourceAction": "remove",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/event-history/{ids}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#delete",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/fb/{packageId}",
+      "sourceController": "FBController",
+      "sourceAction": "fbEvent",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/fb/{packageId}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyPublicController.java",
+      "targetHandler": "LegacyPublicController#fb",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/loading/access/access",
+      "sourceController": "LoadCountAccessController",
+      "sourceAction": "addAccess",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/loading/access/access",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyPublicController.java",
+      "targetHandler": "LegacyPublicController#access",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/loading/access/download",
+      "sourceController": "LoadCountAccessController",
+      "sourceAction": "addDownload",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/loading/access/download",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyPublicController.java",
+      "targetHandler": "LegacyPublicController#download",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/count/list",
+      "sourceController": "LoadCountController",
+      "sourceAction": "list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/landing-counts/list",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#list",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/count/export",
+      "sourceController": "LoadCountController",
+      "sourceAction": "export",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/landing-counts/export",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#export",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/count/{id}",
+      "sourceController": "LoadCountController",
+      "sourceAction": "getInfo",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/landing-counts/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#detail",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/count",
+      "sourceController": "LoadCountController",
+      "sourceAction": "add",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/landing-counts",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#add",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/count",
+      "sourceController": "LoadCountController",
+      "sourceAction": "edit",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/landing-counts/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#edit",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/count/{ids}",
+      "sourceController": "LoadCountController",
+      "sourceAction": "remove",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/landing-counts/{ids}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#delete",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/page/{page}",
+      "sourceController": "PageController",
+      "sourceAction": "page",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/page/{page}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyPublicController.java",
+      "targetHandler": "LegacyPublicController#page",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/notify/list",
+      "sourceController": "AppNotifyController",
+      "sourceAction": "list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/notifications/list",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#list",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/notify/export",
+      "sourceController": "AppNotifyController",
+      "sourceAction": "export",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/notifications/export",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#export",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/notify/{id}",
+      "sourceController": "AppNotifyController",
+      "sourceAction": "getInfo",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/notifications/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#detail",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/notify",
+      "sourceController": "AppNotifyController",
+      "sourceAction": "add",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/notifications",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#add",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/notify",
+      "sourceController": "AppNotifyController",
+      "sourceAction": "edit",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/notifications/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#edit",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/notify/{ids}",
+      "sourceController": "AppNotifyController",
+      "sourceAction": "remove",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/notifications/{ids}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#delete",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/pwa/list",
+      "sourceController": "AppPwaController",
+      "sourceAction": "list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/pwa/list",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#list",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/pwa/all",
+      "sourceController": "AppPwaController",
+      "sourceAction": "all",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/pwa/all",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminActionsController.java",
+      "targetHandler": "PackageAdminActionsController#all",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/pwa/export",
+      "sourceController": "AppPwaController",
+      "sourceAction": "export",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/pwa/export",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#export",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/pwa/{id}",
+      "sourceController": "AppPwaController",
+      "sourceAction": "getInfo",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/pwa/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#detail",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/pwa",
+      "sourceController": "AppPwaController",
+      "sourceAction": "add",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/pwa",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#add",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/pwa",
+      "sourceController": "AppPwaController",
+      "sourceAction": "edit",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/pwa/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#edit",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/pwa/{ids}",
+      "sourceController": "AppPwaController",
+      "sourceAction": "remove",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/pwa/{ids}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#delete",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/pwa/{path}",
+      "sourceController": "PwaController",
+      "sourceAction": "getInfo",
+      "targetMethod": "GET",
+      "targetPath": "/package-legacy/pwa/{path}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyPublicController.java",
+      "targetHandler": "LegacyPublicController#pwa",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/notify/subscribe",
+      "sourceController": "PwaNotifyController",
+      "sourceAction": "subscribe",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/notify/subscribe",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyPublicController.java",
+      "targetHandler": "LegacyPublicController#subscribe",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/notify/notifyweb",
+      "sourceController": "PwaNotifyController",
+      "sourceAction": "get",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/notify/notifyweb",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyPublicController.java",
+      "targetHandler": "LegacyPublicController#notifyWeb",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/systemSDK/upload/data",
+      "sourceController": "AppStatisticsController",
+      "sourceAction": "upload",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/systemSDK/upload/data",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyPublicController.java",
+      "targetHandler": "LegacyPublicController#uploadData",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "ANY",
+      "sourcePath": "/systemSDK/{a}",
+      "sourceController": "AppStatisticsController",
+      "sourceAction": "getSwitch",
+      "targetMethod": "ANY",
+      "targetPath": "/package-legacy/systemSDK/{a}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/LegacyPublicController.java",
+      "targetHandler": "LegacyPublicController#systemSdk",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/statistics/list",
+      "sourceController": "WebStatisticsController",
+      "sourceAction": "list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/statistics/list",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#list",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/statistics/export",
+      "sourceController": "WebStatisticsController",
+      "sourceAction": "export",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/statistics/export",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#export",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/statistics/{id}",
+      "sourceController": "WebStatisticsController",
+      "sourceAction": "getInfo",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/statistics/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#detail",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/statistics",
+      "sourceController": "WebStatisticsController",
+      "sourceAction": "add",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/statistics",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#add",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/statistics",
+      "sourceController": "WebStatisticsController",
+      "sourceAction": "edit",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/statistics/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#edit",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/statistics/{ids}",
+      "sourceController": "WebStatisticsController",
+      "sourceAction": "remove",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/statistics/{ids}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#delete",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/statistics/getTotal",
+      "sourceController": "WebStatisticsController",
+      "sourceAction": "getTotal",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/statistics/getTotal",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminActionsController.java",
+      "targetHandler": "PackageAdminActionsController#totals",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/store/list",
+      "sourceController": "StoreStatusController",
+      "sourceAction": "list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/store/list",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#list",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/store/add",
+      "sourceController": "StoreStatusController",
+      "sourceAction": "add",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/store",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#add",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/store/{id}",
+      "sourceController": "StoreStatusController",
+      "sourceAction": "select",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/store/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#detail",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/store/{ids}",
+      "sourceController": "StoreStatusController",
+      "sourceAction": "remove",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/store/{ids}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#delete",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/store/update",
+      "sourceController": "StoreStatusController",
+      "sourceAction": "edit",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/store/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#edit",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/record/list",
+      "sourceController": "AppEventRecordController",
+      "sourceAction": "list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/app-events/list",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#list",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/record/export",
+      "sourceController": "AppEventRecordController",
+      "sourceAction": "export",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/app-events/export",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#export",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/record/{eventId}",
+      "sourceController": "AppEventRecordController",
+      "sourceAction": "getInfo",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/app-events/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#detail",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/record",
+      "sourceController": "AppEventRecordController",
+      "sourceAction": "add",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/app-events",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#add",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/record",
+      "sourceController": "AppEventRecordController",
+      "sourceAction": "edit",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/app-events/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#edit",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/record/{eventIds}",
+      "sourceController": "AppEventRecordController",
+      "sourceAction": "remove",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/app-events/{ids}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#delete",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/reviewsrecord/list",
+      "sourceController": "ReviewsRecordController",
+      "sourceAction": "list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/reviews/list",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#list",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/reviewsrecord/export",
+      "sourceController": "ReviewsRecordController",
+      "sourceAction": "export",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/reviews/export",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#export",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/reviewsrecord/{reviewsId}",
+      "sourceController": "ReviewsRecordController",
+      "sourceAction": "getInfo",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/reviews/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#detail",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/reviewsrecord",
+      "sourceController": "ReviewsRecordController",
+      "sourceAction": "add",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/reviews",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#add",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/reviewsrecord",
+      "sourceController": "ReviewsRecordController",
+      "sourceAction": "edit",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/reviews/{id}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#edit",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/reviewsrecord/{reviewsIds}",
+      "sourceController": "ReviewsRecordController",
+      "sourceAction": "remove",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/reviews/{ids}",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminController.java",
+      "targetHandler": "PackageAdminController#delete",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler"
+      ],
+      "testScope": "HTTP handler and method resolution; semantic tests listed separately in task-3-report.md"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/common/download",
+      "sourceController": "CommonController",
+      "sourceAction": "download",
+      "targetMethod": "GET",
+      "targetPath": "/package-legacy/common/download",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/PackageFileController.java",
+      "targetHandler": "PackageFileController#download",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler",
+        "PackageFileRoutesTest#uploadDownloadAndRejectTraversal"
+      ],
+      "testScope": "HTTP handler and file semantics"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/common/upload",
+      "sourceController": "CommonController",
+      "sourceAction": "upload",
+      "targetMethod": "POST",
+      "targetPath": "/package-legacy/common/upload",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/PackageFileController.java",
+      "targetHandler": "PackageFileController#upload",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler",
+        "PackageFileRoutesTest#uploadDownloadAndRejectTraversal"
+      ],
+      "testScope": "HTTP handler and file semantics"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/common/uploads",
+      "sourceController": "CommonController",
+      "sourceAction": "uploads",
+      "targetMethod": "POST",
+      "targetPath": "/package-legacy/common/uploads",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/PackageFileController.java",
+      "targetHandler": "PackageFileController#uploads",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler",
+        "PackageFileRoutesTest#uploadDownloadAndRejectTraversal"
+      ],
+      "testScope": "HTTP handler and file semantics"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/common/download/resource",
+      "sourceController": "CommonController",
+      "sourceAction": "resource",
+      "targetMethod": "GET",
+      "targetPath": "/package-legacy/common/download/resource",
+      "targetFile": "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/legacy/PackageFileController.java",
+      "targetHandler": "PackageFileController#resource",
+      "tests": [
+        "PackageEndpointCoverageTest#all99SourceActionsResolveToExpectedHandler",
+        "PackageFileRoutesTest#uploadDownloadAndRejectTraversal"
+      ],
+      "testScope": "HTTP handler and file semantics"
+    }
+  ],
+  "staticResources": {
+    "tests": [
+      "PackageFileRoutesTest#uploadDownloadAndRejectTraversal"
+    ],
+    "targetPath": "/package-legacy/profile/**",
+    "sourcePath": "/profile/**",
+    "targetHandler": "PackageFileController#profile"
+  }
+}

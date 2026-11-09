@@ -101,10 +101,14 @@ public class EvnetHistoryServiceImpl implements IEvnetHistoryService {
         return evnetHistoryMapper.deleteEvnetHistoryById(id);
     }
 
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private org.jeecg.modules.packagemanagement.infrastructure.identity.PackagePublicOwnership publicOwnership;
     @Override
+    @org.springframework.transaction.annotation.Transactional
     public void fbEvent(String packageId, EvnetHistory event) {
         event.setPackageName(packageId);
         evnetHistoryMapper.insertEvnetHistory(event);
+        if(publicOwnership!=null)publicOwnership.fromPackage("pkg_event_history",event.getId(),packageId);
         String originalUrl = event.getOriginalUrl();
         System.out.println(originalUrl);
         try {
@@ -142,6 +146,7 @@ public class EvnetHistoryServiceImpl implements IEvnetHistoryService {
             fbError.setErrorMessage("上报失败："+e.getMessage());
             fbError.setErrorContent(event.toString());
             eventErrorMapper.insertEventError(fbError);
+            if(publicOwnership!=null)publicOwnership.fromPackage("pkg_event_error",fbError.getId(),fbError.getErrorPackage());
         }
     }
 
@@ -153,6 +158,7 @@ public class EvnetHistoryServiceImpl implements IEvnetHistoryService {
             fbError.setErrorPackage(packageID);
             fbError.setErrorMessage("包不存在");
             eventErrorMapper.insertEventError(fbError);
+            if(publicOwnership!=null)publicOwnership.fromPackage("pkg_event_error",fbError.getId(),fbError.getErrorPackage());
             return;
         }
         try {
@@ -163,6 +169,7 @@ public class EvnetHistoryServiceImpl implements IEvnetHistoryService {
             fbError.setErrorMessage("fb上报日志："+response.toString());
             fbError.setErrorContent(fbEvent.toString());
             eventErrorMapper.insertEventError(fbError);
+            if(publicOwnership!=null)publicOwnership.fromPackage("pkg_event_error",fbError.getId(),fbError.getErrorPackage());
         } catch (RuntimeException e) {
             System.out.println("fb上报失败：" + e.getMessage());
             EventError fbError = new EventError();
@@ -170,6 +177,7 @@ public class EvnetHistoryServiceImpl implements IEvnetHistoryService {
             fbError.setErrorMessage("fb上报失败："+e.getMessage());
             fbError.setErrorContent(fbEvent.toString());
             eventErrorMapper.insertEventError(fbError);
+            if(publicOwnership!=null)publicOwnership.fromPackage("pkg_event_error",fbError.getId(),fbError.getErrorPackage());
         }
     }
 }

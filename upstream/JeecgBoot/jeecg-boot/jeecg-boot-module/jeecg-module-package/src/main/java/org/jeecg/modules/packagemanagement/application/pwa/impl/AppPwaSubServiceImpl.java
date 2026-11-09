@@ -28,6 +28,7 @@ public class AppPwaSubServiceImpl implements IAppPwaSubService
     private AppPwaSubMapper appPwaSubMapper;
     @Autowired
     private AppPwaMapper appPwaMapper;
+    @Autowired(required=false) private org.jeecg.modules.packagemanagement.infrastructure.identity.PackagePublicOwnership publicOwnership;
 
 
     /**
@@ -60,6 +61,7 @@ public class AppPwaSubServiceImpl implements IAppPwaSubService
      * @return 结果
      */
     @Override
+    @org.springframework.transaction.annotation.Transactional
     public int insertAppPwaSub(AppPwaSub appPwa)
     {
         if (StringUtils.isEmpty(appPwa.getHost())){
@@ -84,7 +86,9 @@ public class AppPwaSubServiceImpl implements IAppPwaSubService
         if (CollectionUtils.isEmpty(appPwaSubList)){
             appPwa.setAppId(list.get(0).getId());
             appPwa.setCreateTime(new Date());
-            return appPwaSubMapper.insertAppPwaSub(appPwa);
+            int affected=appPwaSubMapper.insertAppPwaSub(appPwa);
+            if(affected>0&&publicOwnership!=null)publicOwnership.inherit("pkg_pwa_subscription",appPwa.getId(),"pkg_pwa",appPwa.getAppId());
+            return affected;
         }else {
             appPwa.setAppId(list.get(0).getId());
             appPwa.setId(appPwaSubList.get(0).getId());

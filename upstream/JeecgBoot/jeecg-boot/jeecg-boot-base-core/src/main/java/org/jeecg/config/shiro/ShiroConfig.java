@@ -201,6 +201,7 @@ public class ShiroConfig {
         filterMap.put("jwt", new JwtFilter(cloudServer==null));
         shiroFilterFactoryBean.setFilters(filterMap);
         // <!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边
+        filterChainDefinitionMap.put("/package-legacy/**", "anon");
         filterChainDefinitionMap.put("/**", "jwt");
 
         // 未授权界面返回JSON

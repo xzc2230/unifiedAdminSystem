@@ -28,6 +28,7 @@ const checkFiles = (files, label) => {
 const key = (method, url) => `${method} ${url}`;
 const audit = read('full-coverage-audit.json');
 const foundation = read('foundation-targets.json');
+const nonmigrated = read('nonmigrated-targets.json');
 const components = read('component-targets.json');
 const targets = read('target-endpoints.json');
 const front = read('frontend-targets.json');
@@ -36,6 +37,19 @@ const snapshot = read('source-snapshot.json');
 if (audit) {
   check(audit.endpoints.length === 235, 'Expected 235 source paths');
   check(audit.pages.length + audit.apis.length + audit.frontendSupport.length === 261, 'Expected 261 source frontend files');
+  if (nonmigrated) {
+    const expected = audit.endpoints.filter(e => ['工具差异登记', '示例不迁移'].includes(e.disposition));
+    const mapped = new Map(nonmigrated.endpoints.map(e => [key(e.sourceMethod, e.sourcePath), e]));
+    check(nonmigrated.endpoints.length === 17 && mapped.size === 17, 'Expected 17 explicit tool/example dispositions');
+    for (const e of expected) {
+      const target = mapped.get(key(e.httpMethod, e.path));
+      check(Boolean(target), `Missing tool/example disposition: ${key(e.httpMethod, e.path)}`);
+      if (target) {
+        check(target.disposition === e.disposition && Boolean(target.reason), `Missing disposition reason: ${e.path}`);
+        checkFiles(target.targetFiles, e.path);
+      }
+    }
+  }
   if (foundation) {
     const expected = audit.endpoints.filter(e => e.disposition === '复用：宿主基础能力');
     const mapped = new Map(foundation.endpoints.map(e => [key(e.sourceMethod, e.sourcePath), e]));

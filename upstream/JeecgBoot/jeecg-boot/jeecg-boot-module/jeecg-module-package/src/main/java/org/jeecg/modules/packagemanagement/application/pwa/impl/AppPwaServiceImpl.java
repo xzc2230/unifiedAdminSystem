@@ -54,6 +54,7 @@ public class AppPwaServiceImpl implements IAppPwaService
     public AppPwa selectAppPwaById(Long id)
     {
         AppPwa appPwa = appPwaMapper.selectAppPwaById(id);
+        if(appPwa==null)return null;
         ReviewsRecord reviewsRecord = new ReviewsRecord();
         reviewsRecord.setAppId(id);
         List<ReviewsRecord> reviewsRecords =  reviewsRecordMapper.selectReviewsRecordList(reviewsRecord);
