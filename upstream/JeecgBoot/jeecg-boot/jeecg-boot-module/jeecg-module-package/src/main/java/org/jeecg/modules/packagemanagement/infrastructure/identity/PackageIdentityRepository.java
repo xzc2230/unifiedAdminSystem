@@ -15,7 +15,15 @@ public class PackageIdentityRepository  {
         return jdbc.queryForObject("SELECT COUNT(*) FROM sys_user_tenant m JOIN sys_tenant t ON t.id=m.tenant_id JOIN sys_user u ON u.id=m.user_id WHERE m.tenant_id=? AND m.user_id=? AND m.status='1' AND t.status=1 AND t.del_flag=0 AND u.status=1 AND u.del_flag=0 AND (t.begin_date IS NULL OR t.begin_date<=NOW()) AND (t.end_date IS NULL OR t.end_date>NOW())",Long.class,tenant,user)>0;
     }
     public List<Long> legacyIds(int tenant,String user) {
-        return jdbc.queryForList("SELECT legacy_user_id FROM pkg_user_identity WHERE tenant_id=? AND jeecg_user_id=?",Long.class,tenant,user);
+        record Identity(Long id,String status) {}
+        var rows=jdbc.query("SELECT legacy_user_id,status FROM pkg_user_identity WHERE tenant_id=? AND jeecg_user_id=?",
+                (rs,index)->new Identity(rs.getObject("legacy_user_id",Long.class),rs.getString("status")),tenant,user);
+        // Check cardinality before status: a disabled duplicate must still deny resolution.
+        if(rows.size()==1) {
+            var identity=rows.get(0);
+            if(!"ACTIVE".equals(identity.status())||identity.id()==null||identity.id()<=0)return List.of();
+        }
+        return rows.stream().map(Identity::id).toList();
     }
     public Set<Long> ownedIds(PackageActor actor,String type) {
         validateType(type);

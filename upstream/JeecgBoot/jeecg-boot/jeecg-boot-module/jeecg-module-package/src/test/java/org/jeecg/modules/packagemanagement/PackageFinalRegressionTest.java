@@ -40,7 +40,7 @@ class PackageFinalRegressionTest {
         when(mapper.updateAppStatistics(any())).thenReturn(1);
         var access=mock(PackageAccess.class);
         var resource=new ManagedResource<>("pkg_app_statistics",AppStatistics.class,AppStatistics::getId,f->List.of(),id->null,
-            service::insertAppStatistics,service::updateAppStatistics,ids->1,(r,a)->r.setUserId(9),
+            service::insertAppStatistics,service::updateAppStatistics,ids->1,(r,a)->r.setUserId(9L),
             List.of("packageCode","status"),Map.of("packageCode","包名"),access,transaction());
         var forged=new AppStatistics();forged.setPackageCode("com.test");forged.setReigisterNum(999L);forged.setPaymentNum(999L);forged.setPaymentTotal(new BigDecimal("999"));
         var created=resource.add(actor,forged);

@@ -25,7 +25,7 @@ public class PackageAdminActionsController {
     @GetMapping("/apps/transfer-targets")
     public Result<List<Map<String,Object>>> targets() {
         var actor=guard.actor("apps","transfer");
-        return Result.ok(jdbc.queryForList("SELECT u.id, COALESCE(NULLIF(u.realname,''),u.username) AS displayName FROM sys_user u JOIN sys_user_tenant m ON m.user_id=u.id JOIN sys_tenant t ON t.id=m.tenant_id JOIN pkg_user_identity i ON CONVERT(i.jeecg_user_id USING utf8mb4) COLLATE utf8mb4_general_ci=CONVERT(u.id USING utf8mb4) COLLATE utf8mb4_general_ci AND i.tenant_id=m.tenant_id WHERE m.tenant_id=? AND m.status='1' AND t.status=1 AND t.del_flag=0 AND u.status=1 AND u.del_flag=0 AND (t.begin_date IS NULL OR t.begin_date<=NOW()) AND (t.end_date IS NULL OR t.end_date>NOW()) GROUP BY u.id,u.realname,u.username HAVING COUNT(DISTINCT i.legacy_user_id)=1 ORDER BY displayName",actor.tenantId()));
+        return Result.ok(jdbc.queryForList("SELECT u.id, COALESCE(NULLIF(u.realname,''),u.username) AS displayName FROM sys_user u JOIN sys_user_tenant m ON m.user_id=u.id JOIN sys_tenant t ON t.id=m.tenant_id JOIN pkg_user_identity i ON CONVERT(i.jeecg_user_id USING utf8mb4) COLLATE utf8mb4_general_ci=CONVERT(u.id USING utf8mb4) COLLATE utf8mb4_general_ci AND i.tenant_id=m.tenant_id WHERE m.tenant_id=? AND m.status='1' AND t.status=1 AND t.del_flag=0 AND u.status=1 AND u.del_flag=0 AND (t.begin_date IS NULL OR t.begin_date<=NOW()) AND (t.end_date IS NULL OR t.end_date>NOW()) GROUP BY u.id,u.realname,u.username HAVING COUNT(*)=1 AND SUM(i.status='ACTIVE' AND i.legacy_user_id>0)=1 ORDER BY displayName",actor.tenantId()));
     }
     public record Transfer(List<Long> ids,String targetUser) {}
     @PostMapping("/apps/transfer")

@@ -81,9 +81,6 @@ public class PackageAccess  {
         active(actor);
         return actor.legacyUserId();
     }
-    public int effectiveLegacyUserIdInt(PackageActor actor) {
-        return Math.toIntExact(effectiveLegacyUserId(actor));
-    }
     public List<String> logPackages(PackageActor actor) {
         active(actor);
         return repository.ownedPackages(actor);

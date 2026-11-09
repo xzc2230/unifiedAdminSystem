@@ -39,7 +39,7 @@ public final class PackageAdminRegistry {
         resources.put("statistics",new ManagedResource<>("pkg_app_statistics",AppStatistics.class,AppStatistics::getId,
                 statistics::selectAppStatisticsList,statistics::selectAppStatisticsById,statistics::insertAppStatistics,
                 statistics::updateAppStatistics,statistics::deleteAppStatisticsByIds,
-                (r,a)->r.setUserId(access.effectiveLegacyUserIdInt(a)),
+                (r,a)->r.setUserId(access.effectiveLegacyUserId(a)),
                 List.of("packageCode","status","url","subAreas","subUrl","shunt"),
                 cols("packageCode","包名","reigisterNum","注册总数","paymentNum","充值总数","paymentTotal","充值总额","url","主链接","subAreas","子地区","subUrl","子链接","status","状态","shunt","隐藏开关"),access,tx));
         resources.put("event-configs",new ManagedResource<>("pkg_event_config",EventConfig.class,EventConfig::getId,

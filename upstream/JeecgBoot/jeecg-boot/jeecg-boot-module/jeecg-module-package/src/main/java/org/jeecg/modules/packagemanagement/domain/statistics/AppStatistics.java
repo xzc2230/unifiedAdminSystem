@@ -65,7 +65,7 @@ public class AppStatistics extends PackageEntity {
     /**
      * 用户
      */
-    private Integer userId;
+    private Long userId;
 
     private Integer status;
 
@@ -144,11 +144,11 @@ public class AppStatistics extends PackageEntity {
         return subUrl;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
