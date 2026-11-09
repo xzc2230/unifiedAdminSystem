@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.AppStatisticsMapper">
+
+    <resultMap type="org.jeecg.modules.packagemanagement.domain.statistics.AppStatistics" id="AppStatisticsResult">
+        <result property="id" column="id"/>
+        <result property="packageCode" column="package_code"/>
+        <result property="reigisterNum" column="reigister_num"/>
+        <result property="paymentNum" column="payment_num"/>
+        <result property="paymentTotal" column="payment_total"/>
+        <result property="url" column="url"/>
+        <result property="subAreas" column="sub_areas"/>
+        <result property="subUrl" column="sub_url"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="userId" column="user_id"/>
+        <result property="status" column="status"/>
+        <result property="shunt" column="shunt"/>
+    </resultMap>
+
+    <sql id="selectAppStatisticsVo">
+        select id,
+               package_code,
+               reigister_num,
+               payment_num,
+               payment_total,
+               url,
+               sub_areas,
+               sub_url,
+               create_time,
+               update_time,
+               user_id,
+               status,
+               shunt
+        from pkg_app_statistics
+    </sql>
+
+    <select id="selectAppStatisticsList" parameterType="org.jeecg.modules.packagemanagement.domain.statistics.AppStatistics" resultMap="AppStatisticsResult">
+        <include refid="selectAppStatisticsVo"/>
+        <where>
+            <if test="packageCode != null  and packageCode != ''">and package_code like concat('%',#{packageCode},'%')</if>
+            <if test="reigisterNum != null ">and reigister_num = #{reigisterNum}</if>
+            <if test="paymentNum != null ">and payment_num = #{paymentNum}</if>
+            <if test="paymentTotal != null ">and payment_total = #{paymentTotal}</if>
+            <if test="url != null  and url != ''">and url = #{url}</if>
+            <if test="subAreas != null  and subAreas != ''">and sub_areas = #{subAreas}</if>
+            <if test="subUrl != null  and subUrl != ''">and sub_url = #{subUrl}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="shunt != null ">and shunt = #{shunt}</if>
+        </where>
+    </select>
+
+    <select id="selectAppStatisticsById" parameterType="Long" resultMap="AppStatisticsResult">
+        <include refid="selectAppStatisticsVo"/>
+        where id = #{id}
+    </select>
+
+
+    <select id="selectAppStatisticsByPackageName" parameterType="String" resultMap="AppStatisticsResult">
+        <include refid="selectAppStatisticsVo"/>
+        where package_code = #{packageName}
+    </select>
+
+
+    <insert id="insertAppStatistics" parameterType="org.jeecg.modules.packagemanagement.domain.statistics.AppStatistics" useGeneratedKeys="true" keyProperty="id">
+        insert into pkg_app_statistics
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="packageCode != null">package_code,</if>
+            <if test="reigisterNum != null">reigister_num,</if>
+            <if test="paymentNum != null">payment_num,</if>
+            <if test="paymentTotal != null">payment_total,</if>
+            <if test="url != null">url,</if>
+            <if test="subAreas != null">sub_areas,</if>
+            <if test="subUrl != null">sub_url,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="status != null">status,</if>
+            <if test="shunt != null">shunt,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="packageCode != null">#{packageCode},</if>
+            <if test="reigisterNum != null">#{reigisterNum},</if>
+            <if test="paymentNum != null">#{paymentNum},</if>
+            <if test="paymentTotal != null">#{paymentTotal},</if>
+            <if test="url != null">#{url},</if>
+            <if test="subAreas != null">#{subAreas},</if>
+            <if test="subUrl != null">#{subUrl},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="shunt != null">#{shunt},</if>
+        </trim>
+    </insert>
+
+    <update id="updateAppStatistics" parameterType="org.jeecg.modules.packagemanagement.domain.statistics.AppStatistics">
+        update pkg_app_statistics
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="packageCode != null">package_code = #{packageCode},</if>
+            <if test="reigisterNum != null">reigister_num = #{reigisterNum},</if>
+            <if test="paymentNum != null">payment_num = #{paymentNum},</if>
+            <if test="paymentTotal != null">payment_total = #{paymentTotal},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="subAreas != null">sub_areas = #{subAreas},</if>
+            <if test="subUrl != null">sub_url = #{subUrl},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="shunt != null">shunt = #{shunt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAppStatisticsById" parameterType="Long">
+        delete
+        from pkg_app_statistics
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteAppStatisticsByIds" parameterType="String">
+        delete from pkg_app_statistics where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

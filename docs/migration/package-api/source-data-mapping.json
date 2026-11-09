@@ -1,0 +1,702 @@
+{
+  "generatedAt": "2026-11-09",
+  "note": "Mapper 字段映射清单，不是生产 DDL。字段类型、长度、唯一约束、默认值、索引及实际历史数据必须与源数据库核对。applog 为实际使用的 ES 索引，app_log SQL Mapper 为历史实现。",
+  "tables": [
+    {
+      "entity": "AppManager",
+      "table": "app_manager",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "appName",
+          "column": "app_name"
+        },
+        {
+          "property": "areas",
+          "column": "areas"
+        },
+        {
+          "property": "author",
+          "column": "author"
+        },
+        {
+          "property": "createDate",
+          "column": "create_date"
+        },
+        {
+          "property": "mark",
+          "column": "mark"
+        },
+        {
+          "property": "packageCode",
+          "column": "package_code"
+        },
+        {
+          "property": "status",
+          "column": "status"
+        },
+        {
+          "property": "updateDate",
+          "column": "update_date"
+        },
+        {
+          "property": "url",
+          "column": "url"
+        },
+        {
+          "property": "userId",
+          "column": "user_id"
+        },
+        {
+          "property": "userName",
+          "column": "user_name"
+        },
+        {
+          "property": "whetherRestrict",
+          "column": "whether_restrict"
+        },
+        {
+          "property": "whetherUs",
+          "column": "whether_us"
+        },
+        {
+          "property": "whetherUse",
+          "column": "whether_use"
+        }
+      ],
+      "source": "PackServer/src/main/resources/mybatis/system/AppManagerMapper.xml"
+    },
+    {
+      "entity": "AppStatistics",
+      "table": "app_statistics",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "packageCode",
+          "column": "package_code"
+        },
+        {
+          "property": "reigisterNum",
+          "column": "reigister_num"
+        },
+        {
+          "property": "paymentNum",
+          "column": "payment_num"
+        },
+        {
+          "property": "paymentTotal",
+          "column": "payment_total"
+        },
+        {
+          "property": "url",
+          "column": "url"
+        },
+        {
+          "property": "subAreas",
+          "column": "sub_areas"
+        },
+        {
+          "property": "subUrl",
+          "column": "sub_url"
+        },
+        {
+          "property": "createTime",
+          "column": "create_time"
+        },
+        {
+          "property": "updateTime",
+          "column": "update_time"
+        },
+        {
+          "property": "userId",
+          "column": "user_id"
+        },
+        {
+          "property": "status",
+          "column": "status"
+        },
+        {
+          "property": "shunt",
+          "column": "shunt"
+        }
+      ],
+      "source": "PackServer/src/main/resources/mybatis/system/AppStatisticsMapper.xml"
+    },
+    {
+      "entity": "StoreStatus",
+      "table": "app_store_status",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "packageCode",
+          "column": "package_code"
+        },
+        {
+          "property": "status",
+          "column": "status"
+        },
+        {
+          "property": "storeUrl",
+          "column": "store_url"
+        },
+        {
+          "property": "createDate",
+          "column": "create_date"
+        },
+        {
+          "property": "successDate",
+          "column": "success_date"
+        },
+        {
+          "property": "failDate",
+          "column": "fail_date"
+        },
+        {
+          "property": "successEmail",
+          "column": "success_email"
+        },
+        {
+          "property": "failEmail",
+          "column": "fail_email"
+        }
+      ],
+      "source": "PackServer/src/main/resources/mybatis/system/StoreStatusMapper.xml"
+    },
+    {
+      "entity": "EventConfig",
+      "table": "event_config",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "packageId",
+          "column": "package_id"
+        },
+        {
+          "property": "packageToken",
+          "column": "package_token"
+        },
+        {
+          "property": "packagePixel",
+          "column": "package_pixel"
+        },
+        {
+          "property": "appName",
+          "column": "app_name"
+        },
+        {
+          "property": "url",
+          "column": "url"
+        }
+      ],
+      "source": "PackServer/src/main/resources/mybatis/system/EventConfigMapper.xml"
+    },
+    {
+      "entity": "EvnetHistory",
+      "table": "evnet_history",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "eventName",
+          "column": "event_name"
+        },
+        {
+          "property": "eventTime",
+          "column": "event_time"
+        },
+        {
+          "property": "eventSource",
+          "column": "event_source"
+        },
+        {
+          "property": "mediaSource",
+          "column": "media_source"
+        },
+        {
+          "property": "campaign",
+          "column": "campaign"
+        },
+        {
+          "property": "afSub1",
+          "column": "af_sub1"
+        },
+        {
+          "property": "afSub2",
+          "column": "af_sub2"
+        },
+        {
+          "property": "afSub3",
+          "column": "af_sub3"
+        },
+        {
+          "property": "region",
+          "column": "region"
+        },
+        {
+          "property": "countryCode",
+          "column": "country_code"
+        },
+        {
+          "property": "state",
+          "column": "state"
+        },
+        {
+          "property": "city",
+          "column": "city"
+        },
+        {
+          "property": "postalCode",
+          "column": "postal_code"
+        },
+        {
+          "property": "dma",
+          "column": "dma"
+        },
+        {
+          "property": "ip",
+          "column": "ip"
+        },
+        {
+          "property": "wifi",
+          "column": "wifi"
+        },
+        {
+          "property": "operator",
+          "column": "operator"
+        },
+        {
+          "property": "language",
+          "column": "language"
+        },
+        {
+          "property": "appsflyerId",
+          "column": "appsflyer_id"
+        },
+        {
+          "property": "platform",
+          "column": "platform"
+        },
+        {
+          "property": "osVersion",
+          "column": "os_version"
+        },
+        {
+          "property": "appVersion",
+          "column": "app_version"
+        },
+        {
+          "property": "sdkVersion",
+          "column": "sdk_version"
+        },
+        {
+          "property": "appId",
+          "column": "app_id"
+        },
+        {
+          "property": "appName",
+          "column": "app_name"
+        },
+        {
+          "property": "bundleId",
+          "column": "bundle_id"
+        },
+        {
+          "property": "isRetargeting",
+          "column": "is_retargeting"
+        },
+        {
+          "property": "userAgent",
+          "column": "user_agent"
+        },
+        {
+          "property": "httpReferrer",
+          "column": "http_referrer"
+        },
+        {
+          "property": "originalUrl",
+          "column": "original_url"
+        },
+        {
+          "property": "deviceDownloadTime",
+          "column": "device_download_time"
+        },
+        {
+          "property": "conversionType",
+          "column": "conversion_type"
+        },
+        {
+          "property": "deviceModel",
+          "column": "device_model"
+        },
+        {
+          "property": "jsonStr",
+          "column": "json_str"
+        },
+        {
+          "property": "path",
+          "column": "path"
+        },
+        {
+          "property": "status",
+          "column": "status"
+        },
+        {
+          "property": "packageName",
+          "column": "package_name"
+        }
+      ],
+      "source": "PackServer/src/main/resources/mybatis/system/EvnetHistoryMapper.xml"
+    },
+    {
+      "entity": "EventError",
+      "table": "event_error",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "errorPackage",
+          "column": "error_package"
+        },
+        {
+          "property": "errorMessage",
+          "column": "error_message"
+        },
+        {
+          "property": "errorContent",
+          "column": "error_content"
+        }
+      ],
+      "source": "PackServer/src/main/resources/mybatis/system/EventErrorMapper.xml"
+    },
+    {
+      "entity": "LoadCount",
+      "table": "load_count",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "hostName",
+          "column": "hostName"
+        },
+        {
+          "property": "time",
+          "column": "time"
+        },
+        {
+          "property": "access",
+          "column": "access"
+        },
+        {
+          "property": "download",
+          "column": "download"
+        },
+        {
+          "property": "userId",
+          "column": "user_id"
+        },
+        {
+          "property": "appId",
+          "column": "app_id"
+        }
+      ],
+      "source": "PackServer/src/main/resources/mybatis/system/LoadCountMapper.xml"
+    },
+    {
+      "entity": "AppPwa",
+      "table": "app_pwa",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "appName",
+          "column": "app_name"
+        },
+        {
+          "property": "appIcon",
+          "column": "app_icon"
+        },
+        {
+          "property": "appAdvertising",
+          "column": "app_advertising"
+        },
+        {
+          "property": "appDescription",
+          "column": "app_description"
+        },
+        {
+          "property": "appLanguage",
+          "column": "app_language"
+        },
+        {
+          "property": "appHost",
+          "column": "app_host"
+        },
+        {
+          "property": "appUrl",
+          "column": "app_url"
+        },
+        {
+          "property": "appEvent",
+          "column": "app_event"
+        },
+        {
+          "property": "appEventConf",
+          "column": "app_event_conf"
+        },
+        {
+          "property": "userId",
+          "column": "user_id"
+        },
+        {
+          "property": "appCreateTime",
+          "column": "app_create_time"
+        },
+        {
+          "property": "appChangeTime",
+          "column": "app_change_time"
+        },
+        {
+          "property": "appSubHost",
+          "column": "app_sub_host"
+        },
+        {
+          "property": "appSub",
+          "column": "app_sub"
+        },
+        {
+          "property": "linkId",
+          "column": "link_id"
+        },
+        {
+          "property": "publicKey",
+          "column": "public_key"
+        },
+        {
+          "property": "privateKey",
+          "column": "private_key"
+        },
+        {
+          "property": "downloadUrl",
+          "column": "download_url"
+        },
+        {
+          "property": "appType",
+          "column": "app_type"
+        },
+        {
+          "property": "appCode",
+          "column": "app_code"
+        },
+        {
+          "property": "downloadCount",
+          "column": "download_count"
+        },
+        {
+          "property": "score",
+          "column": "score"
+        },
+        {
+          "property": "reviews",
+          "column": "reviews"
+        },
+        {
+          "property": "tags",
+          "column": "tags"
+        }
+      ],
+      "source": "PackServer/src/main/resources/mybatis/system/AppPwaMapper.xml"
+    },
+    {
+      "entity": "AppPwaSub",
+      "table": "app_pwa_sub",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "host",
+          "column": "host"
+        },
+        {
+          "property": "endpoint",
+          "column": "endpoint"
+        },
+        {
+          "property": "auth",
+          "column": "auth"
+        },
+        {
+          "property": "p256dh",
+          "column": "p256dh"
+        },
+        {
+          "property": "appId",
+          "column": "app_id"
+        },
+        {
+          "property": "createTime",
+          "column": "create_time"
+        },
+        {
+          "property": "sendTime",
+          "column": "send_time"
+        },
+        {
+          "property": "sendStatus",
+          "column": "send_status"
+        },
+        {
+          "property": "sendErr",
+          "column": "send_err"
+        }
+      ],
+      "source": "PackServer/src/main/resources/mybatis/system/AppPwaSubMapper.xml"
+    },
+    {
+      "entity": "AppNotify",
+      "table": "app_notify",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "appId",
+          "column": "app_id"
+        },
+        {
+          "property": "userId",
+          "column": "user_id"
+        },
+        {
+          "property": "appName",
+          "column": "app_name"
+        },
+        {
+          "property": "appIcon",
+          "column": "app_icon"
+        },
+        {
+          "property": "appHost",
+          "column": "app_host"
+        },
+        {
+          "property": "notifyTitle",
+          "column": "notify_title"
+        },
+        {
+          "property": "notifyMessage",
+          "column": "notify_message"
+        },
+        {
+          "property": "notifyIcon",
+          "column": "notify_icon"
+        },
+        {
+          "property": "createTime",
+          "column": "create_time"
+        }
+      ],
+      "source": "PackServer/src/main/resources/mybatis/system/AppNotifyMapper.xml"
+    },
+    {
+      "entity": "AppEventRecord",
+      "table": "app_event_record",
+      "columns": [
+        {
+          "property": "eventId",
+          "column": "event_id"
+        },
+        {
+          "property": "appId",
+          "column": "app_id"
+        },
+        {
+          "property": "hostName",
+          "column": "host_name"
+        },
+        {
+          "property": "eventType",
+          "column": "event_type"
+        },
+        {
+          "property": "eventTypeName",
+          "column": "event_type_name"
+        },
+        {
+          "property": "deviceNo",
+          "column": "device_no"
+        },
+        {
+          "property": "ip",
+          "column": "ip"
+        },
+        {
+          "property": "createTime",
+          "column": "create_time"
+        },
+        {
+          "property": "userId",
+          "column": "user_id"
+        }
+      ],
+      "source": "PackServer/src/main/resources/mybatis/system/AppEventRecordMapper.xml"
+    },
+    {
+      "entity": "ReviewsRecord",
+      "table": "reviews_record",
+      "columns": [
+        {
+          "property": "reviewsId",
+          "column": "reviews_id"
+        },
+        {
+          "property": "appId",
+          "column": "app_id"
+        },
+        {
+          "property": "headPortraitUrl",
+          "column": "head_portrait_url"
+        },
+        {
+          "property": "name",
+          "column": "name"
+        },
+        {
+          "property": "content",
+          "column": "content"
+        },
+        {
+          "property": "score",
+          "column": "score"
+        },
+        {
+          "property": "createTime",
+          "column": "create_time"
+        }
+      ],
+      "source": "PackServer/src/main/resources/mybatis/system/ReviewsRecordMapper.xml"
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.AppPwaMapper">
+
+    <resultMap type="org.jeecg.modules.packagemanagement.domain.pwa.AppPwa" id="AppPwaResult">
+        <result property="id"    column="id"    />
+        <result property="appName"    column="app_name"    />
+        <result property="appIcon"    column="app_icon"    />
+        <result property="appAdvertising"    column="app_advertising"    />
+        <result property="appDescription"    column="app_description"    />
+        <result property="appLanguage"    column="app_language"    />
+        <result property="appHost"    column="app_host"    />
+        <result property="appUrl"    column="app_url"    />
+        <result property="appEvent"    column="app_event"    />
+        <result property="appEventConf"    column="app_event_conf"    />
+        <result property="userId"    column="user_id"    />
+        <result property="appCreateTime"    column="app_create_time"    />
+        <result property="appChangeTime"    column="app_change_time"    />
+        <result property="appSubHost"    column="app_sub_host"    />
+        <result property="appSub"    column="app_sub"    />
+        <result property="linkId"    column="link_id"    />
+        <result property="publicKey"    column="public_key"    />
+        <result property="privateKey"    column="private_key"    />
+        <result property="downloadUrl"    column="download_url"    />
+        <result property="appType"    column="app_type"    />
+        <result property="appCode"    column="app_code"    />
+        <result property="downloadCount"    column="download_count"    />
+        <result property="score"    column="score"    />
+        <result property="reviews"    column="reviews"    />
+        <result property="tags"    column="tags"    />
+    </resultMap>
+
+    <sql id="selectAppPwaVo">
+        select id, app_name, app_icon, app_advertising, app_description, app_language, app_host,app_url, app_event, app_event_conf, user_id, app_create_time, app_change_time,app_sub_host,app_sub, link_id,public_key,private_key,download_url,app_type,app_code,reviews,download_count,score,tags from pkg_pwa
+    </sql>
+
+    <select id="selectAppPwaList" parameterType="org.jeecg.modules.packagemanagement.domain.pwa.AppPwa" resultMap="AppPwaResult">
+        <include refid="selectAppPwaVo"/>
+        <where>
+            <if test="appName != null  and appName != ''"> and app_name like concat('%', #{appName}, '%')</if>
+            <if test="appHost != null  and appHost != ''"> and app_host like concat('%', #{appHost}, '%')</if>
+            <if test="appSub != null  and appSub != ''"> and app_sub like concat('%', #{appSub}, '%')</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="appUrl != null ">and app_url like concat('%', #{appUrl}, '%')</if>
+            <if test="appType != null">and app_type = #{appType}</if>
+            <if test="appCode != null">and app_code = #{appCode}</if>
+        </where>
+    </select>
+
+    <select id="selectAppPwaById" parameterType="Long" resultMap="AppPwaResult">
+        <include refid="selectAppPwaVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAppPwa" parameterType="org.jeecg.modules.packagemanagement.domain.pwa.AppPwa" useGeneratedKeys="true" keyProperty="id">
+        insert into pkg_pwa
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="appName != null">app_name,</if>
+            <if test="appIcon != null">app_icon,</if>
+            <if test="appCode != null">app_code,</if>
+            <if test="appAdvertising != null">app_advertising,</if>
+            <if test="appDescription != null">app_description,</if>
+            <if test="appLanguage != null">app_language,</if>
+            <if test="appHost != null">app_host,</if>
+            <if test="appSubHost != null">app_sub_host,</if>
+            <if test="appSub != null">app_sub,</if>
+            <if test="appUrl != null">app_url,</if>
+            <if test="appEvent != null">app_event,</if>
+            <if test="appEventConf != null">app_event_conf,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="appCreateTime != null">app_create_time,</if>
+            <if test="appChangeTime != null">app_change_time,</if>
+            <if test="linkId != null">link_id,</if>
+            <if test="publicKey != null">public_key,</if>
+            <if test="privateKey != null">private_key,</if>
+            <if test="downloadUrl != null">download_url,</if>
+            <if test="appType != null">app_type,</if>
+            <if test="downloadCount != null">download_count,</if>
+            <if test="score != null">score,</if>
+            <if test="reviews != null">reviews,</if>
+            <if test="tags != null">tags,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="appName != null">#{appName},</if>
+            <if test="appIcon != null">#{appIcon},</if>
+            <if test="appCode != null">#{appCode},</if>
+            <if test="appAdvertising != null">#{appAdvertising},</if>
+            <if test="appDescription != null">#{appDescription},</if>
+            <if test="appLanguage != null">#{appLanguage},</if>
+            <if test="appHost != null">#{appHost},</if>
+            <if test="appSubHost != null">#{appSubHost},</if>
+            <if test="appSub != null">#{appSub},</if>
+            <if test="appUrl != null">#{appUrl},</if>
+            <if test="appEvent != null">#{appEvent},</if>
+            <if test="appEventConf != null">#{appEventConf},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="appCreateTime != null">#{appCreateTime},</if>
+            <if test="appChangeTime != null">#{appChangeTime},</if>
+            <if test="linkId != null">#{linkId},</if>
+            <if test="publicKey != null">#{publicKey},</if>
+            <if test="privateKey != null">#{privateKey},</if>
+            <if test="downloadUrl != null">#{downloadUrl},</if>
+            <if test="appType != null">#{appType},</if>
+            <if test="downloadCount != null">#{downloadCount},</if>
+            <if test="score != null">#{score},</if>
+            <if test="reviews != null">#{reviews},</if>
+            <if test="tags != null">#{tags},</if>
+
+         </trim>
+    </insert>
+
+    <update id="updateAppPwa" parameterType="org.jeecg.modules.packagemanagement.domain.pwa.AppPwa">
+        update pkg_pwa
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="appName != null">app_name = #{appName},</if>
+            <if test="appIcon != null">app_icon = #{appIcon},</if>
+            <if test="appCode != null">app_code = #{appCode},</if>
+            <if test="appAdvertising != null">app_advertising = #{appAdvertising},</if>
+            <if test="appDescription != null">app_description = #{appDescription},</if>
+            <if test="appLanguage != null">app_language = #{appLanguage},</if>
+            <if test="appHost != null">app_host = #{appHost},</if>
+            <if test="appSubHost != null">app_sub_host = #{appSubHost},</if>
+            <if test="appSub != null">app_sub = #{appSub},</if>
+            <if test="appUrl != null">app_url = #{appUrl},</if>
+            <if test="appEvent != null">app_event = #{appEvent},</if>
+            <if test="appEventConf != null">app_event_conf = #{appEventConf},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="appCreateTime != null">app_create_time = #{appCreateTime},</if>
+            <if test="appChangeTime != null">app_change_time = #{appChangeTime},</if>
+            <if test="linkId != null">link_id = #{linkId},</if>
+            <if test="publicKey != null">public_key = #{publicKey},</if>
+            <if test="privateKey != null">private_key = #{privateKey},</if>
+            <if test="downloadUrl != null">download_url = #{downloadUrl},</if>
+            <if test="appType != null">app_type = #{appType},</if>
+            <if test="downloadCount != null">download_count = #{downloadCount},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="reviews != null">reviews = #{reviews},</if>
+            <if test="tags != null">tags = #{tags},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAppPwaById" parameterType="Long">
+        delete from pkg_pwa where id = #{id}
+    </delete>
+
+    <delete id="deleteAppPwaByIds" parameterType="String">
+        delete from pkg_pwa where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+
+</mapper>

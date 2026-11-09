@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.EventConfigMapper">
+
+    <resultMap type="org.jeecg.modules.packagemanagement.domain.event.EventConfig" id="EventConfigResult">
+        <result property="id"    column="id"    />
+        <result property="packageId"    column="package_id"    />
+        <result property="packageToken"    column="package_token"    />
+        <result property="packagePixel"    column="package_pixel"    />
+        <result property="appName"    column="app_name"    />
+        <result property="url"    column="url"    />
+    </resultMap>
+
+    <sql id="selectEventConfigVo">
+        select id, package_id, package_token, package_pixel,app_name,url from pkg_event_config
+    </sql>
+
+    <select id="selectEventConfigList" parameterType="org.jeecg.modules.packagemanagement.domain.event.EventConfig" resultMap="EventConfigResult">
+        <include refid="selectEventConfigVo"/>
+        <where>
+            <if test="packageId != null  and packageId != ''"> and package_id = #{packageId}</if>
+            <if test="packageToken != null  and packageToken != ''"> and package_token = #{packageToken}</if>
+            <if test="packagePixel != null  and packagePixel != ''"> and package_pixel = #{packagePixel}</if>
+            <if test="appName != null  and appName != ''"> and app_name = #{appName}</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+        </where>
+    </select>
+
+    <select id="selectEventConfigById" parameterType="Long" resultMap="EventConfigResult">
+        <include refid="selectEventConfigVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectEventConfigByPackageId" parameterType="String" resultMap="EventConfigResult">
+        <include refid="selectEventConfigVo"/>
+        where package_id = #{packageId}
+    </select>
+
+    <insert id="insertEventConfig" parameterType="org.jeecg.modules.packagemanagement.domain.event.EventConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into pkg_event_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="packageId != null and packageId != ''">package_id,</if>
+            <if test="packageToken != null and packageToken != ''">package_token,</if>
+            <if test="packagePixel != null and packagePixel != ''">package_pixel,</if>
+            <if test="appName != null and appName != ''">app_name,</if>
+            <if test="url != null and url != ''">url,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="packageId != null and packageId != ''">#{packageId},</if>
+            <if test="packageToken != null and packageToken != ''">#{packageToken},</if>
+            <if test="packagePixel != null and packagePixel != ''">#{packagePixel},</if>
+            <if test="appName != null and appName != ''">#{appName},</if>
+            <if test="url != null and url != ''">#{url},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEventConfig" parameterType="org.jeecg.modules.packagemanagement.domain.event.EventConfig">
+        update pkg_event_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="packageId != null and packageId != ''">package_id = #{packageId},</if>
+            <if test="packageToken != null and packageToken != ''">package_token = #{packageToken},</if>
+            <if test="packagePixel != null and packagePixel != ''">package_pixel = #{packagePixel},</if>
+            <if test="appName != null and appName != ''">app_name = #{appName},</if>
+            <if test="url != null and url != ''">url = #{url},</if>
+
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEventConfigById" parameterType="Long">
+        delete from pkg_event_config where id = #{id}
+    </delete>
+
+    <delete id="deleteEventConfigByIds" parameterType="String">
+        delete from pkg_event_config where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

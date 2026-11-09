@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.EvnetHistoryMapper">
+
+    <resultMap type="org.jeecg.modules.packagemanagement.domain.event.EvnetHistory" id="EvnetHistoryResult">
+        <result property="id"    column="id"    />
+        <result property="eventName"    column="event_name"    />
+        <result property="eventTime"    column="event_time"    />
+        <result property="eventSource"    column="event_source"    />
+        <result property="mediaSource"    column="media_source"    />
+        <result property="campaign"    column="campaign"    />
+        <result property="afSub1"    column="af_sub1"    />
+        <result property="afSub2"    column="af_sub2"    />
+        <result property="afSub3"    column="af_sub3"    />
+        <result property="region"    column="region"    />
+        <result property="countryCode"    column="country_code"    />
+        <result property="state"    column="state"    />
+        <result property="city"    column="city"    />
+        <result property="postalCode"    column="postal_code"    />
+        <result property="dma"    column="dma"    />
+        <result property="ip"    column="ip"    />
+        <result property="wifi"    column="wifi"    />
+        <result property="operator"    column="operator"    />
+        <result property="language"    column="language"    />
+        <result property="appsflyerId"    column="appsflyer_id"    />
+        <result property="platform"    column="platform"    />
+        <result property="osVersion"    column="os_version"    />
+        <result property="appVersion"    column="app_version"    />
+        <result property="sdkVersion"    column="sdk_version"    />
+        <result property="appId"    column="app_id"    />
+        <result property="appName"    column="app_name"    />
+        <result property="bundleId"    column="bundle_id"    />
+        <result property="isRetargeting"    column="is_retargeting"    />
+        <result property="userAgent"    column="user_agent"    />
+        <result property="httpReferrer"    column="http_referrer"    />
+        <result property="originalUrl"    column="original_url"    />
+        <result property="deviceDownloadTime"    column="device_download_time"    />
+        <result property="conversionType"    column="conversion_type"    />
+        <result property="deviceModel"    column="device_model"    />
+        <result property="jsonStr"    column="json_str"    />
+        <result property="path"    column="path"    />
+        <result property="status"    column="status"    />
+        <result property="packageName"    column="package_name"    />
+    </resultMap>
+
+    <sql id="selectEvnetHistoryVo">
+        select id, event_name, event_time, event_source, media_source, campaign, af_sub1, af_sub2, af_sub3, region, country_code, state, city, postal_code, dma, ip, wifi, operator, language, appsflyer_id, platform, os_version, app_version, sdk_version, app_id, app_name, bundle_id, is_retargeting, user_agent, http_referrer, original_url, device_download_time, conversion_type, device_model, json_str, path, status, package_name from pkg_event_history
+    </sql>
+
+    <select id="selectEvnetHistoryList" parameterType="org.jeecg.modules.packagemanagement.domain.event.EvnetHistory" resultMap="EvnetHistoryResult">
+        <include refid="selectEvnetHistoryVo"/>
+        <where>
+            <if test="eventName != null  and eventName != ''"> and event_name like concat('%', #{eventName}, '%')</if>
+            <if test="eventTime != null  and eventTime != ''"> and event_time = #{eventTime}</if>
+            <if test="eventSource != null  and eventSource != ''"> and event_source = #{eventSource}</if>
+            <if test="mediaSource != null  and mediaSource != ''"> and media_source = #{mediaSource}</if>
+            <if test="campaign != null  and campaign != ''"> and campaign = #{campaign}</if>
+            <if test="afSub1 != null  and afSub1 != ''"> and af_sub1 = #{afSub1}</if>
+            <if test="afSub2 != null  and afSub2 != ''"> and af_sub2 = #{afSub2}</if>
+            <if test="afSub3 != null  and afSub3 != ''"> and af_sub3 = #{afSub3}</if>
+            <if test="region != null  and region != ''"> and region = #{region}</if>
+            <if test="countryCode != null  and countryCode != ''"> and country_code = #{countryCode}</if>
+            <if test="state != null  and state != ''"> and state = #{state}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="postalCode != null  and postalCode != ''"> and postal_code = #{postalCode}</if>
+            <if test="dma != null  and dma != ''"> and dma = #{dma}</if>
+            <if test="ip != null  and ip != ''"> and ip = #{ip}</if>
+            <if test="wifi != null  and wifi != ''"> and wifi = #{wifi}</if>
+            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
+            <if test="language != null  and language != ''"> and language = #{language}</if>
+            <if test="appsflyerId != null  and appsflyerId != ''"> and appsflyer_id = #{appsflyerId}</if>
+            <if test="platform != null  and platform != ''"> and platform = #{platform}</if>
+            <if test="osVersion != null  and osVersion != ''"> and os_version = #{osVersion}</if>
+            <if test="appVersion != null  and appVersion != ''"> and app_version = #{appVersion}</if>
+            <if test="sdkVersion != null  and sdkVersion != ''"> and sdk_version = #{sdkVersion}</if>
+            <if test="appId != null  and appId != ''"> and app_id = #{appId}</if>
+            <if test="appName != null  and appName != ''"> and app_name like concat('%', #{appName}, '%')</if>
+            <if test="bundleId != null  and bundleId != ''"> and bundle_id = #{bundleId}</if>
+            <if test="isRetargeting != null  and isRetargeting != ''"> and is_retargeting = #{isRetargeting}</if>
+            <if test="userAgent != null  and userAgent != ''"> and user_agent = #{userAgent}</if>
+            <if test="httpReferrer != null  and httpReferrer != ''"> and http_referrer = #{httpReferrer}</if>
+            <if test="originalUrl != null  and originalUrl != ''"> and original_url = #{originalUrl}</if>
+            <if test="deviceDownloadTime != null  and deviceDownloadTime != ''"> and device_download_time = #{deviceDownloadTime}</if>
+            <if test="conversionType != null  and conversionType != ''"> and conversion_type = #{conversionType}</if>
+            <if test="deviceModel != null  and deviceModel != ''"> and device_model = #{deviceModel}</if>
+            <if test="jsonStr != null  and jsonStr != ''"> and json_str = #{jsonStr}</if>
+            <if test="path != null  and path != ''"> and path = #{path}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="packageName != null  and packageName != ''"> and package_name like concat('%', #{packageName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectEvnetHistoryById" parameterType="Long" resultMap="EvnetHistoryResult">
+        <include refid="selectEvnetHistoryVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertEvnetHistory" parameterType="org.jeecg.modules.packagemanagement.domain.event.EvnetHistory" useGeneratedKeys="true" keyProperty="id">
+        insert into pkg_event_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="eventName != null">event_name,</if>
+            <if test="eventTime != null">event_time,</if>
+            <if test="eventSource != null">event_source,</if>
+            <if test="mediaSource != null">media_source,</if>
+            <if test="campaign != null">campaign,</if>
+            <if test="afSub1 != null">af_sub1,</if>
+            <if test="afSub2 != null">af_sub2,</if>
+            <if test="afSub3 != null">af_sub3,</if>
+            <if test="region != null">region,</if>
+            <if test="countryCode != null">country_code,</if>
+            <if test="state != null">state,</if>
+            <if test="city != null">city,</if>
+            <if test="postalCode != null">postal_code,</if>
+            <if test="dma != null">dma,</if>
+            <if test="ip != null">ip,</if>
+            <if test="wifi != null">wifi,</if>
+            <if test="operator != null">operator,</if>
+            <if test="language != null">language,</if>
+            <if test="appsflyerId != null">appsflyer_id,</if>
+            <if test="platform != null">platform,</if>
+            <if test="osVersion != null">os_version,</if>
+            <if test="appVersion != null">app_version,</if>
+            <if test="sdkVersion != null">sdk_version,</if>
+            <if test="appId != null">app_id,</if>
+            <if test="appName != null">app_name,</if>
+            <if test="bundleId != null">bundle_id,</if>
+            <if test="isRetargeting != null">is_retargeting,</if>
+            <if test="userAgent != null">user_agent,</if>
+            <if test="httpReferrer != null">http_referrer,</if>
+            <if test="originalUrl != null">original_url,</if>
+            <if test="deviceDownloadTime != null">device_download_time,</if>
+            <if test="conversionType != null">conversion_type,</if>
+            <if test="deviceModel != null">device_model,</if>
+            <if test="jsonStr != null">json_str,</if>
+            <if test="path != null and path != ''">path,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="packageName != null">package_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="eventName != null">#{eventName},</if>
+            <if test="eventTime != null">#{eventTime},</if>
+            <if test="eventSource != null">#{eventSource},</if>
+            <if test="mediaSource != null">#{mediaSource},</if>
+            <if test="campaign != null">#{campaign},</if>
+            <if test="afSub1 != null">#{afSub1},</if>
+            <if test="afSub2 != null">#{afSub2},</if>
+            <if test="afSub3 != null">#{afSub3},</if>
+            <if test="region != null">#{region},</if>
+            <if test="countryCode != null">#{countryCode},</if>
+            <if test="state != null">#{state},</if>
+            <if test="city != null">#{city},</if>
+            <if test="postalCode != null">#{postalCode},</if>
+            <if test="dma != null">#{dma},</if>
+            <if test="ip != null">#{ip},</if>
+            <if test="wifi != null">#{wifi},</if>
+            <if test="operator != null">#{operator},</if>
+            <if test="language != null">#{language},</if>
+            <if test="appsflyerId != null">#{appsflyerId},</if>
+            <if test="platform != null">#{platform},</if>
+            <if test="osVersion != null">#{osVersion},</if>
+            <if test="appVersion != null">#{appVersion},</if>
+            <if test="sdkVersion != null">#{sdkVersion},</if>
+            <if test="appId != null">#{appId},</if>
+            <if test="appName != null">#{appName},</if>
+            <if test="bundleId != null">#{bundleId},</if>
+            <if test="isRetargeting != null">#{isRetargeting},</if>
+            <if test="userAgent != null">#{userAgent},</if>
+            <if test="httpReferrer != null">#{httpReferrer},</if>
+            <if test="originalUrl != null">#{originalUrl},</if>
+            <if test="deviceDownloadTime != null">#{deviceDownloadTime},</if>
+            <if test="conversionType != null">#{conversionType},</if>
+            <if test="deviceModel != null">#{deviceModel},</if>
+            <if test="jsonStr != null">#{jsonStr},</if>
+            <if test="path != null and path != ''">#{path},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="packageName != null">#{packageName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEvnetHistory" parameterType="org.jeecg.modules.packagemanagement.domain.event.EvnetHistory">
+        update pkg_event_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="eventName != null">event_name = #{eventName},</if>
+            <if test="eventTime != null">event_time = #{eventTime},</if>
+            <if test="eventSource != null">event_source = #{eventSource},</if>
+            <if test="mediaSource != null">media_source = #{mediaSource},</if>
+            <if test="campaign != null">campaign = #{campaign},</if>
+            <if test="afSub1 != null">af_sub1 = #{afSub1},</if>
+            <if test="afSub2 != null">af_sub2 = #{afSub2},</if>
+            <if test="afSub3 != null">af_sub3 = #{afSub3},</if>
+            <if test="region != null">region = #{region},</if>
+            <if test="countryCode != null">country_code = #{countryCode},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="postalCode != null">postal_code = #{postalCode},</if>
+            <if test="dma != null">dma = #{dma},</if>
+            <if test="ip != null">ip = #{ip},</if>
+            <if test="wifi != null">wifi = #{wifi},</if>
+            <if test="operator != null">operator = #{operator},</if>
+            <if test="language != null">language = #{language},</if>
+            <if test="appsflyerId != null">appsflyer_id = #{appsflyerId},</if>
+            <if test="platform != null">platform = #{platform},</if>
+            <if test="osVersion != null">os_version = #{osVersion},</if>
+            <if test="appVersion != null">app_version = #{appVersion},</if>
+            <if test="sdkVersion != null">sdk_version = #{sdkVersion},</if>
+            <if test="appId != null">app_id = #{appId},</if>
+            <if test="appName != null">app_name = #{appName},</if>
+            <if test="bundleId != null">bundle_id = #{bundleId},</if>
+            <if test="isRetargeting != null">is_retargeting = #{isRetargeting},</if>
+            <if test="userAgent != null">user_agent = #{userAgent},</if>
+            <if test="httpReferrer != null">http_referrer = #{httpReferrer},</if>
+            <if test="originalUrl != null">original_url = #{originalUrl},</if>
+            <if test="deviceDownloadTime != null">device_download_time = #{deviceDownloadTime},</if>
+            <if test="conversionType != null">conversion_type = #{conversionType},</if>
+            <if test="deviceModel != null">device_model = #{deviceModel},</if>
+            <if test="jsonStr != null">json_str = #{jsonStr},</if>
+            <if test="path != null and path != ''">path = #{path},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="packageName != null">package_name = #{packageName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEvnetHistoryById" parameterType="Long">
+        delete from pkg_event_history where id = #{id}
+    </delete>
+
+    <delete id="deleteEvnetHistoryByIds" parameterType="String">
+        delete from pkg_event_history where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.AppEventRecordMapper">
+    
+    <resultMap type="org.jeecg.modules.packagemanagement.domain.system.AppEventRecord" id="AppEventRecordResult">
+        <result property="eventId"    column="event_id"    />
+        <result property="appId"    column="app_id"    />
+        <result property="hostName"    column="host_name"    />
+        <result property="eventType"    column="event_type"    />
+        <result property="eventTypeName"    column="event_type_name"    />
+        <result property="deviceNo"    column="device_no"    />
+        <result property="ip"    column="ip"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectAppEventRecordVo">
+        select event_id, app_id, host_name, event_type, event_type_name, device_no, ip, create_time, user_id from pkg_app_event
+    </sql>
+
+    <select id="selectAppEventRecordList" parameterType="org.jeecg.modules.packagemanagement.domain.system.AppEventRecord" resultMap="AppEventRecordResult">
+        <include refid="selectAppEventRecordVo"/>
+        <where>  
+            <if test="appId != null "> and app_id = #{appId}</if>
+            <if test="hostName != null  and hostName != ''"> and host_name like concat('%', #{hostName}, '%')</if>
+            <if test="eventType != null "> and event_type = #{eventType}</if>
+            <if test="eventTypeName != null  and eventTypeName != ''"> and event_type_name like concat('%', #{eventTypeName}, '%')</if>
+            <if test="deviceNo != null  and deviceNo != ''"> and device_no = #{deviceNo}</if>
+            <if test="ip != null  and ip != ''"> and ip = #{ip}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+        </where>
+    </select>
+    
+    <select id="selectAppEventRecordByEventId" parameterType="Long" resultMap="AppEventRecordResult">
+        <include refid="selectAppEventRecordVo"/>
+        where event_id = #{eventId}
+    </select>
+        
+    <insert id="insertAppEventRecord" parameterType="org.jeecg.modules.packagemanagement.domain.system.AppEventRecord" useGeneratedKeys="true" keyProperty="eventId">
+        insert into pkg_app_event
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="appId != null">app_id,</if>
+            <if test="hostName != null">host_name,</if>
+            <if test="eventType != null">event_type,</if>
+            <if test="eventTypeName != null">event_type_name,</if>
+            <if test="deviceNo != null">device_no,</if>
+            <if test="ip != null">ip,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="appId != null">#{appId},</if>
+            <if test="hostName != null">#{hostName},</if>
+            <if test="eventType != null">#{eventType},</if>
+            <if test="eventTypeName != null">#{eventTypeName},</if>
+            <if test="deviceNo != null">#{deviceNo},</if>
+            <if test="ip != null">#{ip},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAppEventRecord" parameterType="org.jeecg.modules.packagemanagement.domain.system.AppEventRecord">
+        update pkg_app_event
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="appId != null">app_id = #{appId},</if>
+            <if test="hostName != null">host_name = #{hostName},</if>
+            <if test="eventType != null">event_type = #{eventType},</if>
+            <if test="eventTypeName != null">event_type_name = #{eventTypeName},</if>
+            <if test="deviceNo != null">device_no = #{deviceNo},</if>
+            <if test="ip != null">ip = #{ip},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where event_id = #{eventId}
+    </update>
+
+    <delete id="deleteAppEventRecordByEventId" parameterType="Long">
+        delete from pkg_app_event where event_id = #{eventId}
+    </delete>
+
+    <delete id="deleteAppEventRecordByEventIds" parameterType="String">
+        delete from pkg_app_event where event_id in 
+        <foreach item="eventId" collection="array" open="(" separator="," close=")">
+            #{eventId}
+        </foreach>
+    </delete>
+</mapper>

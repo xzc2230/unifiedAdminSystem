@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.AppPwaSubMapper">
+
+    <resultMap type="org.jeecg.modules.packagemanagement.domain.pwa.AppPwaSub" id="AppPwaSubResult">
+        <result property="id"    column="id"    />
+        <result property="host"    column="host"    />
+        <result property="endpoint"    column="endpoint"    />
+        <result property="auth"    column="auth"/>
+        <result property="p256dh"    column="p256dh"/>
+        <result property="appId"    column="app_id" />
+        <result property="createTime"    column="create_time" />
+        <result property="sendTime"    column="send_time" />
+        <result property="sendStatus"    column="send_status" />
+        <result property="sendErr"    column="send_err" />
+    </resultMap>
+
+    <sql id="selectAppPwaSubVo">
+        select id,host,endpoint,auth,p256dh,app_id,create_time,send_time,send_status,send_err from pkg_pwa_subscription
+    </sql>
+
+    <select id="selectAppPwaSubList" parameterType="org.jeecg.modules.packagemanagement.domain.pwa.AppPwaSub" resultMap="AppPwaSubResult">
+        <include refid="selectAppPwaSubVo"/>
+        <where>
+            <if test="host != null  and host != ''"> and host like concat('%', #{host}, '%')</if>
+            <if test="appId != null ">and app_id = #{appId}</if>
+            <if test="endpoint != null ">and endpoint = #{endpoint}</if>
+        </where>
+    </select>
+
+    <select id="selectAppPwaSubById" parameterType="Long" resultMap="AppPwaSubResult">
+        <include refid="selectAppPwaSubVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAppPwaSub" parameterType="org.jeecg.modules.packagemanagement.domain.pwa.AppPwaSub" useGeneratedKeys="true" keyProperty="id">
+        insert into pkg_pwa_subscription
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="host != null">host,</if>
+            <if test="endpoint != null">endpoint,</if>
+            <if test="auth != null">auth,</if>
+            <if test="p256dh != null">p256dh,</if>
+            <if test="appId != null">app_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="sendTime != null">send_time,</if>
+            <if test="sendStatus != null">send_status,</if>
+            <if test="sendErr != null">send_err,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="host != null">#{host},</if>
+            <if test="endpoint != null">#{endpoint},</if>
+            <if test="auth != null">#{auth},</if>
+            <if test="p256dh != null">#{p256dh},</if>
+            <if test="appId != null">#{appId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="sendTime != null">#{sendTime},</if>
+            <if test="sendStatus != null">#{sendStatus},</if>
+            <if test="sendErr != null">#{sendErr},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAppPwaSub" parameterType="org.jeecg.modules.packagemanagement.domain.pwa.AppPwaSub">
+        update pkg_pwa_subscription
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="host != null">host = #{host},</if>
+            <if test="endpoint != null">endpoint = #{endpoint},</if>
+            <if test="auth != null">auth = #{auth},</if>
+            <if test="p256dh != null">p256dh = #{p256dh},</if>
+            <if test="appId != null">app_id = #{appId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="sendTime != null">send_time =  #{sendTime},</if>
+            <if test="sendStatus != null">send_status = #{sendStatus},</if>
+            <if test="sendErr != null">send_err = #{sendErr},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAppPwaSubById" parameterType="Long">
+        delete from pkg_pwa_subscription where id = #{id}
+    </delete>
+
+    <delete id="deleteAppPwaSubByIds" parameterType="String">
+        delete from pkg_pwa_subscription where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+
+</mapper>

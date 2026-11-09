@@ -1,0 +1,960 @@
+{
+  "generatedAt": "2026-11-09",
+  "sourceRoot": "D:/workspace/package-api/package-api",
+  "scope": "自定义业务接口；不包含 RuoYi 通用系统、监控、代码生成及注释代码",
+  "note": "ANY 表示源代码未限定 HTTP 方法；classAnonymous 与 permission 分开记录，不能据此推断实际鉴权结果。静态扫描不代替启动时路由检查。",
+  "controllerCount": 21,
+  "endpointCount": 95,
+  "endpoints": [
+    {
+      "controller": "AppManagerController",
+      "method": "list",
+      "httpMethod": "GET",
+      "path": "/system/manager/list",
+      "classAnonymous": false,
+      "permission": "system:manager:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppManagerController.java",
+      "line": 41
+    },
+    {
+      "controller": "AppManagerController",
+      "method": "export",
+      "httpMethod": "POST",
+      "path": "/system/manager/export",
+      "classAnonymous": false,
+      "permission": "system:manager:export",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppManagerController.java",
+      "line": 53
+    },
+    {
+      "controller": "AppManagerController",
+      "method": "getInfo",
+      "httpMethod": "GET",
+      "path": "/system/manager/selbyid/{id}",
+      "classAnonymous": false,
+      "permission": "system:manager:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppManagerController.java",
+      "line": 65
+    },
+    {
+      "controller": "AppManagerController",
+      "method": "add",
+      "httpMethod": "POST",
+      "path": "/system/manager/add",
+      "classAnonymous": false,
+      "permission": "system:manager:add",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppManagerController.java",
+      "line": 75
+    },
+    {
+      "controller": "AppManagerController",
+      "method": "edit",
+      "httpMethod": "PUT",
+      "path": "/system/manager/update",
+      "classAnonymous": false,
+      "permission": "system:manager:edit",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppManagerController.java",
+      "line": 91
+    },
+    {
+      "controller": "AppManagerController",
+      "method": "remove",
+      "httpMethod": "DELETE",
+      "path": "/system/manager/delete/{ids}",
+      "classAnonymous": false,
+      "permission": "system:manager:remove",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppManagerController.java",
+      "line": 101
+    },
+    {
+      "controller": "AppManagerController",
+      "method": "transfer",
+      "httpMethod": "GET",
+      "path": "/system/manager/transfer/{id}/{userId}/{userName}",
+      "classAnonymous": false,
+      "permission": "system:manager:transfer",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppManagerController.java",
+      "line": 114
+    },
+    {
+      "controller": "Client1Controller",
+      "method": "login",
+      "httpMethod": "ANY",
+      "path": "/v2/api/user/login",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/Client1Controller.java",
+      "line": 23
+    },
+    {
+      "controller": "Client1Controller",
+      "method": "redirected",
+      "httpMethod": "ANY",
+      "path": "/v2/api/retry/{a}",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/Client1Controller.java",
+      "line": 29
+    },
+    {
+      "controller": "Client1Controller",
+      "method": "getBanner",
+      "httpMethod": "ANY",
+      "path": "/v2/api/banner/list/{a}",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/Client1Controller.java",
+      "line": 34
+    },
+    {
+      "controller": "Client1Controller",
+      "method": "getUrlBy",
+      "httpMethod": "ANY",
+      "path": "/v2/api/check/url",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/Client1Controller.java",
+      "line": 40
+    },
+    {
+      "controller": "Client2Controller",
+      "method": "getAesData",
+      "httpMethod": "ANY",
+      "path": "/{a}/{b}/{c}",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/Client2Controller.java",
+      "line": 21
+    },
+    {
+      "controller": "ClientController",
+      "method": "api4",
+      "httpMethod": "ANY",
+      "path": "/system/{a}",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/ClientController.java",
+      "line": 19
+    },
+    {
+      "controller": "ClientController",
+      "method": "loadAdj",
+      "httpMethod": "ANY",
+      "path": "/dynamic/{a}",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/ClientController.java",
+      "line": 25
+    },
+    {
+      "controller": "ClientController",
+      "method": "base64Data",
+      "httpMethod": "ANY",
+      "path": "/home/index/jsp",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/ClientController.java",
+      "line": 30
+    },
+    {
+      "controller": "ClientController",
+      "method": "base64Data2",
+      "httpMethod": "ANY",
+      "path": "/{l}",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/ClientController.java",
+      "line": 36
+    },
+    {
+      "controller": "ClientController",
+      "method": "base64Data3",
+      "httpMethod": "ANY",
+      "path": "/{l}/{a}",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/ClientController.java",
+      "line": 42
+    },
+    {
+      "controller": "ClientController",
+      "method": "getUserInfo",
+      "httpMethod": "ANY",
+      "path": "/app/start",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/controller/ClientController.java",
+      "line": 48
+    },
+    {
+      "controller": "EsAppLogController",
+      "method": "list",
+      "httpMethod": "GET",
+      "path": "/system/applog/list",
+      "classAnonymous": true,
+      "permission": "system:applog:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/applog/controller/EsAppLogController.java",
+      "line": 74
+    },
+    {
+      "controller": "EsAppLogController",
+      "method": "export",
+      "httpMethod": "POST",
+      "path": "/system/applog/export",
+      "classAnonymous": true,
+      "permission": "system:applog:export",
+      "source": "PackServer/src/main/java/com/ruoyi/project/applog/controller/EsAppLogController.java",
+      "line": 109
+    },
+    {
+      "controller": "EsAppLogController",
+      "method": "getInfo",
+      "httpMethod": "GET",
+      "path": "/system/applog/{id}",
+      "classAnonymous": true,
+      "permission": "system:applog:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/applog/controller/EsAppLogController.java",
+      "line": 125
+    },
+    {
+      "controller": "EsAppLogController",
+      "method": "add",
+      "httpMethod": "POST",
+      "path": "/system/applog/add",
+      "classAnonymous": true,
+      "permission": "system:applog:add",
+      "source": "PackServer/src/main/java/com/ruoyi/project/applog/controller/EsAppLogController.java",
+      "line": 139
+    },
+    {
+      "controller": "EsAppLogController",
+      "method": "edit",
+      "httpMethod": "PUT",
+      "path": "/system/applog/update",
+      "classAnonymous": true,
+      "permission": "system:applog:edit",
+      "source": "PackServer/src/main/java/com/ruoyi/project/applog/controller/EsAppLogController.java",
+      "line": 150
+    },
+    {
+      "controller": "EsAppLogController",
+      "method": "remove",
+      "httpMethod": "DELETE",
+      "path": "/system/applog/{ids}",
+      "classAnonymous": true,
+      "permission": "system:applog:remove",
+      "source": "PackServer/src/main/java/com/ruoyi/project/applog/controller/EsAppLogController.java",
+      "line": 161
+    },
+    {
+      "controller": "EsAppLogController",
+      "method": "clean",
+      "httpMethod": "DELETE",
+      "path": "/system/applog/clean",
+      "classAnonymous": true,
+      "permission": "system:applog:clean",
+      "source": "PackServer/src/main/java/com/ruoyi/project/applog/controller/EsAppLogController.java",
+      "line": 173
+    },
+    {
+      "controller": "EventConfigController",
+      "method": "list",
+      "httpMethod": "GET",
+      "path": "/system/event_config/list",
+      "classAnonymous": false,
+      "permission": "system:event_config:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EventConfigController.java",
+      "line": 36
+    },
+    {
+      "controller": "EventConfigController",
+      "method": "export",
+      "httpMethod": "POST",
+      "path": "/system/event_config/export",
+      "classAnonymous": false,
+      "permission": "system:event_config:export",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EventConfigController.java",
+      "line": 49
+    },
+    {
+      "controller": "EventConfigController",
+      "method": "getInfo",
+      "httpMethod": "GET",
+      "path": "/system/event_config/{id}",
+      "classAnonymous": false,
+      "permission": "system:event_config:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EventConfigController.java",
+      "line": 61
+    },
+    {
+      "controller": "EventConfigController",
+      "method": "add",
+      "httpMethod": "POST",
+      "path": "/system/event_config",
+      "classAnonymous": false,
+      "permission": "system:event_config:add",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EventConfigController.java",
+      "line": 72
+    },
+    {
+      "controller": "EventConfigController",
+      "method": "edit",
+      "httpMethod": "PUT",
+      "path": "/system/event_config",
+      "classAnonymous": false,
+      "permission": "system:event_config:edit",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EventConfigController.java",
+      "line": 83
+    },
+    {
+      "controller": "EventConfigController",
+      "method": "remove",
+      "httpMethod": "DELETE",
+      "path": "/system/event_config/{ids}",
+      "classAnonymous": false,
+      "permission": "system:event_config:remove",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EventConfigController.java",
+      "line": 94
+    },
+    {
+      "controller": "EventErrorController",
+      "method": "list",
+      "httpMethod": "GET",
+      "path": "/system/error/list",
+      "classAnonymous": false,
+      "permission": "system:error:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EventErrorController.java",
+      "line": 35
+    },
+    {
+      "controller": "EventErrorController",
+      "method": "export",
+      "httpMethod": "POST",
+      "path": "/system/error/export",
+      "classAnonymous": false,
+      "permission": "system:error:export",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EventErrorController.java",
+      "line": 48
+    },
+    {
+      "controller": "EventErrorController",
+      "method": "getInfo",
+      "httpMethod": "GET",
+      "path": "/system/error/{id}",
+      "classAnonymous": false,
+      "permission": "system:error:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EventErrorController.java",
+      "line": 60
+    },
+    {
+      "controller": "EventErrorController",
+      "method": "add",
+      "httpMethod": "POST",
+      "path": "/system/error",
+      "classAnonymous": false,
+      "permission": "system:error:add",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EventErrorController.java",
+      "line": 71
+    },
+    {
+      "controller": "EventErrorController",
+      "method": "edit",
+      "httpMethod": "PUT",
+      "path": "/system/error",
+      "classAnonymous": false,
+      "permission": "system:error:edit",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EventErrorController.java",
+      "line": 82
+    },
+    {
+      "controller": "EventErrorController",
+      "method": "remove",
+      "httpMethod": "DELETE",
+      "path": "/system/error/{ids}",
+      "classAnonymous": false,
+      "permission": "system:error:remove",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EventErrorController.java",
+      "line": 93
+    },
+    {
+      "controller": "EvnetHistoryController",
+      "method": "list",
+      "httpMethod": "GET",
+      "path": "/system/history/list",
+      "classAnonymous": false,
+      "permission": "system:history:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EvnetHistoryController.java",
+      "line": 36
+    },
+    {
+      "controller": "EvnetHistoryController",
+      "method": "export",
+      "httpMethod": "POST",
+      "path": "/system/history/export",
+      "classAnonymous": false,
+      "permission": "system:history:export",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EvnetHistoryController.java",
+      "line": 49
+    },
+    {
+      "controller": "EvnetHistoryController",
+      "method": "getInfo",
+      "httpMethod": "GET",
+      "path": "/system/history/{id}",
+      "classAnonymous": false,
+      "permission": "system:history:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EvnetHistoryController.java",
+      "line": 61
+    },
+    {
+      "controller": "EvnetHistoryController",
+      "method": "add",
+      "httpMethod": "POST",
+      "path": "/system/history",
+      "classAnonymous": false,
+      "permission": "system:history:add",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EvnetHistoryController.java",
+      "line": 72
+    },
+    {
+      "controller": "EvnetHistoryController",
+      "method": "edit",
+      "httpMethod": "PUT",
+      "path": "/system/history",
+      "classAnonymous": false,
+      "permission": "system:history:edit",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EvnetHistoryController.java",
+      "line": 83
+    },
+    {
+      "controller": "EvnetHistoryController",
+      "method": "remove",
+      "httpMethod": "DELETE",
+      "path": "/system/history/{ids}",
+      "classAnonymous": false,
+      "permission": "system:history:remove",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/EvnetHistoryController.java",
+      "line": 94
+    },
+    {
+      "controller": "FBController",
+      "method": "fbEvent",
+      "httpMethod": "ANY",
+      "path": "/fb/{packageId}",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/FBController.java",
+      "line": 23
+    },
+    {
+      "controller": "LoadCountAccessController",
+      "method": "addAccess",
+      "httpMethod": "ANY",
+      "path": "/loading/access/access",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/LoadCountAccessController.java",
+      "line": 23
+    },
+    {
+      "controller": "LoadCountAccessController",
+      "method": "addDownload",
+      "httpMethod": "ANY",
+      "path": "/loading/access/download",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/LoadCountAccessController.java",
+      "line": 47
+    },
+    {
+      "controller": "LoadCountController",
+      "method": "list",
+      "httpMethod": "GET",
+      "path": "/system/count/list",
+      "classAnonymous": false,
+      "permission": "system:count:list",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/LoadCountController.java",
+      "line": 36
+    },
+    {
+      "controller": "LoadCountController",
+      "method": "export",
+      "httpMethod": "POST",
+      "path": "/system/count/export",
+      "classAnonymous": false,
+      "permission": "system:count:export",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/LoadCountController.java",
+      "line": 49
+    },
+    {
+      "controller": "LoadCountController",
+      "method": "getInfo",
+      "httpMethod": "GET",
+      "path": "/system/count/{id}",
+      "classAnonymous": false,
+      "permission": "system:count:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/LoadCountController.java",
+      "line": 61
+    },
+    {
+      "controller": "LoadCountController",
+      "method": "add",
+      "httpMethod": "POST",
+      "path": "/system/count",
+      "classAnonymous": false,
+      "permission": "system:count:add",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/LoadCountController.java",
+      "line": 72
+    },
+    {
+      "controller": "LoadCountController",
+      "method": "edit",
+      "httpMethod": "PUT",
+      "path": "/system/count",
+      "classAnonymous": false,
+      "permission": "system:count:edit",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/LoadCountController.java",
+      "line": 83
+    },
+    {
+      "controller": "LoadCountController",
+      "method": "remove",
+      "httpMethod": "DELETE",
+      "path": "/system/count/{ids}",
+      "classAnonymous": false,
+      "permission": "system:count:remove",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/LoadCountController.java",
+      "line": 94
+    },
+    {
+      "controller": "PageController",
+      "method": "page",
+      "httpMethod": "ANY",
+      "path": "/page/{page}",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/controller/PageController.java",
+      "line": 24
+    },
+    {
+      "controller": "AppNotifyController",
+      "method": "list",
+      "httpMethod": "GET",
+      "path": "/system/notify/list",
+      "classAnonymous": false,
+      "permission": "system:notify:list",
+      "source": "PackServer/src/main/java/com/ruoyi/project/notify/controller/AppNotifyController.java",
+      "line": 36
+    },
+    {
+      "controller": "AppNotifyController",
+      "method": "export",
+      "httpMethod": "POST",
+      "path": "/system/notify/export",
+      "classAnonymous": false,
+      "permission": "system:notify:export",
+      "source": "PackServer/src/main/java/com/ruoyi/project/notify/controller/AppNotifyController.java",
+      "line": 49
+    },
+    {
+      "controller": "AppNotifyController",
+      "method": "getInfo",
+      "httpMethod": "GET",
+      "path": "/system/notify/{id}",
+      "classAnonymous": false,
+      "permission": "system:notify:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/notify/controller/AppNotifyController.java",
+      "line": 61
+    },
+    {
+      "controller": "AppNotifyController",
+      "method": "add",
+      "httpMethod": "POST",
+      "path": "/system/notify",
+      "classAnonymous": false,
+      "permission": "system:notify:add",
+      "source": "PackServer/src/main/java/com/ruoyi/project/notify/controller/AppNotifyController.java",
+      "line": 72
+    },
+    {
+      "controller": "AppNotifyController",
+      "method": "edit",
+      "httpMethod": "PUT",
+      "path": "/system/notify",
+      "classAnonymous": false,
+      "permission": "system:notify:edit",
+      "source": "PackServer/src/main/java/com/ruoyi/project/notify/controller/AppNotifyController.java",
+      "line": 83
+    },
+    {
+      "controller": "AppNotifyController",
+      "method": "remove",
+      "httpMethod": "DELETE",
+      "path": "/system/notify/{ids}",
+      "classAnonymous": false,
+      "permission": "system:notify:remove",
+      "source": "PackServer/src/main/java/com/ruoyi/project/notify/controller/AppNotifyController.java",
+      "line": 94
+    },
+    {
+      "controller": "AppPwaController",
+      "method": "list",
+      "httpMethod": "GET",
+      "path": "/system/pwa/list",
+      "classAnonymous": false,
+      "permission": "system:pwa:list",
+      "source": "PackServer/src/main/java/com/ruoyi/project/pwa/controller/AppPwaController.java",
+      "line": 36
+    },
+    {
+      "controller": "AppPwaController",
+      "method": "all",
+      "httpMethod": "GET",
+      "path": "/system/pwa/all",
+      "classAnonymous": false,
+      "permission": "system:pwa:list",
+      "source": "PackServer/src/main/java/com/ruoyi/project/pwa/controller/AppPwaController.java",
+      "line": 47
+    },
+    {
+      "controller": "AppPwaController",
+      "method": "export",
+      "httpMethod": "POST",
+      "path": "/system/pwa/export",
+      "classAnonymous": false,
+      "permission": "system:pwa:export",
+      "source": "PackServer/src/main/java/com/ruoyi/project/pwa/controller/AppPwaController.java",
+      "line": 58
+    },
+    {
+      "controller": "AppPwaController",
+      "method": "getInfo",
+      "httpMethod": "GET",
+      "path": "/system/pwa/{id}",
+      "classAnonymous": false,
+      "permission": "system:pwa:list",
+      "source": "PackServer/src/main/java/com/ruoyi/project/pwa/controller/AppPwaController.java",
+      "line": 70
+    },
+    {
+      "controller": "AppPwaController",
+      "method": "add",
+      "httpMethod": "POST",
+      "path": "/system/pwa",
+      "classAnonymous": false,
+      "permission": "system:pwa:add",
+      "source": "PackServer/src/main/java/com/ruoyi/project/pwa/controller/AppPwaController.java",
+      "line": 81
+    },
+    {
+      "controller": "AppPwaController",
+      "method": "edit",
+      "httpMethod": "PUT",
+      "path": "/system/pwa",
+      "classAnonymous": false,
+      "permission": "system:pwa:edit",
+      "source": "PackServer/src/main/java/com/ruoyi/project/pwa/controller/AppPwaController.java",
+      "line": 92
+    },
+    {
+      "controller": "AppPwaController",
+      "method": "remove",
+      "httpMethod": "DELETE",
+      "path": "/system/pwa/{ids}",
+      "classAnonymous": false,
+      "permission": "system:pwa:remove",
+      "source": "PackServer/src/main/java/com/ruoyi/project/pwa/controller/AppPwaController.java",
+      "line": 104
+    },
+    {
+      "controller": "PwaController",
+      "method": "getInfo",
+      "httpMethod": "GET",
+      "path": "/pwa/{path}",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/pwa/controller/PwaController.java",
+      "line": 29
+    },
+    {
+      "controller": "PwaNotifyController",
+      "method": "subscribe",
+      "httpMethod": "ANY",
+      "path": "/notify/subscribe",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/pwa/controller/PwaNotifyController.java",
+      "line": 54
+    },
+    {
+      "controller": "PwaNotifyController",
+      "method": "get",
+      "httpMethod": "ANY",
+      "path": "/notify/notifyweb",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/pwa/controller/PwaNotifyController.java",
+      "line": 61
+    },
+    {
+      "controller": "AppStatisticsController",
+      "method": "upload",
+      "httpMethod": "ANY",
+      "path": "/systemSDK/upload/data",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/statistics/controller/AppStatisticsController.java",
+      "line": 24
+    },
+    {
+      "controller": "AppStatisticsController",
+      "method": "getSwitch",
+      "httpMethod": "ANY",
+      "path": "/systemSDK/{a}",
+      "classAnonymous": true,
+      "permission": "",
+      "source": "PackServer/src/main/java/com/ruoyi/project/statistics/controller/AppStatisticsController.java",
+      "line": 30
+    },
+    {
+      "controller": "WebStatisticsController",
+      "method": "list",
+      "httpMethod": "GET",
+      "path": "/system/statistics/list",
+      "classAnonymous": false,
+      "permission": "system:statistics:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/statistics/controller/WebStatisticsController.java",
+      "line": 46
+    },
+    {
+      "controller": "WebStatisticsController",
+      "method": "export",
+      "httpMethod": "POST",
+      "path": "/system/statistics/export",
+      "classAnonymous": false,
+      "permission": "system:statistics:export",
+      "source": "PackServer/src/main/java/com/ruoyi/project/statistics/controller/WebStatisticsController.java",
+      "line": 58
+    },
+    {
+      "controller": "WebStatisticsController",
+      "method": "getInfo",
+      "httpMethod": "GET",
+      "path": "/system/statistics/{id}",
+      "classAnonymous": false,
+      "permission": "system:statistics:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/statistics/controller/WebStatisticsController.java",
+      "line": 69
+    },
+    {
+      "controller": "WebStatisticsController",
+      "method": "add",
+      "httpMethod": "POST",
+      "path": "/system/statistics",
+      "classAnonymous": false,
+      "permission": "system:statistics:add",
+      "source": "PackServer/src/main/java/com/ruoyi/project/statistics/controller/WebStatisticsController.java",
+      "line": 79
+    },
+    {
+      "controller": "WebStatisticsController",
+      "method": "edit",
+      "httpMethod": "PUT",
+      "path": "/system/statistics",
+      "classAnonymous": false,
+      "permission": "system:statistics:edit",
+      "source": "PackServer/src/main/java/com/ruoyi/project/statistics/controller/WebStatisticsController.java",
+      "line": 95
+    },
+    {
+      "controller": "WebStatisticsController",
+      "method": "remove",
+      "httpMethod": "DELETE",
+      "path": "/system/statistics/{ids}",
+      "classAnonymous": false,
+      "permission": "system:statistics:remove",
+      "source": "PackServer/src/main/java/com/ruoyi/project/statistics/controller/WebStatisticsController.java",
+      "line": 111
+    },
+    {
+      "controller": "WebStatisticsController",
+      "method": "getTotal",
+      "httpMethod": "GET",
+      "path": "/system/statistics/getTotal",
+      "classAnonymous": false,
+      "permission": "system:statistics:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/statistics/controller/WebStatisticsController.java",
+      "line": 117
+    },
+    {
+      "controller": "StoreStatusController",
+      "method": "list",
+      "httpMethod": "GET",
+      "path": "/system/store/list",
+      "classAnonymous": true,
+      "permission": "system:store:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/store/controller/StoreStatusController.java",
+      "line": 29
+    },
+    {
+      "controller": "StoreStatusController",
+      "method": "add",
+      "httpMethod": "POST",
+      "path": "/system/store/add",
+      "classAnonymous": true,
+      "permission": "system:store:add",
+      "source": "PackServer/src/main/java/com/ruoyi/project/store/controller/StoreStatusController.java",
+      "line": 42
+    },
+    {
+      "controller": "StoreStatusController",
+      "method": "select",
+      "httpMethod": "GET",
+      "path": "/system/store/{id}",
+      "classAnonymous": true,
+      "permission": "system:store:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/store/controller/StoreStatusController.java",
+      "line": 58
+    },
+    {
+      "controller": "StoreStatusController",
+      "method": "remove",
+      "httpMethod": "DELETE",
+      "path": "/system/store/{ids}",
+      "classAnonymous": true,
+      "permission": "system:store:remove",
+      "source": "PackServer/src/main/java/com/ruoyi/project/store/controller/StoreStatusController.java",
+      "line": 71
+    },
+    {
+      "controller": "StoreStatusController",
+      "method": "edit",
+      "httpMethod": "PUT",
+      "path": "/system/store/update",
+      "classAnonymous": true,
+      "permission": "system:manager:edit",
+      "source": "PackServer/src/main/java/com/ruoyi/project/store/controller/StoreStatusController.java",
+      "line": 82
+    },
+    {
+      "controller": "AppEventRecordController",
+      "method": "list",
+      "httpMethod": "GET",
+      "path": "/system/record/list",
+      "classAnonymous": false,
+      "permission": "system:record:list",
+      "source": "PackServer/src/main/java/com/ruoyi/project/system/controller/AppEventRecordController.java",
+      "line": 41
+    },
+    {
+      "controller": "AppEventRecordController",
+      "method": "export",
+      "httpMethod": "POST",
+      "path": "/system/record/export",
+      "classAnonymous": false,
+      "permission": "system:record:export",
+      "source": "PackServer/src/main/java/com/ruoyi/project/system/controller/AppEventRecordController.java",
+      "line": 54
+    },
+    {
+      "controller": "AppEventRecordController",
+      "method": "getInfo",
+      "httpMethod": "GET",
+      "path": "/system/record/{eventId}",
+      "classAnonymous": false,
+      "permission": "system:record:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/system/controller/AppEventRecordController.java",
+      "line": 66
+    },
+    {
+      "controller": "AppEventRecordController",
+      "method": "add",
+      "httpMethod": "POST",
+      "path": "/system/record",
+      "classAnonymous": false,
+      "permission": "system:record:add",
+      "source": "PackServer/src/main/java/com/ruoyi/project/system/controller/AppEventRecordController.java",
+      "line": 77
+    },
+    {
+      "controller": "AppEventRecordController",
+      "method": "edit",
+      "httpMethod": "PUT",
+      "path": "/system/record",
+      "classAnonymous": false,
+      "permission": "system:record:edit",
+      "source": "PackServer/src/main/java/com/ruoyi/project/system/controller/AppEventRecordController.java",
+      "line": 88
+    },
+    {
+      "controller": "AppEventRecordController",
+      "method": "remove",
+      "httpMethod": "DELETE",
+      "path": "/system/record/{eventIds}",
+      "classAnonymous": false,
+      "permission": "system:record:remove",
+      "source": "PackServer/src/main/java/com/ruoyi/project/system/controller/AppEventRecordController.java",
+      "line": 99
+    },
+    {
+      "controller": "ReviewsRecordController",
+      "method": "list",
+      "httpMethod": "GET",
+      "path": "/system/reviewsrecord/list",
+      "classAnonymous": false,
+      "permission": "system:record:list",
+      "source": "PackServer/src/main/java/com/ruoyi/project/system/controller/ReviewsRecordController.java",
+      "line": 41
+    },
+    {
+      "controller": "ReviewsRecordController",
+      "method": "export",
+      "httpMethod": "POST",
+      "path": "/system/reviewsrecord/export",
+      "classAnonymous": false,
+      "permission": "system:record:export",
+      "source": "PackServer/src/main/java/com/ruoyi/project/system/controller/ReviewsRecordController.java",
+      "line": 54
+    },
+    {
+      "controller": "ReviewsRecordController",
+      "method": "getInfo",
+      "httpMethod": "GET",
+      "path": "/system/reviewsrecord/{reviewsId}",
+      "classAnonymous": false,
+      "permission": "system:record:query",
+      "source": "PackServer/src/main/java/com/ruoyi/project/system/controller/ReviewsRecordController.java",
+      "line": 66
+    },
+    {
+      "controller": "ReviewsRecordController",
+      "method": "add",
+      "httpMethod": "POST",
+      "path": "/system/reviewsrecord",
+      "classAnonymous": false,
+      "permission": "system:record:add",
+      "source": "PackServer/src/main/java/com/ruoyi/project/system/controller/ReviewsRecordController.java",
+      "line": 77
+    },
+    {
+      "controller": "ReviewsRecordController",
+      "method": "edit",
+      "httpMethod": "PUT",
+      "path": "/system/reviewsrecord",
+      "classAnonymous": false,
+      "permission": "system:record:edit",
+      "source": "PackServer/src/main/java/com/ruoyi/project/system/controller/ReviewsRecordController.java",
+      "line": 88
+    },
+    {
+      "controller": "ReviewsRecordController",
+      "method": "remove",
+      "httpMethod": "DELETE",
+      "path": "/system/reviewsrecord/{reviewsIds}",
+      "classAnonymous": false,
+      "permission": "system:record:remove",
+      "source": "PackServer/src/main/java/com/ruoyi/project/system/controller/ReviewsRecordController.java",
+      "line": 99
+    }
+  ]
+}

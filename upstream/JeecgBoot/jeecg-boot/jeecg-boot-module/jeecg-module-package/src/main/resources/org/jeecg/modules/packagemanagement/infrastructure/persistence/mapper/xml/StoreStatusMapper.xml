@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.StoreStatusMapper">
+
+    <resultMap type="org.jeecg.modules.packagemanagement.domain.store.StoreStatus" id="StoreStatusResult">
+        <result property="id" column="id"/>
+        <result property="packageCode" column="package_code"/>
+        <result property="status" column="status"/>
+        <result property="storeUrl" column="store_url"/>
+        <result property="createDate"   column="create_date"/>
+        <result property="successDate"   column="success_date"/>
+        <result property="failDate"   column="fail_date"/>
+        <result property="successEmail"   column="success_email"/>
+        <result property="failEmail"   column="fail_email"/>
+    </resultMap>
+
+    <sql id="StoreStatus">
+        select id,
+               package_code,
+               status,
+               store_url,
+               create_date,
+               success_date,
+               fail_date,
+               success_email,
+               fail_email
+        from pkg_store_status
+    </sql>
+
+    <select id="selectStoreStatusList" parameterType="org.jeecg.modules.packagemanagement.domain.store.StoreStatus" resultMap="StoreStatusResult">
+        <include refid="StoreStatus"/>
+        <where>
+            <if test="id != null ">and id = #{id}</if>
+            <if test="packageCode != null  and packageCode != ''">and package_code like concat('%',#{packageCode},'%')</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="storeUrl != null  and store_url != ''">and store_url = #{storeUrl}</if>
+        </where>
+    </select>
+
+    <select id="selectStoreStatusById" parameterType="Long" resultMap="StoreStatusResult">
+        <include refid="StoreStatus"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectStoreStatusByPackageName" parameterType="String" resultMap="StoreStatusResult">
+        <include refid="StoreStatus"/>
+        where package_code = #{packageName}
+    </select>
+
+    <insert id="insertStoreStatus" parameterType="org.jeecg.modules.packagemanagement.domain.store.StoreStatus" useGeneratedKeys="true" keyProperty="id">
+        insert into pkg_store_status
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="packageCode != null">package_code,</if>
+            <if test="status != null">status,</if>
+            <if test="storeUrl != null">store_url,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="successEmail != null">success_email,</if>
+            <if test="failEmail != null">fail_email,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="packageCode != null">#{packageCode},</if>
+            <if test="status != null">#{status},</if>
+            <if test="storeUrl != null">#{storeUrl},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="successEmail != null">#{successEmail},</if>
+            <if test="failEmail != null">#{failEmail},</if>
+        </trim>
+    </insert>
+
+    <update id="updateStoreStatusAndDate" parameterType="org.jeecg.modules.packagemanagement.domain.store.StoreStatus">
+        update pkg_store_status
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="packageCode != null">package_code = #{packageCode},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="storeUrl != null">store_url = #{storeUrl},</if>
+            <if test="successDate != null">success_date = #{successDate},</if>
+            <if test="failDate != null">fail_date = #{failDate},</if>
+            <if test="successEmail != null">success_email = #{successEmail},</if>
+            <if test="failEmail != null">fail_email = #{failEmail},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateStoreStatus" parameterType="org.jeecg.modules.packagemanagement.domain.store.StoreStatus">
+        update pkg_store_status
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="packageCode != null">package_code = #{packageCode},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="storeUrl != null">store_url = #{storeUrl},</if>
+            <if test="successDate != null">success_date = #{successDate},</if>
+            <if test="failDate != null">fail_date = #{failDate},</if>
+            <if test="successEmail != null">success_email = #{successEmail},</if>
+            <if test="failEmail != null">fail_email = #{failEmail},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+
+    <update id="updateStoreStatusById" parameterType="Long">
+        update pkg_store_status
+        <trim prefix="SET" suffixOverrides=",">
+            status = 0,
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStoreStatusById" parameterType="Long">
+        delete
+        from pkg_store_status
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteStoreStatusByIds" parameterType="String">
+        delete from pkg_store_status where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

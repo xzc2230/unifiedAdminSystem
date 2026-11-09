@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.EventErrorMapper">
+
+    <resultMap type="org.jeecg.modules.packagemanagement.domain.event.EventError" id="EventErrorResult">
+        <result property="id"    column="id"    />
+        <result property="errorPackage"    column="error_package"    />
+        <result property="errorMessage"    column="error_message"    />
+        <result property="errorContent"    column="error_content"    />
+    </resultMap>
+
+    <sql id="selectEventErrorVo">
+        select id, error_package, error_message, error_content from pkg_event_error
+    </sql>
+
+    <select id="selectEventErrorList" parameterType="org.jeecg.modules.packagemanagement.domain.event.EventError" resultMap="EventErrorResult">
+        <include refid="selectEventErrorVo"/>
+        <where>
+            <if test="errorPackage != null  and errorPackage != ''"> and error_package = #{errorPackage}</if>
+            <if test="errorMessage != null  and errorMessage != ''"> and error_message = #{errorMessage}</if>
+            <if test="errorContent != null  and errorContent != ''"> and error_content = #{errorContent}</if>
+        </where>
+    </select>
+
+    <select id="selectEventErrorById" parameterType="Long" resultMap="EventErrorResult">
+        <include refid="selectEventErrorVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertEventError" parameterType="org.jeecg.modules.packagemanagement.domain.event.EventError" useGeneratedKeys="true" keyProperty="id">
+        insert into pkg_event_error
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="errorPackage != null">error_package,</if>
+            <if test="errorMessage != null">error_message,</if>
+            <if test="errorContent != null">error_content,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="errorPackage != null">#{errorPackage},</if>
+            <if test="errorMessage != null">#{errorMessage},</if>
+            <if test="errorContent != null">#{errorContent},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEventError" parameterType="org.jeecg.modules.packagemanagement.domain.event.EventError">
+        update pkg_event_error
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="errorPackage != null">error_package = #{errorPackage},</if>
+            <if test="errorMessage != null">error_message = #{errorMessage},</if>
+            <if test="errorContent != null">error_content = #{errorContent},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEventErrorById" parameterType="Long">
+        delete from pkg_event_error where id = #{id}
+    </delete>
+
+    <delete id="deleteEventErrorByIds" parameterType="String">
+        delete from pkg_event_error where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
