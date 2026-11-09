@@ -134,9 +134,24 @@ test('failed persisted review deletion leaves the row and permits retry',async()
 test('menu seed has one root, 13 direct pages, unique stable IDs and no automatic role grants',()=>{
   const sql=fs.readFileSync(path.join(root,'../jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/V20261109_04__package_menus.sql'),'utf8');
   const ids=[...sql.matchAll(/VALUES \('([^']+)'/g)].map(m=>m[1]);
+  assert.match(sql,/SET NAMES utf8mb4\s*;[\s\S]*START TRANSACTION;/i,'UTF-8 menu seeds must override a latin1 client before inserting Chinese labels');
   assert.equal(ids.length,new Set(ids).size);assert.ok(ids.every(id=>id.length<=32));
   assert.equal((sql.match(/'pkg_mgmt_root','[^']+','\/package-management\//g)||[]).length,13);
   assert.equal((sql.match(/'\/package-management','layouts\/default\/index'/g)||[]).length,1);
   assert.equal(/INSERT INTO sys_role_permission/i.test(sql),false);
   assert.equal(/package:store:export/.test(sql),false);
+});
+test('menu encoding repair restores exactly the canonical80 labels and only updates names',()=>{
+  const seed=fs.readFileSync(path.join(root,'../jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/V20261109_04__package_menus.sql'),'utf8');
+  const canonical=new Map([...seed.matchAll(/VALUES \('([^']+)',(?:NULL|'[^']*'),'([^']+)'/g)].map(match=>[match[1],match[2]]));
+  const repair=fs.readFileSync(path.join(root,'../../../deploy/package-api/repair-menu-names.sql'),'utf8');
+  assert.match(repair,/^[\x00-\x7F]*$/);
+  const statements=repair.split(';').map(value=>value.trim()).filter(Boolean);
+  assert.equal(statements.shift(),'SET NAMES utf8mb4');assert.equal(statements.shift(),'START TRANSACTION');assert.equal(statements.pop(),'COMMIT');
+  const actual=new Map(statements.map(statement=>{
+    const match=statement.match(/^UPDATE sys_permission SET name=CONVERT\(0x([0-9a-f]+) USING utf8mb4\) WHERE id=0x([0-9a-f]+)$/);
+    assert.ok(match,'repair must update only names by exact ID');
+    return [Buffer.from(match[2],'hex').toString('utf8'),Buffer.from(match[1],'hex').toString('utf8')];
+  }));
+  assert.equal(statements.length,80);assert.equal(actual.size,80);assert.deepEqual(actual,canonical);
 });

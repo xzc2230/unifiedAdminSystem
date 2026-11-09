@@ -1,5 +1,6 @@
 -- 应用包管理：稳定 ID，可重复执行；不写 sys_role_permission，不自动授权用户。
 -- 角色管理员需授权根菜单、需要的子菜单及对应按钮。PWA/W2A 使用相同 pwa 后端权限域。
+SET NAMES utf8mb4;
 START TRANSACTION;
 INSERT INTO sys_permission (id,parent_id,name,url,component,is_route,component_name,redirect,menu_type,perms,perms_type,sort_no,always_show,icon,is_leaf,keep_alive,hidden,hide_tab,del_flag,rule_flag,status,internal_or_external) VALUES ('pkg_mgmt_root',NULL,'应用包管理','/package-management','layouts/default/index',1,'PackageManagement',NULL,0,NULL,'1',80,1,'ant-design:appstore-outlined',0,0,0,0,0,0,'1',0)
 ON DUPLICATE KEY UPDATE name=VALUES(name),url=VALUES(url),component=VALUES(component),parent_id=VALUES(parent_id),perms=VALUES(perms),menu_type=VALUES(menu_type),always_show=VALUES(always_show),is_route=VALUES(is_route),hidden=VALUES(hidden),del_flag=VALUES(del_flag),status=VALUES(status);
