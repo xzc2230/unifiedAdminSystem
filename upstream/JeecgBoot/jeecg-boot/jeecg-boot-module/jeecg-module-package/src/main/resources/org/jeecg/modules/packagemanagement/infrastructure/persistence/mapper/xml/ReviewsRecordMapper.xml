@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.ReviewsRecordMapper">
-    
+
     <resultMap type="org.jeecg.modules.packagemanagement.domain.system.ReviewsRecord" id="ReviewsRecordResult">
         <result property="reviewsId"    column="reviews_id"    />
         <result property="appId"    column="app_id"    />
@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectReviewsRecordList" parameterType="org.jeecg.modules.packagemanagement.domain.system.ReviewsRecord" resultMap="ReviewsRecordResult">
         <include refid="selectReviewsRecordVo"/>
-        <where>  
+        <where>
             <if test="headPortraitUrl != null  and headPortraitUrl != ''"> and head_portrait_url = #{headPortraitUrl}</if>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="content != null  and content != ''"> and content = #{content}</if>
@@ -28,12 +28,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="appId != null "> and app_id = #{appId}</if>
         </where>
     </select>
-    
+
     <select id="selectReviewsRecordByReviewsId" parameterType="Long" resultMap="ReviewsRecordResult">
         <include refid="selectReviewsRecordVo"/>
         where reviews_id = #{reviewsId}
     </select>
-        
+
     <insert id="insertReviewsRecord" parameterType="org.jeecg.modules.packagemanagement.domain.system.ReviewsRecord" useGeneratedKeys="true" keyProperty="reviewsId">
         insert into pkg_review
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -72,7 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteReviewsRecordByReviewsIds" parameterType="String">
-        delete from pkg_review where reviews_id in 
+        delete from pkg_review where reviews_id in
         <foreach item="reviewsId" collection="array" open="(" separator="," close=")">
             #{reviewsId}
         </foreach>

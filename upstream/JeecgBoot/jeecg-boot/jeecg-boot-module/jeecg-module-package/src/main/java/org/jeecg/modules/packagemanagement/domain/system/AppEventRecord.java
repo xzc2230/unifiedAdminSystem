@@ -6,7 +6,7 @@ import org.jeecg.modules.packagemanagement.domain.PackageEntity;
 
 /**
  * 事件统计对象 app_event_record
- * 
+ *
  * @author ruoyi
  * @date 2024-10-11
  */
@@ -45,75 +45,75 @@ public class AppEventRecord extends PackageEntity
 
     private Long userId;
 
-    public void setEventId(Long eventId) 
+    public void setEventId(Long eventId)
     {
         this.eventId = eventId;
     }
 
-    public Long getEventId() 
+    public Long getEventId()
     {
         return eventId;
     }
-    public void setAppId(Long appId) 
+    public void setAppId(Long appId)
     {
         this.appId = appId;
     }
 
-    public Long getAppId() 
+    public Long getAppId()
     {
         return appId;
     }
-    public void setHostName(String hostName) 
+    public void setHostName(String hostName)
     {
         this.hostName = hostName;
     }
 
-    public String getHostName() 
+    public String getHostName()
     {
         return hostName;
     }
-    public void setEventType(Long eventType) 
+    public void setEventType(Long eventType)
     {
         this.eventType = eventType;
     }
 
-    public Long getEventType() 
+    public Long getEventType()
     {
         return eventType;
     }
-    public void setEventTypeName(String eventTypeName) 
+    public void setEventTypeName(String eventTypeName)
     {
         this.eventTypeName = eventTypeName;
     }
 
-    public String getEventTypeName() 
+    public String getEventTypeName()
     {
         return eventTypeName;
     }
-    public void setDeviceNo(String deviceNo) 
+    public void setDeviceNo(String deviceNo)
     {
         this.deviceNo = deviceNo;
     }
 
-    public String getDeviceNo() 
+    public String getDeviceNo()
     {
         return deviceNo;
     }
-    public void setIp(String ip) 
+    public void setIp(String ip)
     {
         this.ip = ip;
     }
 
-    public String getIp() 
+    public String getIp()
     {
         return ip;
     }
-    public void setUserId(Long userId) 
+    public void setUserId(Long userId)
     {
         this.userId = userId;
     }
 
-    public Long getUserId() 
+    public Long getUserId()
     {
         return userId;
     }

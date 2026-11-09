@@ -26,11 +26,11 @@
 
 **Interfaces:** 领域类型保留源 Java 类名和业务属性；Mapper 保留源签名；业务领域对象放 domain，Mapper 放 infrastructure.persistence.mapper。公共字段抽到 domain.PackageEntity。后续任务直接依赖这些类型。
 
-- [ ] 按 source-data-mapping.json 的12张表核对源领域与XML；复制业务字段、SQL条件、排序及聚合，重命名表与 namespace，移除 RuoYi Excel/Swagger 注解。
-- [ ] 新模块只依赖 base-core；挂接父模块与启动依赖，禁止依赖 system-biz 内部实现。
-- [ ] 编写映射测试：验证所有 XML 可解析、namespace 与方法对应、pkg_ 表名完整且保留 evnet_history 字段映射。
-- [ ] 生成带说明的开发建表脚本，所有字段依据源 Java/Mapper，保留原 ID，不伪造生产精确类型。用户映射及所有权字段独立建表。
-- [ ] 运行 Maven focused tests，保存输出及差异报告，审查通过后记账。
+- [x] 按 source-data-mapping.json 的12张表核对源领域与XML；复制业务字段、SQL条件、排序及聚合，重命名表与 namespace，移除 RuoYi Excel/Swagger 注解。
+- [x] 新模块只依赖 base-core；挂接父模块与启动依赖，禁止依赖 system-biz 内部实现。
+- [x] 编写映射测试：验证所有 XML 可解析、namespace 与方法对应、pkg_ 表名完整且保留 evnet_history 字段映射。
+- [x] 生成带说明的开发建表脚本，所有字段依据源 Java/Mapper，保留原 ID，不伪造生产精确类型。用户映射及所有权字段独立建表。
+- [x] 运行 Maven focused tests，保存输出及差异报告，审查通过后记账。
 
 ### Task 2: 应用服务、身份与外部集成
 
@@ -38,12 +38,12 @@
 
 **Interfaces:** 原服务业务方法签名保留，包路径按领域分类；PackageActor 提供 current/requireOwner，PackageProperties 提供所有第三方配置；外部 HTTP/邮件/推送依赖可替换 port。
 
-- [ ] 先编写行为测试：重复包名拒绝、统计累计与金额 HALF_UP2、商店0→1→2且2不再探测、越权单条/批量/导出拒绝、PWA评论保存与删除、随机候选边界。
-- [ ] 迁移24个业务实现/辅助文件中有效能力；遗留 SQL 日志只记录去向，ES保留实际索引行为。
-- [ ] 移植 ClientServiceImpl 的11入口，保持原分支与序列化；javax.servlet改jakarta，RuoYi工具替换为模块适配器；AES默认值由配置注入。
-- [ ] 迁移 FB、IP、Nginx、VAPID、WebPush、邮件集成，外置密钥和部署目录；使用测试替身验证请求，不触发真实外发。
-- [ ] 身份将源数值用户映射到 JEECG 字符串 ID；使用主机 Shiro 登录与租户有效成员核验，批量先全部验证再写入。
-- [ ] 运行服务与协议行为测试，审查并保存报告。
+- [x] 先编写行为测试：重复包名拒绝、统计累计与金额 HALF_UP2、商店0→1→2且2不再探测、越权单条/批量/导出拒绝、PWA评论保存与删除、随机候选边界。
+- [x] 迁移24个业务实现/辅助文件中有效能力；遗留 SQL 日志只记录去向，ES保留实际索引行为。
+- [x] 移植 ClientServiceImpl 的11入口，保持原分支与序列化；javax.servlet改jakarta，RuoYi工具替换为模块适配器；AES默认值由配置注入。
+- [x] 迁移 FB、IP、Nginx、VAPID、WebPush、邮件集成，外置密钥和部署目录；使用测试替身验证请求，不触发真实外发。
+- [x] 身份将源数值用户映射到 JEECG 字符串 ID；使用主机 Shiro 登录与租户有效成员核验，批量先全部验证再写入。
+- [x] 运行服务与协议行为测试，审查并保存报告。
 
 ### Task 3: 管理与兼容接口
 

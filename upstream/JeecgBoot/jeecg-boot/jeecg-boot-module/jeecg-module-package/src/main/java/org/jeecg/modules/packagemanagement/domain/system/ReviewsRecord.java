@@ -6,7 +6,7 @@ import org.jeecg.modules.packagemanagement.domain.PackageEntity;
 
 /**
  * 【请填写功能名称】对象 reviews_record
- * 
+ *
  * @author ruoyi
  * @date 2024-10-15
  */
@@ -34,12 +34,12 @@ public class ReviewsRecord extends PackageEntity
 
     private Long score;
 
-    public void setReviewsId(Long reviewsId) 
+    public void setReviewsId(Long reviewsId)
     {
         this.reviewsId = reviewsId;
     }
 
-    public Long getReviewsId() 
+    public Long getReviewsId()
     {
         return reviewsId;
     }
@@ -57,34 +57,34 @@ public class ReviewsRecord extends PackageEntity
         this.headPortraitUrl = headPortraitUrl;
     }
 
-    public String getHeadPortraitUrl() 
+    public String getHeadPortraitUrl()
     {
         return headPortraitUrl;
     }
-    public void setName(String name) 
+    public void setName(String name)
     {
         this.name = name;
     }
 
-    public String getName() 
+    public String getName()
     {
         return name;
     }
-    public void setContent(String content) 
+    public void setContent(String content)
     {
         this.content = content;
     }
 
-    public String getContent() 
+    public String getContent()
     {
         return content;
     }
-    public void setScore(Long score) 
+    public void setScore(Long score)
     {
         this.score = score;
     }
 
-    public Long getScore() 
+    public Long getScore()
     {
         return score;
     }

@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.AppNotifyMapper">
-    
+
     <resultMap type="org.jeecg.modules.packagemanagement.domain.notify.AppNotify" id="AppNotifyResult">
         <result property="id"    column="id"    />
         <result property="appId"    column="app_id"    />
@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectAppNotifyList" parameterType="org.jeecg.modules.packagemanagement.domain.notify.AppNotify" resultMap="AppNotifyResult">
         <include refid="selectAppNotifyVo"/>
-        <where>  
+        <where>
             <if test="appName != null  and appName != ''"> and app_name like concat('%', #{appName}, '%')</if>
             <if test="appId != null  and appId != ''"> and app_id = #{appId}</if>
             <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
@@ -34,12 +34,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="notifyIcon != null  and notifyIcon != ''"> and notify_icon = #{notifyIcon}</if>
         </where>
     </select>
-    
+
     <select id="selectAppNotifyById" parameterType="Long" resultMap="AppNotifyResult">
         <include refid="selectAppNotifyVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertAppNotify" parameterType="org.jeecg.modules.packagemanagement.domain.notify.AppNotify" useGeneratedKeys="true" keyProperty="id">
         insert into pkg_notification
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -87,7 +87,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteAppNotifyByIds" parameterType="String">
-        delete from pkg_notification where id in 
+        delete from pkg_notification where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

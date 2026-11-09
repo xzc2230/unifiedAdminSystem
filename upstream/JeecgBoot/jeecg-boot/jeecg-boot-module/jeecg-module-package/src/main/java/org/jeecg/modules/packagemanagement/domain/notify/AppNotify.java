@@ -6,7 +6,7 @@ import org.jeecg.modules.packagemanagement.domain.PackageEntity;
 
 /**
  * 消息推送对象 app_notify
- * 
+ *
  * @author ruoyi
  * @date 2024-09-27
  */
@@ -45,12 +45,12 @@ public class AppNotify extends PackageEntity
 
     private String notifyIcon;
 
-    public void setId(Long id) 
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
@@ -76,52 +76,52 @@ public class AppNotify extends PackageEntity
         this.appName = appName;
     }
 
-    public String getAppName() 
+    public String getAppName()
     {
         return appName;
     }
-    public void setAppIcon(String appIcon) 
+    public void setAppIcon(String appIcon)
     {
         this.appIcon = appIcon;
     }
 
-    public String getAppIcon() 
+    public String getAppIcon()
     {
         return appIcon;
     }
-    public void setAppHost(String appHost) 
+    public void setAppHost(String appHost)
     {
         this.appHost = appHost;
     }
 
-    public String getAppHost() 
+    public String getAppHost()
     {
         return appHost;
     }
-    public void setNotifyTitle(String notifyTitle) 
+    public void setNotifyTitle(String notifyTitle)
     {
         this.notifyTitle = notifyTitle;
     }
 
-    public String getNotifyTitle() 
+    public String getNotifyTitle()
     {
         return notifyTitle;
     }
-    public void setNotifyMessage(String notifyMessage) 
+    public void setNotifyMessage(String notifyMessage)
     {
         this.notifyMessage = notifyMessage;
     }
 
-    public String getNotifyMessage() 
+    public String getNotifyMessage()
     {
         return notifyMessage;
     }
-    public void setNotifyIcon(String notifyIcon) 
+    public void setNotifyIcon(String notifyIcon)
     {
         this.notifyIcon = notifyIcon;
     }
 
-    public String getNotifyIcon() 
+    public String getNotifyIcon()
     {
         return notifyIcon;
     }

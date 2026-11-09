@@ -16,7 +16,7 @@
 | login | 缺username、空包/停用、有效包响应 code/message/data.show/path/useAF |
 | redirected | 缺packName、有效URL与已有query、af_id开关、响应状态与Location |
 | getBanner | systemName/systemID命名、缺包、有效包结构 |
-| checkUrl | 参数遍历推断、默认event/canLoad/canAppend/load、有效包布尔值 |
+| checkUrl | tokenID/baseTime请求头指定参数名、默认event/canLoad/canAppend/load、有效包布尔值 |
 | dynamicAdj | 默认与有效 app_id/app_cache/app_limit/app_name/app_dynamic |
 | getUserInfo | user_id/user_token、timestamp偏移、User-Agent、摘要与响应字段 |
 | base64Data | pack_a/data_a、缺参数、合法配置、JSON编码 |

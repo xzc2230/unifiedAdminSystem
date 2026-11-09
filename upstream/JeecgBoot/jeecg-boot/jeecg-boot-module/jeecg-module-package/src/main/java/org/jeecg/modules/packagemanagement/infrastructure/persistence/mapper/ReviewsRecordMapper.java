@@ -5,15 +5,15 @@ import org.jeecg.modules.packagemanagement.domain.system.ReviewsRecord;
 
 /**
  * 【请填写功能名称】Mapper接口
- * 
+ *
  * @author ruoyi
  * @date 2024-10-15
  */
-public interface ReviewsRecordMapper 
+public interface ReviewsRecordMapper
 {
     /**
      * 查询【请填写功能名称】
-     * 
+     *
      * @param reviewsId 【请填写功能名称】主键
      * @return 【请填写功能名称】
      */
@@ -21,7 +21,7 @@ public interface ReviewsRecordMapper
 
     /**
      * 查询【请填写功能名称】列表
-     * 
+     *
      * @param reviewsRecord 【请填写功能名称】
      * @return 【请填写功能名称】集合
      */
@@ -29,7 +29,7 @@ public interface ReviewsRecordMapper
 
     /**
      * 新增【请填写功能名称】
-     * 
+     *
      * @param reviewsRecord 【请填写功能名称】
      * @return 结果
      */
@@ -37,7 +37,7 @@ public interface ReviewsRecordMapper
 
     /**
      * 修改【请填写功能名称】
-     * 
+     *
      * @param reviewsRecord 【请填写功能名称】
      * @return 结果
      */
@@ -45,7 +45,7 @@ public interface ReviewsRecordMapper
 
     /**
      * 删除【请填写功能名称】
-     * 
+     *
      * @param reviewsId 【请填写功能名称】主键
      * @return 结果
      */
@@ -53,7 +53,7 @@ public interface ReviewsRecordMapper
 
     /**
      * 批量删除【请填写功能名称】
-     * 
+     *
      * @param reviewsIds 需要删除的数据主键集合
      * @return 结果
      */

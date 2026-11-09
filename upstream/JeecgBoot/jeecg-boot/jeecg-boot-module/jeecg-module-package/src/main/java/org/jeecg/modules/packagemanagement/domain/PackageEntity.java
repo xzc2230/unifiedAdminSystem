@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Entity基类
- * 
+ *
  * @author ruoyi
  */
 public class PackageEntity implements Serializable
