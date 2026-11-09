@@ -1,0 +1,1783 @@
+{
+  "logic": [
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/service/impl/AppManagerServiceImpl.java",
+      "category": "业务服务实现",
+      "methods": [
+        {
+          "name": "selectAppManagerById",
+          "visibility": "public",
+          "line": 38
+        },
+        {
+          "name": "selectAppManagerByPackageName",
+          "visibility": "public",
+          "line": 43
+        },
+        {
+          "name": "selectAppManagerList",
+          "visibility": "public",
+          "line": 54
+        },
+        {
+          "name": "insertAppManager",
+          "visibility": "public",
+          "line": 67
+        },
+        {
+          "name": "updateAppManager",
+          "visibility": "public",
+          "line": 94
+        },
+        {
+          "name": "deleteAppManagerByIds",
+          "visibility": "public",
+          "line": 120
+        },
+        {
+          "name": "deleteAppManagerById",
+          "visibility": "public",
+          "line": 131
+        },
+        {
+          "name": "transferAppManagerById",
+          "visibility": "public",
+          "line": 136
+        },
+        {
+          "name": "setAdminUser",
+          "visibility": "public",
+          "line": 140
+        }
+      ],
+      "disposition": "迁入独立模块 application 对应业务域",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/apps/impl/AppManagerServiceImpl.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/app/service/impl/ClientServiceImpl.java",
+      "category": "业务服务实现",
+      "methods": [
+        {
+          "name": "api",
+          "visibility": "public",
+          "line": 36
+        },
+        {
+          "name": "login",
+          "visibility": "public",
+          "line": 181
+        },
+        {
+          "name": "redirected",
+          "visibility": "public",
+          "line": 312
+        },
+        {
+          "name": "getBanner",
+          "visibility": "public",
+          "line": 494
+        },
+        {
+          "name": "checkUrl",
+          "visibility": "public",
+          "line": 695
+        },
+        {
+          "name": "dynamicAdj",
+          "visibility": "public",
+          "line": 843
+        },
+        {
+          "name": "getUserInfo",
+          "visibility": "public",
+          "line": 973
+        },
+        {
+          "name": "base64Data",
+          "visibility": "public",
+          "line": 1111
+        },
+        {
+          "name": "base64Data2",
+          "visibility": "public",
+          "line": 1258
+        },
+        {
+          "name": "base64Data3",
+          "visibility": "public",
+          "line": 1374
+        },
+        {
+          "name": "app1",
+          "visibility": "public",
+          "line": 1475
+        },
+        {
+          "name": "log",
+          "visibility": "public",
+          "line": 1590
+        }
+      ],
+      "disposition": "迁入独立模块 application 对应业务域",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/apps/impl/ClientServiceImpl.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/applog/service/impl/AppLogServiceImpl.java",
+      "category": "业务服务实现",
+      "methods": [
+        {
+          "name": "selectAppLogById",
+          "visibility": "public",
+          "line": 31
+        },
+        {
+          "name": "selectAppLogList",
+          "visibility": "public",
+          "line": 43
+        },
+        {
+          "name": "insertAppLog",
+          "visibility": "public",
+          "line": 55
+        },
+        {
+          "name": "updateAppLog",
+          "visibility": "public",
+          "line": 67
+        },
+        {
+          "name": "deleteAppLogByIds",
+          "visibility": "public",
+          "line": 79
+        },
+        {
+          "name": "deleteAppLogById",
+          "visibility": "public",
+          "line": 91
+        },
+        {
+          "name": "cleanAppLog",
+          "visibility": "public",
+          "line": 103
+        }
+      ],
+      "disposition": "历史 MySQL 日志实现；源控制器已注释，保留说明和数据兼容评估",
+      "verification": "源控制器整段注释，历史SQL日志未迁入活跃路由；实际ES实现另列",
+      "targetFiles": [
+        "docs/migration/package-api/task-1-report.md"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/applog/service/impl/EsAppLogServiceImpl.java",
+      "category": "业务服务实现",
+      "methods": [
+        {
+          "name": "builder",
+          "visibility": "public",
+          "line": 20
+        }
+      ],
+      "disposition": "迁入独立模块 application 对应业务域",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/applog/EsAppLogServiceImpl.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/service/impl/EventConfigServiceImpl.java",
+      "category": "业务服务实现",
+      "methods": [
+        {
+          "name": "selectEventConfigById",
+          "visibility": "public",
+          "line": 35
+        },
+        {
+          "name": "selectEventConfigByPackageId",
+          "visibility": "public",
+          "line": 40
+        },
+        {
+          "name": "selectEventConfigList",
+          "visibility": "public",
+          "line": 51
+        },
+        {
+          "name": "insertEventConfig",
+          "visibility": "public",
+          "line": 62
+        },
+        {
+          "name": "updateEventConfig",
+          "visibility": "public",
+          "line": 73
+        },
+        {
+          "name": "deleteEventConfigByIds",
+          "visibility": "public",
+          "line": 84
+        },
+        {
+          "name": "deleteEventConfigById",
+          "visibility": "public",
+          "line": 95
+        },
+        {
+          "name": "page",
+          "visibility": "public",
+          "line": 100
+        }
+      ],
+      "disposition": "迁入独立模块 application 对应业务域",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/event/impl/EventConfigServiceImpl.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/service/impl/EventErrorServiceImpl.java",
+      "category": "业务服务实现",
+      "methods": [
+        {
+          "name": "selectEventErrorById",
+          "visibility": "public",
+          "line": 31
+        },
+        {
+          "name": "selectEventErrorList",
+          "visibility": "public",
+          "line": 43
+        },
+        {
+          "name": "insertEventError",
+          "visibility": "public",
+          "line": 55
+        },
+        {
+          "name": "updateEventError",
+          "visibility": "public",
+          "line": 67
+        },
+        {
+          "name": "deleteEventErrorByIds",
+          "visibility": "public",
+          "line": 79
+        },
+        {
+          "name": "deleteEventErrorById",
+          "visibility": "public",
+          "line": 91
+        }
+      ],
+      "disposition": "迁入独立模块 application 对应业务域",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/event/impl/EventErrorServiceImpl.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/service/impl/EvnetHistoryServiceImpl.java",
+      "category": "业务服务实现",
+      "methods": [
+        {
+          "name": "selectEvnetHistoryById",
+          "visibility": "public",
+          "line": 46
+        },
+        {
+          "name": "selectEvnetHistoryList",
+          "visibility": "public",
+          "line": 57
+        },
+        {
+          "name": "insertEvnetHistory",
+          "visibility": "public",
+          "line": 68
+        },
+        {
+          "name": "updateEvnetHistory",
+          "visibility": "public",
+          "line": 79
+        },
+        {
+          "name": "deleteEvnetHistoryByIds",
+          "visibility": "public",
+          "line": 90
+        },
+        {
+          "name": "deleteEvnetHistoryById",
+          "visibility": "public",
+          "line": 101
+        },
+        {
+          "name": "fbEvent",
+          "visibility": "public",
+          "line": 106
+        },
+        {
+          "name": "fbLog",
+          "visibility": "private",
+          "line": 150
+        }
+      ],
+      "disposition": "迁入独立模块 application 对应业务域",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/event/impl/EvnetHistoryServiceImpl.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/event/service/impl/LoadCountServiceImpl.java",
+      "category": "业务服务实现",
+      "methods": [
+        {
+          "name": "selectLoadCountById",
+          "visibility": "public",
+          "line": 39
+        },
+        {
+          "name": "selectLoadCountByHostName",
+          "visibility": "public",
+          "line": 45
+        },
+        {
+          "name": "selectLoadCountList",
+          "visibility": "public",
+          "line": 56
+        },
+        {
+          "name": "insertLoadCount",
+          "visibility": "public",
+          "line": 86
+        },
+        {
+          "name": "updateLoadCount",
+          "visibility": "public",
+          "line": 109
+        },
+        {
+          "name": "deleteLoadCountByIds",
+          "visibility": "public",
+          "line": 132
+        },
+        {
+          "name": "deleteLoadCountById",
+          "visibility": "public",
+          "line": 144
+        }
+      ],
+      "disposition": "迁入独立模块 application 对应业务域",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/event/impl/LoadCountServiceImpl.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/notify/service/impl/AppNotifyServiceImpl.java",
+      "category": "业务服务实现",
+      "methods": [
+        {
+          "name": "selectAppNotifyById",
+          "visibility": "public",
+          "line": 56
+        },
+        {
+          "name": "selectAppNotifyList",
+          "visibility": "public",
+          "line": 68
+        },
+        {
+          "name": "insertAppNotify",
+          "visibility": "public",
+          "line": 84
+        },
+        {
+          "name": "sendPwaNotify",
+          "visibility": "public",
+          "line": 114
+        },
+        {
+          "name": "push",
+          "visibility": "public",
+          "line": 151
+        },
+        {
+          "name": "updateAppNotify",
+          "visibility": "public",
+          "line": 161
+        },
+        {
+          "name": "deleteAppNotifyByIds",
+          "visibility": "public",
+          "line": 173
+        },
+        {
+          "name": "deleteAppNotifyById",
+          "visibility": "public",
+          "line": 185
+        }
+      ],
+      "disposition": "迁入独立模块 application 对应业务域",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/notification/impl/AppNotifyServiceImpl.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/pwa/service/impl/AppPwaServiceImpl.java",
+      "category": "业务服务实现",
+      "methods": [
+        {
+          "name": "selectAppPwaById",
+          "visibility": "public",
+          "line": 53
+        },
+        {
+          "name": "selectAppPwaList",
+          "visibility": "public",
+          "line": 70
+        },
+        {
+          "name": "selectAppPwaAppList",
+          "visibility": "public",
+          "line": 76
+        },
+        {
+          "name": "insertAppPwa",
+          "visibility": "public",
+          "line": 88
+        },
+        {
+          "name": "updateAppPwa",
+          "visibility": "public",
+          "line": 139
+        },
+        {
+          "name": "deleteAppPwaByIds",
+          "visibility": "public",
+          "line": 188
+        },
+        {
+          "name": "deleteAppPwaById",
+          "visibility": "public",
+          "line": 205
+        },
+        {
+          "name": "setAdminUser",
+          "visibility": "public",
+          "line": 214
+        }
+      ],
+      "disposition": "迁入独立模块 application 对应业务域",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/pwa/impl/AppPwaServiceImpl.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/pwa/service/impl/AppPwaSubServiceImpl.java",
+      "category": "业务服务实现",
+      "methods": [
+        {
+          "name": "selectAppPwaSubById",
+          "visibility": "public",
+          "line": 53
+        },
+        {
+          "name": "selectAppPwaSubList",
+          "visibility": "public",
+          "line": 65
+        },
+        {
+          "name": "insertAppPwaSub",
+          "visibility": "public",
+          "line": 76
+        },
+        {
+          "name": "updateAppPwaSub",
+          "visibility": "public",
+          "line": 116
+        },
+        {
+          "name": "deleteAppPwaSubByIds",
+          "visibility": "public",
+          "line": 129
+        },
+        {
+          "name": "deleteAppPwaSubById",
+          "visibility": "public",
+          "line": 141
+        }
+      ],
+      "disposition": "迁入独立模块 application 对应业务域",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/pwa/impl/AppPwaSubServiceImpl.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/statistics/service/impl/AppStatisticsServiceImpl.java",
+      "category": "业务服务实现",
+      "methods": [
+        {
+          "name": "selectAppStatisticsById",
+          "visibility": "public",
+          "line": 44
+        },
+        {
+          "name": "selectAppStatisticsList",
+          "visibility": "public",
+          "line": 56
+        },
+        {
+          "name": "selectAppStatisticsByPackageName",
+          "visibility": "public",
+          "line": 61
+        },
+        {
+          "name": "insertAppStatistics",
+          "visibility": "public",
+          "line": 73
+        },
+        {
+          "name": "updateAppStatistics",
+          "visibility": "public",
+          "line": 98
+        },
+        {
+          "name": "uploadData",
+          "visibility": "public",
+          "line": 104
+        },
+        {
+          "name": "getDetails",
+          "visibility": "public",
+          "line": 146
+        },
+        {
+          "name": "deleteAppStatisticsByIds",
+          "visibility": "public",
+          "line": 207
+        },
+        {
+          "name": "deleteAppStatisticsById",
+          "visibility": "public",
+          "line": 218
+        }
+      ],
+      "disposition": "迁入独立模块 application 对应业务域",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/statistics/impl/AppStatisticsServiceImpl.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/store/service/impl/StoreStatusServiceImpl.java",
+      "category": "业务服务实现",
+      "methods": [
+        {
+          "name": "selectStoreStatusById",
+          "visibility": "public",
+          "line": 35
+        },
+        {
+          "name": "selectStoreStatusList",
+          "visibility": "public",
+          "line": 47
+        },
+        {
+          "name": "insertStoreStatus",
+          "visibility": "public",
+          "line": 59
+        },
+        {
+          "name": "updateStoreStatusAndDate",
+          "visibility": "public",
+          "line": 76
+        },
+        {
+          "name": "deleteStoreStatusByIds",
+          "visibility": "public",
+          "line": 88
+        },
+        {
+          "name": "deleteStoreStatusById",
+          "visibility": "public",
+          "line": 99
+        },
+        {
+          "name": "updateStoreStatus",
+          "visibility": "public",
+          "line": 104
+        },
+        {
+          "name": "getStatus",
+          "visibility": "public",
+          "line": 109
+        }
+      ],
+      "disposition": "迁入独立模块 application 对应业务域",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/store/impl/StoreStatusServiceImpl.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/system/service/impl/AppEventRecordServiceImpl.java",
+      "category": "业务服务实现",
+      "methods": [
+        {
+          "name": "selectAppEventRecordByEventId",
+          "visibility": "public",
+          "line": 30
+        },
+        {
+          "name": "selectAppEventRecordList",
+          "visibility": "public",
+          "line": 42
+        },
+        {
+          "name": "insertAppEventRecord",
+          "visibility": "public",
+          "line": 54
+        },
+        {
+          "name": "updateAppEventRecord",
+          "visibility": "public",
+          "line": 67
+        },
+        {
+          "name": "deleteAppEventRecordByEventIds",
+          "visibility": "public",
+          "line": 79
+        },
+        {
+          "name": "deleteAppEventRecordByEventId",
+          "visibility": "public",
+          "line": 91
+        }
+      ],
+      "disposition": "迁入独立模块 application 对应业务域",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/event/impl/AppEventRecordServiceImpl.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/system/service/impl/ReviewsRecordServiceImpl.java",
+      "category": "业务服务实现",
+      "methods": [
+        {
+          "name": "selectReviewsRecordByReviewsId",
+          "visibility": "public",
+          "line": 30
+        },
+        {
+          "name": "selectReviewsRecordList",
+          "visibility": "public",
+          "line": 42
+        },
+        {
+          "name": "insertReviewsRecord",
+          "visibility": "public",
+          "line": 54
+        },
+        {
+          "name": "updateReviewsRecord",
+          "visibility": "public",
+          "line": 67
+        },
+        {
+          "name": "deleteReviewsRecordByReviewsIds",
+          "visibility": "public",
+          "line": 79
+        },
+        {
+          "name": "deleteReviewsRecordByReviewsId",
+          "visibility": "public",
+          "line": 91
+        }
+      ],
+      "disposition": "迁入独立模块 application 对应业务域",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/pwa/impl/ReviewsRecordServiceImpl.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/tool/gen/util/AESUtils.java",
+      "category": "跨业务辅助/外部适配",
+      "methods": [
+        {
+          "name": "encrypt",
+          "visibility": "public",
+          "line": 20
+        },
+        {
+          "name": "decrypt",
+          "visibility": "public",
+          "line": 35
+        }
+      ],
+      "disposition": "迁入独立模块 infrastructure 或 legacy 协议辅助；不得复制无关代码生成框架",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/legacy/AESUtils.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/tool/gen/util/AppLogUtils.java",
+      "category": "跨业务辅助/外部适配",
+      "methods": [
+        {
+          "name": "insertAppLog",
+          "visibility": "public",
+          "line": 20
+        }
+      ],
+      "disposition": "迁入独立模块 infrastructure 或 legacy 协议辅助；不得复制无关代码生成框架",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/infrastructure/integration/ElasticsearchAppLogAdapter.java",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/port/AppLogPort.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/tool/gen/util/HttpClientUtil.java",
+      "category": "跨业务辅助/外部适配",
+      "methods": [
+        {
+          "name": "doPostJson",
+          "visibility": "public",
+          "line": 31
+        },
+        {
+          "name": "doPost",
+          "visibility": "public",
+          "line": 56
+        },
+        {
+          "name": "doGet",
+          "visibility": "public",
+          "line": 77
+        },
+        {
+          "name": "getStatus",
+          "visibility": "public",
+          "line": 96
+        },
+        {
+          "name": "doPostForm",
+          "visibility": "public",
+          "line": 119
+        },
+        {
+          "name": "request",
+          "visibility": "public",
+          "line": 143
+        }
+      ],
+      "disposition": "迁入独立模块 infrastructure 或 legacy 协议辅助；不得复制无关代码生成框架",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/infrastructure/integration/JdkHttpAdapter.java",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/port/HttpPort.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/tool/gen/util/IpAddrUtil.java",
+      "category": "跨业务辅助/外部适配",
+      "methods": [
+        {
+          "name": "getCityByIp",
+          "visibility": "public",
+          "line": 19
+        },
+        {
+          "name": "getCountryAndCountryCodeByIP",
+          "visibility": "public",
+          "line": 50
+        },
+        {
+          "name": "passFb",
+          "visibility": "public",
+          "line": 88
+        },
+        {
+          "name": "getIpAddress",
+          "visibility": "public",
+          "line": 110
+        }
+      ],
+      "disposition": "迁入独立模块 infrastructure 或 legacy 协议辅助；不得复制无关代码生成框架",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/infrastructure/integration/GeoHttpAdapter.java",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/port/GeoPort.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/tool/gen/util/MailUtils.java",
+      "category": "跨业务辅助/外部适配",
+      "methods": [
+        {
+          "name": "sendEmail",
+          "visibility": "public",
+          "line": 13
+        },
+        {
+          "name": "getPasswordAuthentication",
+          "visibility": "protected",
+          "line": 32
+        }
+      ],
+      "disposition": "迁入独立模块 infrastructure 或 legacy 协议辅助；不得复制无关代码生成框架",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/infrastructure/integration/SmtpMailAdapter.java",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/port/MailPort.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/tool/gen/util/ParamsUtils.java",
+      "category": "跨业务辅助/外部适配",
+      "methods": [
+        {
+          "name": "getParams",
+          "visibility": "public",
+          "line": 7
+        }
+      ],
+      "disposition": "迁入独立模块 infrastructure 或 legacy 协议辅助；不得复制无关代码生成框架",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/legacy/ParamsUtils.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/tool/gen/util/PwaUtils.java",
+      "category": "跨业务辅助/外部适配",
+      "methods": [
+        {
+          "name": "getInstance",
+          "visibility": "public",
+          "line": 52
+        },
+        {
+          "name": "doPost",
+          "visibility": "public",
+          "line": 63
+        },
+        {
+          "name": "dpGet",
+          "visibility": "public",
+          "line": 92
+        },
+        {
+          "name": "doPut",
+          "visibility": "public",
+          "line": 111
+        },
+        {
+          "name": "dpDelete",
+          "visibility": "public",
+          "line": 131
+        },
+        {
+          "name": "addHeader",
+          "visibility": "private",
+          "line": 151
+        }
+      ],
+      "disposition": "迁入独立模块 infrastructure 或 legacy 协议辅助；不得复制无关代码生成框架",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/infrastructure/integration/NpmPwaAdapter.java",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/application/port/PwaGateway.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/tool/gen/util/UUIDv7Generator.java",
+      "category": "跨业务辅助/外部适配",
+      "methods": [
+        {
+          "name": "generate",
+          "visibility": "public",
+          "line": 24
+        }
+      ],
+      "disposition": "迁入独立模块 infrastructure 或 legacy 协议辅助；不得复制无关代码生成框架",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/domain/applog/UUIDv7Generator.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    },
+    {
+      "source": "PackServer/src/main/java/com/ruoyi/project/tool/nginx/NginxTools.java",
+      "category": "跨业务辅助/外部适配",
+      "methods": [],
+      "disposition": "迁入独立模块 infrastructure 或 legacy 协议辅助；不得复制无关代码生成框架",
+      "verification": "源码能力已迁入；行为测试及实际验证范围见task-2-report.md、task-2-review.md、verification.md；不代表所有方法分支逐个运行",
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/infrastructure/integration/NpmPwaAdapter.java",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/domain/pwa/PwaBody.java"
+      ],
+      "evidence": [
+        "docs/migration/package-api/task-2-report.md",
+        "docs/migration/package-api/task-2-review.md"
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "sourceTable": "app_manager",
+      "targetTable": "pkg_app_manager",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "appName",
+          "column": "app_name"
+        },
+        {
+          "property": "areas",
+          "column": "areas"
+        },
+        {
+          "property": "author",
+          "column": "author"
+        },
+        {
+          "property": "createDate",
+          "column": "create_date"
+        },
+        {
+          "property": "mark",
+          "column": "mark"
+        },
+        {
+          "property": "packageCode",
+          "column": "package_code"
+        },
+        {
+          "property": "status",
+          "column": "status"
+        },
+        {
+          "property": "updateDate",
+          "column": "update_date"
+        },
+        {
+          "property": "url",
+          "column": "url"
+        },
+        {
+          "property": "userId",
+          "column": "user_id"
+        },
+        {
+          "property": "userName",
+          "column": "user_name"
+        },
+        {
+          "property": "whetherRestrict",
+          "column": "whether_restrict"
+        },
+        {
+          "property": "whetherUs",
+          "column": "whether_us"
+        },
+        {
+          "property": "whetherUse",
+          "column": "whether_use"
+        }
+      ],
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/001-schema.sql",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/org/jeecg/modules/packagemanagement/infrastructure/persistence/mapper/xml/AppManagerMapper.xml"
+      ],
+      "verification": "12套Mapper绑定/SQL解析定向测试已通过；真实显式ID插入回读覆盖AppManager/StoreStatus；原生产数据尚未提供，未执行历史数据导入"
+    },
+    {
+      "sourceTable": "app_statistics",
+      "targetTable": "pkg_app_statistics",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "packageCode",
+          "column": "package_code"
+        },
+        {
+          "property": "reigisterNum",
+          "column": "reigister_num"
+        },
+        {
+          "property": "paymentNum",
+          "column": "payment_num"
+        },
+        {
+          "property": "paymentTotal",
+          "column": "payment_total"
+        },
+        {
+          "property": "url",
+          "column": "url"
+        },
+        {
+          "property": "subAreas",
+          "column": "sub_areas"
+        },
+        {
+          "property": "subUrl",
+          "column": "sub_url"
+        },
+        {
+          "property": "createTime",
+          "column": "create_time"
+        },
+        {
+          "property": "updateTime",
+          "column": "update_time"
+        },
+        {
+          "property": "userId",
+          "column": "user_id"
+        },
+        {
+          "property": "status",
+          "column": "status"
+        },
+        {
+          "property": "shunt",
+          "column": "shunt"
+        }
+      ],
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/001-schema.sql",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/org/jeecg/modules/packagemanagement/infrastructure/persistence/mapper/xml/AppStatisticsMapper.xml"
+      ],
+      "verification": "12套Mapper绑定/SQL解析定向测试已通过；真实显式ID插入回读覆盖AppManager/StoreStatus；原生产数据尚未提供，未执行历史数据导入"
+    },
+    {
+      "sourceTable": "app_store_status",
+      "targetTable": "pkg_store_status",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "packageCode",
+          "column": "package_code"
+        },
+        {
+          "property": "status",
+          "column": "status"
+        },
+        {
+          "property": "storeUrl",
+          "column": "store_url"
+        },
+        {
+          "property": "createDate",
+          "column": "create_date"
+        },
+        {
+          "property": "successDate",
+          "column": "success_date"
+        },
+        {
+          "property": "failDate",
+          "column": "fail_date"
+        },
+        {
+          "property": "successEmail",
+          "column": "success_email"
+        },
+        {
+          "property": "failEmail",
+          "column": "fail_email"
+        }
+      ],
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/001-schema.sql",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/org/jeecg/modules/packagemanagement/infrastructure/persistence/mapper/xml/StoreStatusMapper.xml"
+      ],
+      "verification": "12套Mapper绑定/SQL解析定向测试已通过；真实显式ID插入回读覆盖AppManager/StoreStatus；原生产数据尚未提供，未执行历史数据导入"
+    },
+    {
+      "sourceTable": "event_config",
+      "targetTable": "pkg_event_config",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "packageId",
+          "column": "package_id"
+        },
+        {
+          "property": "packageToken",
+          "column": "package_token"
+        },
+        {
+          "property": "packagePixel",
+          "column": "package_pixel"
+        },
+        {
+          "property": "appName",
+          "column": "app_name"
+        },
+        {
+          "property": "url",
+          "column": "url"
+        }
+      ],
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/001-schema.sql",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/org/jeecg/modules/packagemanagement/infrastructure/persistence/mapper/xml/EventConfigMapper.xml"
+      ],
+      "verification": "12套Mapper绑定/SQL解析定向测试已通过；真实显式ID插入回读覆盖AppManager/StoreStatus；原生产数据尚未提供，未执行历史数据导入"
+    },
+    {
+      "sourceTable": "evnet_history",
+      "targetTable": "pkg_event_history",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "eventName",
+          "column": "event_name"
+        },
+        {
+          "property": "eventTime",
+          "column": "event_time"
+        },
+        {
+          "property": "eventSource",
+          "column": "event_source"
+        },
+        {
+          "property": "mediaSource",
+          "column": "media_source"
+        },
+        {
+          "property": "campaign",
+          "column": "campaign"
+        },
+        {
+          "property": "afSub1",
+          "column": "af_sub1"
+        },
+        {
+          "property": "afSub2",
+          "column": "af_sub2"
+        },
+        {
+          "property": "afSub3",
+          "column": "af_sub3"
+        },
+        {
+          "property": "region",
+          "column": "region"
+        },
+        {
+          "property": "countryCode",
+          "column": "country_code"
+        },
+        {
+          "property": "state",
+          "column": "state"
+        },
+        {
+          "property": "city",
+          "column": "city"
+        },
+        {
+          "property": "postalCode",
+          "column": "postal_code"
+        },
+        {
+          "property": "dma",
+          "column": "dma"
+        },
+        {
+          "property": "ip",
+          "column": "ip"
+        },
+        {
+          "property": "wifi",
+          "column": "wifi"
+        },
+        {
+          "property": "operator",
+          "column": "operator"
+        },
+        {
+          "property": "language",
+          "column": "language"
+        },
+        {
+          "property": "appsflyerId",
+          "column": "appsflyer_id"
+        },
+        {
+          "property": "platform",
+          "column": "platform"
+        },
+        {
+          "property": "osVersion",
+          "column": "os_version"
+        },
+        {
+          "property": "appVersion",
+          "column": "app_version"
+        },
+        {
+          "property": "sdkVersion",
+          "column": "sdk_version"
+        },
+        {
+          "property": "appId",
+          "column": "app_id"
+        },
+        {
+          "property": "appName",
+          "column": "app_name"
+        },
+        {
+          "property": "bundleId",
+          "column": "bundle_id"
+        },
+        {
+          "property": "isRetargeting",
+          "column": "is_retargeting"
+        },
+        {
+          "property": "userAgent",
+          "column": "user_agent"
+        },
+        {
+          "property": "httpReferrer",
+          "column": "http_referrer"
+        },
+        {
+          "property": "originalUrl",
+          "column": "original_url"
+        },
+        {
+          "property": "deviceDownloadTime",
+          "column": "device_download_time"
+        },
+        {
+          "property": "conversionType",
+          "column": "conversion_type"
+        },
+        {
+          "property": "deviceModel",
+          "column": "device_model"
+        },
+        {
+          "property": "jsonStr",
+          "column": "json_str"
+        },
+        {
+          "property": "path",
+          "column": "path"
+        },
+        {
+          "property": "status",
+          "column": "status"
+        },
+        {
+          "property": "packageName",
+          "column": "package_name"
+        }
+      ],
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/001-schema.sql",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/org/jeecg/modules/packagemanagement/infrastructure/persistence/mapper/xml/EvnetHistoryMapper.xml"
+      ],
+      "verification": "12套Mapper绑定/SQL解析定向测试已通过；真实显式ID插入回读覆盖AppManager/StoreStatus；原生产数据尚未提供，未执行历史数据导入"
+    },
+    {
+      "sourceTable": "event_error",
+      "targetTable": "pkg_event_error",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "errorPackage",
+          "column": "error_package"
+        },
+        {
+          "property": "errorMessage",
+          "column": "error_message"
+        },
+        {
+          "property": "errorContent",
+          "column": "error_content"
+        }
+      ],
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/001-schema.sql",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/org/jeecg/modules/packagemanagement/infrastructure/persistence/mapper/xml/EventErrorMapper.xml"
+      ],
+      "verification": "12套Mapper绑定/SQL解析定向测试已通过；真实显式ID插入回读覆盖AppManager/StoreStatus；原生产数据尚未提供，未执行历史数据导入"
+    },
+    {
+      "sourceTable": "load_count",
+      "targetTable": "pkg_load_count",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "hostName",
+          "column": "hostName"
+        },
+        {
+          "property": "time",
+          "column": "time"
+        },
+        {
+          "property": "access",
+          "column": "access"
+        },
+        {
+          "property": "download",
+          "column": "download"
+        },
+        {
+          "property": "userId",
+          "column": "user_id"
+        },
+        {
+          "property": "appId",
+          "column": "app_id"
+        }
+      ],
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/001-schema.sql",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/org/jeecg/modules/packagemanagement/infrastructure/persistence/mapper/xml/LoadCountMapper.xml"
+      ],
+      "verification": "12套Mapper绑定/SQL解析定向测试已通过；真实显式ID插入回读覆盖AppManager/StoreStatus；原生产数据尚未提供，未执行历史数据导入"
+    },
+    {
+      "sourceTable": "app_pwa",
+      "targetTable": "pkg_pwa",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "appName",
+          "column": "app_name"
+        },
+        {
+          "property": "appIcon",
+          "column": "app_icon"
+        },
+        {
+          "property": "appAdvertising",
+          "column": "app_advertising"
+        },
+        {
+          "property": "appDescription",
+          "column": "app_description"
+        },
+        {
+          "property": "appLanguage",
+          "column": "app_language"
+        },
+        {
+          "property": "appHost",
+          "column": "app_host"
+        },
+        {
+          "property": "appUrl",
+          "column": "app_url"
+        },
+        {
+          "property": "appEvent",
+          "column": "app_event"
+        },
+        {
+          "property": "appEventConf",
+          "column": "app_event_conf"
+        },
+        {
+          "property": "userId",
+          "column": "user_id"
+        },
+        {
+          "property": "appCreateTime",
+          "column": "app_create_time"
+        },
+        {
+          "property": "appChangeTime",
+          "column": "app_change_time"
+        },
+        {
+          "property": "appSubHost",
+          "column": "app_sub_host"
+        },
+        {
+          "property": "appSub",
+          "column": "app_sub"
+        },
+        {
+          "property": "linkId",
+          "column": "link_id"
+        },
+        {
+          "property": "publicKey",
+          "column": "public_key"
+        },
+        {
+          "property": "privateKey",
+          "column": "private_key"
+        },
+        {
+          "property": "downloadUrl",
+          "column": "download_url"
+        },
+        {
+          "property": "appType",
+          "column": "app_type"
+        },
+        {
+          "property": "appCode",
+          "column": "app_code"
+        },
+        {
+          "property": "downloadCount",
+          "column": "download_count"
+        },
+        {
+          "property": "score",
+          "column": "score"
+        },
+        {
+          "property": "reviews",
+          "column": "reviews"
+        },
+        {
+          "property": "tags",
+          "column": "tags"
+        }
+      ],
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/001-schema.sql",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/org/jeecg/modules/packagemanagement/infrastructure/persistence/mapper/xml/AppPwaMapper.xml"
+      ],
+      "verification": "12套Mapper绑定/SQL解析定向测试已通过；真实显式ID插入回读覆盖AppManager/StoreStatus；原生产数据尚未提供，未执行历史数据导入"
+    },
+    {
+      "sourceTable": "app_pwa_sub",
+      "targetTable": "pkg_pwa_subscription",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "host",
+          "column": "host"
+        },
+        {
+          "property": "endpoint",
+          "column": "endpoint"
+        },
+        {
+          "property": "auth",
+          "column": "auth"
+        },
+        {
+          "property": "p256dh",
+          "column": "p256dh"
+        },
+        {
+          "property": "appId",
+          "column": "app_id"
+        },
+        {
+          "property": "createTime",
+          "column": "create_time"
+        },
+        {
+          "property": "sendTime",
+          "column": "send_time"
+        },
+        {
+          "property": "sendStatus",
+          "column": "send_status"
+        },
+        {
+          "property": "sendErr",
+          "column": "send_err"
+        }
+      ],
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/001-schema.sql",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/org/jeecg/modules/packagemanagement/infrastructure/persistence/mapper/xml/AppPwaSubMapper.xml"
+      ],
+      "verification": "12套Mapper绑定/SQL解析定向测试已通过；真实显式ID插入回读覆盖AppManager/StoreStatus；原生产数据尚未提供，未执行历史数据导入"
+    },
+    {
+      "sourceTable": "app_notify",
+      "targetTable": "pkg_notification",
+      "columns": [
+        {
+          "property": "id",
+          "column": "id"
+        },
+        {
+          "property": "appId",
+          "column": "app_id"
+        },
+        {
+          "property": "userId",
+          "column": "user_id"
+        },
+        {
+          "property": "appName",
+          "column": "app_name"
+        },
+        {
+          "property": "appIcon",
+          "column": "app_icon"
+        },
+        {
+          "property": "appHost",
+          "column": "app_host"
+        },
+        {
+          "property": "notifyTitle",
+          "column": "notify_title"
+        },
+        {
+          "property": "notifyMessage",
+          "column": "notify_message"
+        },
+        {
+          "property": "notifyIcon",
+          "column": "notify_icon"
+        },
+        {
+          "property": "createTime",
+          "column": "create_time"
+        }
+      ],
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/001-schema.sql",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/org/jeecg/modules/packagemanagement/infrastructure/persistence/mapper/xml/AppNotifyMapper.xml"
+      ],
+      "verification": "12套Mapper绑定/SQL解析定向测试已通过；真实显式ID插入回读覆盖AppManager/StoreStatus；原生产数据尚未提供，未执行历史数据导入"
+    },
+    {
+      "sourceTable": "app_event_record",
+      "targetTable": "pkg_app_event",
+      "columns": [
+        {
+          "property": "eventId",
+          "column": "event_id"
+        },
+        {
+          "property": "appId",
+          "column": "app_id"
+        },
+        {
+          "property": "hostName",
+          "column": "host_name"
+        },
+        {
+          "property": "eventType",
+          "column": "event_type"
+        },
+        {
+          "property": "eventTypeName",
+          "column": "event_type_name"
+        },
+        {
+          "property": "deviceNo",
+          "column": "device_no"
+        },
+        {
+          "property": "ip",
+          "column": "ip"
+        },
+        {
+          "property": "createTime",
+          "column": "create_time"
+        },
+        {
+          "property": "userId",
+          "column": "user_id"
+        }
+      ],
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/001-schema.sql",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/org/jeecg/modules/packagemanagement/infrastructure/persistence/mapper/xml/AppEventRecordMapper.xml"
+      ],
+      "verification": "12套Mapper绑定/SQL解析定向测试已通过；真实显式ID插入回读覆盖AppManager/StoreStatus；原生产数据尚未提供，未执行历史数据导入"
+    },
+    {
+      "sourceTable": "reviews_record",
+      "targetTable": "pkg_review",
+      "columns": [
+        {
+          "property": "reviewsId",
+          "column": "reviews_id"
+        },
+        {
+          "property": "appId",
+          "column": "app_id"
+        },
+        {
+          "property": "headPortraitUrl",
+          "column": "head_portrait_url"
+        },
+        {
+          "property": "name",
+          "column": "name"
+        },
+        {
+          "property": "content",
+          "column": "content"
+        },
+        {
+          "property": "score",
+          "column": "score"
+        },
+        {
+          "property": "createTime",
+          "column": "create_time"
+        }
+      ],
+      "targetFiles": [
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/001-schema.sql",
+        "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/org/jeecg/modules/packagemanagement/infrastructure/persistence/mapper/xml/ReviewsRecordMapper.xml"
+      ],
+      "verification": "12套Mapper绑定/SQL解析定向测试已通过；真实显式ID插入回读覆盖AppManager/StoreStatus；原生产数据尚未提供，未执行历史数据导入"
+    }
+  ],
+  "elasticsearch": {
+    "sourceIndex": "applog",
+    "targetIndex": "applog",
+    "targetFiles": [
+      "upstream/JeecgBoot/jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/infrastructure/integration/ElasticsearchAppLogAdapter.java"
+    ],
+    "verification": "端口替身验证索引创建/UTC日期/列表与导出时间区差异；未验证真实生产ES集群或迁移历史索引"
+  }
+}

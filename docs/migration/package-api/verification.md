@@ -32,3 +32,9 @@
 - Task 2 独立复审：规格通过、质量 Approved，详见 task-2-review.md。
 - 全部 Package*Test 在隔离 MySQL 环境完成：40项、0失败、0错误、0跳过，2026-11-09 12:43:20 BUILD SUCCESS；日志 .runtime/package-mysql/task2-all-live.log。
 - Geo失败兜底、ES UTC存储及列表/导出时区差异、全局推送密钥初始化边界均已修复并复核。控制器事务、HTTP接线和真实外部服务验证仍分别属于后续验收。
+
+## 数据与源码覆盖预检
+
+- foundation-targets.json逐条列出119条基础接口的实际宿主文件及差异；component-targets.json列出24业务/辅助实现和12业务表的实际文件；source-snapshot.json保存330个相关源文件内容指纹。仅为静态映射，不替代逐分支业务测试。
+- deploy/package-api/data-preflight.sql在本机隔离MySQL执行成功；本次12业务表为空，金额0.00，无生产数据导入。日志.runtime/package-mysql/preflight.log。
+- 完整清单验证工具verify-coverage.mjs目前将缺少的目标接口/前端清单明确报错；Task3/4完成后补齐再运行，不能将现阶段称为全量覆盖验证通过。

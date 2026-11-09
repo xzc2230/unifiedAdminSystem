@@ -36,6 +36,10 @@ pkg_user_identity用于旧数字用户到JEECG用户/租户的明确映射；每
 
 核对12表数量、父子关联、统计金额、评论、订阅、通知、NPM linkId和VAPID密钥；ES applog索引及字段映射另行迁移。上传文件、PWA/W2A静态站点目录、Nginx域名关系不随Java代码自动迁移。
 
+导入后在选定目标库执行deploy/package-api/data-preflight.sql（只读）：检查一对一身份、成员有效性、逐资源归属、孤立评论/订阅/通知、全局包/appCode重复及12表数量/金额汇总。只报告密钥是否存在，不输出私钥内容。预检在本机隔离空库已执行成功，日志.runtime/package-mysql/preflight.log；空库检查不代表历史生产数据已验证。宿主与新增表排序规则可能不同，预检的宿主身份字符串比较已明确使用utf8mb4_general_ci。
+
+业务字典app_status、app_where、app_area、store_status、event_name、country_name、load_host均被源页面使用，但提供的源SQL未含这些业务字典数据。应从原系统导出value/label/排序后转换为JEECG字典；尤其load_host的value→label决定appSub，不能用示例域名代替。用户数值ID和业务字典都不能仅凭显示名称自动匹配。
+
 ## 生产切换前
 
 必须具备源业务DDL/数据备份、有效身份映射、完整PWA静态资源、外部服务测试配置及旧域名代理规则。先在隔离环境完成新旧协议对照与页面验收，再准备目标数据快照与回退入口。旧API域名保持原方法/路径/参数，由代理映射到独立/package-legacy内部空间；管理API使用/package-admin，独立鉴权。
