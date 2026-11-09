@@ -61,7 +61,7 @@
             <if test="failEmail != null">fail_email,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null ">id,</if>
+            <if test="id != null ">#{id},</if>
             <if test="packageCode != null">#{packageCode},</if>
             <if test="status != null">#{status},</if>
             <if test="storeUrl != null">#{storeUrl},</if>

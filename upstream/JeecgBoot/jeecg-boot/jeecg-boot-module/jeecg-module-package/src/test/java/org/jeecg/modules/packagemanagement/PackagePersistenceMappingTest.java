@@ -1,13 +1,17 @@
 package org.jeecg.modules.packagemanagement;
 
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
+import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.session.Configuration;
+import org.jeecg.modules.packagemanagement.domain.app.AppManager;
+import org.jeecg.modules.packagemanagement.domain.store.StoreStatus;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -65,5 +69,37 @@ class PackagePersistenceMappingTest {
             assertTrue(java.util.regex.Pattern.compile("property=\"jsonStr\"\\s+column=\"json_str\"").matcher(xml).find());
             assertTrue(xml.contains("from pkg_event_history"));
         }
+    }
+
+    @Test
+    void appManagerExplicitIdInsertUsesIdColumnAndBoundParameter() throws Exception {
+        AppManager manager = new AppManager();
+        manager.setId(17L);
+        manager.setPackageCode("legacy.app");
+        assertExplicitIdInsert("AppManager", "pkg_app_manager", manager);
+    }
+
+    @Test
+    void storeStatusExplicitIdInsertUsesIdColumnAndBoundParameter() throws Exception {
+        StoreStatus status = new StoreStatus();
+        status.setId(19L);
+        status.setPackageCode("legacy.app");
+        assertExplicitIdInsert("StoreStatus", "pkg_store_status", status);
+    }
+
+    private void assertExplicitIdInsert(String name, String table, Object parameter) throws Exception {
+        Configuration config = new Configuration();
+        String resource = ROOT + name + "Mapper.xml";
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream(resource)) {
+            assertNotNull(input, resource);
+            new XMLMapperBuilder(input, config, resource, config.getSqlFragments()).parse();
+        }
+        BoundSql bound = config.getMappedStatement(MAPPER_PACKAGE + name + "Mapper.insert" + name)
+                .getBoundSql(parameter);
+        String sql = bound.getSql().replaceAll("\\s+", " ").trim();
+        assertTrue(sql.matches("(?i)insert into " + table
+                + " \\( id, package_code \\) values \\( \\?, \\? \\)"), sql);
+        assertEquals(List.of("id", "packageCode"), bound.getParameterMappings().stream()
+                .map(mapping -> mapping.getProperty()).toList(), sql);
     }
 }

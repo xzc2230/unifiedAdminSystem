@@ -9,7 +9,7 @@ Status: **DONE_WITH_CONCERNS** (2026-11-09)
 - Mapper interfaces: `.../jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/infrastructure/persistence/mapper/`.
 - Mapper XML: `.../jeecg-module-package/src/main/resources/org/jeecg/modules/packagemanagement/infrastructure/persistence/mapper/xml/`.
 - Inferred MySQL development DDL: `.../jeecg-module-package/src/main/resources/db/package/001-schema.sql`.
-- Mapper contract tests: `.../jeecg-module-package/src/test/java/org/jeecg/modules/packagemanagement/PackagePersistenceMappingTest.java`.
+- Mapper contract tests: `.../jeecg-module-package/src/test/java/org/jeecg/modules/packagemanagement/PackagePersistenceMappingTest.java` and the optional `PackagePersistenceMySqlIntegrationTest.java` in the same directory.
 
 ## Exact domain type mapping for service migration
 
@@ -26,7 +26,7 @@ Status: **DONE_WITH_CONCERNS** (2026-11-09)
 
 `com.ruoyi.framework.web.domain.BaseEntity` becomes `org.jeecg.modules.packagemanagement.domain.PackageEntity`, preserving search, audit, remark, and params accessors. Source `AppLog.initId()` still uses the source UUIDv7 helper, copied as `domain.applog.UUIDv7Generator`; the active ES index name is `applog`. The ES annotations and dependency are deferred to the ES integration layer. RuoYi Excel annotations and the unrelated Apache POI import in `StatisticsVO` are removed. Business field names and accessors remain source compatible, including the source spellings `EvnetHistory`, `reigisterNum`, and `PwaBody.CreateBoody`.
 
-All twelve mapper interfaces have their source class names and method names under `org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper`. Their XML namespaces use that exact package. Their source condition, sort, and aggregate SQL is retained with table substitutions below. `AppManagerMapper.transferAppManagerById` has `@Param` names for its three existing parameters. Three inserts that previously lacked key retrieval now set `useGeneratedKeys`, and the source AppManager insert's literal `id` value is corrected to `#{id}`.
+All twelve mapper interfaces have their source class names and method names under `org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper`. Their XML namespaces use that exact package. Their source condition, sort, and aggregate SQL is retained with table substitutions below. `AppManagerMapper.transferAppManagerById` has `@Param` names for its three existing parameters. Three inserts that previously lacked key retrieval now set `useGeneratedKeys`. Explicit historical IDs are preserved: the AppManager and StoreStatus INSERT column lists contain literal column name `id`, while their VALUES lists bind `#{id}`.
 
 | Source table | Target table |
 | --- | --- |
@@ -53,12 +53,17 @@ From `upstream/JeecgBoot/jeecg-boot`, using `JAVA_HOME=C:\Program Files\Java\jdk
 & 'D:\file\apache-maven-3.8.8-bin\apache-maven-3.8.8\bin\mvn.cmd' -o '-Dmaven.repo.local=D:\workspace\JEECG\.runtime\m2' -pl jeecg-boot-module/jeecg-module-package -am '-DskipTests=false' '-Dtest=PackagePersistenceMappingTest' '-Dsurefire.failIfNoSpecifiedTests=false' test
 ```
 
-Result: reactor **BUILD SUCCESS**, two package tests run, zero failures/errors. The tests make MyBatis parse all twelve XMLs and verify each interface method has a statement, all twelve renamed tables appear, and the `EvnetHistory` `appsflyer_id` and `json_str` mappings survive. `git diff --check` passed after the final POM edits. Static DDL check found the widest business table (`pkg_event_history`) has about 34,680 bytes of maximum `VARCHAR(255)` payload, below the 65,535 byte SQL row limit; large free text is `TEXT`/`LONGTEXT`.
+Result after review fixes: reactor **BUILD SUCCESS**, four package tests run, zero failures/errors. The tests make MyBatis parse all twelve XMLs and verify each interface method has a statement, all twelve renamed tables appear, and the `EvnetHistory` `appsflyer_id` and `json_str` mappings survive. Two added BoundSql tests use non-null historical IDs and assert `id` is a column name and a bound VALUES parameter for AppManager and StoreStatus. Before the XML correction, both tests failed on the actual rendered SQL; after correction, all four passed. The source XML files use CRLF, so `git -c core.whitespace=cr-at-eol diff --check` passes. Static DDL check found the widest business table (`pkg_event_history`) has about 34,680 bytes of maximum `VARCHAR(255)` payload, below the 65,535 byte SQL row limit; large free text is `TEXT`/`LONGTEXT`.
+
+An optional live MyBatis test is available as `PackagePersistenceMySqlIntegrationTest`. It requires environment variables `PACKAGE_TEST_MYSQL_URL`, `PACKAGE_TEST_MYSQL_USER`, and `PACKAGE_TEST_MYSQL_PASSWORD`. Before opening a connection it enforces `127.0.0.1:13317/package_migration_test` and user `package_test`; it then inserts explicit `Long` IDs into AppManager and StoreStatus, verifies one affected row and readback of both IDs/package codes, and rolls back in `finally`. With variables unset, it skips. The focused compile/test command is the one above with `'-Dtest=PackagePersistence*Test'`: latest local run was **BUILD SUCCESS**, five tests discovered, four passed, one skipped. A credentialed execution is pending; its password must not be logged.
 
 An initial full reactor test run with `-DskipTests=false` was stopped in existing `jeecg-boot-base-core` tests before it reached this module: 59 tests, 2 failures and 2 errors caused by unavailable DNS/loopback connections in this sandbox. Reports: `upstream/JeecgBoot/jeecg-boot/jeecg-boot-base-core/target/surefire-reports/`. The focused run compiles base-core and runs only the package tests.
 
 ## Remaining concerns
 
 - Source production business DDL and historical data were unavailable. SQL types, lengths, defaults, unique constraints, and indexes in `001-schema.sql` are explicitly inferred. Compare with production before importing data or applying the script there. In particular, verify duplicate package/app codes before enabling the unique indexes.
-- No live MySQL schema execution or historical data migration was performed. Numeric legacy user IDs need verified JEECG identity and tenant mappings before management operations are enabled.
+- No historical data migration was performed. The optional MyBatis insert test still needs the local disposable test database and credentialed execution. Numeric legacy user IDs need verified JEECG identity and tenant mappings before management operations are enabled.
 - ES annotations/repository and SQL `AppLogMapper` are deliberately outside this SQL persistence layer. The source uses the `applog` ES index for active request logs; services must implement that adapter separately.
+
+## Controller verification addendum
+2026-11-09: inferred DDL executed successfully on isolated native MySQL 8.0.45; 14 tables confirmed. Credentialed focused Maven run PackagePersistence*Test completed BUILD SUCCESS: 5 tests, 0 failures, 0 errors, 0 skipped, including actual MyBatis insert/readback/rollback. Log: .runtime/package-mysql/mybatis-live.log. Existing host baseline SQL was imported only into package_migration_test for later integration. Native temporary Redis is on 127.0.0.1:16390.
