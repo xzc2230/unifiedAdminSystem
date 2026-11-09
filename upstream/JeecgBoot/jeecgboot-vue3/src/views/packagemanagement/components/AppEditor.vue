@@ -1,0 +1,424 @@
+<template>
+  <div class="app-editor">
+    <section class="editor-section" aria-labelledby="app-basic-heading">
+      <header class="section-heading">
+        <div><h3 id="app-basic-heading">基础信息</h3><p>设置应用标识与访问链接</p></div>
+        <span class="section-caption">带 * 的为必填项</span>
+      </header>
+      <div class="field-grid">
+        <a-form-item
+          v-for="field in basicFields"
+          :key="field.key"
+          :class="{ 'full-width': field.key !== 'appName' && field.key !== 'author' }"
+          :label="field.label"
+          :name="field.key"
+          :rules="rulesFor(field)"
+          :extra="field.key === 'packageCode' && editing ? '包名是应用的唯一标识，创建后不可修改。' : undefined"
+        >
+          <a-textarea
+            v-if="field.key === 'mark'"
+            :value="model[field.key]"
+            :rows="2"
+            placeholder="填写应用备注（选填）"
+            @update:value="update(field, $event)"
+          />
+          <a-input
+            v-else
+            :value="model[field.key]"
+            :disabled="Boolean(field.readonly || (field.immutable && editing))"
+            :placeholder="placeholders[field.key]"
+            allowClear
+            @update:value="update(field, $event)"
+          />
+        </a-form-item>
+      </div>
+    </section>
+
+    <section class="editor-section" aria-labelledby="app-access-heading">
+      <header class="section-heading"
+        ><div><h3 id="app-access-heading">访问控制</h3><p>选择风控模式，配置地区访问规则</p></div></header
+      >
+      <a-form-item v-if="statusField" label="风控模式" name="status" :rules="rulesFor(statusField)" class="mode-form-item">
+        <a-radio-group :value="model.status" class="mode-options" @change="update(statusField, $event.target.value)">
+          <a-radio
+            v-for="option in optionsFor(statusField)"
+            :key="option.value"
+            :value="option.value"
+            class="mode-option"
+            :class="{ 'mode-option-selected': String(model.status) === String(option.value) }"
+          >
+            <span class="mode-name">{{ option.label }}</span>
+            <span class="mode-description">{{ modeDescriptions[String(option.value)] || '使用该风控模式' }}</span>
+          </a-radio>
+        </a-radio-group>
+        <p v-if="!optionsFor(statusField).length" class="field-help">暂无可用模式，请联系管理员配置应用状态字典。</p>
+      </a-form-item>
+      <div class="control-grid">
+        <div v-for="field in toggleFields" :key="field.key" class="toggle-setting">
+          <div
+            ><label :for="`app-${field.key}`">{{ field.label }}</label
+            ><p>{{ toggleDescriptions[field.key] }}</p></div
+          >
+          <a-form-item :name="field.key" :rules="rulesFor(field)" :aria-label="field.label" class="toggle-form-item">
+            <a-switch
+              :id="`app-${field.key}`"
+              :checked="Number(model[field.key]) === 1"
+              :disabled="!optionsFor(field).length"
+              :aria-label="field.label"
+              @change="update(field, $event ? 1 : 0)"
+            />
+          </a-form-item>
+        </div>
+      </div>
+      <p v-if="toggleFields.some((field) => !optionsFor(field).length)" class="field-help">开关选项暂不可用，请联系管理员配置应用开关字典。</p>
+      <a-form-item
+        v-if="areasField"
+        :label="areasField.label"
+        name="areas"
+        :rules="rulesFor(areasField)"
+        class="areas-form-item"
+        :extra="Number(model.whetherRestrict) === 1 ? '白名单已开启，请核对允许访问的地区。' : '白名单未开启；已选地区会保留，开启后使用。'"
+      >
+        <a-select
+          :value="model.areas"
+          :options="optionsFor(areasField)"
+          mode="multiple"
+          allowClear
+          showSearch
+          optionFilterProp="label"
+          placeholder="搜索并选择地区，可多选"
+          :disabled="!optionsFor(areasField).length"
+          @change="update(areasField, $event)"
+        />
+      </a-form-item>
+    </section>
+
+    <section class="editor-section" aria-labelledby="app-risk-heading">
+      <header class="section-heading"
+        ><div><h3 id="app-risk-heading">风控阈值</h3><p>按应用配置设备关联与切换限制</p></div
+        ><span class="section-caption">高级配置</span></header
+      >
+      <div class="risk-notice">关联与切换阈值留空或设为 0 时使用默认值 1；计数窗口小于 60 秒时使用默认值 86400 秒（24 小时）。</div>
+      <div class="field-grid">
+        <a-form-item
+          v-for="field in riskFields"
+          :key="field.key"
+          :label="riskLabels[field.key] || field.label"
+          :name="field.key"
+          :rules="rulesFor(field)"
+          :extra="riskDescriptions[field.key]"
+        >
+          <a-input-number
+            :value="model[field.key]"
+            :min="0"
+            :precision="0"
+            :placeholder="field.key === 'riskWindowSeconds' ? '默认 86400' : '默认 1'"
+            @change="update(field, $event)"
+          >
+            <template #addonAfter>{{ field.key === 'riskWindowSeconds' ? '秒' : field.key === 'aidGaidSwitchThreshold' ? '次' : '个' }}</template>
+          </a-input-number>
+        </a-form-item>
+      </div>
+    </section>
+
+    <section v-if="referrerField" class="editor-section" aria-labelledby="app-referrer-heading">
+      <header class="section-heading"
+        ><div><h3 id="app-referrer-heading">来源黑名单</h3><p>配置 InstallReferrer 黑名单模板</p></div
+        ><span class="format-label">JSON</span></header
+      >
+      <a-form-item
+        name="referrerBlacklistJson"
+        :rules="rulesFor(referrerField)"
+        class="json-form-item"
+        extra="选填，请保持合法的 JSON 格式；留空时不设置自定义模板。"
+      >
+        <a-textarea
+          :value="model.referrerBlacklistJson"
+          :rows="8"
+          :spellcheck="false"
+          aria-label="InstallReferrer 黑名单模板（JSON）"
+          class="json-editor"
+          placeholder="输入 JSON 格式的黑名单模板"
+          @update:value="update(referrerField, $event)"
+        />
+      </a-form-item>
+    </section>
+  </div>
+</template>
+
+<script setup lang="ts">
+  import { computed } from 'vue';
+  import type { PackageField, PackageOption } from '/@/types/packagemanagement';
+
+  const props = defineProps<{
+    model: Record<string, any>;
+    fields: PackageField[];
+    optionsFor: (field: PackageField) => PackageOption[];
+    editing: boolean;
+  }>();
+  const emit = defineEmits<{ (event: 'update-field', field: PackageField, value: any): void }>();
+  const update = (field: PackageField, value: any) => emit('update-field', field, value);
+  const rulesFor = (field: PackageField) => (field.required ? [{ required: true, message: `请填写${field.label}` }] : []);
+  const basicFields = computed(() =>
+    ['appName', 'author', 'packageCode', 'url', 'mark'].flatMap((key) => props.fields.filter((field) => field.key === key))
+  );
+  const statusField = computed(() => props.fields.find((field) => field.key === 'status'));
+  const areasField = computed(() => props.fields.find((field) => field.key === 'areas'));
+  const toggleFields = computed(() => props.fields.filter((field) => ['whetherRestrict', 'whetherUs', 'whetherUse'].includes(field.key)));
+  const riskFields = computed(() =>
+    props.fields.filter((field) => ['gaidAidThreshold', 'aidDeviceThreshold', 'aidGaidSwitchThreshold', 'riskWindowSeconds'].includes(field.key))
+  );
+  const referrerField = computed(() => props.fields.find((field) => field.key === 'referrerBlacklistJson'));
+  const placeholders: Record<string, string> = {
+    appName: '输入应用名称',
+    author: '输入出包人（选填）',
+    packageCode: '例如 com.example.app',
+    url: 'https://example.com',
+  };
+  const modeDescriptions: Record<string, string> = {
+    '0': '使用全关模式',
+    '1': '使用全开模式',
+    '2': '使用归因模式',
+    '3': '用于调试与联调',
+  };
+  const toggleDescriptions: Record<string, string> = {
+    whetherRestrict: '开启地区白名单规则',
+    whetherUs: '限制美国地区访问',
+    whetherUse: '标记为自用应用',
+  };
+  const riskLabels: Record<string, string> = {
+    gaidAidThreshold: 'GAID 关联 AID 数',
+    aidDeviceThreshold: 'AID 关联设备数',
+    aidGaidSwitchThreshold: 'GAID 切换次数',
+    riskWindowSeconds: '风控计数窗口',
+  };
+  const riskDescriptions: Record<string, string> = {
+    gaidAidThreshold: '同一 GAID 可关联的 AID 数量阈值',
+    aidDeviceThreshold: '同一 AID 可关联的设备数量阈值',
+    aidGaidSwitchThreshold: '同一 AID 的 GAID 切换次数阈值',
+    riskWindowSeconds: '设备关联与切换行为的统计时长',
+  };
+</script>
+
+<style scoped lang="less">
+  .app-editor {
+    --editor-surface: #fff;
+    --editor-border: #e4e9f0;
+    --editor-text: #243247;
+    --editor-muted: #66758a;
+    display: grid;
+    gap: 18px;
+    color: var(--editor-text);
+  }
+  .editor-section {
+    padding: 22px 24px 4px;
+    border: 1px solid var(--editor-border);
+    border-radius: 12px;
+    background: var(--editor-surface);
+  }
+  .section-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .section-heading h3 {
+    margin: 0;
+    color: var(--editor-text);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+  }
+  .section-heading p,
+  .toggle-setting p {
+    margin: 4px 0 0;
+    color: var(--editor-muted);
+    font-size: 12px;
+    line-height: 20px;
+  }
+  .section-caption {
+    padding-top: 3px;
+    color: var(--editor-muted);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 22px;
+  }
+  .field-grid > *,
+  .control-grid > * {
+    min-width: 0;
+  }
+  .full-width {
+    grid-column: 1 / -1;
+  }
+  .app-editor :deep(.ant-form-item) {
+    margin-bottom: 20px;
+  }
+  .app-editor :deep(.ant-form-item-label) {
+    padding-bottom: 6px;
+  }
+  .app-editor :deep(.ant-form-item-label > label) {
+    height: auto;
+    color: var(--editor-text);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .app-editor :deep(.ant-input-number) {
+    width: 100%;
+  }
+  .app-editor :deep(.ant-input-number-group-wrapper) {
+    width: 100%;
+  }
+  .app-editor :deep(.ant-input),
+  .app-editor :deep(.ant-input-affix-wrapper),
+  .app-editor :deep(.ant-input-number),
+  .app-editor :deep(.ant-select-selector) {
+    border-radius: 6px;
+  }
+  .app-editor :deep(.ant-form-item-extra) {
+    padding-top: 5px;
+    color: var(--editor-muted);
+    font-size: 12px;
+    line-height: 20px;
+  }
+  .mode-options {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+  }
+  .mode-option {
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    padding: 14px 10px;
+    border: 1px solid var(--editor-border);
+    border-radius: 8px;
+    transition:
+      border-color 0.15s,
+      background 0.15s;
+  }
+  .mode-option-selected {
+    border-color: #1677ff;
+    background: #f0f6ff;
+  }
+  .mode-option :deep(.ant-radio) {
+    margin-top: 3px;
+  }
+  .mode-option :deep(.ant-radio + span) {
+    min-width: 0;
+    padding-inline-end: 0;
+  }
+  .mode-name {
+    display: block;
+    color: var(--editor-text);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .mode-description {
+    display: block;
+    margin-top: 4px;
+    color: var(--editor-muted);
+    font-size: 11px;
+    line-height: 18px;
+  }
+  .control-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .toggle-setting {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid var(--editor-border);
+    border-radius: 8px;
+  }
+  .toggle-setting label {
+    color: var(--editor-text);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .toggle-setting p {
+    font-size: 11px;
+  }
+  .app-editor .toggle-form-item {
+    flex: none;
+    margin: 0;
+  }
+  .risk-notice {
+    margin-bottom: 18px;
+    padding: 10px 12px;
+    border-left: 3px solid #91caff;
+    border-radius: 4px;
+    background: #f0f6ff;
+    color: var(--editor-muted);
+    font-size: 12px;
+    line-height: 20px;
+  }
+  .format-label {
+    padding: 2px 8px;
+    border: 1px solid var(--editor-border);
+    border-radius: 4px;
+    color: var(--editor-muted);
+    font:
+      11px/18px Consolas,
+      monospace;
+  }
+  .json-editor {
+    padding: 12px 14px;
+    background: #fafbfd;
+    font:
+      12px/1.8 Consolas,
+      'SFMono-Regular',
+      monospace;
+    tab-size: 2;
+  }
+  .field-help {
+    margin: 8px 0;
+    color: var(--editor-muted);
+    font-size: 12px;
+  }
+  :global(html[data-theme='dark'] .app-editor) {
+    --editor-surface: #1f1f1f;
+    --editor-border: #424242;
+    --editor-text: #e5e7eb;
+    --editor-muted: #a1aab8;
+  }
+  :global(html[data-theme='dark'] .app-editor .mode-option-selected),
+  :global(html[data-theme='dark'] .app-editor .risk-notice) {
+    background: #162c46;
+  }
+  :global(html[data-theme='dark'] .app-editor .json-editor) {
+    background: #181818;
+  }
+  @media (max-width: 640px) {
+    .editor-section {
+      padding: 16px 14px 0;
+      border-radius: 8px;
+    }
+    .field-grid,
+    .control-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .mode-options {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .section-caption {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mode-option {
+      transition: none;
+    }
+  }
+</style>

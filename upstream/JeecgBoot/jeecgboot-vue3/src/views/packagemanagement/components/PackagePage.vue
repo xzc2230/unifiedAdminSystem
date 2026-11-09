@@ -31,10 +31,17 @@
         <template v-else-if="fieldsByKey[column.dataIndex]">{{ displayValue(column.dataIndex,text) }}</template>
       </template>
     </BasicTable>
-    <a-modal v-model:open="editorOpen" :title="`${editId == null ? '新增' : '编辑'}${definition.title}`" :width="definition.domain === 'pwa' ? 1000 : 850" :confirmLoading="saving" :maskClosable="false" destroyOnClose @ok="save">
+    <a-modal v-model:open="editorOpen" :title="definition.domain === 'apps' ? `${editId == null ? '新增' : '编辑'}应用` : `${editId == null ? '新增' : '编辑'}${definition.title}`"
+      :width="definition.domain === 'apps' ? 960 : definition.domain === 'pwa' ? 1000 : 850"
+      :wrapClassName="definition.domain === 'apps' ? 'app-editor-modal' : undefined"
+      :bodyStyle="definition.domain === 'apps' ? { maxHeight: 'calc(100dvh - 200px)', overflowY: 'auto', padding: '20px 24px', background: 'var(--app-editor-background, #f5f7fa)' } : undefined"
+      :okText="definition.domain === 'apps' ? '保存应用' : undefined"
+      :cancelText="definition.domain === 'apps' ? '取消' : undefined"
+      :confirmLoading="saving" :maskClosable="false" destroyOnClose @ok="save">
       <a-alert v-if="definition.domain === 'notifications' && editId == null" type="info" message="保存后将向所选应用发送通知；发送结果以服务器实际响应为准。" showIcon class="notice" />
       <a-form ref="editorForm" :model="model" layout="vertical">
-        <a-row :gutter="20">
+        <AppEditor v-if="definition.domain === 'apps'" :model="model" :fields="editableFields" :optionsFor="optionsFor" :editing="editId != null" @update-field="setField" />
+        <a-row v-else :gutter="20">
           <a-col v-for="field in editableFields" :key="field.key" :xs="24" :md="field.type === 'textarea' || field.key === 'appAdvertising' ? 24 : 12">
             <a-form-item :label="field.label" :name="field.key" :rules="field.required ? [{required:true,message:`请填写${field.label}`}] : []">
               <PackageField :field="field" :value="model[field.key]" :options="optionsFor(field)" :domain="definition.domain" :disabled="Boolean(field.readonly || field.immutable && editId != null)" @update:value="setField(field,$event)" />
@@ -66,6 +73,7 @@ import type { PackageDefinition,PackageField as PackageFieldSpec,PackageId,Packa
 import { fromAreas,toAreas,legacyImageUrl } from '../package-conversions.mjs';
 import PackageField from './PackageField.vue';
 import PwaEditor from './PwaEditor.vue';
+import AppEditor from './AppEditor.vue';
 const props=defineProps<{definition:PackageDefinition}>();
 const definition=props.definition;
 const api=packageApi(definition.domain);
@@ -166,3 +174,25 @@ async function doTransfer(){if(!targetUser.value){message.warning('请选择接�
 onMounted(()=>{loadChoices();if(definition.domain==='statistics') loadTotal();});
 </script>
 <style scoped lang="less">.package-page{padding:16px}.summary-card{margin-bottom:16px}.totals{margin-top:16px}.notice{margin-bottom:16px}.detail-value{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;max-width:560px}</style>
+<style lang="less">
+  .app-editor-modal {
+    .ant-modal { top: 40px; max-width: calc(100vw - 32px); padding-bottom: 24px; }
+    .ant-modal-content { overflow: hidden; padding: 0; border-radius: 14px; }
+    .ant-modal-header { margin: 0; padding: 20px 24px; border-bottom: 1px solid #e4e9f0; }
+    .ant-modal-title { font-size: 17px; font-weight: 600; line-height: 24px; }
+    .ant-modal-close { top: 19px; right: 20px; }
+    .ant-modal-footer { margin: 0; padding: 14px 24px; border-top: 1px solid #e4e9f0; }
+    .ant-modal-footer .ant-btn { min-width: 88px; height: 36px; border-radius: 6px; }
+    .ant-modal-body { scrollbar-gutter: stable; }
+    @media (max-width: 640px) {
+      .ant-modal { top: 16px; max-width: calc(100vw - 20px); }
+      .ant-modal-body { padding: 12px !important; max-height: calc(100dvh - 166px) !important; }
+      .ant-modal-header { padding: 18px 20px; }
+      .ant-modal-footer { padding: 12px 16px; }
+    }
+  }
+  html[data-theme='dark'] .app-editor-modal {
+    --app-editor-background: #141414;
+    .ant-modal-header, .ant-modal-footer { border-color: #424242; }
+  }
+</style>

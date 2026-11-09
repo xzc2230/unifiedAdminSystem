@@ -89,7 +89,7 @@ test('all 13 page entries and business editor SFCs compile', () => {
     }
   }}
   walk(path.join(root,'src/views/packagemanagement'));
-  assert.equal(count,17);
+  assert.equal(count,18);
 });
 test('editable business fields agree with backend allowlists and preserve domain special cases', async () => {
   const ts=require('typescript');
