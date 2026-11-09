@@ -348,7 +348,7 @@
       initChartData();
       appData.value.metadata = { izDraw: '1', defaultSelect: '0' }  
       quickCommandData.value = [
-          { name: '介绍一下JeecgBoot', descr: "请介绍一下JeecgBoot" },
+          { name: '介绍一下后台管理系统', descr: "请介绍一下后台管理系统" },
           { name: 'JEECG的优势？', descr: "JEECG有哪些优势？" },
           { name: 'JEECG可以做什么？', descr: "JEECG可以做哪些事情？" },
           { name: '创建一个系统用户', descr: "请创建一个系统用户，具体信息如下：\n" +

@@ -31,7 +31,7 @@
       colProps: {
         span: 15,
       },
-      defaultValue: 'Hello JeecgBoot',
+      defaultValue: 'Hello 后台管理系统',
     },
   ];
 
