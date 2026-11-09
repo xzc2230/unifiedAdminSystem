@@ -106,6 +106,8 @@ public class ShiroConfig {
         // Exact endpoints only; RoutingNodeController enforces independent bearer credentials and fixed assignments.
         filterChainDefinitionMap.put("/site-platform/node/snapshots", "anon");
         filterChainDefinitionMap.put("/site-platform/node/ack", "anon");
+        // Exact route only: attribution validates its own subject credential and resolve token.
+        filterChainDefinitionMap.put("/api/v1/attribution/resolve", "anon");
         filterChainDefinitionMap.put("/sys/randomImage/**", "anon"); //登录验证码接口排除
         filterChainDefinitionMap.put("/sys/checkCaptcha", "anon"); //登录验证码接口排除
         filterChainDefinitionMap.put("/sys/smsCheckCaptcha", "anon"); //短信次数发送太多验证码排除
