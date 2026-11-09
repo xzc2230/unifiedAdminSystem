@@ -68,6 +68,6 @@ export function normalizePackageMenus(routes) {
     const visible = (route.children || []).filter(child => !child.meta?.hideMenu && !child.meta?.ignoreRoute && !child.hidden);
     if (!visible.length) return [];
     const path = visible[0].path;
-    return [{...route,alwaysShow:true,redirect:path.startsWith('/') ? path : `/package-management/${path}`,meta:{...route.meta,alwaysShow:true,hideMenu:false}}];
+    return [{...route,component:'LAYOUT',alwaysShow:true,redirect:path.startsWith('/') ? path : `/package-management/${path}`,meta:{...route.meta,alwaysShow:true,hideMenu:false}}];
   });
 }

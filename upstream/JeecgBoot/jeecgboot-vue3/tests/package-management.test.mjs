@@ -137,9 +137,24 @@ test('menu seed has one root, 13 direct pages, unique stable IDs and no automati
   assert.match(sql,/SET NAMES utf8mb4\s*;[\s\S]*START TRANSACTION;/i,'UTF-8 menu seeds must override a latin1 client before inserting Chinese labels');
   assert.equal(ids.length,new Set(ids).size);assert.ok(ids.every(id=>id.length<=32));
   assert.equal((sql.match(/'pkg_mgmt_root','[^']+','\/package-management\//g)||[]).length,13);
-  assert.equal((sql.match(/'\/package-management','layouts\/default\/index'/g)||[]).length,1);
+  assert.equal((sql.match(/'\/package-management','LAYOUT'/g)||[]).length,1);
   assert.equal(/INSERT INTO sys_role_permission/i.test(sql),false);
   assert.equal(/package:store:export/.test(sql),false);
+});
+test('actual host route conversion keeps13 package children instead of producing a single-page wrapper',()=>{
+  const ts=require('typescript');
+  const source=fs.readFileSync(path.join(root,'src/router/helper/routeHelper.ts'),'utf8');
+  // Compile the real production conversion with only component loading stubbed.
+  const node=ts.createSourceFile('route.ts',source,ts.ScriptTarget.Latest,true).statements.find(node=>ts.isFunctionDeclaration(node)&&node.name?.text==='transformObjToRoute');
+  const compiled=ts.transpileModule(node.getText().replace(/^export /,''),{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
+  const convert=new Function('LayoutMap','LAYOUT','cloneDeep','warn','asyncImportRoute',compiled+'; return transformObjToRoute;')(new Map([['LAYOUT','layout-component']]),'layout-component',structuredClone,()=>{},()=>{});
+  for(const component of ['LAYOUT','layouts/default/index','/layouts/default/index']){
+    const children=Array.from({length:13},(_,i)=>({path:`/package-management/page${i}`,name:`page${i}`,component:`packagemanagement/page${i}/index`,meta:{title:`Page${i}`}}));
+    const normalized=normalizePackageMenus([{path:'/package-management',name:'PackageManagement',component,meta:{title:'应用包管理'},children}]);
+    const converted=convert(normalized)[0];
+    assert.equal(converted.path,'/package-management');assert.equal(converted.meta.single,undefined);
+    assert.equal(converted.children.length,13);assert.equal(converted.component,'layout-component');
+  }
 });
 test('menu encoding repair restores exactly the canonical80 labels and only updates names',()=>{
   const seed=fs.readFileSync(path.join(root,'../jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/V20261109_04__package_menus.sql'),'utf8');
