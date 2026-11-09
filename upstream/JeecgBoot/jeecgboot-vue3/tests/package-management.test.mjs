@@ -31,7 +31,7 @@ test('package menu redirects to first visible authorized child and leaves other 
   assert.equal(normalizePackageMenus([full])[0].redirect, '/package-management/apps');
   assert.equal(normalizePackageMenus([{...full,children:[{path:'apps',meta:{hideMenu:true}},{path:'pwa'}]}])[0].redirect, '/package-management/pwa');
   assert.equal(normalizePackageMenus([{...full,children:[]}]).length, 0);
-  assert.equal(normalizePackageMenus([full])[0].meta.alwaysShow, true);
+  assert.equal(normalizePackageMenus([full])[0].meta.alwaysShow, false);
   assert.equal(full.redirect, undefined);
 });
 test('PWA requires domain dictionary, score, tags and complete reviews without changing IDs or dates', () => {
@@ -55,6 +55,25 @@ test('legacy images retain profile storage and resolve historical previews witho
   assert.throws(()=>uploadedImageName({code:200,url:'http://ignored.invalid/a'}));
 });
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+test('actual sidebar renderers expose package children instead of treating the root as an aggregate route',()=>{
+  const ts=require('typescript');
+  const utils=ts.createSourceFile('utils.ts',fs.readFileSync(path.join(root,'src/utils/common/compUtils.ts'),'utf8'),ts.ScriptTarget.Latest,true);
+  const helper=utils.statements.find(node=>ts.isFunctionDeclaration(node)&&node.name?.text==='checkChildrenHidden');
+  const checkChildrenHidden=new Function(ts.transpileModule(helper.getText().replace(/^export\s+/,''),{}).outputText+';return checkChildrenHidden;')();
+  const children=Array.from({length:13},(_,i)=>({path:`/package-management/page${i}`,hideMenu:false,meta:{hideMenu:false}}));
+  for(const incoming of [true,false,1,0]){
+    const normalized=normalizePackageMenus([{path:'/package-management',alwaysShow:incoming,meta:{alwaysShow:incoming},children}])[0];
+    assert.equal(checkChildrenHidden(normalized),true,'package directory must not trigger host aggregate-route hiding');
+    for(const file of ['src/components/Menu/src/components/BasicSubMenuItem.vue','src/components/SimpleMenu/src/SimpleSubMenu.vue']){
+      const source=fs.readFileSync(path.join(root,file),'utf8');
+      const body=source.match(/function menuHasChildren\([^)]*\): boolean \{([\s\S]*?)\n      \}/)[1];
+      const predicate=new Function('checkChildrenHidden','menuTreeItem',body).bind(null,checkChildrenHidden);
+      assert.equal(predicate(normalized),true,file+' must render a submenu');
+      assert.equal(predicate({...normalized,children:children.map(child=>({...child,hideMenu:true}))}),false,'hidden children stay hidden');
+    }
+  }
+});
+
 test('all 13 page entries and business editor SFCs compile', () => {
   const {parse,compileScript,compileTemplate}=require('@vue/compiler-sfc');
   let count=0;
