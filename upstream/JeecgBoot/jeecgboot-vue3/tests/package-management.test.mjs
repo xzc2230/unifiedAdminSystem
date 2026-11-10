@@ -124,6 +124,18 @@ test('editable business fields agree with backend allowlists and preserve domain
   assert.ok(definitions['landing-counts'].filters.includes('time'));
   assert.equal(definitions.apps.fields.find(f=>f.key==='url').required,true);
 });
+test('app editor offers android and ios store fields', () => {
+  const ts=require('typescript');
+  const source=fs.readFileSync(path.join(root,'src/views/packagemanagement/package.data.ts'),'utf8');
+  const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText;
+  return import('data:text/javascript;base64,'+Buffer.from(compiled).toString('base64')).then(({definitions})=>{
+    const keys = definitions.apps.fields.map((field) => field.key);
+    assert.ok(keys.includes('platform'));
+    assert.ok(keys.includes('appleAppId'));
+    assert.ok(keys.includes('storeRegion'));
+    assert.equal(definitions.apps.fields.find((field) => field.key === 'platform').type, 'radio');
+  });
+});
 test('actual package bodyCell slot preserves Ant Table custom checkbox and index renderers',async()=>{
   const {createSSRApp,h,compile}=require('vue');
   const {renderToString}=require('vue/server-renderer');

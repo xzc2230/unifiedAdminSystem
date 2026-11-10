@@ -5,6 +5,50 @@
         <div><h3 id="app-basic-heading">基础信息</h3><p>设置应用标识与访问链接</p></div>
         <span class="section-caption">带 * 的为必填项</span>
       </header>
+      <a-form-item
+        v-if="platformField"
+        :label="platformField.label"
+        name="platform"
+        :rules="rulesFor(platformField)"
+        class="platform-form-item"
+      >
+        <a-radio-group :value="model.platform || 'android'" class="platform-options" @change="onPlatformChange($event.target.value)">
+          <a-radio v-for="option in platformOptions" :key="String(option.value)" :value="option.value">{{ option.label }}</a-radio>
+        </a-radio-group>
+      </a-form-item>
+      <div v-if="model.platform === 'ios'" class="field-grid ios-store-fields">
+        <a-form-item
+          v-if="appleAppIdField"
+          :label="appleAppIdField.label"
+          name="appleAppId"
+          :rules="rulesFor(appleAppIdField)"
+          class="full-width"
+        >
+          <a-input-number
+            :value="model.appleAppId === '' || model.appleAppId == null ? undefined : Number(model.appleAppId)"
+            :min="0"
+            :precision="0"
+            :controls="false"
+            class="apple-id-input"
+            placeholder="输入 Apple ID"
+            @change="update(appleAppIdField, $event == null ? '' : String($event))"
+          />
+        </a-form-item>
+        <a-form-item
+          v-if="storeRegionField"
+          :label="storeRegionField.label"
+          name="storeRegion"
+          :rules="rulesFor(storeRegionField)"
+          class="full-width"
+        >
+          <a-input
+            :value="model.storeRegion"
+            placeholder="cn"
+            allowClear
+            @update:value="update(storeRegionField, $event)"
+          />
+        </a-form-item>
+      </div>
       <div class="field-grid">
         <a-form-item
           v-for="field in basicFields"
@@ -147,7 +191,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue';
+  import { computed, watchEffect } from 'vue';
   import type { PackageField, PackageOption } from '/@/types/packagemanagement';
 
   const props = defineProps<{
@@ -160,6 +204,26 @@
   const update = (field: PackageField, value: any) => emit('update-field', field, value);
   const whitelistOn = computed(() => Number(props.model.whetherRestrict) === 1);
   const rulesFor = (field: PackageField) => (field.required ? [{ required: true, message: `请填写${field.label}` }] : []);
+  const platformField = computed(() => props.fields.find((field) => field.key === 'platform'));
+  const appleAppIdField = computed(() => props.fields.find((field) => field.key === 'appleAppId'));
+  const storeRegionField = computed(() => props.fields.find((field) => field.key === 'storeRegion'));
+  const platformOptions = computed<PackageOption[]>(
+    () => platformField.value?.options || [{ value: 'android', label: '安卓' }, { value: 'ios', label: 'iOS' }]
+  );
+  watchEffect(() => {
+    const field = platformField.value;
+    if (!field) return;
+    const current = props.model.platform;
+    if (current == null || current === '') update(field, 'android');
+  });
+  function onPlatformChange(value: string) {
+    if (!platformField.value) return;
+    update(platformField.value, value);
+    if (value !== 'ios') {
+      if (appleAppIdField.value) update(appleAppIdField.value, '');
+      if (storeRegionField.value) update(storeRegionField.value, '');
+    }
+  }
   const basicFields = computed(() =>
     ['appName', 'author', 'packageCode', 'url', 'mark'].flatMap((key) => props.fields.filter((field) => field.key === key))
   );
@@ -274,6 +338,12 @@
   }
   .app-editor :deep(.ant-input-number) {
     width: 100%;
+  }
+  .app-editor .apple-id-input {
+    width: 100%;
+  }
+  .platform-form-item {
+    margin-bottom: 20px;
   }
   .app-editor :deep(.ant-input-number-group-wrapper) {
     width: 100%;
