@@ -65,7 +65,7 @@
               :checked="Number(model[field.key]) === 1"
               :disabled="!optionsFor(field).length"
               :aria-label="field.label"
-              @change="update(field, $event ? 1 : 0)"
+              @change="onToggle(field, $event)"
             />
           </a-form-item>
         </div>
@@ -77,17 +77,17 @@
         name="areas"
         :rules="rulesFor(areasField)"
         class="areas-form-item"
-        :extra="Number(model.whetherRestrict) === 1 ? '白名单已开启，请核对允许访问的地区。' : '白名单未开启；已选地区会保留，开启后使用。'"
+        :extra="whitelistOn ? '白名单已开启，请选择允许访问的地区。' : '白名单关闭时不能选择地区，开启后才能选择。'"
       >
         <a-select
-          :value="model.areas"
+          :value="whitelistOn ? model.areas : []"
           :options="optionsFor(areasField)"
           mode="multiple"
           allowClear
           showSearch
           optionFilterProp="label"
-          placeholder="搜索并选择地区，可多选"
-          :disabled="!optionsFor(areasField).length"
+          :placeholder="whitelistOn ? '搜索并选择地区，可多选' : '请先开启白名单'"
+          :disabled="!whitelistOn || !optionsFor(areasField).length"
           @change="update(areasField, $event)"
         />
       </a-form-item>
@@ -158,13 +158,19 @@
   }>();
   const emit = defineEmits<{ (event: 'update-field', field: PackageField, value: any): void }>();
   const update = (field: PackageField, value: any) => emit('update-field', field, value);
+  const whitelistOn = computed(() => Number(props.model.whetherRestrict) === 1);
   const rulesFor = (field: PackageField) => (field.required ? [{ required: true, message: `请填写${field.label}` }] : []);
   const basicFields = computed(() =>
     ['appName', 'author', 'packageCode', 'url', 'mark'].flatMap((key) => props.fields.filter((field) => field.key === key))
   );
   const statusField = computed(() => props.fields.find((field) => field.key === 'status'));
   const areasField = computed(() => props.fields.find((field) => field.key === 'areas'));
-  const toggleFields = computed(() => props.fields.filter((field) => ['whetherRestrict', 'whetherUs', 'whetherUse'].includes(field.key)));
+  function onToggle(field: PackageField, checked: boolean) {
+    const value = checked ? 1 : 0;
+    update(field, value);
+    if (field.key === 'whetherRestrict' && value !== 1 && areasField.value) update(areasField.value, []);
+  }
+  const toggleFields = computed(() => props.fields.filter((field) => ['whetherRestrict', 'whetherUs'].includes(field.key)));
   const riskFields = computed(() =>
     props.fields.filter((field) => ['gaidAidThreshold', 'aidDeviceThreshold', 'aidGaidSwitchThreshold', 'riskWindowSeconds'].includes(field.key))
   );
@@ -182,9 +188,8 @@
     '3': '用于调试与联调',
   };
   const toggleDescriptions: Record<string, string> = {
-    whetherRestrict: '开启地区白名单规则',
+    whetherRestrict: '开启后才能选择白名单地区',
     whetherUs: '限制美国地区访问',
-    whetherUse: '标记为自用应用',
   };
   const riskLabels: Record<string, string> = {
     gaidAidThreshold: 'GAID 关联 AID 数',
@@ -328,7 +333,7 @@
   }
   .control-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
     margin-bottom: 20px;
   }
