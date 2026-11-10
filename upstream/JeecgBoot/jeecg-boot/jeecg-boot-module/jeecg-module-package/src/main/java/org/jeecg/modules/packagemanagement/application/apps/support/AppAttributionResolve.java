@@ -25,8 +25,8 @@ public class AppAttributionResolve {
         if (body == null || !body.hasNonNull("applicationCode")) return null;
         String code = body.get("applicationCode").asText("").trim();
         if (code.isEmpty()) return null;
-        AppManager app = apps.selectAppManagerByApplicationCode(code);
-        if (app == null) return null;
+        AppManager app = apps.selectAppManagerByPackageName(code);
+        if (app == null || app.getPackageCode() == null || app.getPackageCode().isBlank()) return null;
         if (body.hasNonNull("applicationId")) {
             String applicationId = body.get("applicationId").asText("").trim();
             if (!applicationId.isEmpty() && !applicationId.equals(String.valueOf(app.getId()))) {
@@ -45,7 +45,7 @@ public class AppAttributionResolve {
         Map<String, Object> bodyOut = new LinkedHashMap<>();
         bodyOut.put("clickRef", body.hasNonNull("clickRef") ? body.get("clickRef").asText() : null);
         bodyOut.put("resolveToken", token);
-        bodyOut.put("applicationCode", app.getApplicationCode());
+        bodyOut.put("applicationCode", app.getPackageCode());
         bodyOut.put("promotionCode", null);
         bodyOut.put("resolutionState", "MATCHED");
         bodyOut.put("parameterSource", "REAL");

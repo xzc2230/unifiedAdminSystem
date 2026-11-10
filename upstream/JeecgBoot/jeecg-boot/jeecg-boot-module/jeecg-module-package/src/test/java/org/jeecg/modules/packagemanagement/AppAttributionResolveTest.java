@@ -27,15 +27,16 @@ class AppAttributionResolveTest {
         AppManagerMapper apps = mock(AppManagerMapper.class);
         AppManager app = new AppManager();
         app.setId(9L);
-        app.setApplicationCode("Ab12Cd34Ef56Gh78");
+        app.setPackageCode("com.example.app");
+        app.setApplicationCode("Ab12Cd");
         app.setUrl("https://example.invalid/land");
         app.setMark("备注内容");
-        when(apps.selectAppManagerByApplicationCode("Ab12Cd34Ef56Gh78")).thenReturn(app);
+        when(apps.selectAppManagerByPackageName("com.example.app")).thenReturn(app);
         var service = new AppAttributionResolve(apps);
         Map<String, Object> body = service.tryResolve(json.readTree("""
-                {"applicationCode":"Ab12Cd34Ef56Gh78","applicationId":"9","clickRef":null,"resolveToken":"short","resolveTokenType":"ATTRIBUTION_TOKEN"}
+                {"applicationCode":"com.example.app","applicationId":"9","clickRef":null,"resolveToken":"short","resolveTokenType":"ATTRIBUTION_TOKEN"}
                 """));
-        assertEquals("Ab12Cd34Ef56Gh78", body.get("applicationCode"));
+        assertEquals("com.example.app", body.get("applicationCode"));
         assertNull(body.get("clickRef"));
         assertNull(body.get("promotionCode"));
         assertEquals("MATCHED", body.get("resolutionState"));
@@ -54,7 +55,8 @@ class AppAttributionResolveTest {
         int adsetLength = String.valueOf(facebook.get("adset_id")).length();
         assertTrue(adsetLength == 6 || adsetLength == 7);
         assertEquals(8, String.valueOf(facebook.get("ad_id")).length());
-        verify(apps).selectAppManagerByApplicationCode("Ab12Cd34Ef56Gh78");
+        verify(apps).selectAppManagerByPackageName("com.example.app");
+        verify(apps, never()).selectAppManagerByApplicationCode(any());
     }
 
     @Test
@@ -62,10 +64,10 @@ class AppAttributionResolveTest {
         AppManagerMapper apps = mock(AppManagerMapper.class);
         AppManager app = new AppManager();
         app.setId(9L);
-        app.setApplicationCode("Ab12Cd34Ef56Gh78");
-        when(apps.selectAppManagerByApplicationCode("Ab12Cd34Ef56Gh78")).thenReturn(app);
+        app.setPackageCode("com.example.app");
+        when(apps.selectAppManagerByPackageName("com.example.app")).thenReturn(app);
         var service = new AppAttributionResolve(apps);
         assertEquals(400, assertThrows(PackageFailure.class, () -> service.tryResolve(json.readTree(
-                "{\"applicationCode\":\"Ab12Cd34Ef56Gh78\",\"applicationId\":\"8\"}"))).getCode());
+                "{\"applicationCode\":\"com.example.app\",\"applicationId\":\"8\"}"))).getCode());
     }
 }
