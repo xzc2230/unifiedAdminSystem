@@ -93,7 +93,7 @@ test('all package SFCs compile and required page entries and shared components a
   walk(packageDirectory);
   // Check coverage without preventing additional independently compiled components.
   const requiredFiles=[
-    ...['apps','pwa','w2a','store','notifications','statistics','reviews','app-events','event-configs','event-errors','event-history','landing-counts','packstat','request-logs','risk'].map(name=>`${name}/index.vue`),
+    ...['apps','pwa','w2a','store','notifications','statistics','reviews','app-events','event-configs','event-errors','event-history','landing-counts','packstat','request-logs','risk','client-docs'].map(name=>`${name}/index.vue`),
     ...['calllog','docs','token'].map(name=>`openapi/${name}.vue`),
     ...['AppEditor','AppSharingModal','DevRecordPage','PackageField','PackageImageUpload','PackagePage','PwaEditor'].map(name=>`components/${name}.vue`),
   ];
@@ -240,4 +240,19 @@ test('49 whitelist countries have unique codes, Chinese labels and identical ser
   const client = fs.readFileSync(new URL('../src/views/packagemanagement/package-country-regions.json', import.meta.url),'utf8');
   const server = fs.readFileSync(new URL('../../jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/package-country-regions.json', import.meta.url),'utf8');
   assert.deepEqual(JSON.parse(client),JSON.parse(server));
+});
+
+test('client protocol docs list twelve interfaces under the package menu', async () => {
+  const { CLIENT_PROTOCOL_DOC } = await import('../src/views/packagemanagement/client-docs/client-docs.mjs');
+  const page = fs.readFileSync(path.join(root, 'src/views/packagemanagement/client-docs/index.vue'), 'utf8');
+  const menu = fs.readFileSync(path.join(root, '../jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/017-client-protocol-docs-menu.sql'), 'utf8');
+  assert.equal(CLIENT_PROTOCOL_DOC.host, 'https://apivo.attrnivo.com/');
+  assert.equal(CLIENT_PROTOCOL_DOC.interfaces.length, 12);
+  assert.deepEqual(CLIENT_PROTOCOL_DOC.interfaces.map((item) => item.path), [
+    '/system/xxx', '/v2/api/user/login', '/v2/api/retry/xxx', '/v2/api/banner/list/xxx', '/dynamic/xx',
+    '/v2/api/check/url', '/app/start', '/home/index/jsp', '/xxxxxx', '/xxx/xxxx', '/xxx/xxxx/xxx', '/xxx/xxxx/xxx/xxxx',
+  ]);
+  assert.match(page, /CLIENT_PROTOCOL_DOC/);
+  assert.match(menu, /'pkg_menu_client_docs','pkg_mgmt_root','接口文档','\/package-management\/client-docs'/);
+  assert.match(menu, /packagemanagement\/client-docs\/index/);
 });
