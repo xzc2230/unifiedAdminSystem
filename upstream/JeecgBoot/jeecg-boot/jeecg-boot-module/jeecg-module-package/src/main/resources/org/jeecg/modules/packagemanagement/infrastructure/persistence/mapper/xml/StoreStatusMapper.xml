@@ -7,6 +7,9 @@
     <resultMap type="org.jeecg.modules.packagemanagement.domain.store.StoreStatus" id="StoreStatusResult">
         <result property="id" column="id"/>
         <result property="packageCode" column="package_code"/>
+        <result property="platform" column="platform"/>
+        <result property="appleAppId" column="apple_app_id"/>
+        <result property="storeRegion" column="store_region"/>
         <result property="status" column="status"/>
         <result property="storeUrl" column="store_url"/>
         <result property="createDate"   column="create_date"/>
@@ -19,6 +22,9 @@
     <sql id="StoreStatus">
         select id,
                package_code,
+               platform,
+               apple_app_id,
+               store_region,
                status,
                store_url,
                create_date,
@@ -49,11 +55,19 @@
         where package_code = #{packageName}
     </select>
 
+    <select id="selectStoreStatusByPlatformAndPackage" resultMap="StoreStatusResult">
+        <include refid="StoreStatus"/>
+        where platform = #{platform} and package_code = #{packageCode}
+    </select>
+
     <insert id="insertStoreStatus" parameterType="org.jeecg.modules.packagemanagement.domain.store.StoreStatus" useGeneratedKeys="true" keyProperty="id">
         insert into pkg_store_status
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">id,</if>
             <if test="packageCode != null">package_code,</if>
+            <if test="platform != null">platform,</if>
+            <if test="appleAppId != null">apple_app_id,</if>
+            <if test="storeRegion != null">store_region,</if>
             <if test="status != null">status,</if>
             <if test="storeUrl != null">store_url,</if>
             <if test="createDate != null">create_date,</if>
@@ -63,6 +77,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
             <if test="packageCode != null">#{packageCode},</if>
+            <if test="platform != null">#{platform},</if>
+            <if test="appleAppId != null">#{appleAppId},</if>
+            <if test="storeRegion != null">#{storeRegion},</if>
             <if test="status != null">#{status},</if>
             <if test="storeUrl != null">#{storeUrl},</if>
             <if test="createDate != null">#{createDate},</if>
@@ -75,6 +92,9 @@
         update pkg_store_status
         <trim prefix="SET" suffixOverrides=",">
             <if test="packageCode != null">package_code = #{packageCode},</if>
+            <if test="platform != null">platform = #{platform},</if>
+            <if test="appleAppId != null">apple_app_id = #{appleAppId},</if>
+            <if test="storeRegion != null">store_region = #{storeRegion},</if>
             <if test="status != null">status = #{status},</if>
             <if test="storeUrl != null">store_url = #{storeUrl},</if>
             <if test="successDate != null">success_date = #{successDate},</if>
@@ -89,6 +109,9 @@
         update pkg_store_status
         <trim prefix="SET" suffixOverrides=",">
             <if test="packageCode != null">package_code = #{packageCode},</if>
+            <if test="platform != null">platform = #{platform},</if>
+            <if test="appleAppId != null">apple_app_id = #{appleAppId},</if>
+            <if test="storeRegion != null">store_region = #{storeRegion},</if>
             <if test="status != null">status = #{status},</if>
             <if test="storeUrl != null">store_url = #{storeUrl},</if>
             <if test="successDate != null">success_date = #{successDate},</if>

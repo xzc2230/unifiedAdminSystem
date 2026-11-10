@@ -12,6 +12,9 @@
         <result property="createDate" column="create_date"/>
         <result property="mark" column="mark"/>
         <result property="packageCode" column="package_code"/>
+        <result property="platform" column="platform"/>
+        <result property="appleAppId" column="apple_app_id"/>
+        <result property="storeRegion" column="store_region"/>
         <result property="status" column="status"/>
         <result property="updateDate" column="update_date"/>
         <result property="url" column="url"/>
@@ -39,6 +42,9 @@
                create_date,
                mark,
                package_code,
+               platform,
+               apple_app_id,
+               store_region,
                status,
                update_date,
                url,
@@ -102,6 +108,11 @@
         where package_code = #{packageName}
     </select>
 
+    <select id="selectAppManagerByPlatformAndPackage" resultMap="AppManagerResult">
+        <include refid="selectAppManagerVo"/>
+        where platform = #{platform} and package_code = #{packageCode}
+    </select>
+
     <insert id="insertAppManager" parameterType="org.jeecg.modules.packagemanagement.domain.app.AppManager" useGeneratedKeys="true" keyProperty="id">
         insert into pkg_app_manager
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -112,6 +123,9 @@
             <if test="createDate != null">create_date,</if>
             <if test="mark != null">mark,</if>
             <if test="packageCode != null">package_code,</if>
+            <if test="platform != null">platform,</if>
+            <if test="appleAppId != null">apple_app_id,</if>
+            <if test="storeRegion != null">store_region,</if>
             <if test="status != null">status,</if>
             <if test="updateDate != null">update_date,</if>
             <if test="url != null">url,</if>
@@ -138,6 +152,9 @@
             <if test="createDate != null">#{createDate},</if>
             <if test="mark != null">#{mark},</if>
             <if test="packageCode != null">#{packageCode},</if>
+            <if test="platform != null">#{platform},</if>
+            <if test="appleAppId != null">#{appleAppId},</if>
+            <if test="storeRegion != null">#{storeRegion},</if>
             <if test="status != null">#{status},</if>
             <if test="updateDate != null">#{updateDate},</if>
             <if test="url != null">#{url},</if>
@@ -167,6 +184,9 @@
             <if test="createDate != null">create_date = #{createDate},</if>
             <if test="mark != null">mark = #{mark},</if>
             <if test="packageCode != null">package_code = #{packageCode},</if>
+            <if test="platform != null">platform = #{platform},</if>
+            <if test="appleAppId != null">apple_app_id = #{appleAppId},</if>
+            <if test="storeRegion != null">store_region = #{storeRegion},</if>
             <if test="status != null">status = #{status},</if>
             <if test="updateDate != null">update_date = #{updateDate},</if>
             <if test="url != null">url = #{url},</if>

@@ -56,6 +56,12 @@ public class AppManager extends PackageEntity {
 
     private String packageCode;
 
+    private String platform;
+
+    private String appleAppId;
+
+    private String storeRegion;
+
     /**
      * $column.columnComment
      */
@@ -175,6 +181,30 @@ public class AppManager extends PackageEntity {
         return packageCode;
     }
 
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
+    }
+
+    public String getAppleAppId() {
+        return appleAppId;
+    }
+
+    public void setAppleAppId(String appleAppId) {
+        this.appleAppId = appleAppId;
+    }
+
+    public String getStoreRegion() {
+        return storeRegion;
+    }
+
+    public void setStoreRegion(String storeRegion) {
+        this.storeRegion = storeRegion;
+    }
+
     public void setStatus(Integer status) {
         this.status = status;
     }
@@ -233,6 +263,9 @@ public class AppManager extends PackageEntity {
                 .append("createDate", getCreateDate())
                 .append("mark", getMark())
                 .append("packageCode", getPackageCode())
+                .append("platform", getPlatform())
+                .append("appleAppId", getAppleAppId())
+                .append("storeRegion", getStoreRegion())
                 .append("status", getStatus())
                 .append("updateDate", getUpdateDate())
                 .append("url", getUrl())

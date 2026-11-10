@@ -12,6 +12,9 @@ CREATE TABLE IF NOT EXISTS `pkg_app_manager` (
   `create_date` DATETIME NULL,
   `mark` VARCHAR(255) NULL,
   `package_code` VARCHAR(255) NULL,
+  `platform` VARCHAR(16) NULL DEFAULT 'android',
+  `apple_app_id` VARCHAR(32) NULL,
+  `store_region` VARCHAR(8) NULL,
   `status` INT NULL,
   `update_date` DATETIME NULL,
   `url` TEXT NULL,
@@ -26,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `pkg_app_manager` (
   risk_window_seconds INT NOT NULL DEFAULT 86400,
   referrer_blacklist_json TEXT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_pkg_app_manager_package_code` (`package_code`)
+  UNIQUE KEY `uk_pkg_app_manager_platform_package` (`platform`, `package_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Source: PackServer/src/main/resources/mybatis/system/AppStatisticsMapper.xml
@@ -51,6 +54,9 @@ CREATE TABLE IF NOT EXISTS `pkg_app_statistics` (
 CREATE TABLE IF NOT EXISTS `pkg_store_status` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `package_code` VARCHAR(255) NULL,
+  `platform` VARCHAR(16) NULL DEFAULT 'android',
+  `apple_app_id` VARCHAR(32) NULL,
+  `store_region` VARCHAR(8) NULL,
   `status` INT NULL,
   `store_url` TEXT NULL,
   `create_date` DATETIME NULL,
@@ -58,7 +64,8 @@ CREATE TABLE IF NOT EXISTS `pkg_store_status` (
   `fail_date` DATETIME NULL,
   `success_email` VARCHAR(255) NULL,
   `fail_email` VARCHAR(255) NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_pkg_store_platform_package` (`platform`, `package_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Source: PackServer/src/main/resources/mybatis/system/EventConfigMapper.xml

@@ -25,6 +25,12 @@ public class StoreStatus extends PackageEntity {
 
     private String packageCode;
 
+    private String platform;
+
+    private String appleAppId;
+
+    private String storeRegion;
+
     /**
      * 市场链接
      */
@@ -61,6 +67,30 @@ public class StoreStatus extends PackageEntity {
 
     public void setPackageCode(String packageCode) {
         this.packageCode = packageCode;
+    }
+
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
+    }
+
+    public String getAppleAppId() {
+        return appleAppId;
+    }
+
+    public void setAppleAppId(String appleAppId) {
+        this.appleAppId = appleAppId;
+    }
+
+    public String getStoreRegion() {
+        return storeRegion;
+    }
+
+    public void setStoreRegion(String storeRegion) {
+        this.storeRegion = storeRegion;
     }
 
     public String getStoreUrl() {
@@ -124,6 +154,9 @@ public class StoreStatus extends PackageEntity {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("id", getId())
                 .append("packageCode", getPackageCode())
+                .append("platform", getPlatform())
+                .append("appleAppId", getAppleAppId())
+                .append("storeRegion", getStoreRegion())
                 .append("storeUrl", getStoreUrl())
                 .append("status", getStatus())
                 .append("createTime", getCreateTime())

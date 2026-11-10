@@ -1,5 +1,6 @@
 package org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.packagemanagement.domain.store.StoreStatus;
 
 import java.util.List;
@@ -40,6 +41,8 @@ public interface StoreStatusMapper
      * @return
      */
     public StoreStatus selectStoreStatusByPackageName(String  packageName);
+
+    public StoreStatus selectStoreStatusByPlatformAndPackage(@Param("platform") String platform, @Param("packageCode") String packageCode);
 
 
     /**
