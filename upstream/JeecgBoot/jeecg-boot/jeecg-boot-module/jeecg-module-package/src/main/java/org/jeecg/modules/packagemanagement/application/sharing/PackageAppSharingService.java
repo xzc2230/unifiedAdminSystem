@@ -23,7 +23,9 @@ public class PackageAppSharingService {
     }
 
     public int grant(PackageActor actor, Collection<Long> ids, String targetUser, String reason) {
-        return change(actor, ids, targetUser, reason, true);
+        List<Long> unique = validateIds(ids);
+        if (unique.size() != 1) throw new PackageFailure(400, "一次只能共享一个应用");
+        return change(actor, unique, targetUser, reason, true);
     }
 
     public int revoke(PackageActor actor, Collection<Long> ids, String targetUser, String reason) {

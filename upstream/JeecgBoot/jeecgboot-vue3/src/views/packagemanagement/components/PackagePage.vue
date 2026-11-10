@@ -10,13 +10,23 @@
       <a-row :gutter="24" class="totals"><a-col :span="6"><a-statistic title="包数量" :value="totals.totalPackage ?? '—'" /></a-col><a-col :span="6"><a-statistic title="注册总数" :value="totals.totalRegister ?? '—'" /></a-col><a-col :span="6"><a-statistic title="充值次数" :value="totals.totalPayment ?? '—'" /></a-col><a-col :span="6"><a-statistic title="充值金额" :value="totals.totalMoney ?? '—'" :precision="2" /></a-col></a-row>
     </a-card>
     <BasicTable @register="registerTable">
-      <template #tableTitle><span>{{ definition.title }}</span></template>
-      <template #toolbar>
+      <template #tableTitle>
+        <span>{{ definition.title }}</span>
         <a-button v-if="definition.add !== false" v-auth="permission('add')" type="primary" @click="openEditor()">新增</a-button>
-        <a-button v-auth="permission('remove')" danger :disabled="!canRemoveSelected" @click="confirmRemove(selected)">批量删除</a-button>
         <a-button v-if="definition.export !== false" v-auth="permission('export')" :loading="exporting" @click="exportRows">导出</a-button>
-        <a-button v-if="definition.domain === 'apps'" v-auth="permission('transfer')" :disabled="!canShareSelected" @click="openSharing()">共享应用</a-button>
+      </template>
+      <template #toolbar>
+        <a-button v-auth="permission('remove')" danger :disabled="!canRemoveSelected" @click="confirmRemove(selected)">批量删除</a-button>
         <a-button v-if="definition.domain === 'request-logs'" v-auth="permission('clean')" danger @click="confirmClean">清理日志</a-button>
+      </template>
+      <template #tableTop>
+        <a-alert v-if="selected.length" type="info" show-icon>
+          <template #message>
+            <span>已选中 {{ selected.length }} 条记录</span>
+            <a-divider type="vertical" />
+            <a @click="clearSelection">清空</a>
+          </template>
+        </a-alert>
       </template>
       <template #bodyCell="{column,record,text}">
         <template v-if="column.key === 'action'"><a-space>
@@ -105,11 +115,10 @@ const manageableSelection=computed(()=>selected.value.length>0 && selected.value
   return row && canManageRow(row);
 }));
 const canRemoveSelected=computed(()=>roleAllows('remove') && (definition.domain==='apps'?manageableSelection.value:selected.value.length>0));
-const canShareSelected=computed(()=>definition.domain==='apps' && roleAllows('transfer') && manageableSelection.value && new Set(selected.value.map(String)).size<=100);
+function clearSelection(){selected.value=[];selectedRows.value=[];clearSelectedRowKeys();}
 function openSharing(record?:Record<string,any>) {
-  if(!roleAllows('transfer')) return;
-  if(record) { if(canManageRow(record)) sharingModal.value?.open([{id:record[idKey],canManage:record.canManage}]); }
-  else if(canShareSelected.value) sharingModal.value?.open(selected.value.map(id=>({id,canManage:selectedRows.value.find(row=>String(row[idKey])===String(id))?.canManage})));
+  if(!roleAllows('transfer') || !record || !canManageRow(record)) return;
+  sharingModal.value?.open([{id:record[idKey],canManage:record.canManage}]);
 }
 const lastFilters=ref<Record<string,any>>({});
 const editorOpen=ref(false),detailOpen=ref(false),saving=ref(false),exporting=ref(false);

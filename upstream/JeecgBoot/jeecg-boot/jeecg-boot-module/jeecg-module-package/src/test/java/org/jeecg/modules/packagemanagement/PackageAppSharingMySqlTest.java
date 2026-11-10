@@ -123,7 +123,7 @@ class PackageAppSharingMySqlTest {
         assertEquals(1,count("pkg_app_share_audit"));
     }
     @Test void rejectsInactiveMissingOrAmbiguousTargetAndRollsBackAuditFailure() throws Exception {
-        service(); var ids=List.of(9007199254740993L,9007199254740994L);
+        service(); var ids=List.of(9007199254740993L);
         jdbc.update("UPDATE sys_user_tenant SET status='0' WHERE user_id=?",recipient.userId());
         assertThrows(PackageFailure.class,()->call("grant",owner,ids,recipient.userId(),"inactive"));
         jdbc.update("UPDATE sys_user_tenant SET status='1' WHERE user_id=?",recipient.userId());
@@ -135,7 +135,7 @@ class PackageAppSharingMySqlTest {
         jdbc.update("INSERT INTO pkg_user_identity(legacy_user_id,tenant_id,jeecg_user_id,status) VALUES (7199,71,?,'DISABLED')",recipient.userId());
         assertThrows(PackageFailure.class,()->call("grant",owner,ids,recipient.userId(),"ambiguous"));
         jdbc.update("DELETE FROM pkg_user_identity WHERE legacy_user_id=7199");
-        jdbc.execute("ALTER TABLE pkg_app_share_audit ADD CONSTRAINT sharing_test_failure CHECK (app_id <> 9007199254740994)");
+        jdbc.execute("ALTER TABLE pkg_app_share_audit ADD CONSTRAINT sharing_test_failure CHECK (app_id <> 9007199254740993)");
         assertThrows(RuntimeException.class,()->call("grant",owner,ids,recipient.userId(),"audit failure"));
         assertEquals(0,count("pkg_app_share")); assertEquals(0,count("pkg_app_share_audit"));
     }
@@ -161,10 +161,12 @@ class PackageAppSharingMySqlTest {
     @Test void revokeAuditFailureRestoresWholeBatchAndNullInputsAreBadRequests() throws Exception {
         service(); var ids=List.of(9007199254740993L,9007199254740994L);
         assertEquals(400,assertThrows(PackageFailure.class,()->call("grant",owner,null,recipient.userId(),"reason")).getCode());
-        assertEquals(400,assertThrows(PackageFailure.class,()->call("grant",owner,ids,null,"reason")).getCode());
-        assertEquals(400,assertThrows(PackageFailure.class,()->call("grant",owner,ids,recipient.userId(),null)).getCode());
+        assertEquals(400,assertThrows(PackageFailure.class,()->call("grant",owner,ids,recipient.userId(),"reason")).getCode());
+        assertEquals(400,assertThrows(PackageFailure.class,()->call("grant",owner,List.of(ids.get(0)),null,"reason")).getCode());
+        assertEquals(400,assertThrows(PackageFailure.class,()->call("grant",owner,List.of(ids.get(0)),recipient.userId(),null)).getCode());
         assertEquals(400,assertThrows(PackageFailure.class,()->call("grant",owner,Arrays.asList(ids.get(0),null),recipient.userId(),"reason")).getCode());
-        call("grant",owner,ids,recipient.userId(),"grant");
+        call("grant",owner,List.of(ids.get(0)),recipient.userId(),"grant");
+        call("grant",owner,List.of(ids.get(1)),recipient.userId(),"grant");
         jdbc.execute("ALTER TABLE pkg_app_share_audit ADD CONSTRAINT sharing_test_revoke_failure CHECK (action <> 'REVOKE' OR app_id <> 9007199254740994)");
         assertThrows(RuntimeException.class,()->call("revoke",owner,ids,recipient.userId(),"audit failure"));
         assertEquals(2,count("pkg_app_share")); assertEquals(2,count("pkg_app_share_audit"));

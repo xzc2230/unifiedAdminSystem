@@ -5,7 +5,6 @@ import { parse, compileScript, compileTemplate } from '@vue/compiler-sfc';
 import ts from 'typescript';
 import * as vue from 'vue';
 import { renderToString } from 'vue/server-renderer';
-import { Table } from 'ant-design-vue';
 import * as dev from '../src/views/packagemanagement/package-dev.mjs';
 import * as regions from '../src/views/packagemanagement/package-regions.mjs';
 import * as conversions from '../src/views/packagemanagement/package-conversions.mjs';
@@ -38,94 +37,12 @@ const deferred = () => {
   return { promise, resolve, reject };
 };
 const owner = (id = '9007199254740993') => ({ id, canManage: true });
-const auditRecord = (overrides = {}) => ({
-  id: '9007199254740995',
-  appId: owner().id,
-  granteeUserId: 'u1',
-  displayName: '张三',
-  operatorUserId: 'admin',
-  operatorName: '管理员',
-  action: 'GRANT',
-  reason: '协作',
-  createdAt: '2026-11-10 12:00:00',
-  ...overrides,
-});
 
-test('actual modal AntD tables locally slice full server collections through independent page-change handlers', async () => {
-  const records = Array.from({ length: 45 }, (_, index) => ({
-    userId: `user-${index + 1}`,
-    displayName: `Recipient-${String(index + 1).padStart(2, '0')}`,
-    grantedBy: 'admin',
-    reason: 'Collaboration',
-    createdAt: '2026-11-10 12:00:00',
-  }));
-  const auditRecords = records.map((row, index) =>
-    auditRecord({
-      id: String(9007199254740993n + BigInt(index)),
-      granteeUserId: row.userId,
-      displayName: row.displayName,
-    })
-  );
-  const requests = [];
-  const fullCollection = (collection) => async (id, params) => {
-    requests.push({ id, ...params });
-    // The current server deliberately ignores pagination and always returns all records.
-    return { records: collection, total: collection.length };
-  };
-  const view = mount(undefined, { getAppShares: fullCollection(records), getAppShareAudit: fullCollection(auditRecords) });
-  try {
-    await view.state.open([owner()]);
-    const source = readFileSync(new URL('AppSharingModal.vue', directory), 'utf8');
-    const tables = [...source.matchAll(/<a-table\b[\s\S]*?<\/a-table>/g)].map((match) => match[0]);
-    assert.equal(tables.length, 2);
-    const renderTables = async () => {
-      const handlers = [];
-      const app = vue.createSSRApp({ render: vue.compile(`<div>${tables.join('')}</div>`), setup: () => ({ ...view.state }) });
-      // Forward actual production template props/slots into the real AntD table, retaining its emitted change handler.
-      app.component('a-table', {
-        inheritAttrs: false,
-        setup: (_, { attrs, slots }) => {
-          handlers.push(attrs.onChange);
-          return () => vue.h(Table, attrs, slots);
-        },
-      });
-      app.directive('auth', {});
-      const html = await renderToString(app);
-      const tableBodies = [...html.matchAll(/<tbody\b[\s\S]*?<\/tbody>/g)].map((match) => match[0]);
-      const bodies = tableBodies.map((body) => [...body.matchAll(/Recipient-\d{2}/g)].map((row) => row[0]));
-      assert.equal(bodies.length, 2);
-      const rowKeys = tableBodies.map((body) => [...body.matchAll(/<tr\b[^>]*data-row-key="([^"]+)"/g)].map((row) => row[1]));
-      const pageRecords = (collection, page) => collection.slice((page - 1) * 20, page * 20);
-      assert.deepEqual(
-        rowKeys[0],
-        pageRecords(records, view.state.sharesPage).map((row) => row.userId)
-      );
-      assert.deepEqual(
-        rowKeys[1],
-        pageRecords(auditRecords, view.state.auditPage).map((row) => row.id),
-        'audit row keys use exact backend string IDs without a synthetic key field'
-      );
-      return { bodies, handlers };
-    };
-    const expected = (page) => records.slice((page - 1) * 20, page * 20).map((row) => row.displayName);
-    let rendered = await renderTables();
-    assert.deepEqual(rendered.bodies, [expected(1), expected(1)]);
-    for (const page of [2, 3, 1]) {
-      await rendered.handlers[0]({ current: page });
-      rendered = await renderTables();
-      assert.deepEqual(rendered.bodies, [expected(page), expected(1)], 'recipient pages do not alter audit pages');
-    }
-    for (const page of [2, 3, 1]) {
-      await rendered.handlers[1]({ current: page });
-      rendered = await renderTables();
-      assert.deepEqual(rendered.bodies, [expected(1), expected(page)], 'audit pages do not alter recipient pages');
-    }
-    assert.equal(view.state.shares.length, 45);
-    assert.equal(view.state.audit.length, 45);
-    assert.equal(requests.length, 8);
-  } finally {
-    view.unmount();
-  }
+test('sharing modal only asks for one recipient and does not render share lists', () => {
+  const source = readFileSync(new URL('AppSharingModal.vue', directory), 'utf8');
+  assert.match(source, /label="接收人"/);
+  assert.match(source, /共享应用/);
+  assert.doesNotMatch(source, /<a-table|共享原因|撤销共享|共享审计/);
 });
 
 function mount(filename = 'AppSharingModal.vue', overrides = {}, domain = 'apps') {
@@ -215,23 +132,20 @@ test('page requires explicit row capability AND role permission; mixed and missi
   const view = mount('PackagePage.vue');
   assert.equal(typeof view.state.openSharing, 'function');
   view.table().rowSelection.onChange(['1', '2'], [owner('1'), { id: '2', canManage: false }]);
-  assert.equal(view.state.canShareSelected, false);
   assert.equal(view.state.canRemoveSelected, false);
   view.state.confirmRemove(['1', '2']);
   assert.equal(view.confirmations.length, 0);
   view.table().rowSelection.onChange(['1'], [owner('1')]);
-  assert.equal(view.state.canShareSelected, true);
   assert.equal(view.state.canRemoveSelected, true);
   assert.equal(view.state.canManageRow({ id: '2' }), false);
   assert.equal(view.state.canManageRow({ id: '2', canManage: 'true' }), false);
   view.deny();
-  assert.equal(view.state.canShareSelected, false);
   view.state.confirmRemove(['1']);
   assert.equal(view.confirmations.length, 0);
   view.unmount();
 });
 
-test('modal validates reason, target and batch; preserves string IDs and sends a snapshot', async () => {
+test('modal requires one recipient, preserves the opened string ID, and sends a fixed reason', async () => {
   const calls = [];
   const view = mount(undefined, {
     shareApps: async (...args) => {
@@ -242,17 +156,17 @@ test('modal validates reason, target and batch; preserves string IDs and sends a
   const rows = [owner()];
   await view.state.open(rows);
   assert.equal(view.state.targets[0].label, '张三');
-  view.state.targetUser = 'u1';
-  for (const reason of ['', '  ', 'x'.repeat(501)]) {
-    view.state.reason = reason;
-    await view.state.grant();
-  }
+  await view.state.grant();
   assert.equal(calls.length, 0);
-  view.state.reason = '  合作维护  ';
+  assert.match(view.state.submitError, /请选择接收人/);
+  view.state.targetUser = 'u1';
   rows.push(owner('2'));
   await view.state.grant();
-  assert.deepEqual(calls, [[['9007199254740993'], 'u1', '合作维护']]);
+  assert.deepEqual(calls, [[['9007199254740993'], 'u1', '共享应用']]);
   assert.equal(view.emitted.length, 1);
+  assert.equal(view.state.visible, false);
+  await view.state.open([owner(), owner('2')]);
+  assert.equal(view.state.visible, false);
   view.unmount();
 });
 
@@ -264,6 +178,7 @@ test('modal refuses recipients, missing capabilities, invalid or oversized IDs a
     [owner('0')],
     [owner('-1')],
     [owner(9007199254740992)],
+    [owner(), owner('2')],
     Array.from({ length: 101 }, (_, i) => owner(String(i + 1))),
   ]) {
     await view.state.open(rows);
@@ -286,7 +201,6 @@ test('grant duplicate lock and failure retain all inputs and permit retry', asyn
   });
   await view.state.open([owner()]);
   view.state.targetUser = 'u1';
-  view.state.reason = '协作';
   const request = view.state.grant();
   await view.state.grant();
   assert.equal(calls, 1);
@@ -294,7 +208,6 @@ test('grant duplicate lock and failure retain all inputs and permit retry', asyn
   pending.reject(new Error('共享失败'));
   await request;
   assert.equal(view.state.targetUser, 'u1');
-  assert.equal(view.state.reason, '协作');
   assert.match(view.state.submitError, /共享失败/);
   assert.equal(view.state.saving, false);
   assert.equal(view.state.visible, true);
@@ -304,89 +217,29 @@ test('grant duplicate lock and failure retain all inputs and permit retry', asyn
   view.unmount();
 });
 
-test('single app loads recipients and canonical audit; revoke validates and deduplicates', async () => {
-  const calls = [],
-    pending = deferred();
-  const audit = auditRecord();
-  const view = mount(undefined, {
-    getAppShares: async () => ({ records: [{ userId: 'u1', displayName: '张三' }], total: 1 }),
-    getAppShareAudit: async () => ({ records: [audit], total: 1 }),
-    revokeAppShares: (...args) => {
-      calls.push(args);
-      return pending.promise;
-    },
-  });
-  await view.state.open([owner()]);
-  assert.equal(view.state.shares[0].userId, 'u1');
-  assert.deepEqual(view.state.audit[0], audit);
-  view.state.beginRevoke(view.state.shares[0]);
-  for (const reason of ['', ' ', 'x'.repeat(501)]) {
-    view.state.revokeReason = reason;
-    await view.state.revoke();
-  }
-  assert.equal(calls.length, 0);
-  view.state.revokeReason = '结束协作';
-  const request = view.state.revoke();
-  await view.state.revoke();
-  await view.state.grant();
-  assert.deepEqual(calls, [[['9007199254740993'], 'u1', '结束协作']]);
-  pending.reject(new Error('撤销失败'));
-  await request;
-  assert.equal(view.state.revokeReason, '结束协作');
-  assert.equal(view.state.revokeTarget.userId, 'u1');
-  assert.equal(view.state.saving, false);
-  view.unmount();
-});
-
-test('successful revoke refreshes recipients/audit and never closes manager', async () => {
-  let revoked = false;
-  const view = mount(undefined, {
-    getAppShares: async () => ({ records: revoked ? [] : [{ userId: 'u1' }], total: revoked ? 0 : 1 }),
-    revokeAppShares: async () => {
-      revoked = true;
-      return 1;
-    },
-  });
-  await view.state.open([owner()]);
-  view.state.beginRevoke(view.state.shares[0]);
-  view.state.revokeReason = '离开团队';
-  await view.state.revoke();
-  assert.deepEqual(view.state.shares, []);
-  assert.equal(view.state.visible, true);
-  assert.equal(view.state.revokeTarget, null);
-  assert.equal(view.emitted.length, 1);
-  view.unmount();
-});
-
-test('closed session target/list/write success or failure cannot pollute newer modal or its lock', async () => {
+test('closed session target or write success or failure cannot pollute a newer modal', async () => {
   for (const fail of [false, true]) {
     const oldTargets = deferred(),
-      oldList = deferred(),
       oldWrite = deferred(),
       newWrite = deferred();
     let targetCalls = 0,
       writes = 0;
     const view = mount(undefined, {
       transferTargets: () => (++targetCalls === 1 ? oldTargets.promise : Promise.resolve([{ id: 'u2', displayName: '新接收人' }])),
-      getAppShares: (id) => (id === '1' ? oldList.promise : Promise.resolve({ records: [{ userId: 'u2' }], total: 1 })),
       shareApps: () => (++writes === 1 ? oldWrite.promise : newWrite.promise),
     });
     const oldOpen = view.state.open([owner('1')]);
     view.state.targetUser = 'u1';
-    view.state.reason = '旧原因';
     const request = view.state.grant();
     view.state.close();
     await view.state.open([owner('2')]);
     view.state.targetUser = 'u2';
-    view.state.reason = '新原因';
     const newer = view.state.grant();
     if (fail) {
       oldTargets.reject(new Error('旧目标失败'));
-      oldList.reject(new Error('旧列表失败'));
       oldWrite.reject(new Error('旧写入失败'));
     } else {
-      oldTargets.resolve([{ id: 'old' }]);
-      oldList.resolve({ records: [{ userId: 'old' }], total: 1 });
+      oldTargets.resolve([{ id: 'old', displayName: '旧接收人' }]);
       oldWrite.resolve(1);
     }
     await oldOpen;
@@ -394,8 +247,7 @@ test('closed session target/list/write success or failure cannot pollute newer m
     await flush();
     assert.equal(view.state.visible, true);
     assert.equal(view.state.targets[0].value, 'u2');
-    assert.equal(view.state.shares[0].userId, 'u2');
-    assert.equal(view.state.reason, '新原因');
+    assert.equal(view.state.targetUser, 'u2');
     assert.equal(view.state.submitError, '');
     assert.equal(view.state.saving, true);
     assert.equal(view.emitted.length, 0);
@@ -406,30 +258,20 @@ test('closed session target/list/write success or failure cannot pollute newer m
   }
 });
 
-test('list errors remain visible and retryable with independent shares and audit pagination', async () => {
-  const calls = [];
+test('recipient load errors stay visible and can be retried', async () => {
   let fail = true;
   const view = mount(undefined, {
-    getAppShares: async (id, params) => {
-      calls.push(['shares', id, params]);
-      if (fail) throw new Error('列表失败');
-      return { records: [], total: 45 };
-    },
-    getAppShareAudit: async (id, params) => {
-      calls.push(['audit', id, params]);
-      return { records: [], total: 70 };
+    transferTargets: async () => {
+      if (fail) throw new Error('接收人加载失败');
+      return [{ id: 'u1', displayName: '张三' }];
     },
   });
   await view.state.open([owner()]);
-  assert.match(view.state.sharesError, /列表失败/);
+  assert.match(view.state.targetsError, /接收人加载失败/);
   fail = false;
-  await view.state.loadShares(2);
-  await view.state.loadAudit(3);
-  assert.equal(view.state.sharesError, '');
-  assert.equal(view.state.sharesTotal, 45);
-  assert.equal(view.state.auditTotal, 70);
-  assert.deepEqual(calls.at(-2), ['shares', '9007199254740993', { pageNo: 2, pageSize: 20 }]);
-  assert.deepEqual(calls.at(-1), ['audit', '9007199254740993', { pageNo: 3, pageSize: 20 }]);
+  await view.state.loadTargets();
+  assert.equal(view.state.targetsError, '');
+  assert.equal(view.state.targets[0].label, '张三');
   view.unmount();
 });
 
@@ -483,72 +325,17 @@ test('details exclude canManage metadata even when all field permissions are gra
   view.unmount();
 });
 
-test('latest same-session shares and audit pages win over late success and failure', async () => {
-  for (const fail of [false, true]) {
-    const oldShares = deferred(),
-      oldAudit = deferred(),
-      newShares = deferred(),
-      newAudit = deferred();
-    const view = mount(undefined, {
-      getAppShares: (_id, params) =>
-        params.pageNo === 2 ? oldShares.promise : params.pageNo === 3 ? newShares.promise : Promise.resolve({ records: [], total: 0 }),
-      getAppShareAudit: (_id, params) =>
-        params.pageNo === 2 ? oldAudit.promise : params.pageNo === 3 ? newAudit.promise : Promise.resolve({ records: [], total: 0 }),
-    });
-    await view.state.open([owner()]);
-    const firstShares = view.state.loadShares(2),
-      firstAudit = view.state.loadAudit(2);
-    const lastShares = view.state.loadShares(3),
-      lastAudit = view.state.loadAudit(3);
-    if (fail) {
-      oldShares.reject(new Error('旧页失败'));
-      oldAudit.reject(new Error('旧页失败'));
-    } else {
-      oldShares.resolve({ records: [{ userId: 'old' }], total: 1 });
-      oldAudit.resolve({ records: [auditRecord({ granteeUserId: 'old' })], total: 1 });
-    }
-    await Promise.all([firstShares, firstAudit]);
-    assert.equal(view.state.sharesLoading, true);
-    assert.equal(view.state.auditLoading, true);
-    newShares.resolve({ records: [{ userId: 'new' }], total: 41 });
-    newAudit.resolve({ records: [auditRecord({ id: '9007199254740996', granteeUserId: 'new' })], total: 41 });
-    await Promise.all([lastShares, lastAudit]);
-    assert.equal(view.state.shares[0].userId, 'new');
-    assert.equal(view.state.audit[0].granteeUserId, 'new');
-    assert.equal(view.state.sharesError, '');
-    assert.equal(view.state.auditError, '');
-    view.unmount();
-  }
-});
-
-test('actual toolbar disables mixed, unknown, over-limit and role-denied sharing selections', async () => {
-  const view = mount('PackagePage.vue');
+test('add and export sit on the left and the toolbar has no batch share', () => {
   const source = readFileSync(new URL('PackagePage.vue', directory), 'utf8');
+  const title = source.match(/<template #tableTitle>([\s\S]*?)<\/template>/)[1];
   const toolbar = source.match(/<template #toolbar>([\s\S]*?)<\/template>/)[1];
-  const render = async () => {
-    const app = vue.createSSRApp({ render: vue.compile(`<div>${toolbar}</div>`), setup: () => ({ ...view.state }) });
-    app.component('a-button', {
-      setup:
-        (_, { slots, attrs }) =>
-        () =>
-          vue.h('button', attrs, slots.default?.()),
-    });
-    app.directive('auth', {});
-    return renderToString(app);
-  };
-  view.table().rowSelection.onChange(['1'], [owner('1')]);
-  assert.match(await render(), /<button(?![^>]*disabled)[^>]*>共享应用<\/button>/);
-  for (const rows of [[owner('1'), { id: '2', canManage: false }], [{ id: '1' }], Array.from({ length: 101 }, (_, i) => owner(String(i + 1)))]) {
-    view.table().rowSelection.onChange(
-      rows.map((row) => row.id),
-      rows
-    );
-    assert.match(await render(), /<button[^>]*disabled[^>]*>共享应用<\/button>/);
-  }
-  view.table().rowSelection.onChange(['1'], [owner('1')]);
-  view.deny();
-  assert.match(await render(), /<button[^>]*disabled[^>]*>共享应用<\/button>/);
-  view.unmount();
+  const top = source.match(/<template #tableTop>([\s\S]*?)<\/template>/)[1];
+  assert.match(title, /新增/);
+  assert.match(title, /导出/);
+  assert.match(toolbar, /批量删除/);
+  assert.doesNotMatch(toolbar, /新增|导出|共享应用/);
+  assert.match(top, /已选中/);
+  assert.doesNotMatch(source, /未选中任何数据/);
 });
 
 test('delete confirmation snapshots IDs, rechecks permission and refresh invalidates selected app capabilities', async () => {
@@ -582,23 +369,25 @@ test('sharing capability does not change selection behavior in other resource pa
   view.unmount();
 });
 
-test('500-character reasons are accepted and a failed grant unlocks a successful retry', async () => {
+test('a failed grant keeps the recipient and a retry can succeed', async () => {
   let calls = 0;
   const view = mount(undefined, {
-    shareApps: async () => {
-      if (++calls === 1) throw new Error('临时失败');
+    shareApps: async (...args) => {
+      calls++;
+      if (calls === 1) throw new Error('临时失败');
+      assert.deepEqual(args, [['9007199254740993'], 'u1', '共享应用']);
       return 1;
     },
   });
   await view.state.open([owner()]);
   view.state.targetUser = 'u1';
-  view.state.reason = '共'.repeat(500);
   await view.state.grant();
-  assert.equal(view.state.reason.length, 500);
   assert.equal(view.state.saving, false);
+  assert.equal(view.state.targetUser, 'u1');
+  assert.equal(view.state.visible, true);
   await view.state.grant();
   assert.equal(calls, 2);
   assert.equal(view.emitted.length, 1);
-  assert.equal(view.state.reason, '');
+  assert.equal(view.state.visible, false);
   view.unmount();
 });

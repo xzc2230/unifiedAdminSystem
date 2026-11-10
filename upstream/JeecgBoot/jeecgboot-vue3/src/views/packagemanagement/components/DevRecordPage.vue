@@ -2,11 +2,23 @@
   <div class="dev-record-page">
     <slot name="summary" :query="lastQuery" />
     <BasicTable @register="registerTable">
-      <template #toolbar><a-space>
+      <template #tableTitle>
+        <span>{{ title }}</span>
         <a-button v-if="!readonly" v-auth="permission('add')" type="primary" @click="openEditor()">新增</a-button>
+      </template>
+      <template #toolbar>
         <a-button v-if="!readonly" v-auth="permission('remove')" danger :disabled="!selected.length" @click="remove(selected)">批量删除</a-button>
         <slot name="toolbar" :reload="reload" />
-      </a-space></template>
+      </template>
+      <template #tableTop>
+        <a-alert v-if="selected.length" type="info" show-icon>
+          <template #message>
+            <span>已选中 {{ selected.length }} 条记录</span>
+            <a-divider type="vertical" />
+            <a @click="clearSelection">清空</a>
+          </template>
+        </a-alert>
+      </template>
       <template #bodyCell="{column,record,text}">
         <template v-if="column.key==='action'"><a-space>
           <a v-auth="permission('query')" @click="showDetail(record)">详情</a>
@@ -65,7 +77,8 @@ watch(()=>props.filters,schemas=>setProps({formConfig:{schemas,labelWidth:90,aut
 const open=ref(false),saving=ref(false),editingId=ref<any>(),formRef=ref(),form=reactive<Record<string,any>>({});
 const detailOpen=ref(false),detail=ref<Record<string,any>>({}),lookupLoading=ref(false),asnPreview=ref('');
 async function openEditor(row?:any){const data=row?await api.value.detail(row.id):{};Object.keys(form).forEach(k=>delete form[k]);Object.assign(form,props.defaults,data);editingId.value=row?.id;asnPreview.value='';open.value=true;}
-async function refresh(){selected.value=[];clearSelectedRowKeys();await reload();emit('changed');}
+function clearSelection(){selected.value=[];clearSelectedRowKeys();}
+async function refresh(){clearSelection();await reload();emit('changed');}
 async function save(){await formRef.value.validate();saving.value=true;try{let data=Object.fromEntries(props.fields.filter(f=>!f.readonly).map(f=>[f.key,form[f.key]]));if(props.path==='packstat')data=packstatPayload(data);await api.value.save(data,editingId.value);message.success('保存成功');open.value=false;await refresh();}catch(e:any){message.error(e.message||'保存失败');}finally{saving.value=false;}}
 function remove(ids:any[]){Modal.confirm({title:`确认删除 ${ids.length} 条记录？`,onOk:async()=>{await api.value.remove(ids);message.success('删除成功');await refresh();}});}
 async function showDetail(row:any){detail.value=props.readonly?row:await api.value.detail(row.id);detailOpen.value=true;}
