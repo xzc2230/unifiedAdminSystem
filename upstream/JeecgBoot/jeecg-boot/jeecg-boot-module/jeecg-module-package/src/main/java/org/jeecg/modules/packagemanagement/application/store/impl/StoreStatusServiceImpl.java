@@ -171,7 +171,8 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
         }
         if ("ios".equalsIgnoreCase(platform)) {
             String appleAppId = storeStatus.getAppleAppId();
-            if (appleAppId == null || !appleAppId.matches("\\d+")) {
+            if (appleAppId == null || appleAppId.isBlank()) return null;
+            if (!appleAppId.matches("\\d+")) {
                 org.slf4j.LoggerFactory.getLogger(getClass()).warn("iOS store probe skipped, invalid apple app id package={} appleAppId={}", storeStatus.getPackageCode(), appleAppId);
                 return null;
             }

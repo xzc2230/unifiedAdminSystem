@@ -35,7 +35,7 @@
   import { computed, onBeforeUnmount, ref } from 'vue';
   import { message } from 'ant-design-vue';
   import { usePermission } from '/@/hooks/web/usePermission';
-  import { shareApps, transferTargets } from '/@/api/packagemanagement';
+  import { transferApps, transferTargets } from '/@/api/packagemanagement';
   import type { PackageId } from '/@/types/packagemanagement';
 
   const emit = defineEmits<{ (event: 'success'): void }>();
@@ -107,9 +107,9 @@
     saving.value = true;
     submitError.value = '';
     try {
-      const count = await shareApps(appIds, target, '共享应用');
+      await transferApps(appIds, target);
       if (!current(version)) return;
-      message.success(`共享成功，变更 ${count} 条`);
+      message.success('转移成功');
       emit('success');
       close();
     } catch (error) {

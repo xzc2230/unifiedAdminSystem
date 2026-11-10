@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class PackageAdminActionsController {
     private final PackageAdminRegistry registry;
     private final PackageAdminSupport guard;
+    private final PackageAccess access;
     private final PackageAppSharingService sharing;
     private final JdbcTemplate jdbc;
     public PackageAdminActionsController(PackageAdminRegistry registry,PackageAdminSupport guard,
@@ -27,7 +28,7 @@ public class PackageAdminActionsController {
     @Autowired
     public PackageAdminActionsController(PackageAdminRegistry registry,PackageAdminSupport guard,
             PackageAccess access,TransactionTemplate tx,JdbcTemplate jdbc,PackageAppSharingService sharing) {
-        this.registry=registry;this.guard=guard;this.sharing=sharing;this.jdbc=jdbc;
+        this.registry=registry;this.guard=guard;this.access=access;this.sharing=sharing;this.jdbc=jdbc;
     }
     @GetMapping("/apps/transfer-targets")
     public Result<List<Map<String,Object>>> targets() {
@@ -40,9 +41,9 @@ public class PackageAdminActionsController {
     @PostMapping("/apps/transfer")
     public Result<Integer> transfer(@RequestBody Transfer request) {
         var actor=guard.actor("apps","transfer");
-        if(request==null)throw new PackageFailure(400,"共享请求不能为空");
-        String reason=request.reason()==null||request.reason().isBlank()?"兼容 transfer 入口共享应用":request.reason();
-        return Result.ok(sharing.grant(actor,request.ids(),request.targetUser(),reason));
+        if(request==null||request.ids()==null||request.ids().size()!=1)throw new PackageFailure(400,"一次只能转移一个应用");
+        access.transfer(actor,"pkg_app_manager",request.ids(),request.targetUser());
+        return Result.ok(1);
     }
     @SuppressWarnings("unchecked")
     @GetMapping("/pwa/all")

@@ -142,13 +142,19 @@ test('app editor offers android and ios store fields', () => {
     const code = definitions.apps.fields.find((field) => field.key === 'applicationCode');
     assert.equal(code.label, '默认编码');
     assert.equal(code.readonly, true);
-    assert.equal(definitions.apps.filters.includes('applicationCode'), false);
+    assert.deepEqual(definitions.apps.filters, ['packageCode']);
+    assert.deepEqual(definitions.apps.columns.slice(0, 2), ['id', 'appName']);
+    for (const hidden of ['author', 'applicationCode', 'gaidAidThreshold', 'aidDeviceThreshold', 'aidGaidSwitchThreshold', 'riskWindowSeconds', 'referrerBlacklistJson']) {
+      assert.equal(definitions.apps.columns.includes(hidden), false, hidden);
+    }
+    assert.deepEqual(definitions.store.filters, ['packageCode', 'status', 'appleAppId']);
+    assert.equal(definitions.store.fields.some((field) => field.key === 'appleAppId'), true);
     assert.match(fs.readFileSync(path.join(root, 'src/views/packagemanagement/components/PackagePage.vue'), 'utf8'), /key!=='applicationCode'/);
   });
 });
-test('app editor requires apple app id when platform is ios', () => {
+test('app editor leaves ios apple id optional and defaults the store region', () => {
   const source = fs.readFileSync(path.join(root, 'src/views/packagemanagement/components/AppEditor.vue'), 'utf8');
-  assert.match(source, /field\.key === 'appleAppId'[\s\S]*platform === 'ios'/);
+  assert.doesNotMatch(source, /appleAppId' && props\.model\.platform === 'ios'/);
   assert.match(source, /model\.storeRegion \|\| 'us'/);
   assert.match(source, /optionsFor\(storeRegionField\)/);
 });

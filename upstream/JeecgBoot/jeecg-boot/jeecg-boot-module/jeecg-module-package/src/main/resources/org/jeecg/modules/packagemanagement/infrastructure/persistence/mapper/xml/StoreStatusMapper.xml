@@ -41,6 +41,7 @@
             <if test="id != null ">and id = #{id}</if>
             <if test="packageCode != null  and packageCode != ''">and package_code like concat('%',#{packageCode},'%')</if>
             <if test="status != null ">and status = #{status}</if>
+            <if test="appleAppId != null and appleAppId != ''">and apple_app_id = #{appleAppId}</if>
             <if test="storeUrl != null  and store_url != ''">and store_url = #{storeUrl}</if>
         </where>
     </select>

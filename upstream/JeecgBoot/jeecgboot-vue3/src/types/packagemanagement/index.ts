@@ -4,7 +4,7 @@ export interface PackagePage { records: PackageRecord[]; total: number }
 export interface PackageOption { value: string | number; label: string; remark?: string }
 export interface PackageField {
   key: string; label: string; type?: 'text' | 'textarea' | 'number' | 'date' | 'datetime' | 'switch' | 'image' | 'dict' | 'parent';
-  required?: boolean; dict?: string; multiple?: boolean; immutable?: boolean; readonly?: boolean; max?: number;
+  required?: boolean; dict?: string; multiple?: boolean; immutable?: boolean; readonly?: boolean; max?: number; options?: PackageOption[];
 }
 export interface PackageDefinition {
   domain: string; title: string; key?: string; fields: PackageField[]; filters: string[]; columns?: string[];

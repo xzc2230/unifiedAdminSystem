@@ -85,7 +85,8 @@ import { copyTextToClipboard } from '/@/hooks/web/useCopyToClipboard';
 import { BasicTable,useTable } from '/@/components/Table';
 import { initDictOptions } from '/@/utils/dict/JDictSelectUtil';
 import { useGlobSetting } from '/@/hooks/setting';
-import { usePermission } from '/@/hooks/web/usePermission';
+  import { usePermission } from '/@/hooks/web/usePermission';
+  import { useUserStore } from '/@/store/modules/user';
 import { packageApi,allPwa,statisticsTotal,cleanLogs } from '/@/api/packagemanagement';
 import type { PackageDefinition,PackageField as PackageFieldSpec,PackageId,PackageOption } from '/@/types/packagemanagement';
 import { APP_AREA_OPTIONS, countryLabel, countryCode } from '../package-regions.mjs';
@@ -129,7 +130,7 @@ const initialAppModel=ref<Record<string,any>>({}),dirtyAppFields=ref(new Set<str
 const detail=ref<Record<string,any>>({});
 const editorForm=ref(),pwaEditor=ref();
 const fieldsByKey=Object.fromEntries(definition.fields.map(f=>[f.key,f]));
-const editableFields=computed(()=>definition.fields.filter(f=>(!f.readonly || definition.domain === 'notifications' && ['appName','appIcon','appHost'].includes(f.key)) && (definition.domain !== 'apps' || editId.value == null || canAppField(appPermissions.value,'edit',f.key))).map(f=>definition.domain==='apps'?{...f,required:appFieldRequired(f,editId.value!=null,canAppField(appPermissions.value,'query',f.key)||dirtyAppFields.value.has(f.key))}:f));
+const editableFields=computed(()=>definition.fields.filter(f=>(!f.readonly || definition.domain === 'apps' && f.key === 'userName' && editId.value == null || definition.domain === 'notifications' && ['appName','appIcon','appHost'].includes(f.key)) && (definition.domain !== 'apps' || f.key === 'userName' || editId.value == null || canAppField(appPermissions.value,'edit',f.key))).map(f=>definition.domain==='apps'?{...f,required:appFieldRequired(f,editId.value!=null,canAppField(appPermissions.value,'query',f.key)||dirtyAppFields.value.has(f.key))}:f));
 const detailFields=computed(()=>[...definition.fields.filter(f=>!['startReqTime','endReqTime'].includes(f.key)),...Object.keys(detail.value).filter(k=>!fieldsByKey[k]).map(key=>({key,label:({id:'编号',eventId:'事件编号',reviewsId:'评论编号',tags:'标签',score:'评分分布',reviewsRecords:'评论集合',appCode:'推广码',appSub:'域名后缀',appType:'应用类型',userId:'归属用户',userName:'归属用户名称',createTime:'创建时间',updateTime:'更新时间',updateDate:'更新时间'} as Record<string,string>)[key] || key}))].filter(f=>f.key!=='canManage' && (definition.domain!=='apps'||canAppField(appPermissions.value,'query',f.key))));
 function optionsFor(field:PackageFieldSpec):PackageOption[] {
   if(field.dict==='app_area') {
@@ -145,6 +146,7 @@ function displayValue(key:string,value:any) {
   const field=fieldsByKey[key];
   if(field?.dict==='app_area') return toAreas(value).map(code=>optionsFor(field).find(option=>String(option.value)===code)?.label || countryLabel(code)).join(', ');
   if(field?.dict || definition.domain==='store' && key==='status') return String(value ?? '').split(',').map(v=>optionsFor(field).find(o=>String(o.value)===v)?.label || v).join(', ');
+  if(field?.options?.length) return field.options.find(option=>String(option.value)===String(value))?.label || value;
   return value;
 }
 function displayDetail(value:any) { return prettyJson(value); }
@@ -182,6 +184,7 @@ async function openEditor(record?:Record<string,any>) {
   Object.keys(model).forEach(k=>delete model[k]);
   const defaults=definition.domain==='apps' && record?{}:{status:0,whetherRestrict:0,whetherUs:0,whetherUse:0,shunt:0,downloadCount:0,reviews:0,appEvent:'0',reviewsRecords:[],tags:'[]',score:'{}'};
   Object.assign(model,defaults,data);
+  if(definition.domain==='apps' && !record) model.userName=useUserStore().getUserInfo?.username || '';
   if(!Array.isArray(model.reviewsRecords)) model.reviewsRecords=[];
   if(definition.domain==='statistics' && model.subAreas!=null) model.subAreas=countryCode(model.subAreas);
   if(definition.domain==='apps') {model.areas=toAreas(model.areas);initialAppModel.value=JSON.parse(JSON.stringify(model));dirtyAppFields.value=new Set();}

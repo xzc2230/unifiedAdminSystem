@@ -105,4 +105,26 @@ class StoreProbeTest {
         verify(mail).sendEmail(anyString(), eq("App Store下架"), eq(ios.getStoreUrl()));
         verifyNoInteractions(probe);
     }
+
+    @Test
+    void blankIosAppleIdSkipsLookupAndKeepsStatus() {
+        var mapper = mock(StoreStatusMapper.class);
+        var probe = mock(StoreProbePort.class);
+        var http = mock(HttpPort.class);
+        var mail = mock(MailPort.class);
+        var service = new StoreStatusServiceImpl();
+        PackageBusinessTest.inject(service, "storeStatusMapper", mapper);
+        PackageBusinessTest.inject(service, "probe", probe);
+        PackageBusinessTest.inject(service, "http", http);
+        PackageBusinessTest.inject(service, "mail", mail);
+        PackageBusinessTest.inject(service, "settings", new PackageManagementProperties());
+        StoreStatus ios = new StoreStatus();
+        ios.setStatus(0);
+        ios.setPlatform("ios");
+        ios.setPackageCode("com.blank");
+        when(mapper.selectStoreStatusList(any())).thenReturn(List.of(ios));
+        service.getStatus();
+        assertEquals(0, ios.getStatus());
+        verifyNoInteractions(http, probe, mail);
+    }
 }

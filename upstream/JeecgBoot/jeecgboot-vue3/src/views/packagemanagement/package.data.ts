@@ -23,7 +23,7 @@ const historyFields = Object.entries(historyLabels).map(([key,label]) => field(k
   type:['jsonStr','originalUrl','userAgent'].includes(key)?'textarea':key==='status'?'number':'text',required:['path','status'].includes(key),
 }));
 export const definitions: Record<string,PackageDefinition> = {
-  apps:{domain:'apps',title:'应用管理',filters:['appName','author','packageCode','userName','status','url','whetherRestrict','areas','whetherUs','mark','updateDate'],fields:[field('appName','应用名称',{required:true}),field('applicationCode','默认编码',{readonly:true}),field('author','出包人'),
+  apps:{domain:'apps',title:'应用管理',filters:['packageCode'],columns:['id','appName','platform','appleAppId','storeRegion','packageCode','url','status','whetherRestrict','areas','whetherUs','whetherUse','mark','userName','updateDate'],fields:[field('id','应用ID',{readonly:true}),field('appName','应用名称',{required:true}),field('applicationCode','默认编码',{readonly:true}),field('author','出包人'),
     field('platform','平台',{type:'radio',options:[{value:'android',label:'安卓'},{value:'ios',label:'iOS'}],required:true} as Partial<PackageField>),
     field('appleAppId','Apple ID'),field('storeRegion','商店地区',{type:'dict',dict:'app_area'}),pkg,field('url','链接',{required:true}),status,
     field('whetherRestrict','白名单',{type:'dict',dict:'app_where'}),field('areas','白名单地区',{type:'dict',dict:'app_area',multiple:true}),
@@ -31,7 +31,7 @@ export const definitions: Record<string,PackageDefinition> = {
     field('gaidAidThreshold','同一 GAID 关联 AID 阈值',{type:'number'}),field('aidDeviceThreshold','同一 AID 设备数阈值',{type:'number'}),
     field('aidGaidSwitchThreshold','同一 AID 的 GAID 切换阈值',{type:'number'}),field('riskWindowSeconds','风控计数窗口（秒）',{type:'number'}),
     field('referrerBlacklistJson','InstallReferrer 黑名单模板（JSON）',{type:'textarea'}),field('userName','归属用户',{readonly:true}),field('updateDate','更新时间',{type:'datetime',readonly:true})]},
-  store:{domain:'store',title:'上架状态',export:false,filters:['packageCode','status'],fields:[{...pkg,immutable:false},field('platform','平台',{readonly:true}),field('status','上架状态',{type:'number'}),
+  store:{domain:'store',title:'上架状态',export:false,filters:['packageCode','status','appleAppId'],fields:[{...pkg,immutable:false},field('platform','平台',{readonly:true,options:[{value:'android',label:'安卓'},{value:'ios',label:'iOS'}]}),field('appleAppId','Apple ID',{readonly:true}),field('status','上架状态',{type:'number'}),
     field('successEmail','过审邮箱'),field('failEmail','下架邮箱'),field('storeUrl','市场链接',{readonly:true}),
     field('successDate','过审日期',{readonly:true}),field('failDate','下架日期',{readonly:true})]},
   statistics:{domain:'statistics',title:'应用统计',filters:['packageCode','subAreas'],fields:[pkg,status,field('url','主链接'),field('shunt','是否分流',{type:'switch'}),field('subAreas','隐藏地区',{type:'dict',dict:'app_area'}),field('subUrl','隐藏链接'),

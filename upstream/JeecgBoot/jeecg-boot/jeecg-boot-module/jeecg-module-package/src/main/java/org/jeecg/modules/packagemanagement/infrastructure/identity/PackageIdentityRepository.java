@@ -96,7 +96,11 @@ public class PackageIdentityRepository  {
         for(Long id:ids) {
             int n=jdbc.update("UPDATE pkg_resource_owner SET owner_user_id=? WHERE resource_type=? AND resource_id=? AND tenant_id=?",targetUser,type,id,actor.tenantId());
             if(n!=1)throw new PackageFailure(409,"Ownership changed");
-            if(Set.of("pkg_app_manager","pkg_app_statistics","pkg_load_count","pkg_pwa","pkg_notification","pkg_app_event").contains(type))jdbc.update("UPDATE "+type+" SET user_id=? WHERE "+TABLES.get(type)+"=?",legacy.get(0),id);
+            if("pkg_app_manager".equals(type)) {
+                String username=jdbc.queryForObject("SELECT username FROM sys_user WHERE id=? AND status=1 AND del_flag=0",String.class,targetUser);
+                if(username==null||username.isBlank())throw new PackageFailure(403,"目标用户名不存在");
+                jdbc.update("UPDATE pkg_app_manager SET user_id=?, user_name=? WHERE id=?",legacy.get(0),username,id);
+            } else if(Set.of("pkg_app_statistics","pkg_load_count","pkg_pwa","pkg_notification","pkg_app_event").contains(type))jdbc.update("UPDATE "+type+" SET user_id=? WHERE "+TABLES.get(type)+"=?",legacy.get(0),id);
         }
     }
     public List<String> ownedPackages(PackageActor actor) {

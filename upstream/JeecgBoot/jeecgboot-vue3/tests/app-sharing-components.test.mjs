@@ -65,6 +65,7 @@ function mount(filename = 'AppSharingModal.vue', overrides = {}, domain = 'apps'
   const api = {
     transferTargets: async () => [{ id: 'u1', displayName: '张三' }],
     shareApps: async () => 1,
+    transferApps: async () => 1,
     revokeAppShares: async () => 1,
     getAppShares: async () => ({ records: [], total: 0 }),
     getAppShareAudit: async () => ({ records: [], total: 0 }),
@@ -76,6 +77,7 @@ function mount(filename = 'AppSharingModal.vue', overrides = {}, domain = 'apps'
     '/@/api/packagemanagement': api,
     '/@/hooks/web/usePermission': { usePermission: () => ({ hasPermission: () => permitted.value }) },
     '/@/store/modules/permission': { usePermissionStore: () => ({ getPermCodeList: ['*:*:*'] }) },
+    '/@/store/modules/user': { useUserStore: () => ({ getUserInfo: { username: 'current-user' } }) },
     '/@/api/packagemanagement/dev': {},
     '../package-dev.mjs': dev,
     '../package-regions.mjs': regions,
@@ -150,7 +152,7 @@ test('page requires explicit row capability AND role permission; mixed and missi
 test('modal requires one recipient, preserves the opened string ID, and sends a fixed reason', async () => {
   const calls = [];
   const view = mount(undefined, {
-    shareApps: async (...args) => {
+    transferApps: async (...args) => {
       calls.push(args);
       return 1;
     },
@@ -164,7 +166,7 @@ test('modal requires one recipient, preserves the opened string ID, and sends a 
   view.state.targetUser = 'u1';
   rows.push(owner('2'));
   await view.state.grant();
-  assert.deepEqual(calls, [[['9007199254740993'], 'u1', '共享应用']]);
+  assert.deepEqual(calls, [[['9007199254740993'], 'u1']]);
   assert.equal(view.emitted.length, 1);
   assert.equal(view.state.visible, false);
   await view.state.open([owner(), owner('2')]);
@@ -196,7 +198,7 @@ test('grant duplicate lock and failure retain all inputs and permit retry', asyn
   const pending = deferred();
   let calls = 0;
   const view = mount(undefined, {
-    shareApps: () => {
+    transferApps: () => {
       calls++;
       return pending.promise;
     },
@@ -228,7 +230,7 @@ test('closed session target or write success or failure cannot pollute a newer m
       writes = 0;
     const view = mount(undefined, {
       transferTargets: () => (++targetCalls === 1 ? oldTargets.promise : Promise.resolve([{ id: 'u2', displayName: '新接收人' }])),
-      shareApps: () => (++writes === 1 ? oldWrite.promise : newWrite.promise),
+      transferApps: () => (++writes === 1 ? oldWrite.promise : newWrite.promise),
     });
     const oldOpen = view.state.open([owner('1')]);
     view.state.targetUser = 'u1';
@@ -375,10 +377,10 @@ test('sharing capability does not change selection behavior in other resource pa
 test('a failed grant keeps the recipient and a retry can succeed', async () => {
   let calls = 0;
   const view = mount(undefined, {
-    shareApps: async (...args) => {
+    transferApps: async (...args) => {
       calls++;
       if (calls === 1) throw new Error('临时失败');
-      assert.deepEqual(args, [['9007199254740993'], 'u1', '共享应用']);
+      assert.deepEqual(args, [['9007199254740993'], 'u1']);
       return 1;
     },
   });

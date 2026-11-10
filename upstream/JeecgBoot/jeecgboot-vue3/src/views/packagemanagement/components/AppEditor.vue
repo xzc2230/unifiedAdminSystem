@@ -207,9 +207,7 @@
   const update = (field: PackageField, value: any) => emit('update-field', field, value);
   const whitelistOn = computed(() => Number(props.model.whetherRestrict) === 1);
   const rulesFor = (field: PackageField) => {
-    const required =
-      field.required || (field.key === 'appleAppId' && props.model.platform === 'ios');
-    return required ? [{ required: true, message: `请填写${field.label}` }] : [];
+    return field.required ? [{ required: true, message: `请填写${field.label}` }] : [];
   };
   const platformField = computed(() => props.fields.find((field) => field.key === 'platform'));
   const appleAppIdField = computed(() => props.fields.find((field) => field.key === 'appleAppId'));
@@ -245,7 +243,7 @@
     }
   }
   const basicFields = computed(() =>
-    ['appName', 'applicationCode', 'author', 'packageCode', 'url', 'mark'].flatMap((key) => props.fields.filter((field) => field.key === key))
+    ['appName', 'userName', 'applicationCode', 'author', 'packageCode', 'url', 'mark'].flatMap((key) => props.fields.filter((field) => field.key === key))
   );
   const statusField = computed(() => props.fields.find((field) => field.key === 'status'));
   const areasField = computed(() => props.fields.find((field) => field.key === 'areas'));
@@ -263,6 +261,7 @@
     appName: '输入应用名称',
     author: '输入出包人（选填）',
     applicationCode: '保存时生成 6 位唯一编码',
+    userName: '当前登录用户',
     packageCode: '例如 com.example.app',
     url: 'https://example.com',
   };
