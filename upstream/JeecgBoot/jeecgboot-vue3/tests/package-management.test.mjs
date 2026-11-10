@@ -139,6 +139,9 @@ test('app editor offers android and ios store fields', () => {
     const areas = definitions.apps.fields.find((field) => field.key === 'areas');
     assert.equal(region.dict, areas.dict);
     assert.equal(region.dict, 'app_area');
+    const code = definitions.apps.fields.find((field) => field.key === 'applicationCode');
+    assert.equal(code.label, '默认编码');
+    assert.equal(code.readonly, true);
   });
 });
 test('app editor requires apple app id when platform is ios', () => {

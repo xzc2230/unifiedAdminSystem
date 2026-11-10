@@ -228,6 +228,14 @@
     if (!field || props.model.platform !== 'ios') return;
     if (props.model.storeRegion == null || props.model.storeRegion === '') update(field, 'us');
   });
+  watchEffect(() => {
+    const field = props.fields.find((item) => item.key === 'applicationCode');
+    if (!field || props.editing || props.model.applicationCode) return;
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let code = '';
+    for (let index = 0; index < 6; index += 1) code += alphabet[Math.floor(Math.random() * alphabet.length)];
+    update(field, code);
+  });
   function onPlatformChange(value: string) {
     if (!platformField.value) return;
     update(platformField.value, value);
@@ -237,7 +245,7 @@
     }
   }
   const basicFields = computed(() =>
-    ['appName', 'author', 'packageCode', 'url', 'mark'].flatMap((key) => props.fields.filter((field) => field.key === key))
+    ['appName', 'applicationCode', 'author', 'packageCode', 'url', 'mark'].flatMap((key) => props.fields.filter((field) => field.key === key))
   );
   const statusField = computed(() => props.fields.find((field) => field.key === 'status'));
   const areasField = computed(() => props.fields.find((field) => field.key === 'areas'));
@@ -254,6 +262,7 @@
   const placeholders: Record<string, string> = {
     appName: '输入应用名称',
     author: '输入出包人（选填）',
+    applicationCode: '保存时生成 6 位唯一编码',
     packageCode: '例如 com.example.app',
     url: 'https://example.com',
   };

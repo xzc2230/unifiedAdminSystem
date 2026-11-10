@@ -25,6 +25,8 @@ public interface AppManagerMapper {
 
     public AppManager selectAppManagerByPlatformAndPackage(@Param("platform") String platform, @Param("packageCode") String packageCode);
 
+    public AppManager selectAppManagerByApplicationCode(String applicationCode);
+
     /**
      * 查询【请填写功能名称】列表
      *

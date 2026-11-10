@@ -76,6 +76,7 @@ public class AppManagerServiceImpl implements IAppManagerService {
         appManager.setAreas(org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions.normalizeAreas(appManager.getAreas()));
         if(appManager.getPackageCode()!=null)appManager.setPackageCode(appManager.getPackageCode().trim());
         StoreListing.normalize(appManager);
+        assignApplicationCode(appManager);
         AppManager appManager1 = appManagerMapper.selectAppManagerByPlatformAndPackage(appManager.getPlatform(), appManager.getPackageCode());
         if (appManager1 != null) {
             return -1;
@@ -116,6 +117,20 @@ public class AppManagerServiceImpl implements IAppManagerService {
         }
         refresh(appManager.getPackageCode());
         return count;
+    }
+
+    private void assignApplicationCode(AppManager app) {
+        String requested = app.getApplicationCode() == null ? "" : app.getApplicationCode().trim();
+        if (org.jeecg.modules.packagemanagement.application.apps.support.AppApplicationCodes.valid(requested)
+                && appManagerMapper.selectAppManagerByApplicationCode(requested) == null) {
+            app.setApplicationCode(requested);
+            return;
+        }
+        String code;
+        do {
+            code = org.jeecg.modules.packagemanagement.application.apps.support.AppApplicationCodes.next();
+        } while (appManagerMapper.selectAppManagerByApplicationCode(code) != null);
+        app.setApplicationCode(code);
     }
 
     private void syncStore(AppManager app, boolean identityChanged) {

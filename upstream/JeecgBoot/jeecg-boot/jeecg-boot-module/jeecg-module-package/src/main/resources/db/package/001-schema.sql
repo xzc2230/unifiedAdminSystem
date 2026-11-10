@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS `pkg_app_manager` (
   `create_date` DATETIME NULL,
   `mark` VARCHAR(255) NULL,
   `package_code` VARCHAR(255) NULL,
+  `application_code` VARCHAR(32) NULL,
   `platform` VARCHAR(16) NULL DEFAULT 'android',
   `apple_app_id` VARCHAR(32) NULL,
   `store_region` VARCHAR(8) NULL,
@@ -29,7 +30,8 @@ CREATE TABLE IF NOT EXISTS `pkg_app_manager` (
   risk_window_seconds INT NOT NULL DEFAULT 86400,
   referrer_blacklist_json TEXT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_pkg_app_manager_platform_package` (`platform`, `package_code`)
+  UNIQUE KEY `uk_pkg_app_manager_platform_package` (`platform`, `package_code`),
+  UNIQUE KEY `uk_pkg_app_manager_application_code` (`application_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Source: PackServer/src/main/resources/mybatis/system/AppStatisticsMapper.xml

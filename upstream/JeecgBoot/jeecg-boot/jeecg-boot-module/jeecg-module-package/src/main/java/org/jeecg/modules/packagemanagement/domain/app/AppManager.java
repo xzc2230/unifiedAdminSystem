@@ -56,6 +56,8 @@ public class AppManager extends PackageEntity {
 
     private String packageCode;
 
+    private String applicationCode;
+
     private String platform;
 
     private String appleAppId;
@@ -179,6 +181,14 @@ public class AppManager extends PackageEntity {
 
     public String getPackageCode() {
         return packageCode;
+    }
+
+    public void setApplicationCode(String applicationCode) {
+        this.applicationCode = applicationCode;
+    }
+
+    public String getApplicationCode() {
+        return applicationCode;
     }
 
     public String getPlatform() {

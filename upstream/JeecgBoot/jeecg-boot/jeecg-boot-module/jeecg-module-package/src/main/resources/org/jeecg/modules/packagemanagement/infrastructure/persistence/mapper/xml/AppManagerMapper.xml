@@ -12,6 +12,7 @@
         <result property="createDate" column="create_date"/>
         <result property="mark" column="mark"/>
         <result property="packageCode" column="package_code"/>
+        <result property="applicationCode" column="application_code"/>
         <result property="platform" column="platform"/>
         <result property="appleAppId" column="apple_app_id"/>
         <result property="storeRegion" column="store_region"/>
@@ -42,6 +43,7 @@
                create_date,
                mark,
                package_code,
+               application_code,
                platform,
                apple_app_id,
                store_region,
@@ -116,6 +118,11 @@
         where platform = #{platform} and package_code = #{packageCode}
     </select>
 
+    <select id="selectAppManagerByApplicationCode" parameterType="String" resultMap="AppManagerResult">
+        <include refid="selectAppManagerVo"/>
+        where application_code = #{applicationCode}
+    </select>
+
     <insert id="insertAppManager" parameterType="org.jeecg.modules.packagemanagement.domain.app.AppManager" useGeneratedKeys="true" keyProperty="id">
         insert into pkg_app_manager
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -126,6 +133,7 @@
             <if test="createDate != null">create_date,</if>
             <if test="mark != null">mark,</if>
             <if test="packageCode != null">package_code,</if>
+            <if test="applicationCode != null">application_code,</if>
             <if test="platform != null">platform,</if>
             <if test="appleAppId != null">apple_app_id,</if>
             <if test="storeRegion != null">store_region,</if>
@@ -155,6 +163,7 @@
             <if test="createDate != null">#{createDate},</if>
             <if test="mark != null">#{mark},</if>
             <if test="packageCode != null">#{packageCode},</if>
+            <if test="applicationCode != null">#{applicationCode},</if>
             <if test="platform != null">#{platform},</if>
             <if test="appleAppId != null">#{appleAppId},</if>
             <if test="storeRegion != null">#{storeRegion},</if>
