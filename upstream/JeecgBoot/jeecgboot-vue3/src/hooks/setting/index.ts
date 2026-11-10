@@ -26,8 +26,8 @@ export const useGlobSetting = (): Readonly<GlobConfig> => {
   //   );
   // }
 
-  // 短标题：替换shortName的下划线为空格
-  const shortTitle = VITE_GLOB_APP_SHORT_NAME.replace(/_/g, " ");
+  // 显示名称使用网站标题，shortName 仅作为配置和缓存的内部标识。
+  const shortTitle = VITE_GLOB_APP_TITLE;
   // Take global configuration
   const glob: Readonly<GlobConfig> = {
     title: VITE_GLOB_APP_TITLE,
