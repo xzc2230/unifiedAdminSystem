@@ -25,7 +25,7 @@ const historyFields = Object.entries(historyLabels).map(([key,label]) => field(k
 export const definitions: Record<string,PackageDefinition> = {
   apps:{domain:'apps',title:'应用管理',filters:['appName','author','packageCode','userName','status','url','whetherRestrict','areas','whetherUs','mark','updateDate'],fields:[field('appName','应用名称',{required:true}),field('author','出包人'),
     field('platform','平台',{type:'radio',options:[{value:'android',label:'安卓'},{value:'ios',label:'iOS'}],required:true} as Partial<PackageField>),
-    field('appleAppId','Apple ID'),field('storeRegion','商店地区'),pkg,field('url','链接',{required:true}),status,
+    field('appleAppId','Apple ID'),field('storeRegion','商店地区',{type:'dict',dict:'app_area'}),pkg,field('url','链接',{required:true}),status,
     field('whetherRestrict','白名单',{type:'dict',dict:'app_where'}),field('areas','白名单地区',{type:'dict',dict:'app_area',multiple:true}),
     field('whetherUs','禁用美国',{type:'dict',dict:'app_where'}),field('whetherUse','是否自用',{type:'dict',dict:'app_where'}),field('mark','备注',{type:'textarea'}),
     field('gaidAidThreshold','同一 GAID 关联 AID 阈值',{type:'number'}),field('aidDeviceThreshold','同一 AID 设备数阈值',{type:'number'}),

@@ -32,7 +32,7 @@ class StoreListingSyncTest {
         verify(stores).insertStoreStatus(argThat(row ->
                 "ios".equals(row.getPlatform())
                         && row.getStatus() == 0
-                        && "https://apps.apple.com/cn/app/id123456".equals(row.getStoreUrl())));
+                        && "https://apps.apple.com/us/app/id123456".equals(row.getStoreUrl())));
     }
 
     @Test

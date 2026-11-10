@@ -41,11 +41,14 @@
           :rules="rulesFor(storeRegionField)"
           class="full-width"
         >
-          <a-input
-            :value="model.storeRegion"
-            placeholder="cn"
+          <a-select
+            :value="model.storeRegion || 'us'"
+            :options="optionsFor(storeRegionField)"
             allowClear
-            @update:value="update(storeRegionField, $event)"
+            showSearch
+            optionFilterProp="label"
+            placeholder="不选则默认美国"
+            @change="update(storeRegionField, $event || 'us')"
           />
         </a-form-item>
       </div>
@@ -219,6 +222,11 @@
     if (!field) return;
     const current = props.model.platform;
     if (current == null || current === '') update(field, 'android');
+  });
+  watchEffect(() => {
+    const field = storeRegionField.value;
+    if (!field || props.model.platform !== 'ios') return;
+    if (props.model.storeRegion == null || props.model.storeRegion === '') update(field, 'us');
   });
   function onPlatformChange(value: string) {
     if (!platformField.value) return;

@@ -10,7 +10,7 @@
 
 ## 数据
 
-`pkg_app_manager` 与 `pkg_store_status` 增加 `platform`，只允许 `android` 或 `ios`。iOS 再增加 `apple_app_id` 与 `store_region`。`apple_app_id` 只存数字。`store_region` 为两位小写国家码，缺省 `cn`。安卓这两列为空。
+`pkg_app_manager` 与 `pkg_store_status` 增加 `platform`，只允许 `android` 或 `ios`。iOS 再增加 `apple_app_id` 与 `store_region`。`apple_app_id` 只存数字。`store_region` 为两位小写国家码，缺省 `us`。表单下拉与白名单地区使用同一个 `app_area` 字典。安卓这两列为空。
 
 已有应用和商店记录回填 `platform=android`，已有 Google Play 链接保持不变。
 
@@ -33,7 +33,7 @@ iOS 缺少 Apple ID，或 Apple ID 含非数字，拒绝保存。安卓不接受
 
 ## 页面
 
-应用表单用单选区分安卓和 iOS，默认安卓。选 iOS 时才显示 Apple ID 和地区。Apple ID 必填，只能是数字。地区缺省 `cn`。
+应用表单用单选区分安卓和 iOS，默认安卓。选 iOS 时才显示 Apple ID 和地区。Apple ID 必填，只能是数字。地区缺省 `us`，下拉选项与白名单地区相同。
 
 商店列表展示平台和实际探测链接。
 

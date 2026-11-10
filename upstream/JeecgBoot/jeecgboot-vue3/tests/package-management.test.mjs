@@ -135,12 +135,17 @@ test('app editor offers android and ios store fields', () => {
     assert.ok(keys.includes('storeRegion'));
     assert.equal(definitions.apps.fields.find((field) => field.key === 'platform').type, 'radio');
     assert.notEqual(definitions.apps.fields.find((field) => field.key === 'appleAppId').required, true);
+    const region = definitions.apps.fields.find((field) => field.key === 'storeRegion');
+    const areas = definitions.apps.fields.find((field) => field.key === 'areas');
+    assert.equal(region.dict, areas.dict);
+    assert.equal(region.dict, 'app_area');
   });
 });
 test('app editor requires apple app id when platform is ios', () => {
   const source = fs.readFileSync(path.join(root, 'src/views/packagemanagement/components/AppEditor.vue'), 'utf8');
   assert.match(source, /field\.key === 'appleAppId'[\s\S]*platform === 'ios'/);
-  assert.match(source, /placeholder="cn"/);
+  assert.match(source, /model\.storeRegion \|\| 'us'/);
+  assert.match(source, /optionsFor\(storeRegionField\)/);
 });
 test('actual package bodyCell slot preserves Ant Table custom checkbox and index renderers',async()=>{
   const {createSSRApp,h,compile}=require('vue');

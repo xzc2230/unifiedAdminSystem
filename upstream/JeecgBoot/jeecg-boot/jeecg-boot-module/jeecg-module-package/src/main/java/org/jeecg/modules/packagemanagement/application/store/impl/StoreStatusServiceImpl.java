@@ -177,7 +177,7 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
             }
             String region = storeStatus.getStoreRegion();
             if (region == null || region.isEmpty()) {
-                region = "cn";
+                region = "us";
             }
             try {
                 String lookupUrl = "https://itunes.apple.com/lookup?id=" + appleAppId + "&country=" + region;

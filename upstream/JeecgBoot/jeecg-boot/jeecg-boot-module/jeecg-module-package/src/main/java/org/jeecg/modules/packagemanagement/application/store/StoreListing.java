@@ -19,7 +19,7 @@ public final class StoreListing {
         }
         String appleId = app.getAppleAppId() == null ? "" : app.getAppleAppId().trim();
         if (!appleId.matches("[0-9]+")) throw new PackageFailure(400, "Apple ID 必须是数字");
-        String region = app.getStoreRegion() == null || app.getStoreRegion().isBlank() ? "cn" : app.getStoreRegion().trim().toLowerCase();
+        String region = app.getStoreRegion() == null || app.getStoreRegion().isBlank() ? "us" : app.getStoreRegion().trim().toLowerCase();
         if (!region.matches("[a-z]{2}")) throw new PackageFailure(400, "商店地区必须是两位字母");
         app.setAppleAppId(appleId);
         app.setStoreRegion(region);

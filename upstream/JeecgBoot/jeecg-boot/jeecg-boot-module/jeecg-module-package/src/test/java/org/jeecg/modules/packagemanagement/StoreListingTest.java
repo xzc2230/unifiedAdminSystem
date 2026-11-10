@@ -24,8 +24,8 @@ class StoreListingTest {
         app.setPackageCode("com.test");
         app.setAppleAppId("123456");
         StoreListing.normalize(app);
-        assertEquals("cn", app.getStoreRegion());
-        assertEquals("https://apps.apple.com/cn/app/id123456", StoreListing.url(app));
+        assertEquals("us", app.getStoreRegion());
+        assertEquals("https://apps.apple.com/us/app/id123456", StoreListing.url(app));
         app.setAppleAppId("12a");
         assertEquals(400, assertThrows(PackageFailure.class, () -> StoreListing.normalize(app)).getCode());
     }

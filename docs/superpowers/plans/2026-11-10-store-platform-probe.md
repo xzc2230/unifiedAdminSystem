@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - `platform` 只允许 `android` 或 `ios`。空平台在探测和保存时视为 `android`。
-- iOS 的 `apple_app_id` 只能是数字。`store_region` 缺省 `cn`，保存为两位小写字母。
+- iOS 的 `apple_app_id` 只能是数字。`store_region` 缺省 `us`，保存为两位小写字母。表单下拉与白名单地区使用同一个 `app_area` 字典。
 - 安卓链接固定为 `https://play.google.com/store/apps/details?id=` 加包名。
 - iOS 链接固定为 `https://apps.apple.com/{store_region}/app/id{apple_app_id}`。
 - iOS 在架判断是 GET `https://itunes.apple.com/lookup?id={apple_app_id}&country={store_region}` 且 `resultCount >= 1`。不用网页 HTTP 200。
@@ -363,7 +363,7 @@ field('storeRegion','商店地区'),
 
 store 字段增加 `field('platform','平台',{readonly:true})`，并放进列表列。`package-dev.mjs` 的 `EDIT_FIELDS` 与 `QUERY_FIELDS` 加入这三个键，顺序与 `AppManagerFieldPermissionPolicy.EDIT`、`QUERY` 一致。`PackageAdminRegistry` 的 apps 可写列和 store 展示列加入同名字段。
 
-`AppEditor.vue` 在基础信息顶部渲染平台单选。模型不是 `ios` 时不渲染 Apple ID 和地区。切回安卓时把这两个字段写成空字符串。地区输入框 placeholder 为 `cn`。Apple ID 使用数字输入。
+`AppEditor.vue` 在基础信息顶部渲染平台单选。模型不是 `ios` 时不渲染 Apple ID 和地区。切回安卓时把这两个字段写成空字符串。地区用 `app_area` 下拉，不选时保存为 `us`。Apple ID 使用数字输入。
 
 - [ ] **Step 4: Run test to verify it passes**
 
