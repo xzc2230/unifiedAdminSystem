@@ -27,6 +27,9 @@ public class AppManagerServiceImpl implements IAppManagerService {
     private AppManagerMapper appManagerMapper;
     @Autowired
     private StoreStatusMapper storeStatusMapper;
+    @Autowired(required=false)
+    private org.jeecg.modules.packagemanagement.application.apps.support.AppManagerCache cache;
+    private void refresh(String code){if(cache!=null)cache.refresh(code);}
 
     /**
      * 查询【请填写功能名称】
@@ -41,7 +44,10 @@ public class AppManagerServiceImpl implements IAppManagerService {
 
     @Override
     public AppManager selectAppManagerByPackageName(String packageName) {
-        return appManagerMapper.selectAppManagerByPackageName(packageName);
+        if(packageName==null||packageName.isBlank())return null;
+        String normalized=packageName.trim();
+        AppManager row=appManagerMapper.selectAppManagerByPackageName(normalized);
+        refresh(normalized);return row;
     }
 
     /**
@@ -66,6 +72,7 @@ public class AppManagerServiceImpl implements IAppManagerService {
     @Transactional
     public int insertAppManager(AppManager appManager) {
 
+        if(appManager.getPackageCode()!=null)appManager.setPackageCode(appManager.getPackageCode().trim());
         AppManager appManager1 = appManagerMapper.selectAppManagerByPackageName(appManager.getPackageCode());
         if (appManager1 != null) {
             return -1;
@@ -80,7 +87,7 @@ public class AppManagerServiceImpl implements IAppManagerService {
                 storeStatusMapper.insertStoreStatus(ss);
             }
             appManager.setCreateDate(DateUtils.getNowDate());
-            return appManagerMapper.insertAppManager(appManager);
+            int count=appManagerMapper.insertAppManager(appManager);refresh(appManager.getPackageCode());return count;
         }
     }
 
@@ -107,7 +114,7 @@ public class AppManagerServiceImpl implements IAppManagerService {
         }
         appManager.setCreateDate(DateUtils.getNowDate());
 
-        return appManagerMapper.updateAppManager(appManager);
+        int count=appManagerMapper.updateAppManager(appManager);refresh(appManager.getPackageCode());return count;
     }
 
     /**
@@ -118,7 +125,8 @@ public class AppManagerServiceImpl implements IAppManagerService {
      */
     @Override
     public int deleteAppManagerByIds(Long[] ids) {
-        return appManagerMapper.deleteAppManagerByIds(ids);
+        var codes=java.util.Arrays.stream(ids).map(appManagerMapper::selectAppManagerById).filter(java.util.Objects::nonNull).map(AppManager::getPackageCode).toList();
+        int count=appManagerMapper.deleteAppManagerByIds(ids);codes.forEach(this::refresh);return count;
     }
 
     /**
@@ -129,12 +137,13 @@ public class AppManagerServiceImpl implements IAppManagerService {
      */
     @Override
     public int deleteAppManagerById(Long id) {
-        return appManagerMapper.deleteAppManagerById(id);
+        return deleteAppManagerByIds(new Long[]{id});
     }
 
     @Override
     public int transferAppManagerById(String id, Integer userId, String userName) {
-        return appManagerMapper.transferAppManagerById(id, userId, userName);
+        int count=appManagerMapper.transferAppManagerById(id, userId, userName);
+        refresh(id);return count;
     }
 
 }

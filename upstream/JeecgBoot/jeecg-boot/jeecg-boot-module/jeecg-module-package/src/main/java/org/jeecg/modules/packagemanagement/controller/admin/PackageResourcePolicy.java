@@ -86,7 +86,9 @@ public class PackageResourcePolicy {
         if(table.equals("pkg_app_statistics")&&old!=null&&!Objects.equals(property(old,"packageCode"),property(value,"packageCode")))
             throw new PackageFailure(400,"统计包名不可修改");
         if(table.equals("pkg_app_manager")) {
-            String code=(String)property(value,"packageCode");
+            String rawCode=(String)property(value,"packageCode");
+            String code=rawCode==null?null:rawCode.trim();
+            new BeanWrapperImpl(value).setPropertyValue("packageCode",code);
             if(code==null||code.isBlank())throw new PackageFailure(400,"包名不能为空");
             if(old!=null&&!Objects.equals(property(old,"packageCode"),code))throw new PackageFailure(400,"包名不可修改");
             var before=stores.selectStoreStatusByPackageName(code);

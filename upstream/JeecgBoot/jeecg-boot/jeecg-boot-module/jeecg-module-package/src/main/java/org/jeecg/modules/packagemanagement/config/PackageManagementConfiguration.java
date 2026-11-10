@@ -15,7 +15,13 @@ public class PackageManagementConfiguration {
  @Bean public GeoPort packageGeoPort(HttpPort http,PackageManagementProperties settings){return new GeoHttpAdapter(http,settings);}
  @Bean public ElasticsearchAppLogAdapter packageAppLogPort(HttpPort http,PackageManagementProperties settings){return new ElasticsearchAppLogAdapter(http,settings);}
  @Bean public org.jeecg.modules.packagemanagement.application.applog.EsAppLogServiceImpl packageAppLogService(ElasticsearchAppLogAdapter adapter){return new org.jeecg.modules.packagemanagement.application.applog.EsAppLogServiceImpl(adapter);}
- @Bean public StoreProbePort packageStoreProbe(HttpPort http){return url->{try{return http.exchange("GET",url,null,java.util.Map.of()).success();}catch(RuntimeException e){return false;}};}
+ @Bean public StoreProbePort packageStoreProbe(HttpPort http){return url->{
+  var reply=http.exchange("GET",url,null,java.util.Map.of());
+  byte[] bytes=(reply.body()==null?"":reply.body()).getBytes(java.nio.charset.StandardCharsets.UTF_8);
+  String peek=new String(bytes,0,Math.min(2048,bytes.length),java.nio.charset.StandardCharsets.UTF_8);
+  org.slf4j.LoggerFactory.getLogger("package.store.probe").info("Store probe url={} status={} headers={} body={}",url,reply.status(),reply.headers(),peek);
+  return reply.success();
+ };}
  @Bean public MailPort packageMailPort(PackageManagementProperties settings){return new SmtpMailAdapter(settings);}
  @Bean public PwaGateway packagePwaGateway(HttpPort http,PackageManagementProperties settings){return new NpmPwaAdapter(http,settings);}
  @Bean public FacebookPort packageFacebookPort(HttpPort http,PackageManagementProperties settings,@org.springframework.beans.factory.annotation.Qualifier("packageClock") java.time.Clock clock){return new FacebookHttpAdapter(http,settings,clock);}

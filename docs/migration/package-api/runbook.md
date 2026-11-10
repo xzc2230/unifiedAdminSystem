@@ -2,6 +2,8 @@
 
 当前实现与验证状态以implementation-status.md、verification.md为准。本说明随接口、前端实施继续补全，不能据此认定生产切换已完成。
 
+2026-11-10 的 dev 增量补迁、菜单授权、009～012 SQL 顺序与任务配置另见 [dev-migration-status.md](dev-migration-status.md)。原 main 基线验证不自动代表 dev 覆盖。
+
 ## 本机隔离环境
 
 | 服务 | 地址 | 数据/配置 |

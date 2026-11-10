@@ -74,7 +74,7 @@ test('actual sidebar renderers expose package children instead of treating the r
   }
 });
 
-test('all 13 page entries and business editor SFCs compile', () => {
+test('all 18 page entries and business editor SFCs compile', () => {
   const {parse,compileScript,compileTemplate}=require('@vue/compiler-sfc');
   let count=0;
   function walk(directory){for(const entry of fs.readdirSync(directory,{withFileTypes:true})){
@@ -89,7 +89,7 @@ test('all 13 page entries and business editor SFCs compile', () => {
     }
   }}
   walk(path.join(root,'src/views/packagemanagement'));
-  assert.equal(count,18);
+  assert.equal(count,24);
 });
 test('editable business fields agree with backend allowlists and preserve domain special cases', async () => {
   const ts=require('typescript');
@@ -119,7 +119,7 @@ test('editable business fields agree with backend allowlists and preserve domain
 test('actual package bodyCell slot preserves Ant Table custom checkbox and index renderers',async()=>{
   const {createSSRApp,h,compile}=require('vue');
   const {renderToString}=require('vue/server-renderer');
-  const {Table,Checkbox,Space,Image}=require('ant-design-vue');
+  const {Table,Checkbox,Space,Image,Tooltip}=require('ant-design-vue');
   const source=fs.readFileSync(path.join(root,'src/views/packagemanagement/components/PackagePage.vue'),'utf8');
   const slot=source.match(/(<template #bodyCell[\s\S]*?)\s*<\/BasicTable>/)[1];
   const app=createSSRApp({
@@ -128,7 +128,7 @@ test('actual package bodyCell slot preserves Ant Table custom checkbox and index
       rows:[{id:1,appName:'Visible application'}],fieldsByKey:{appName:{key:'appName'}},definition:{domain:'apps'},displayValue:(_key,value)=>value}),
   });
   app.component('a-table',Table);
-  app.component('a-space',Space);app.component('a-image',Image);app.directive('auth',{});
+  app.component('a-space',Space);app.component('a-image',Image);app.component('a-tooltip',Tooltip);app.directive('auth',{});
   const html=await renderToString(app);
   assert.match(html,/type="checkbox"/);
   assert.match(html,/data-index="true"/);

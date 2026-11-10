@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.PackStatDetectConfigMapper">
+
+    <resultMap type="org.jeecg.modules.packagemanagement.domain.packstat.PackStatDetectConfig" id="PackStatDetectConfigResult">
+        <id property="id" column="id"/>
+        <result property="apiIntervalSeconds" column="api_interval_seconds"/>
+        <result property="threadCount" column="thread_count"/>
+        <result property="detectionFrequencyMinutes" column="detection_frequency_minutes"/>
+        <result property="notifyEmail" column="notify_email"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="selectOne" resultMap="PackStatDetectConfigResult">
+        select id, api_interval_seconds, thread_count, detection_frequency_minutes, notify_email, updated_at
+        from pkg_pack_stat_detect_config
+        order by id asc
+        limit 1
+    </select>
+
+    <insert id="insertDetectConfig" parameterType="org.jeecg.modules.packagemanagement.domain.packstat.PackStatDetectConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into pkg_pack_stat_detect_config
+        (api_interval_seconds, thread_count, detection_frequency_minutes, notify_email, updated_at)
+        values
+        (#{apiIntervalSeconds}, #{threadCount}, #{detectionFrequencyMinutes}, #{notifyEmail}, #{updatedAt})
+    </insert>
+
+    <update id="updateApiIntervalSeconds" parameterType="org.jeecg.modules.packagemanagement.domain.packstat.PackStatDetectConfig">
+        update pkg_pack_stat_detect_config
+        set api_interval_seconds = #{apiIntervalSeconds},
+            updated_at = #{updatedAt}
+        where id = #{id}
+    </update>
+</mapper>

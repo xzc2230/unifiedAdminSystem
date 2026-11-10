@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.OpenApiCallLogMapper">
+ <resultMap id="row" type="org.jeecg.modules.packagemanagement.domain.openapi.OpenApiCallLog">
+ <id property="id" column="id"/><result property="apiPath" column="api_path"/><result property="requestBody" column="request_body"/><result property="responseBody" column="response_body"/><result property="callTime" column="call_time"/><result property="token" column="token"/><result property="tokenId" column="token_id"/><result property="tenantId" column="tenant_id"/><result property="ownerUserId" column="owner_user_id"/>
+ </resultMap>
+ <select id="list" resultMap="row">SELECT * FROM pkg_app_open_api_call_log WHERE tenant_id=#{tenantId}
+ <if test="ownerUserId != null">AND owner_user_id=#{ownerUserId}</if><if test="token != null and token != ''">AND token LIKE CONCAT('%',#{token},'%')</if><if test="apiPath != null and apiPath != ''">AND api_path LIKE CONCAT('%',#{apiPath},'%')</if>
+ <if test="beginTime != null and beginTime != ''">AND DATE(call_time) &gt;= #{beginTime}</if>
+ <if test="endTime != null and endTime != ''">AND DATE(call_time) &lt;= #{endTime}</if>
+ ORDER BY call_time DESC,id DESC</select>
+ <insert id="insert" useGeneratedKeys="true" keyProperty="id">INSERT INTO pkg_app_open_api_call_log(api_path,request_body,response_body,call_time,token,token_id,tenant_id,owner_user_id) VALUES(#{apiPath},#{requestBody},#{responseBody},#{callTime},#{token},#{tokenId},#{tenantId},#{ownerUserId})</insert>
+</mapper>

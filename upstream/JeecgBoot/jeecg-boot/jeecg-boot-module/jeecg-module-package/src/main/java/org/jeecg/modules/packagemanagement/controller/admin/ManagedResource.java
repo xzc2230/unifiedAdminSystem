@@ -71,11 +71,15 @@ public final class ManagedResource<T> {
         });
     }
     public T edit(PackageActor actor,long key,T submitted) {
+        return edit(actor,key,submitted,(value,old)->{});
+    }
+    public T edit(PackageActor actor,long key,T submitted,BiConsumer<T,T> validator) {
         access.requireRow(actor,table,key);
         return tx.execute(status->{
             access.lockRows(actor,table,List.of(key));
             T existing=find.apply(key);
             if(existing==null) throw new PackageFailure(404,"记录不存在");
+            validator.accept(submitted,existing);
             T previous=fresh();
             org.springframework.beans.BeanUtils.copyProperties(existing,previous);
             copyAllowed(submitted,existing);
@@ -107,7 +111,11 @@ public final class ManagedResource<T> {
             destination.setPropertyValue(property,source.getPropertyValue(property));
     }
     public void export(PackageActor actor,T filter,HttpServletResponse response) throws IOException {
+        export(actor,filter,response,row->{});
+    }
+    public void export(PackageActor actor,T filter,HttpServletResponse response,Consumer<T> mask) throws IOException {
         List<T> rows=scoped(actor,filter);
+        rows.forEach(mask);
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition","attachment; filename="+table+".xlsx");
         try(XSSFWorkbook book=new XSSFWorkbook()) {

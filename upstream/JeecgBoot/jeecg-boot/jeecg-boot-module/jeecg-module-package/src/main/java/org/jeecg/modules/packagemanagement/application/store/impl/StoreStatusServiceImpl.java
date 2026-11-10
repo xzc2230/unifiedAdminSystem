@@ -122,6 +122,7 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
             for (StoreStatus s : filteredList) {
                 boolean isOnline = probe.getStatus(s.getStoreUrl());
                 if (s.getStatus() == 0 && isOnline) {
+                    org.slf4j.LoggerFactory.getLogger(getClass()).info("Store transition package={} status=0->1",s.getPackageCode());
                     s.setStatus(1);
                     s.setSuccessDate(DateUtils.getNowDate());
                     storeStatusMapper.updateStoreStatusAndDate(s);
@@ -131,6 +132,7 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
                     }
                     sendTransitionEmail(stringBuffer.toString(), "GP上架", s.getStoreUrl());
                 } else if (s.getStatus() == 1 && !isOnline) {
+                    org.slf4j.LoggerFactory.getLogger(getClass()).info("Store transition package={} status=1->2",s.getPackageCode());
                     s.setStatus(2);
                     s.setFailDate(DateUtils.getNowDate());
                     storeStatusMapper.updateStoreStatusAndDate(s);

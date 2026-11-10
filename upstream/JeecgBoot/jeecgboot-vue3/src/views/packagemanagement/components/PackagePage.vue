@@ -21,13 +21,15 @@
       <template #bodyCell="{column,record,text}">
         <template v-if="column.key === 'action'"><a-space>
           <a v-auth="permission('query')" @click="showDetail(record)">详情</a>
-          <a v-if="definition.edit !== false" v-auth="permission('edit')" @click="openEditor(record)">编辑</a>
-          <a v-auth="permission('remove')" @click="confirmRemove([record[idKey]])">删除</a>
+          <a v-if="definition.edit !== false && (definition.domain === 'apps' ? canEditApp : hasPermission(permission('edit')))" @click="openEditor(record)">编辑</a>
+          <a v-auth="permission('remove')" @click="confirmRemove([record[idKey]])">删除</a><a v-if="definition.domain === 'apps'" v-auth="'package:risk:query'" @click="openAuto(record)">自动拉黑</a>
         </a-space></template>
         <a-image v-else-if="['appIcon','appAdvertising','notifyIcon','headPortraitUrl'].includes(column.dataIndex) && text" :src="fileUrl(String(text).split(',')[0])" :width="40" :height="40" />
         <a v-else-if="column.dataIndex === 'storeUrl' && record.packageCode" :href="marketUrl(record.packageCode)" target="_blank" rel="noopener noreferrer">Google Play</a>
         <a v-else-if="column.dataIndex === 'appHost' && definition.domain === 'pwa' && record.appHost && record.appSub" :href="promotionUrl(record)" target="_blank" rel="noopener noreferrer">{{ promotionUrl(record) }}</a>
         <template v-else-if="column.dataIndex === 'paymentTotal'">{{ money(text) }}</template>
+        <a-tooltip v-else-if="definition.domain === 'request-logs' && column.dataIndex === 'reqParams'" placement="topLeft"><template #title><pre class="detail-value">{{ prettyJson(text) }}</pre><a @click="copyValue(text)">复制</a></template><span>{{ text }}</span></a-tooltip>
+        <a-tooltip v-else-if="fieldsByKey[column.dataIndex] && fieldsByKey[column.dataIndex].dict && dictRemark(column.dataIndex,text)" :title="dictRemark(column.dataIndex,text)">{{ displayValue(column.dataIndex,text) }}</a-tooltip>
         <template v-else-if="fieldsByKey[column.dataIndex]">{{ displayValue(column.dataIndex,text) }}</template>
       </template>
     </BasicTable>
@@ -59,11 +61,19 @@
       <a-select v-model:value="targetUser" :options="targets" :loading="targetsLoading" showSearch optionFilterProp="label" placeholder="选择接收人" style="width:100%" />
       <a-empty v-if="!targetsLoading && !targets.length" description="暂无符合条件的接收人" />
     </a-modal>
+    <a-modal v-model:open="autoOpen" :title="`自动拉黑 · ${autoPkg}`" :footer="null" width="860">
+      <a-space class="notice"><a-select v-model:value="autoType" allowClear placeholder="全部类型" :options="[{value:'gaid',label:'GAID'},{value:'aid',label:'AID'}]" style="width:160px" @change="loadAuto" /><a-button :loading="autoLoading" @click="loadAuto">刷新</a-button></a-space>
+      <a-table :columns="[{title:'类型',dataIndex:'type'},{title:'标识',dataIndex:'value'},{title:'原因',dataIndex:'reason'},{title:'操作',key:'action'}]" :dataSource="autoRows" :loading="autoLoading" :rowKey="row=>`${row.type}:${row.value}`" :pagination="false"><template #bodyCell="{column,record}"><a v-if="column.key==='action'" v-auth="'package:risk:remove'" @click="removeAuto(record)">解除拉黑</a></template></a-table>
+    </a-modal>
   </div>
 </template>
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue';
+import { usePermissionStore } from '/@/store/modules/permission';
+import { autoBlacklist,removeAutoBlacklist } from '/@/api/packagemanagement/dev';
+import { EDIT_FIELDS,canAppField,appEditPayload,appFieldRequired,prettyJson } from '../package-dev.mjs';
 import { message, Modal } from 'ant-design-vue';
+import { copyTextToClipboard } from '/@/hooks/web/useCopyToClipboard';
 import { BasicTable,useTable } from '/@/components/Table';
 import { initDictOptions } from '/@/utils/dict/JDictSelectUtil';
 import { useGlobSetting } from '/@/hooks/setting';
@@ -78,6 +88,9 @@ const props=defineProps<{definition:PackageDefinition}>();
 const definition=props.definition;
 const api=packageApi(definition.domain);
 const {hasPermission}=usePermission();
+const permissionStore=usePermissionStore();
+const appPermissions=computed(()=>permissionStore.getPermCodeList as string[]);
+const canEditApp=computed(()=>hasPermission('*:*:*') || EDIT_FIELDS.some(key=>canAppField(appPermissions.value,'edit',key)));
 const permission=(action:string)=>`package:${definition.domain}:${action}`;
 const idKey=definition.key || 'id';
 const dicts=reactive<Record<string,PackageOption[]>>({});
@@ -88,11 +101,12 @@ const editorOpen=ref(false),detailOpen=ref(false),saving=ref(false),exporting=re
 const editId=ref<PackageId>();
 const editorVersion=ref(0);
 const model=reactive<Record<string,any>>({});
+const initialAppModel=ref<Record<string,any>>({}),dirtyAppFields=ref(new Set<string>());
 const detail=ref<Record<string,any>>({});
 const editorForm=ref(),pwaEditor=ref();
 const fieldsByKey=Object.fromEntries(definition.fields.map(f=>[f.key,f]));
-const editableFields=computed(()=>definition.fields.filter(f=>!f.readonly || definition.domain === 'notifications' && ['appName','appIcon','appHost'].includes(f.key)));
-const detailFields=computed(()=>[...definition.fields.filter(f=>!['startReqTime','endReqTime'].includes(f.key)),...Object.keys(detail.value).filter(k=>!fieldsByKey[k]).map(key=>({key,label:({id:'编号',eventId:'事件编号',reviewsId:'评论编号',tags:'标签',score:'评分分布',reviewsRecords:'评论集合',appCode:'推广码',appSub:'域名后缀',appType:'应用类型',userId:'归属用户',userName:'归属用户名称',createTime:'创建时间',updateTime:'更新时间'} as Record<string,string>)[key] || key}))]);
+const editableFields=computed(()=>definition.fields.filter(f=>(!f.readonly || definition.domain === 'notifications' && ['appName','appIcon','appHost'].includes(f.key)) && (definition.domain !== 'apps' || editId.value == null || canAppField(appPermissions.value,'edit',f.key))).map(f=>definition.domain==='apps'?{...f,required:appFieldRequired(f,editId.value!=null,canAppField(appPermissions.value,'query',f.key)||dirtyAppFields.value.has(f.key))}:f));
+const detailFields=computed(()=>[...definition.fields.filter(f=>!['startReqTime','endReqTime'].includes(f.key)),...Object.keys(detail.value).filter(k=>!fieldsByKey[k]).map(key=>({key,label:({id:'编号',eventId:'事件编号',reviewsId:'评论编号',tags:'标签',score:'评分分布',reviewsRecords:'评论集合',appCode:'推广码',appSub:'域名后缀',appType:'应用类型',userId:'归属用户',userName:'归属用户名称',createTime:'创建时间',updateTime:'更新时间',updateDate:'更新时间'} as Record<string,string>)[key] || key}))].filter(f=>definition.domain!=='apps'||canAppField(appPermissions.value,'query',f.key)));
 function optionsFor(field:PackageFieldSpec):PackageOption[] {
   if(field.key==='status' && definition.domain==='store') return [{value:0,label:'待上架'},{value:1,label:'已上架'},{value:2,label:'已下架'}];
   if(field.type==='parent') return parentApps.value.map(v=>({value:v.id,label:`${v.appName} (${v.appHost || v.id})`}));
@@ -103,39 +117,43 @@ function displayValue(key:string,value:any) {
   if(field?.dict || definition.domain==='store' && key==='status') return String(value ?? '').split(',').map(v=>optionsFor(field).find(o=>String(o.value)===v)?.label || v).join(', ');
   return value;
 }
-function displayDetail(value:any) { return typeof value==='object' ? JSON.stringify(value,null,2) : value ?? '—'; }
+function displayDetail(value:any) { return prettyJson(value); }
+function dictRemark(key:string,value:any){return optionsFor(fieldsByKey[key]).find(o=>String(o.value)===String(value))?.remark || '';}
+async function copyValue(value:any){try{if(!copyTextToClipboard(typeof value==='string'?value:prettyJson(value)))throw new Error('copy');message.success('已复制');}catch{message.error('复制失败，请手动复制');}}
 const backend=useGlobSetting().domainUrl;
 const fileUrl=(value:string)=>legacyImageUrl(value,backend);
 const marketUrl=(pkg:string)=>`https://play.google.com/store/apps/details?id=${encodeURIComponent(pkg)}`;
 const promotionUrl=(row:any)=>`https://${row.appHost}${row.appSub}/?pZoneID=${encodeURIComponent(row.appCode || '')}`;
 const money=(value:any)=>value == null ? '0.00' : Number(value).toFixed(2);
-const schemas=definition.filters.map(key=>{
+const schemas=definition.filters.filter(key=>definition.domain!=='apps'||canAppField(appPermissions.value,'query',key)).map(key=>{
   const f=fieldsByKey[key];
   return {field:key,label:f?.label || key,component:f?.type==='date' || f?.type==='datetime'?'DatePicker':key==='status'&&definition.domain==='store'?'Select':'Input',
     componentProps:f?.type==='date'||f?.type==='datetime'?{valueFormat:f.type==='date'?'YYYY-MM-DD':'YYYY-MM-DD HH:mm:ss',showTime:f.type==='datetime'}:key==='status'&&definition.domain==='store'?{options:optionsFor(f)}:{},colProps:{span:6}};
 });
-const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:['appName','packageCode','packageName','reqTime'].includes(key)?180:150,ellipsis:true}));
+const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:['appName','packageCode','packageName','reqTime'].includes(key)?180:150,ellipsis:true}));
 const [registerTable,{reload,clearSelectedRowKeys}]=useTable({
   api:async params=>{const {pageNo,pageSize,...filters}=params;lastFilters.value=filters;return api.list({...params,...(definition.appType!=null?{appType:definition.appType}:{})});},
   columns,rowKey:idKey,bordered:true,showTableSetting:true,useSearchForm:true,
   formConfig:{schemas:schemas as any,labelWidth:100,showAdvancedButton:schemas.length>3,autoSubmitOnEnter:true},
-  actionColumn:{title:'操作',key:'action',dataIndex:'action',width:190,fixed:'right'},
+  actionColumn:{title:'操作',key:'action',dataIndex:'action',width:definition.domain==='apps'?280:190,fixed:'right'},
   rowSelection:{type:'checkbox',onChange:keys=>selected.value=keys},
 });
 async function loadChoices() {
   const codes=[...new Set(definition.fields.map(f=>f.dict).filter(Boolean))] as string[];
-  await Promise.all(codes.map(async code=>{try {const rows=await initDictOptions(code);dicts[code]=(Array.isArray(rows)?rows:[]).map(v=>({value:['app_status','app_where'].includes(code)?Number(v.value):String(v.value),label:v.text || v.label || v.title}));} catch {dicts[code]=[];}}));
+  await Promise.all(codes.map(async code=>{try {const rows=await initDictOptions(code);dicts[code]=(Array.isArray(rows)?rows:[]).map(v=>({value:['app_status','app_where'].includes(code)?Number(v.value):String(v.value),label:v.text || v.label || v.title,remark:v.remark || v.description || ''}));} catch {dicts[code]=[];}}));
 }
 function setField(field:PackageFieldSpec,value:any) {
   model[field.key]=value;
+  if(definition.domain==='apps')dirtyAppFields.value.add(field.key);
   if(field.type==='parent') {const app=parentApps.value.find(v=>String(v.id)===String(value));for(const key of ['appName','appIcon','appHost']) model[key]=app?.[key];}
 }
 async function openEditor(record?:Record<string,any>) {
   const data=record ? await api.detail(record[idKey]) : {};
   Object.keys(model).forEach(k=>delete model[k]);
-  Object.assign(model,{status:0,whetherRestrict:0,whetherUs:0,whetherUse:0,shunt:0,downloadCount:0,reviews:0,appEvent:'0',reviewsRecords:[],tags:'[]',score:'{}'},data);
+  const defaults=definition.domain==='apps' && record?{}:{status:0,whetherRestrict:0,whetherUs:0,whetherUse:0,shunt:0,downloadCount:0,reviews:0,appEvent:'0',reviewsRecords:[],tags:'[]',score:'{}'};
+  Object.assign(model,defaults,data);
   if(!Array.isArray(model.reviewsRecords)) model.reviewsRecords=[];
-  if(definition.domain==='apps') model.areas=toAreas(model.areas);
+  if(definition.domain==='apps') {model.areas=toAreas(model.areas);initialAppModel.value=JSON.parse(JSON.stringify(model));dirtyAppFields.value=new Set();}
   editId.value=record?.[idKey];
   if(definition.fields.some(f=>f.type==='parent')) {
     parentApps.value=[];
@@ -148,8 +166,8 @@ async function save() {
   await editorForm.value.validate();
   saving.value=true;
   try {
-    let payload=Object.fromEntries(definition.fields.filter(f=>!f.readonly).map(f=>[f.key,model[f.key]]));
-    if(definition.domain==='apps') payload.areas=fromAreas(model.areas);
+    let payload=Object.fromEntries(editableFields.value.filter(f=>!f.readonly).map(f=>[f.key,model[f.key]]));
+    if(definition.domain==='apps') {payload=appEditPayload(payload,appPermissions.value,editId.value!=null,initialAppModel.value,[...dirtyAppFields.value]);if('areas' in payload)payload.areas=fromAreas(payload.areas);}
     if(definition.domain==='store') payload.storeUrl=marketUrl(model.packageCode);
     if(definition.domain==='pwa') {const pwa=pwaEditor.value.payload();payload={...payload,appType:definition.appType,appSub:pwa.appSub,tags:pwa.tags,score:pwa.score,reviewsRecords:pwa.reviewsRecords};}
     await api.save(payload,editId.value);
@@ -171,6 +189,10 @@ const transferOpen=ref(false),targetsLoading=ref(false),transferring=ref(false),
 const targets=ref<PackageOption[]>([]);
 async function openTransfer(){targetUser.value=undefined;targets.value=[];transferOpen.value=true;targetsLoading.value=true;try{targets.value=(await transferTargets()).map(v=>({value:v.id,label:v.displayName}));}finally{targetsLoading.value=false;}}
 async function doTransfer(){if(!targetUser.value){message.warning('请选择接收人');return;}transferring.value=true;try{await transferApps(selected.value,targetUser.value);message.success('应用已转移');transferOpen.value=false;await refresh();}finally{transferring.value=false;}}
+const autoOpen=ref(false),autoLoading=ref(false),autoPkg=ref(''),autoType=ref<string>(),autoRows=ref<any[]>([]);
+async function openAuto(row:any){autoPkg.value=row.packageCode;autoType.value=undefined;autoRows.value=[];autoOpen.value=true;await loadAuto();}
+async function loadAuto(){autoLoading.value=true;try{autoRows.value=await autoBlacklist(autoPkg.value,autoType.value);}finally{autoLoading.value=false;}}
+function removeAuto(row:any){Modal.confirm({title:'解除该设备的自动拉黑？',onOk:async()=>{await removeAutoBlacklist(autoPkg.value,row.type,row.value);message.success('已解除');await loadAuto();}});}
 onMounted(()=>{loadChoices();if(definition.domain==='statistics') loadTotal();});
 </script>
 <style scoped lang="less">.package-page{padding:16px}.summary-card{margin-bottom:16px}.totals{margin-top:16px}.notice{margin-bottom:16px}.detail-value{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;max-width:560px}</style>

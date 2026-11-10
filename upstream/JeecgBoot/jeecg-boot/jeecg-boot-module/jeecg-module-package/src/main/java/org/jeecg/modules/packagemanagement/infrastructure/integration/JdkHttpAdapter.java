@@ -26,7 +26,9 @@ public class JdkHttpAdapter implements HttpPort  {
             headers.forEach(b::header);
             b.method(method,body==null?HttpRequest.BodyPublishers.noBody():HttpRequest.BodyPublishers.ofString(body));
             HttpResponse<String> r=client().send(b.build(),HttpResponse.BodyHandlers.ofString());
-            return new Reply(r.statusCode(),r.body());
+            var responseHeaders=new java.util.LinkedHashMap<String,String>();
+            r.headers().map().forEach((key,values)->responseHeaders.put(key,String.join(",",values)));
+            return new Reply(r.statusCode(),r.body(),responseHeaders);
         }
         catch(InterruptedException e) {
             Thread.currentThread().interrupt();

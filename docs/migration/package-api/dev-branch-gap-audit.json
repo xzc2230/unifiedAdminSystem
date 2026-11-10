@@ -1,0 +1,1439 @@
+{
+  "auditDate": "2026-11-09",
+  "sourceRoot": "D:\\workspace\\package-api\\package-api",
+  "sourceMain": "39b1f92af432bed135f9c639b936f7faffbe64af",
+  "sourceDev": "0f83f8128df8c9978c49479775f86fa716fb435d",
+  "targetHead": "160d9effa6432b9b0f930fcc16409ada5fd5513a",
+  "targetBranch": "codex/package-api-migration",
+  "scope": "committed origin/main..origin/dev; target HEAD and current module; static source audit, no production data verification",
+  "excludedDirtySourceFiles": [
+    "PackServer/sql/app3.sql"
+  ],
+  "summary": {
+    "changedFiles": 193,
+    "addedFiles": 167,
+    "modifiedFiles": 24,
+    "deletedFiles": 2,
+    "originalSnapshotFiles": 330,
+    "mainSnapshotMatchesIgnoringLineEndings": 330,
+    "devSnapshotMatchesIgnoringLineEndings": 319,
+    "devSnapshotChanged": 11,
+    "newControllerEndpoints": 43,
+    "migratedNewControllerEndpoints": 1,
+    "missingNewControllerEndpoints": 42,
+    "missingNewVuePages": 5,
+    "missingNewTables": 6
+  },
+  "missingTables": [
+    "app_open_api_token",
+    "app_open_api_call_log",
+    "app_pack_stat",
+    "app_pack_stat_region",
+    "app_pack_stat_detect_config",
+    "app_pack_stat_detect_history"
+  ],
+  "newEndpoints": [
+    {
+      "method": "GET",
+      "path": "/system/app2AutoBlacklist/list",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/App2AutoBlacklistController.java",
+      "line": 28,
+      "handler": "App2AutoBlacklistController#list",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "DELETE",
+      "path": "/system/app2AutoBlacklist",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/App2AutoBlacklistController.java",
+      "line": 55,
+      "handler": "App2AutoBlacklistController#remove",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "GET",
+      "path": "/system/appAsnBlackList/list",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppAsnBlacklistController.java",
+      "line": 24,
+      "handler": "AppAsnBlacklistController#list",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "GET",
+      "path": "/system/appAsnBlackList/lookup/{asn}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppAsnBlacklistController.java",
+      "line": 32,
+      "handler": "AppAsnBlacklistController#lookupAsn",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "GET",
+      "path": "/system/appAsnBlackList/{id}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppAsnBlacklistController.java",
+      "line": 38,
+      "handler": "AppAsnBlacklistController#getInfo",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "POST",
+      "path": "/system/appAsnBlackList",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppAsnBlacklistController.java",
+      "line": 45,
+      "handler": "AppAsnBlacklistController#add",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "PUT",
+      "path": "/system/appAsnBlackList",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppAsnBlacklistController.java",
+      "line": 52,
+      "handler": "AppAsnBlacklistController#edit",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "DELETE",
+      "path": "/system/appAsnBlackList/{ids}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppAsnBlacklistController.java",
+      "line": 59,
+      "handler": "AppAsnBlacklistController#remove",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "GET",
+      "path": "/system/appCpuAbiBlackList/list",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppCpuAbiBlacklistController.java",
+      "line": 24,
+      "handler": "AppCpuAbiBlacklistController#list",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "GET",
+      "path": "/system/appCpuAbiBlackList/{id}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppCpuAbiBlacklistController.java",
+      "line": 32,
+      "handler": "AppCpuAbiBlacklistController#getInfo",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "POST",
+      "path": "/system/appCpuAbiBlackList",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppCpuAbiBlacklistController.java",
+      "line": 39,
+      "handler": "AppCpuAbiBlacklistController#add",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "PUT",
+      "path": "/system/appCpuAbiBlackList",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppCpuAbiBlacklistController.java",
+      "line": 46,
+      "handler": "AppCpuAbiBlacklistController#edit",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "DELETE",
+      "path": "/system/appCpuAbiBlackList/{ids}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppCpuAbiBlacklistController.java",
+      "line": 53,
+      "handler": "AppCpuAbiBlacklistController#remove",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "GET",
+      "path": "/system/appDeviceBrandBlackList/list",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppDeviceBrandBlacklistController.java",
+      "line": 24,
+      "handler": "AppDeviceBrandBlacklistController#list",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "GET",
+      "path": "/system/appDeviceBrandBlackList/{id}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppDeviceBrandBlacklistController.java",
+      "line": 32,
+      "handler": "AppDeviceBrandBlacklistController#getInfo",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "POST",
+      "path": "/system/appDeviceBrandBlackList",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppDeviceBrandBlacklistController.java",
+      "line": 39,
+      "handler": "AppDeviceBrandBlacklistController#add",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "PUT",
+      "path": "/system/appDeviceBrandBlackList",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppDeviceBrandBlacklistController.java",
+      "line": 46,
+      "handler": "AppDeviceBrandBlacklistController#edit",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "DELETE",
+      "path": "/system/appDeviceBrandBlackList/{ids}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppDeviceBrandBlacklistController.java",
+      "line": 53,
+      "handler": "AppDeviceBrandBlacklistController#remove",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "GET",
+      "path": "/system/appDeviceNameBlackList/list",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppDeviceNameBlacklistController.java",
+      "line": 24,
+      "handler": "AppDeviceNameBlacklistController#list",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "GET",
+      "path": "/system/appDeviceNameBlackList/{id}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppDeviceNameBlacklistController.java",
+      "line": 32,
+      "handler": "AppDeviceNameBlacklistController#getInfo",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "POST",
+      "path": "/system/appDeviceNameBlackList",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppDeviceNameBlacklistController.java",
+      "line": 39,
+      "handler": "AppDeviceNameBlacklistController#add",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "PUT",
+      "path": "/system/appDeviceNameBlackList",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppDeviceNameBlacklistController.java",
+      "line": 46,
+      "handler": "AppDeviceNameBlacklistController#edit",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "DELETE",
+      "path": "/system/appDeviceNameBlackList/{ids}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppDeviceNameBlacklistController.java",
+      "line": 53,
+      "handler": "AppDeviceNameBlacklistController#remove",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "风控管理"
+    },
+    {
+      "method": "POST",
+      "path": "/{q}/{w}/{e}/{r}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/app/controller/Client3Controller.java",
+      "line": 25,
+      "handler": "Client3Controller#getAesData",
+      "status": "已迁移",
+      "migrationState": "migrated",
+      "feature": "四段客户端"
+    },
+    {
+      "method": "GET",
+      "path": "/system/openapi/calllog/list",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/openapi/controller/OpenApiCallLogController.java",
+      "line": 25,
+      "handler": "OpenApiCallLogController#list",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "OpenAPI"
+    },
+    {
+      "method": "GET",
+      "path": "/openapi/manager/list",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/openapi/controller/OpenApiManagerController.java",
+      "line": 41,
+      "handler": "OpenApiManagerController#list",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "OpenAPI"
+    },
+    {
+      "method": "GET",
+      "path": "/openapi/manager/{id}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/openapi/controller/OpenApiManagerController.java",
+      "line": 62,
+      "handler": "OpenApiManagerController#getInfo",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "OpenAPI"
+    },
+    {
+      "method": "POST",
+      "path": "/openapi/manager",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/openapi/controller/OpenApiManagerController.java",
+      "line": 93,
+      "handler": "OpenApiManagerController#add",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "OpenAPI"
+    },
+    {
+      "method": "PUT",
+      "path": "/openapi/manager",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/openapi/controller/OpenApiManagerController.java",
+      "line": 119,
+      "handler": "OpenApiManagerController#edit",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "OpenAPI"
+    },
+    {
+      "method": "DELETE",
+      "path": "/openapi/manager/{ids}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/openapi/controller/OpenApiManagerController.java",
+      "line": 143,
+      "handler": "OpenApiManagerController#remove",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "OpenAPI"
+    },
+    {
+      "method": "GET",
+      "path": "/system/openapi/token/list",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/openapi/controller/OpenApiTokenController.java",
+      "line": 33,
+      "handler": "OpenApiTokenController#list",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "OpenAPI"
+    },
+    {
+      "method": "GET",
+      "path": "/system/openapi/token/{id}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/openapi/controller/OpenApiTokenController.java",
+      "line": 42,
+      "handler": "OpenApiTokenController#getInfo",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "OpenAPI"
+    },
+    {
+      "method": "POST",
+      "path": "/system/openapi/token",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/openapi/controller/OpenApiTokenController.java",
+      "line": 50,
+      "handler": "OpenApiTokenController#add",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "OpenAPI"
+    },
+    {
+      "method": "PUT",
+      "path": "/system/openapi/token",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/openapi/controller/OpenApiTokenController.java",
+      "line": 58,
+      "handler": "OpenApiTokenController#edit",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "OpenAPI"
+    },
+    {
+      "method": "DELETE",
+      "path": "/system/openapi/token/{ids}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/openapi/controller/OpenApiTokenController.java",
+      "line": 66,
+      "handler": "OpenApiTokenController#remove",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "OpenAPI"
+    },
+    {
+      "method": "GET",
+      "path": "/system/packstat/list",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/packstat/controller/PackStatController.java",
+      "line": 34,
+      "handler": "PackStatController#list",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "包统计"
+    },
+    {
+      "method": "GET",
+      "path": "/system/packstat/authors",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/packstat/controller/PackStatController.java",
+      "line": 43,
+      "handler": "PackStatController#authors",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "包统计"
+    },
+    {
+      "method": "GET",
+      "path": "/system/packstat/regions",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/packstat/controller/PackStatController.java",
+      "line": 50,
+      "handler": "PackStatController#regions",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "包统计"
+    },
+    {
+      "method": "GET",
+      "path": "/system/packstat/surviveSummary",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/packstat/controller/PackStatController.java",
+      "line": 57,
+      "handler": "PackStatController#surviveSummary",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "包统计"
+    },
+    {
+      "method": "GET",
+      "path": "/system/packstat/{id}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/packstat/controller/PackStatController.java",
+      "line": 65,
+      "handler": "PackStatController#getInfo",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "包统计"
+    },
+    {
+      "method": "POST",
+      "path": "/system/packstat",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/packstat/controller/PackStatController.java",
+      "line": 73,
+      "handler": "PackStatController#add",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "包统计"
+    },
+    {
+      "method": "PUT",
+      "path": "/system/packstat",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/packstat/controller/PackStatController.java",
+      "line": 81,
+      "handler": "PackStatController#edit",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "包统计"
+    },
+    {
+      "method": "DELETE",
+      "path": "/system/packstat/{ids}",
+      "sourceFile": "PackServer/src/main/java/com/ruoyi/project/packstat/controller/PackStatController.java",
+      "line": 89,
+      "handler": "PackStatController#remove",
+      "status": "缺少对应功能实现",
+      "migrationState": "missing_feature_implementation",
+      "feature": "包统计"
+    }
+  ],
+  "changedFiles": [
+    {
+      "status": "A",
+      "path": ".agents/README.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".agents/docs/DEFAULT_SKILLS.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".agents/docs/SUPERPOWERS.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".agents/skills/.gitkeep",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".agents/skills/backend-dev-standards/SKILL.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".agents/skills/default-coding-stack/SKILL.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".agents/skills/engineering-principles/SKILL.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".cursor/rules/default-coding-stack.mdc",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".cursor/skills/.gitkeep",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".cursor/skills/backend-dev-standards/SKILL.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".cursor/skills/default-coding-stack/SKILL.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".cursor/skills/engineering-principles/SKILL.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".idea/.gitignore",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".idea/compiler.xml",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".idea/encodings.xml",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".idea/jarRepositories.xml",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".idea/misc.xml",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".idea/modules.xml",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".idea/package-api.iml",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": ".idea/vcs.xml",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "AGENTS.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/dist20261010.zip",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/dist20290916.zip",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/scripts/gen-risk-index-vue.mjs",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/scripts/gen-sim-countries.cjs",
+      "disposition": "停用时区/SIM配置及辅助资料：不计生效规则缺口"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/scripts/gen-timezone-labels-zh.cjs",
+      "disposition": "停用时区/SIM配置及辅助资料：不计生效规则缺口"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/scripts/list-tz-suffixes.cjs",
+      "disposition": "停用时区/SIM配置及辅助资料：不计生效规则缺口"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/scripts/rebuild-whitelist-area-linkage.cjs",
+      "disposition": "停用时区/SIM配置及辅助资料：不计生效规则缺口"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/api/system/openapi.js",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/api/system/packstat.js",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/api/system/riskBlacklist.js",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/constants/ianaTimezones.js",
+      "disposition": "停用时区/SIM配置及辅助资料：不计生效规则缺口"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/constants/managerFieldPermissions.contract.test.mjs",
+      "disposition": "字段权限：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/constants/managerFieldPermissions.js",
+      "disposition": "字段权限：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/constants/managerFormDefaults.js",
+      "disposition": "停用时区/SIM配置及辅助资料：不计生效规则缺口"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/constants/simCountries.js",
+      "disposition": "停用时区/SIM配置及辅助资料：不计生效规则缺口"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/constants/timezoneOptions.js",
+      "disposition": "停用时区/SIM配置及辅助资料：不计生效规则缺口"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/constants/whitelistAreaLinkage.js",
+      "disposition": "停用时区/SIM配置及辅助资料：不计生效规则缺口"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/constants/whitelistAreaLinkage.json",
+      "disposition": "停用时区/SIM配置及辅助资料：不计生效规则缺口"
+    },
+    {
+      "status": "M",
+      "path": "PackClient/src/utils/dict.js",
+      "disposition": "日志和字典展示：增强待补"
+    },
+    {
+      "status": "M",
+      "path": "PackClient/src/views/system/applog/index.vue",
+      "disposition": "日志和字典展示：增强待补"
+    },
+    {
+      "status": "M",
+      "path": "PackClient/src/views/system/manager/index.vue",
+      "disposition": "应用管理/客户端集成：部分已迁，详见功能审计"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/views/system/openapi/calllog.vue",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/views/system/openapi/docs.vue",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/views/system/openapi/token.vue",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/views/system/packstat/index.vue",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/views/system/packstat/packstat.contract.test.mjs",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/views/system/packstat/packstatUtils.js",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackClient/src/views/system/risk/index.vue",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/sql/app3.sql",
+      "disposition": "SQL：四黑名单表及五字段已迁，四停用字段未迁"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/sql/app_manager_field_permissions.sql",
+      "disposition": "字段权限：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/sql/app_manager_query_field_permissions.sql",
+      "disposition": "字段权限：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/sql/app_open_api.sql",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/sql/app_pack_stat.sql",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/sql/app_pack_stat_detect_stats.sql",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/sql/app_pack_stat_notify_email.sql",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "D",
+      "path": "PackServer/sql/quartz.sql",
+      "disposition": "源框架初始化SQL删除：不删除JEECG宿主结构"
+    },
+    {
+      "status": "D",
+      "path": "PackServer/sql/ry_20230706.sql",
+      "disposition": "源框架初始化SQL删除：不删除JEECG宿主结构"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/framework/config/ElasticsearchConfig.java",
+      "disposition": "框架/环境配置：按JEECG适配，不直接复制环境或密钥"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/framework/config/ResourcesConfig.java",
+      "disposition": "框架/环境配置：按JEECG适配，不直接复制环境或密钥"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/framework/security/service/TokenService.java",
+      "disposition": "宿主角色会话：需按JEECG适配，未证实等效强制下线"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/controller/App2AutoBlacklistController.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppAsnBlacklistController.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppCpuAbiBlacklistController.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppDeviceBrandBlacklistController.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppDeviceNameBlacklistController.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/controller/AppManagerController.java",
+      "disposition": "应用管理/客户端集成：部分已迁，详见功能审计"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/controller/Client3Controller.java",
+      "disposition": "四段客户端：已有迁移，按适配实现保留"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/domain/AppAsnBlacklist.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/domain/AppCpuAbiBlacklist.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/domain/AppDeviceBrandBlacklist.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/domain/AppDeviceNameBlacklist.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/domain/AppManager.java",
+      "disposition": "应用管理/客户端集成：部分已迁，详见功能审计"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/mapper/AppAsnBlacklistMapper.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/mapper/AppCpuAbiBlacklistMapper.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/mapper/AppDeviceBrandBlacklistMapper.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/mapper/AppDeviceNameBlacklistMapper.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/risk/app2/App2DevicePayload.java",
+      "disposition": "四段客户端：已有迁移，按适配实现保留"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/risk/app2/App2GlobalRiskEvaluator.java",
+      "disposition": "四段客户端：已有迁移，按适配实现保留"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/risk/app2/App2InboundParser.java",
+      "disposition": "四段客户端：已有迁移，按适配实现保留"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/risk/app2/App2InstallReferrerEvaluator.java",
+      "disposition": "四段客户端：已有迁移，按适配实现保留"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/risk/app2/App2KeywordMatcher.java",
+      "disposition": "四段客户端：已有迁移，按适配实现保留"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/risk/app2/App2PkgRiskRedisService.java",
+      "disposition": "四段客户端：已有迁移，按适配实现保留"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/risk/app2/App2RiskConstants.java",
+      "disposition": "四段客户端：已有迁移，按适配实现保留"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/risk/app2/App2RiskResult.java",
+      "disposition": "四段客户端：已有迁移，按适配实现保留"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/risk/app2/App2RiskService.java",
+      "disposition": "四段客户端：已有迁移，按适配实现保留"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/service/ClientService.java",
+      "disposition": "应用管理/客户端集成：部分已迁，详见功能审计"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/service/IAppAsnBlacklistService.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/service/IAppCpuAbiBlacklistService.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/service/IAppDeviceBrandBlacklistService.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/service/IAppDeviceNameBlacklistService.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/service/IAppManagerService.java",
+      "disposition": "应用管理/客户端集成：部分已迁，详见功能审计"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/service/impl/AppAsnBlacklistServiceImpl.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/service/impl/AppCpuAbiBlacklistServiceImpl.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/service/impl/AppDeviceBrandBlacklistServiceImpl.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/service/impl/AppDeviceNameBlacklistServiceImpl.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/service/impl/AppManagerServiceImpl.java",
+      "disposition": "应用管理/客户端集成：部分已迁，详见功能审计"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/service/impl/ClientServiceImpl.java",
+      "disposition": "应用管理/客户端集成：部分已迁，详见功能审计"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/support/AppManagerFieldPermissionPolicy.java",
+      "disposition": "字段权限：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/support/ClientRiskPayloadCodec.java",
+      "disposition": "四段客户端：已有迁移，按适配实现保留"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/app/support/RipeStatAsnLookup.java",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/project/applog/controller/EsAppLogController.java",
+      "disposition": "日志和字典展示：增强待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/openapi/controller/OpenApiCallLogController.java",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/openapi/controller/OpenApiManagerController.java",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/openapi/controller/OpenApiTokenController.java",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/openapi/domain/OpenApiCallLog.java",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/openapi/domain/OpenApiToken.java",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/openapi/interceptor/OpenApiTokenInterceptor.java",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/openapi/mapper/OpenApiCallLogMapper.java",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/openapi/mapper/OpenApiTokenMapper.java",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/openapi/service/IOpenApiCallLogService.java",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/openapi/service/IOpenApiTokenService.java",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/openapi/service/impl/OpenApiCallLogServiceImpl.java",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/openapi/service/impl/OpenApiTokenServiceImpl.java",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/openapi/support/OpenApiAuth.java",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/controller/PackStatController.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/detect/PackStatDetectOutcomeApply.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/detect/PackStatDetectResult.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/detect/PackStatDetectService.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/detect/PackStatHttpClient.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/detect/PackStatIntervalSupport.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/detect/PackStatMailContentBuilder.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/detect/PackStatMailNotifier.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/detect/PackStatMailProperties.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/detect/PackStatNotifyEmailSupport.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/domain/PackStat.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/domain/PackStatDetectConfig.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/domain/PackStatDetectHistory.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/domain/PackStatRegion.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/mapper/PackStatDetectConfigMapper.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/mapper/PackStatDetectHistoryMapper.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/mapper/PackStatMapper.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/mapper/PackStatRegionMapper.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/service/IPackStatService.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/service/impl/PackStatServiceImpl.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/task/PackStatTask.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/util/PackStatDateCalc.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/util/PackStatMonthFilter.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/java/com/ruoyi/project/packstat/util/PackStatUrlParser.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/project/store/service/impl/StoreStatusServiceImpl.java",
+      "disposition": "旧商店检测：响应与异常语义待对齐"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/project/system/controller/SysRoleController.java",
+      "disposition": "宿主角色会话：需按JEECG适配，未证实等效强制下线"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/project/system/mapper/SysUserRoleMapper.java",
+      "disposition": "宿主角色会话：需按JEECG适配，未证实等效强制下线"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/project/system/service/ISysRoleService.java",
+      "disposition": "宿主角色会话：需按JEECG适配，未证实等效强制下线"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/project/system/service/impl/SysRoleServiceImpl.java",
+      "disposition": "宿主角色会话：需按JEECG适配，未证实等效强制下线"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/project/tool/gen/util/HttpClientUtil.java",
+      "disposition": "旧商店检测：响应与异常语义待对齐"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/java/com/ruoyi/project/tool/gen/util/IpAddrUtil.java",
+      "disposition": "四段客户端：已有迁移，按适配实现保留"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/resources/application-druid-dev.yml",
+      "disposition": "框架/环境配置：按JEECG适配，不直接复制环境或密钥"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/resources/application-druid.yml",
+      "disposition": "框架/环境配置：按JEECG适配，不直接复制环境或密钥"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/resources/application-packstat-mail.yml",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/resources/application.yml",
+      "disposition": "框架/环境配置：按JEECG适配，不直接复制环境或密钥"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/resources/mybatis/app/AppAsnBlacklistMapper.xml",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/resources/mybatis/app/AppCpuAbiBlacklistMapper.xml",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/resources/mybatis/app/AppDeviceBrandBlacklistMapper.xml",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/resources/mybatis/app/AppDeviceNameBlacklistMapper.xml",
+      "disposition": "风控管理：模型/Mapper已有，管理接口/页面待补"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/resources/mybatis/openapi/OpenApiCallLogMapper.xml",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/resources/mybatis/openapi/OpenApiTokenMapper.xml",
+      "disposition": "OpenAPI：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/resources/mybatis/packstat/PackStatDetectConfigMapper.xml",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/resources/mybatis/packstat/PackStatDetectHistoryMapper.xml",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/resources/mybatis/packstat/PackStatMapper.xml",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/main/resources/mybatis/packstat/PackStatRegionMapper.xml",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/resources/mybatis/system/AppManagerMapper.xml",
+      "disposition": "应用管理/客户端集成：部分已迁，详见功能审计"
+    },
+    {
+      "status": "M",
+      "path": "PackServer/src/main/resources/mybatis/system/SysUserRoleMapper.xml",
+      "disposition": "宿主角色会话：需按JEECG适配，未证实等效强制下线"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/test/java/com/ruoyi/framework/security/service/TokenServiceTest.java",
+      "disposition": "宿主角色会话：需按JEECG适配，未证实等效强制下线"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/test/java/com/ruoyi/project/app/service/impl/AppManagerServiceImplTest.java",
+      "disposition": "应用管理/客户端集成：部分已迁，详见功能审计"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/test/java/com/ruoyi/project/app/support/AppManagerFieldPermissionPolicyTest.java",
+      "disposition": "字段权限：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/test/java/com/ruoyi/project/packstat/PackStatDateCalcTest.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/test/java/com/ruoyi/project/packstat/PackStatDetectOutcomeApplyTest.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/test/java/com/ruoyi/project/packstat/PackStatDetectResultTest.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/test/java/com/ruoyi/project/packstat/PackStatIntervalSupportTest.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/test/java/com/ruoyi/project/packstat/PackStatMailContentBuilderTest.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/test/java/com/ruoyi/project/packstat/PackStatMapperContractTest.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/test/java/com/ruoyi/project/packstat/PackStatMonthFilterTest.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/test/java/com/ruoyi/project/packstat/PackStatNotifyEmailSupportTest.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/test/java/com/ruoyi/project/packstat/PackStatServiceImplTest.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/test/java/com/ruoyi/project/packstat/PackStatSqlSeedTest.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/test/java/com/ruoyi/project/packstat/PackStatUrlParserTest.java",
+      "disposition": "包统计：待迁移"
+    },
+    {
+      "status": "A",
+      "path": "PackServer/src/test/java/com/ruoyi/project/system/service/impl/SysRoleServiceImplTest.java",
+      "disposition": "宿主角色会话：需按JEECG适配，未证实等效强制下线"
+    },
+    {
+      "status": "A",
+      "path": "docs/ai-handover/API_GUIDE.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "docs/ai-handover/ARCHITECTURE.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "docs/ai-handover/BUSINESS_RULES.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "docs/ai-handover/CURRENT_STATUS.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "docs/ai-handover/DATABASE.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "docs/ai-handover/DEVELOPMENT.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "docs/ai-handover/KNOWN_ISSUES.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "docs/ai-handover/MODULE_MAP.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "docs/ai-handover/PROJECT_OVERVIEW.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "docs/superpowers/plans/2026-10-10-app-manager-field-permissions.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "docs/superpowers/plans/2026-10-10-app-manager-query-field-permissions.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "docs/superpowers/plans/2026-10-10-packstat-exclusive-duration-buckets.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "docs/superpowers/plans/2026-10-10-packstat-threshold-counts.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "docs/superpowers/specs/2026-10-10-app-manager-field-permissions-design.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "docs/superpowers/specs/2026-10-10-packstat-threshold-counts-design.md",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    },
+    {
+      "status": "A",
+      "path": "postman-app2.collection.json",
+      "disposition": "开发资料/工具/构建包：不是线上业务缺口"
+    }
+  ],
+  "fourPathSnapshotComparison": {
+    "files": 26,
+    "matchingDevIgnoringLineEndings": 26,
+    "differentFromDev": []
+  }
+}

@@ -25,6 +25,10 @@
         <result property="aidGaidSwitchThreshold" column="aid_gaid_switch_threshold"/>
         <result property="riskWindowSeconds" column="risk_window_seconds"/>
         <result property="referrerBlacklistJson" column="referrer_blacklist_json"/>
+        <result property="systemTimezone" column="system_timezone"/>
+        <result property="whetherTimezoneRestrict" column="whether_timezone_restrict"/>
+        <result property="simCountry" column="sim_country"/>
+        <result property="whetherSimCountryRestrict" column="whether_sim_country_restrict"/>
     </resultMap>
 
     <sql id="selectAppManagerVo">
@@ -47,6 +51,10 @@
                aid_gaid_switch_threshold,
                risk_window_seconds,
                referrer_blacklist_json,
+               system_timezone,
+               whether_timezone_restrict,
+               sim_country,
+               whether_sim_country_restrict,
                whether_use
         from pkg_app_manager
     </sql>
@@ -116,6 +124,10 @@
             <if test="aidGaidSwitchThreshold != null">aid_gaid_switch_threshold,</if>
             <if test="riskWindowSeconds != null">risk_window_seconds,</if>
             <if test="referrerBlacklistJson != null">referrer_blacklist_json,</if>
+            <if test="systemTimezone != null">system_timezone,</if>
+            <if test="whetherTimezoneRestrict != null">whether_timezone_restrict,</if>
+            <if test="simCountry != null">sim_country,</if>
+            <if test="whetherSimCountryRestrict != null">whether_sim_country_restrict,</if>
             <if test="whetherUse != null">whether_use,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -138,6 +150,10 @@
             <if test="aidGaidSwitchThreshold != null">#{aidGaidSwitchThreshold},</if>
             <if test="riskWindowSeconds != null">#{riskWindowSeconds},</if>
             <if test="referrerBlacklistJson != null">#{referrerBlacklistJson},</if>
+            <if test="systemTimezone != null">#{systemTimezone},</if>
+            <if test="whetherTimezoneRestrict != null">#{whetherTimezoneRestrict},</if>
+            <if test="simCountry != null">#{simCountry},</if>
+            <if test="whetherSimCountryRestrict != null">#{whetherSimCountryRestrict},</if>
             <if test="whetherUse != null">#{whetherUse},</if>
         </trim>
     </insert>
@@ -154,8 +170,8 @@
             <if test="status != null">status = #{status},</if>
             <if test="updateDate != null">update_date = #{updateDate},</if>
             <if test="url != null">url = #{url},</if>
-            <if test="userId != null">user_id = #{userId},</if>
-            <if test="userName != null">user_name = #{userName},</if>
+
+
             <if test="whetherRestrict != null">whether_restrict = #{whetherRestrict},</if>
             <if test="whetherUs != null">whether_us = #{whetherUs},</if>
             <if test="gaidAidThreshold != null">gaid_aid_threshold = #{gaidAidThreshold},</if>
@@ -163,6 +179,10 @@
             <if test="aidGaidSwitchThreshold != null">aid_gaid_switch_threshold = #{aidGaidSwitchThreshold},</if>
             <if test="riskWindowSeconds != null">risk_window_seconds = #{riskWindowSeconds},</if>
             <if test="referrerBlacklistJson != null">referrer_blacklist_json = #{referrerBlacklistJson},</if>
+            <if test="systemTimezone != null">system_timezone = #{systemTimezone},</if>
+            <if test="whetherTimezoneRestrict != null">whether_timezone_restrict = #{whetherTimezoneRestrict},</if>
+            <if test="simCountry != null">sim_country = #{simCountry},</if>
+            <if test="whetherSimCountryRestrict != null">whether_sim_country_restrict = #{whetherSimCountryRestrict},</if>
             <if test="whetherUse != null">whether_use = #{whetherUse},</if>
         </trim>
         where id = #{id}
@@ -186,6 +206,8 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="userId != null">user_id = #{userId},</if>
             <if test="userName != null">user_name = #{userName},</if>
+
+
         </trim>
         where package_code = #{id}
     </update>

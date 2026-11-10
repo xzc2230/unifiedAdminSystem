@@ -16,6 +16,8 @@ public class PackageAdminController {
     private final PackageAdminRegistry registry;
     private final PackageAdminSupport guard;
     private final ObjectMapper json;
+    private final org.jeecg.modules.packagemanagement.application.apps.support.AppManagerFieldPermissionPolicy fields=new org.jeecg.modules.packagemanagement.application.apps.support.AppManagerFieldPermissionPolicy();
+    private void mask(Object row){if(row instanceof org.jeecg.modules.packagemanagement.domain.app.AppManager app)fields.mask(app);}
     public PackageAdminController(PackageAdminRegistry registry,PackageAdminSupport guard) {
         this.registry=registry; this.guard=guard; this.json=org.jeecg.modules.packagemanagement.controller.PackageJson.mapper();
     }
@@ -54,30 +56,38 @@ public class PackageAdminController {
             @RequestParam(defaultValue="10") int pageSize,HttpServletRequest request) {
         PackageActor actor=guard.actor(domain,"query");
         var resource=resource(domain);
-        return Result.ok(guard.page(actor,resource.table(),resource.scoped(actor,filter(resource,request)),
+        var rows=resource.scoped(actor,filter(resource,request));
+        var page=guard.page(actor,resource.table(),rows,
                 row->new BeanWrapperImpl(row).getPropertyValue(resource.table().equals("pkg_app_event")?"eventId":resource.table().equals("pkg_review")?"reviewsId":"id") instanceof Number id?id.longValue():null,
-                pageNo,pageSize));
+                pageNo,pageSize);
+        rows.forEach(this::mask);
+        return Result.ok(page);
     }
     @PostMapping("/{domain}/export")
     public void export(@PathVariable String domain,HttpServletRequest request,HttpServletResponse response) throws IOException {
         if("store".equals(domain))throw new org.jeecg.modules.packagemanagement.exception.PackageFailure(404,"源管理域不提供导出");
         PackageActor actor=guard.actor(domain,"export");
-        var resource=resource(domain); resource.export(actor,filter(resource,request),response);
+        var resource=resource(domain); resource.export(actor,filter(resource,request),response,this::mask);
     }
     @GetMapping("/{domain}/{id:[0-9]+}")
     public Result<Object> detail(@PathVariable String domain,@PathVariable long id) {
         PackageActor actor=guard.actor(domain,"query");
-        return Result.ok(resource(domain).detail(actor,id));
+        Object row=resource(domain).detail(actor,id);mask(row);return Result.ok(row);
     }
     @PostMapping("/{domain}")
     public Result<Object> add(@PathVariable String domain,@RequestBody Map<String,Object> data) {
         PackageActor actor=guard.actor(domain,"add");
-        var resource=resource(domain); return Result.ok(resource.add(actor,body(resource,data)));
+        var resource=resource(domain); Object row=resource.add(actor,body(resource,data));mask(row);return Result.ok(row);
     }
     @PutMapping("/{domain}/{id:[0-9]+}")
     public Result<Object> edit(@PathVariable String domain,@PathVariable long id,@RequestBody Map<String,Object> data) {
         PackageActor actor=guard.actor(domain,"edit");
-        var resource=resource(domain); return Result.ok(resource.edit(actor,id,body(resource,data)));
+        var resource=resource(domain);
+        Object submitted=body(resource,data);
+        Object row="apps".equals(domain)?resource.edit(actor,id,submitted,(requested,stored)->{
+            fields.check((org.jeecg.modules.packagemanagement.domain.app.AppManager)requested,(org.jeecg.modules.packagemanagement.domain.app.AppManager)stored);
+        }):resource.edit(actor,id,submitted);
+        mask(row);return Result.ok(row);
     }
     @DeleteMapping("/{domain}/{ids}")
     public Result<Integer> delete(@PathVariable String domain,@PathVariable String ids) {

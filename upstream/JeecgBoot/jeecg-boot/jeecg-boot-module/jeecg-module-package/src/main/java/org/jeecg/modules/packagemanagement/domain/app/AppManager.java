@@ -187,7 +187,7 @@ public class AppManager extends PackageEntity {
     }
 
     public void setUrl(String url) {
-        this.url = url.trim();
+        this.url = url == null ? null : url.trim();
     }
 
     public String getUrl() {
@@ -252,4 +252,18 @@ public class AppManager extends PackageEntity {
     private String referrerBlacklistJson;
     public String getReferrerBlacklistJson() { return referrerBlacklistJson; }
     public void setReferrerBlacklistJson(String value) { this.referrerBlacklistJson = value; }
+
+    // Source dev retains these settings but all active risk rules remain disabled.
+    private String systemTimezone;
+    public String getSystemTimezone() {return systemTimezone;}
+    public void setSystemTimezone(String value) {this.systemTimezone=value;}
+    private Integer whetherTimezoneRestrict;
+    public Integer getWhetherTimezoneRestrict() {return whetherTimezoneRestrict;}
+    public void setWhetherTimezoneRestrict(Integer value) {this.whetherTimezoneRestrict=value;}
+    private String simCountry;
+    public String getSimCountry() {return simCountry;}
+    public void setSimCountry(String value) {this.simCountry=value;}
+    private Integer whetherSimCountryRestrict;
+    public Integer getWhetherSimCountryRestrict() {return whetherSimCountryRestrict;}
+    public void setWhetherSimCountryRestrict(Integer value) {this.whetherSimCountryRestrict=value;}
 }

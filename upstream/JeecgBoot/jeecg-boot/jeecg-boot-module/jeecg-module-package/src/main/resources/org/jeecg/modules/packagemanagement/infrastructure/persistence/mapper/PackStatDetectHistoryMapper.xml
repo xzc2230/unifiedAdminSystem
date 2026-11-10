@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.PackStatDetectHistoryMapper">
+
+    <insert id="insertDetectHistory" parameterType="org.jeecg.modules.packagemanagement.domain.packstat.PackStatDetectHistory" useGeneratedKeys="true" keyProperty="id">
+        insert into pkg_pack_stat_detect_history
+        (stat_id, store_url, region, detect_result, message, checked_at)
+        values
+        (#{statId}, #{storeUrl}, #{region}, #{detectResult}, #{message}, #{checkedAt})
+    </insert>
+
+    <delete id="deleteOlderThanDays">
+        delete from pkg_pack_stat_detect_history
+        where checked_at &lt; date_sub(now(), interval #{days} day)
+    </delete>
+</mapper>

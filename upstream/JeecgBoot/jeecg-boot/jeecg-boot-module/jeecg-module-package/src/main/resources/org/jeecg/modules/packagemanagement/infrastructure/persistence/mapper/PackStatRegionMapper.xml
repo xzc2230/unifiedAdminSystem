@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.PackStatRegionMapper">
+
+    <resultMap type="org.jeecg.modules.packagemanagement.domain.packstat.PackStatRegion" id="PackStatRegionResult">
+        <id property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="nameCn" column="name_cn"/>
+        <result property="enabled" column="enabled"/>
+        <result property="sortOrder" column="sort_order"/>
+    </resultMap>
+
+    <select id="selectEnabledRegions" resultMap="PackStatRegionResult">
+        select id, code, name_cn, enabled, sort_order
+        from pkg_pack_stat_region
+        where enabled = 1
+        order by sort_order asc, code asc
+    </select>
+
+    <select id="selectByCode" resultMap="PackStatRegionResult">
+        select id, code, name_cn, enabled, sort_order
+        from pkg_pack_stat_region
+        where code = #{code}
+        limit 1
+    </select>
+</mapper>

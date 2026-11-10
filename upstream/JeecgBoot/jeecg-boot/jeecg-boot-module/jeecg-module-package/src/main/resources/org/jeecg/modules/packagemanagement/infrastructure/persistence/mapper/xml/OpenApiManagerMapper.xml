@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.OpenApiManagerMapper">
+ <select id="lockById" resultMap="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.AppManagerMapper.AppManagerResult">SELECT * FROM pkg_app_manager WHERE id=#{id} FOR UPDATE</select>
+ <select id="lockStoreTenant" resultType="java.lang.Long">SELECT resource_id FROM pkg_resource_owner WHERE resource_type='pkg_store_status' AND resource_id=#{id} AND tenant_id=#{tenant} FOR UPDATE</select>
+</mapper>

@@ -1,0 +1,360 @@
+{
+  "date": "2026-11-10",
+  "sourceDev": "0f83f8128df8c9978c49479775f86fa716fb435d",
+  "targetBase": "160d9effa6432b9b0f930fcc16409ada5fd5513a",
+  "verificationScope": "43 source route declarations mapped to existing target controllers; module regression 291 tests, 0 failures/errors, 1 Windows symlink skip. This is not a claim that every route has been exercised through the production proxy.",
+  "items": [
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/app2AutoBlacklist/list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/risk/auto/list",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/app2AutoBlacklist",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/risk/auto",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/appAsnBlackList/list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/risk/asn/list",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/appAsnBlackList/lookup/{asn}",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/risk/asn/lookup/{asn}",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/appAsnBlackList/{id}",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/risk/asn/{id}",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/appAsnBlackList",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/risk/asn",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/appAsnBlackList",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/risk/asn",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/appAsnBlackList/{ids}",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/risk/asn/{ids}",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/appCpuAbiBlackList/list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/risk/abi/list",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/appCpuAbiBlackList/{id}",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/risk/abi/{id}",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/appCpuAbiBlackList",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/risk/abi",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/appCpuAbiBlackList",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/risk/abi",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/appCpuAbiBlackList/{ids}",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/risk/abi/{ids}",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/appDeviceBrandBlackList/list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/risk/brand/list",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/appDeviceBrandBlackList/{id}",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/risk/brand/{id}",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/appDeviceBrandBlackList",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/risk/brand",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/appDeviceBrandBlackList",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/risk/brand",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/appDeviceBrandBlackList/{ids}",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/risk/brand/{ids}",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/appDeviceNameBlackList/list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/risk/device/list",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/appDeviceNameBlackList/{id}",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/risk/device/{id}",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/appDeviceNameBlackList",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/risk/device",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/appDeviceNameBlackList",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/risk/device",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/appDeviceNameBlackList/{ids}",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/risk/device/{ids}",
+      "targetController": "controller/admin/PackageRiskController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/{q}/{w}/{e}/{r}",
+      "targetMethod": "POST",
+      "targetPath": "/package-legacy/{q}/{w}/{e}/{r}",
+      "targetController": "controller/legacy/LegacyClientController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/openapi/calllog/list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/openapi/calllog/list",
+      "targetController": "controller/admin/openapi/PackageOpenApiCallLogController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/openapi/manager/list",
+      "targetMethod": "GET",
+      "targetPath": "/openapi/manager/list",
+      "targetController": "controller/openapi/OpenApiManagerController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/openapi/manager/{id}",
+      "targetMethod": "GET",
+      "targetPath": "/openapi/manager/{id}",
+      "targetController": "controller/openapi/OpenApiManagerController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/openapi/manager",
+      "targetMethod": "POST",
+      "targetPath": "/openapi/manager",
+      "targetController": "controller/openapi/OpenApiManagerController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/openapi/manager",
+      "targetMethod": "PUT",
+      "targetPath": "/openapi/manager",
+      "targetController": "controller/openapi/OpenApiManagerController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/openapi/manager/{ids}",
+      "targetMethod": "DELETE",
+      "targetPath": "/openapi/manager/{ids}",
+      "targetController": "controller/openapi/OpenApiManagerController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/openapi/token/list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/openapi/token/list",
+      "targetController": "controller/admin/openapi/PackageOpenApiTokenController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/openapi/token/{id}",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/openapi/token/{id}",
+      "targetController": "controller/admin/openapi/PackageOpenApiTokenController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/openapi/token",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/openapi/token",
+      "targetController": "controller/admin/openapi/PackageOpenApiTokenController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/openapi/token",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/openapi/token",
+      "targetController": "controller/admin/openapi/PackageOpenApiTokenController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/openapi/token/{ids}",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/openapi/token/{ids}",
+      "targetController": "controller/admin/openapi/PackageOpenApiTokenController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/packstat/list",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/packstat/list",
+      "targetController": "controller/admin/PackagePackStatController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/packstat/authors",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/packstat/authors",
+      "targetController": "controller/admin/PackagePackStatController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/packstat/regions",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/packstat/regions",
+      "targetController": "controller/admin/PackagePackStatController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/packstat/surviveSummary",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/packstat/surviveSummary",
+      "targetController": "controller/admin/PackagePackStatController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "GET",
+      "sourcePath": "/system/packstat/{id}",
+      "targetMethod": "GET",
+      "targetPath": "/package-admin/packstat/{id}",
+      "targetController": "controller/admin/PackagePackStatController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "POST",
+      "sourcePath": "/system/packstat",
+      "targetMethod": "POST",
+      "targetPath": "/package-admin/packstat",
+      "targetController": "controller/admin/PackagePackStatController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "PUT",
+      "sourcePath": "/system/packstat",
+      "targetMethod": "PUT",
+      "targetPath": "/package-admin/packstat",
+      "targetController": "controller/admin/PackagePackStatController.java",
+      "status": "implemented_module_regression_verified"
+    },
+    {
+      "sourceMethod": "DELETE",
+      "sourcePath": "/system/packstat/{ids}",
+      "targetMethod": "DELETE",
+      "targetPath": "/package-admin/packstat/{ids}",
+      "targetController": "controller/admin/PackagePackStatController.java",
+      "status": "implemented_module_regression_verified"
+    }
+  ],
+  "tables": {
+    "app_open_api_token": "pkg_app_open_api_token",
+    "app_open_api_call_log": "pkg_app_open_api_call_log",
+    "app_pack_stat": "pkg_pack_stat",
+    "app_pack_stat_region": "pkg_pack_stat_region",
+    "app_pack_stat_detect_config": "pkg_pack_stat_detect_config",
+    "app_pack_stat_detect_history": "pkg_pack_stat_detect_history"
+  }
+}

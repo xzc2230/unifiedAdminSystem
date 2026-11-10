@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.PackStatMapper">
+
+    <resultMap type="org.jeecg.modules.packagemanagement.domain.packstat.PackStat" id="PackStatResult">
+        <id property="id" column="id"/>
+        <result property="tenantId" column="tenant_id"/><result property="ownerUserId" column="owner_user_id"/>
+        <result property="platform" column="platform"/>
+        <result property="storeUrl" column="store_url"/>
+        <result property="regionCode" column="region_code"/>
+        <result property="customer" column="customer"/>
+        <result property="isReplenish" column="is_replenish"/>
+        <result property="replenishUrl" column="replenish_url"/>
+        <result property="packer" column="packer"/>
+        <result property="notifyEmail" column="notify_email"/>
+        <result property="passDate" column="pass_date"/>
+        <result property="customerUseDate" column="customer_use_date"/>
+        <result property="dropDate" column="drop_date"/>
+        <result property="designer" column="designer"/>
+        <result property="remark" column="remark"/>
+        <result property="surviveDays" column="survive_days"/>
+        <result property="useDays" column="use_days"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectVo">
+        select id, tenant_id, owner_user_id, platform, store_url, region_code, customer, is_replenish, replenish_url, packer,
+               notify_email, pass_date, customer_use_date, drop_date, designer, remark,
+               coalesce(survive_days,
+                   case when drop_date is null then null else greatest(0, datediff(drop_date, pass_date)) end) as survive_days,
+               coalesce(use_days,
+                   case when drop_date is null then null else greatest(0, datediff(drop_date, customer_use_date)) end) as use_days,
+               create_by, create_time, update_by, update_time
+        from pkg_pack_stat
+    </sql>
+
+    <select id="selectPackStatList" parameterType="org.jeecg.modules.packagemanagement.domain.packstat.PackStat" resultMap="PackStatResult">
+        <include refid="selectVo"/>
+        <where>
+            and tenant_id = #{tenantId}
+            <if test="ownerUserId != null">and owner_user_id = #{ownerUserId}</if>
+            <if test="platform != null and platform != ''">and platform = #{platform}</if>
+            <if test="packer != null and packer != ''">and packer = #{packer}</if>
+            <if test="regionCode != null and regionCode != ''">and region_code = #{regionCode}</if>
+            <if test="customer != null and customer != ''">and customer like concat('%', #{customer}, '%')</if>
+            <if test="passMonth != null and passMonth != ''">
+                and pass_date &gt;= str_to_date(concat(#{passMonth}, '-01'), '%Y-%m-%d')
+                and pass_date &lt;= last_day(str_to_date(concat(#{passMonth}, '-01'), '%Y-%m-%d'))
+            </if>
+            <if test="storeUrl != null and storeUrl != ''">and store_url like concat('%', #{storeUrl}, '%')</if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectPackStatById" parameterType="Long" resultMap="PackStatResult">
+        <include refid="selectVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPackStat" parameterType="org.jeecg.modules.packagemanagement.domain.packstat.PackStat" useGeneratedKeys="true" keyProperty="id">
+        insert into pkg_pack_stat
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            tenant_id, owner_user_id,
+            <if test="platform != null">platform,</if>
+            <if test="storeUrl != null">store_url,</if>
+            <if test="regionCode != null">region_code,</if>
+            <if test="customer != null">customer,</if>
+            <if test="isReplenish != null">is_replenish,</if>
+            <if test="replenishUrl != null">replenish_url,</if>
+            <if test="packer != null">packer,</if>
+            <if test="notifyEmail != null">notify_email,</if>
+            <if test="passDate != null">pass_date,</if>
+            <if test="customerUseDate != null">customer_use_date,</if>
+            <if test="dropDate != null">drop_date,</if>
+            <if test="designer != null">designer,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{tenantId}, #{ownerUserId},
+            <if test="platform != null">#{platform},</if>
+            <if test="storeUrl != null">#{storeUrl},</if>
+            <if test="regionCode != null">#{regionCode},</if>
+            <if test="customer != null">#{customer},</if>
+            <if test="isReplenish != null">#{isReplenish},</if>
+            <if test="replenishUrl != null">#{replenishUrl},</if>
+            <if test="packer != null">#{packer},</if>
+            <if test="notifyEmail != null">#{notifyEmail},</if>
+            <if test="passDate != null">#{passDate},</if>
+            <if test="customerUseDate != null">#{customerUseDate},</if>
+            <if test="dropDate != null">#{dropDate},</if>
+            <if test="designer != null">#{designer},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePackStat" parameterType="org.jeecg.modules.packagemanagement.domain.packstat.PackStat">
+        update pkg_pack_stat
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="platform != null">platform = #{platform},</if>
+            <if test="storeUrl != null">store_url = #{storeUrl},</if>
+            <if test="regionCode != null">region_code = #{regionCode},</if>
+            <if test="customer != null">customer = #{customer},</if>
+            <if test="isReplenish != null">is_replenish = #{isReplenish},</if>
+            replenish_url = #{replenishUrl},
+            <if test="packer != null">packer = #{packer},</if>
+            notify_email = #{notifyEmail},
+            <if test="passDate != null">pass_date = #{passDate},</if>
+            <if test="customerUseDate != null">customer_use_date = #{customerUseDate},</if>
+            drop_date = #{dropDate},
+            <if test="designer != null">designer = #{designer},</if>
+            remark = #{remark},
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id} and tenant_id = #{tenantId}
+          <if test="ownerUserId != null">and owner_user_id = #{ownerUserId}</if>
+    </update>
+
+    <delete id="deletePackStatById" parameterType="Long">
+        delete from pkg_pack_stat where id = #{id}
+    </delete>
+
+    <delete id="deletePackStatByIds" parameterType="Long">
+        delete from pkg_pack_stat where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectDistinctPackers" resultType="String">
+        select distinct packer
+        from pkg_pack_stat
+        where tenant_id = #{tenantId} and packer is not null and packer != ''
+        <if test="ownerUserId != null">and owner_user_id = #{ownerUserId}</if>
+        order by packer
+    </select>
+
+    <select id="selectSurviveSummary" resultType="java.util.HashMap">
+        select
+            ifnull(sum(case when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &gt;= 7 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &lt; 8 then 1 else 0 end), 0) as s7,
+            ifnull(sum(case when customer_use_date is null then 0 when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &gt;= 7 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &lt; 8 then 1 else 0 end), 0) as u7,
+            ifnull(sum(case when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &gt;= 8 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &lt; 9 then 1 else 0 end), 0) as s8,
+            ifnull(sum(case when customer_use_date is null then 0 when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &gt;= 8 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &lt; 9 then 1 else 0 end), 0) as u8,
+            ifnull(sum(case when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &gt;= 9 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &lt; 10 then 1 else 0 end), 0) as s9,
+            ifnull(sum(case when customer_use_date is null then 0 when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &gt;= 9 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &lt; 10 then 1 else 0 end), 0) as u9,
+            ifnull(sum(case when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &gt;= 10 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &lt; 11 then 1 else 0 end), 0) as s10,
+            ifnull(sum(case when customer_use_date is null then 0 when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &gt;= 10 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &lt; 11 then 1 else 0 end), 0) as u10,
+            ifnull(sum(case when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &gt;= 11 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &lt; 12 then 1 else 0 end), 0) as s11,
+            ifnull(sum(case when customer_use_date is null then 0 when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &gt;= 11 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &lt; 12 then 1 else 0 end), 0) as u11,
+            ifnull(sum(case when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &gt;= 12 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &lt; 13 then 1 else 0 end), 0) as s12,
+            ifnull(sum(case when customer_use_date is null then 0 when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &gt;= 12 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &lt; 13 then 1 else 0 end), 0) as u12,
+            ifnull(sum(case when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &gt;= 13 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &lt; 14 then 1 else 0 end), 0) as s13,
+            ifnull(sum(case when customer_use_date is null then 0 when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &gt;= 13 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &lt; 14 then 1 else 0 end), 0) as u13,
+            ifnull(sum(case when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &gt;= 14 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &lt; 15 then 1 else 0 end), 0) as s14,
+            ifnull(sum(case when customer_use_date is null then 0 when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &gt;= 14 and greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &lt; 15 then 1 else 0 end), 0) as u14,
+            ifnull(sum(case when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), pass_date)) &gt;= 15 then 1 else 0 end), 0) as s15,
+            ifnull(sum(case when customer_use_date is null then 0 when greatest(0, datediff(least(ifnull(drop_date, curdate()), curdate()), customer_use_date)) &gt;= 15 then 1 else 0 end), 0) as u15
+        from pkg_pack_stat
+        where tenant_id = #{tenantId}
+        <if test="ownerUserId != null">and owner_user_id = #{ownerUserId}</if>
+          and packer = #{packer}
+          and pass_date is not null
+        <if test="passMonth != null and passMonth != ''">
+            and pass_date &gt;= str_to_date(concat(#{passMonth}, '-01'), '%Y-%m-%d')
+            and pass_date &lt;= last_day(str_to_date(concat(#{passMonth}, '-01'), '%Y-%m-%d'))
+        </if>
+    </select>
+
+    <select id="selectPendingDetectList" resultMap="PackStatResult">
+        <include refid="selectVo"/>
+        where drop_date is null
+          and store_url is not null
+          and store_url != ''
+        order by id asc
+    </select>
+
+    <update id="updateDropDateIfAbsent">
+        update pkg_pack_stat
+        set drop_date = #{dropDate},
+            update_time = now()
+        where id = #{id}
+          and drop_date is null
+    </update>
+
+    <update id="updateDetectStats">
+        update pkg_pack_stat
+        set survive_days = #{surviveDays},
+            use_days = #{useDays},
+            drop_date = case
+                when #{dropDate} is not null and drop_date is null then #{dropDate}
+                else drop_date
+            end,
+            update_time = now()
+        where id = #{id}
+    </update>
+</mapper>
