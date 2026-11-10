@@ -194,4 +194,11 @@ class PackageFourPathTest {
         var result=adapter.getFourPathCountryAndCountryCodeByIP("192.0.2.1");
         assertEquals("中国",result.get("country")); assertEquals("false",result.get("status"));
     }
+    @Test void countryCodeWhitelistAcceptsEnglishGeoAndRejectsOtherCountries() {
+        app.setStatus(3); app.setWhetherRestrict(1); app.setAreas(" BR,PH ");
+        when(geo.getFourPathCountryAndCountryCodeByIP(any())).thenReturn(Map.of("country","Brazil","countryCode","BR","status","false"));
+        assertNotNull(client.execute(request("{}",KEY)));
+        app.setAreas("巴西"); assertNotNull(client.execute(request("{}",KEY)));
+        app.setAreas("sg"); assertNull(client.execute(request("{}",KEY)));
+    }
 }

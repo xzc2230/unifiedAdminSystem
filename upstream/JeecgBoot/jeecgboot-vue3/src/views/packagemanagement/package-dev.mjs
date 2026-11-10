@@ -1,5 +1,12 @@
 export const EDIT_FIELDS = Object.freeze(['appName','author','packageCode','url','status','whetherRestrict','areas','mark','whetherUs','gaidAidThreshold','aidDeviceThreshold','aidGaidSwitchThreshold','riskWindowSeconds','referrerBlacklistJson']);
 export const QUERY_FIELDS = Object.freeze(['appName','author','userName','packageCode','status','url','whetherRestrict','areas','whetherUs','mark','updateDate']);
+// These values are part of the legacy client protocol (App2RiskConstants).
+export const APP_STATUS_OPTIONS = Object.freeze([
+ {value:0,label:'全关',remark:'关闭应用访问'},
+ {value:1,label:'全开',remark:'使用全开模式'},
+ {value:2,label:'归因',remark:'使用归因模式'},
+ {value:3,label:'调试',remark:'调试模式跳过 InstallReferrer 检查，仍执行地区和设备风控'},
+]);
 export function canAppField(permissions, action, key) {
  const granted=Array.isArray(permissions)?permissions:[];
  const fields=action==='edit'?EDIT_FIELDS:QUERY_FIELDS;

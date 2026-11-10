@@ -26,7 +26,7 @@ Redis前缀隔离为 `package:legacy:app2:`；默认阈值1，配置小于1也�
 
 已有数据库部署前执行模块资源 `db/package/008-four-path-risk.sql`：创建四类pkg_app_*_blacklist表，补齐pkg_app_manager的gaid_aid_threshold、aid_device_threshold、aid_gaid_switch_threshold、risk_window_seconds、referrer_blacklist_json。脚本逐列判断存在，可重复执行；未执行增量SQL时新版应用查询会因缺列报错。全新库先执行001-schema.sql，再执行008；本次不自动操作生产数据库。
 
-五项风控配置已放入“应用包管理 → 应用管理”的现有编辑表单，沿用现有样式与apps权限；后端允许编辑字段及XML读写已对齐。status仍采用现有app_status字典，若需要在后台选择3（调试），需确保该字典存在3；不会改写其他接口共用的字典标签。
+五项风控配置已放入“应用包管理 → 应用管理”的现有编辑表单，沿用现有样式与apps权限；后端允许编辑字段及XML读写已对齐。2026-11-10 补正应用开关选项：应用管理按客户端协议固定提供 0 全关、1 全开、2 归因、3 调试，新建/编辑及列表翻译使用同一组定义，不再因宿主 app_status 字典缺项而遗漏归因或调试。其他业务页面继续使用各自字典，未改写共享字典数据；后端数字编码及风控处理保持不变。
 
 四类全局规则由对应pkg_app_asn_blacklist、pkg_app_device_brand_blacklist、pkg_app_cpu_abi_blacklist、pkg_app_device_name_blacklist读取enabled=1记录，按priority/ID倒序。必须另行导入源规则数据，否则空表即无规则。此次迁移的是四段客户端接口及运行依赖，未新增源全局风控CRUD页面、ASN查询外部服务或自动拉黑管理按钮；内部查询/解除方法保留。上述后台工具不属于本次已迁移页面。
 

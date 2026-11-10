@@ -1,3 +1,4 @@
+import { countryCode } from './package-regions.mjs';
 export function parseTags(value) {
   const tags = typeof value === 'string' ? JSON.parse(value || '[]') : value || [];
   if (!Array.isArray(tags) || tags.some(v => typeof v !== 'string')) throw new Error('标签必须是文字数组');
@@ -17,7 +18,7 @@ export function weightedScore(value) {
   const total = Object.values(scores).reduce((a,b) => a+b,0);
   return total ? ([1,2,3,4,5].reduce((sum,i) => sum + scores[`score${i}`]*i,0)/total).toFixed(1) : '0';
 }
-export const toAreas = value => (Array.isArray(value) ? value : String(value || '').split(',')).map(v => v.trim()).filter(Boolean);
+export const toAreas = value => [...new Set((Array.isArray(value) ? value : String(value || '').split(',')).map(countryCode).filter(Boolean))];
 export const fromAreas = value => toAreas(value).join(',');
 export function legacyImageUrl(value, backend) {
   if (!value || /^(https?:)?\/\//.test(value)) return value;

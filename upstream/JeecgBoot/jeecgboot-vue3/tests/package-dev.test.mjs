@@ -1,6 +1,24 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as dev from '../src/views/packagemanagement/package-dev.mjs';
+
+test('actual application status options retain attribution and debug without a complete host dictionary',async()=>{
+ const fs=await import('node:fs');
+ const ts=await import('typescript');
+ const page=fs.readFileSync(new URL('../src/views/packagemanagement/components/PackagePage.vue',import.meta.url),'utf8');
+ const source=page.match(/function optionsFor\(field:[\s\S]*?\n\}/)[0];
+ const js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText;
+ const select=(domain,dicts)=>new Function('definition','dicts','parentApps','APP_STATUS_OPTIONS',js+';return optionsFor;')({domain},dicts,{value:[]},dev.APP_STATUS_OPTIONS);
+ const field={key:'status',type:'dict',dict:'app_status'};
+ for(const dicts of [{},{app_status:[{value:0,label:'关'},{value:1,label:'开'}]}]){
+  const options=select('apps',dicts)(field);
+  assert.deepEqual(options.map(({value,label})=>({value,label})),[{value:0,label:'全关'},{value:1,label:'全开'},{value:2,label:'归因'},{value:3,label:'调试'}]);
+  for(const status of [2,3])assert.deepEqual(dev.appEditPayload({status},['package:apps:edit'],true,{status:0}),{status});
+ }
+ assert.deepEqual(select('store',{})(field).map(o=>o.value),[0,1,2]);
+ const other=[{value:9,label:'自定义状态'}];
+ assert.equal(select('statistics',{app_status:other})(field),other);
+});
 test('field permissions preserve module fallback and restrict explicitly granted fields',()=>{
  const access=['package:apps:edit','package:apps:query'];
  assert.equal(dev.canAppField(access,'edit','url'),true);

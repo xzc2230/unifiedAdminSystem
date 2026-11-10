@@ -1,13 +1,12 @@
 package org.jeecg.modules.packagemanagement.application.apps.risk.app2;
 
+import org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions;
 import org.jeecg.modules.packagemanagement.domain.app.AppManager;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +29,6 @@ public class App2RiskService {
     private static final String TIP_RISK_MODE_OFF = "风控全关";
     private static final String TIP_US = "禁用美国及google、apple、amazon等运营商";
     private static final String TIP_AREA = "不在白名单";
-    private static final String COUNTRY_US = "美国";
 
     @Autowired
     private App2InboundParser inboundParser;
@@ -91,9 +89,9 @@ public class App2RiskService {
      * 校验 IP 地区：禁美（whetherUs）、地区白名单（whetherRestrict）。
      */
     private App2RiskResult checkGeo(AppManager app, Map<String, String> cityMap) {
-        String country = cityMap.get("country");
+        String country = PackageCountryRegions.geoCode(cityMap);
         if (app.getWhetherUs() != null && app.getWhetherUs() == 1) {
-            if ("true".equals(cityMap.get("status")) || COUNTRY_US.equals(country)) {
+            if ("true".equals(cityMap.get("status")) || "us".equals(country)) {
                 return App2RiskResult.reject(TIP_US);
             }
         }
@@ -102,12 +100,7 @@ public class App2RiskService {
             if (StringUtils.isBlank(areas)) {
                 return App2RiskResult.reject(TIP_AREA);
             }
-            if (areas.contains(",")) {
-                List<String> list = Arrays.asList(areas.split(","));
-                if (!list.contains(country)) {
-                    return App2RiskResult.reject(TIP_AREA);
-                }
-            } else if (!areas.equals(country)) {
+            if (!PackageCountryRegions.matches(areas, country)) {
                 return App2RiskResult.reject(TIP_AREA);
             }
         }

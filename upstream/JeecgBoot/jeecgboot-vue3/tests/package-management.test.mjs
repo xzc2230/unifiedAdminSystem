@@ -19,8 +19,8 @@ test('weighted score preserves source score1 through score5 semantics', () => {
   assert.equal(weightedScore({score2: 1, score3: 2}), '2.7');
 });
 test('region arrays and local review dates round trip', () => {
-  assert.deepEqual(toAreas('US, BR,,CN'), ['US', 'BR', 'CN']);
-  assert.equal(fromAreas(['US', 'BR']), 'US,BR');
+  assert.deepEqual(toAreas('US, BR,,CN'), ['us', 'br', 'cn']);
+  assert.equal(fromAreas(['US', 'BR']), 'us,br');
   assert.equal(localDateTime(new Date(2026, 10, 9, 8, 7, 6)), '2026-11-09 08:07:06');
   assert.equal(localDateTime('2025-01-02 03:04:05'), '2025-01-02 03:04:05');
 });
@@ -188,4 +188,22 @@ test('menu encoding repair restores exactly the canonical80 labels and only upda
     return [Buffer.from(match[2],'hex').toString('utf8'),Buffer.from(match[1],'hex').toString('utf8')];
   }));
   assert.equal(statements.length,80);assert.equal(actual.size,80);assert.deepEqual(actual,canonical);
+});
+
+test('country areas normalize legacy labels and codes without dropping unknown historical values', () => {
+  assert.deepEqual(toAreas('巴西, BR,菲律賓,SG'), ['br','ph','sg']);
+  assert.equal(fromAreas(['中国','PH']), 'cn,ph');
+  assert.equal(fromAreas([]), '');
+  assert.deepEqual(toAreas('未识别地区'), ['未识别地区']);
+});
+
+test('49 whitelist countries have unique codes, Chinese labels and identical server mappings', async () => {
+  const {APP_AREA_OPTIONS,countryLabel} = await import('../src/views/packagemanagement/package-regions.mjs');
+  assert.equal(APP_AREA_OPTIONS.length,49);
+  assert.equal(new Set(APP_AREA_OPTIONS.map(row=>row.value)).size,49);
+  assert.ok(APP_AREA_OPTIONS.every(row=>/^[a-z]{2}$/.test(row.value) && /[\u4e00-\u9fff]/.test(row.label)));
+  assert.equal(countryLabel('BR'),'巴西');assert.equal(countryLabel('阿联酌'),'阿联酋');
+  const client = fs.readFileSync(new URL('../src/views/packagemanagement/package-country-regions.json', import.meta.url),'utf8');
+  const server = fs.readFileSync(new URL('../../jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/package-country-regions.json', import.meta.url),'utf8');
+  assert.deepEqual(JSON.parse(client),JSON.parse(server));
 });

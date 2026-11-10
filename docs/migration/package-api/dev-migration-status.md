@@ -74,3 +74,15 @@
 该候选 JAR 已实际在 `127.0.0.1:18083/jeecg-boot` 启动，Quartz 显式关闭，Spring 完整装配成功。真实 HTTP 检查五次通过：公开 `/openapi/manager/list` 缺失/未知 Token 分别返回 HTTP401 及源 `code/msg` 信封；包统计、Token 管理、全局风控三个管理入口无 JEECG 登录令牌时均被宿主以 HTTP401 拒绝。日志 `.runtime/package-dev-host.stdout.log`、`.runtime/package-dev-host-http-smoke.json`。这项启动检查验证宿主过滤器与模块边界；授权后的 CRUD/跨归属/异常审计由模块 MockMvc 和 MySQL 测试覆盖，未冒充完整浏览器或生产代理联调。
 
 以上验证不代表生产域名代理、真实邮件、真实商店和生产历史数据已联调。
+
+## 应用开关选项补正（2026-11-10）
+
+用户反馈应用新建/编辑缺少“归因”和“调试”。后端已有 `App2RiskConstants` 的 0/1/2/3 四种状态，前端却完全依赖未提供种子数据的宿主 `app_status` 字典。原前端验收只检查字段存在和 SFC 编译，未验证字典缺项时仍能选全业务模式。
+
+修复仅作用于应用管理：`package-dev.mjs` 定义四种协议状态，`PackagePage.optionsFor` 在应用 status 字段返回完整选项，新建/编辑单选框和列表翻译共用；保存继续传数值 2/3，其他业务字典与后端风控处理不变。调试模式仍按后端原规则跳过 InstallReferrer，保留地区及设备风控，不是跳过全部校验。
+
+新增回归先复现失败：宿主字典缺失时实际 optionsFor 返回空数组；补正后验证空字典、仅有开/关的旧字典、归因/调试数字提交、商店和统计页面原选项。前端完整 23 项测试通过；RED/GREEN 记录 `.runtime/package-status-options-red.log`、`.runtime/package-status-options-green.log`。线上需发布本次前端构建才能生效；没有执行生产字典 SQL 或部署操作。
+
+### 2026-11-10 白名单地区国家码统一
+
+源 dev 地区联动配置确认 75 个名称/别名对应 49 个国家或地区；原数据库的 `app_area` 记录未随源码提交，不能据此宣称覆盖线上额外自定义项。新增 `013-country-code-regions.sql` 补齐字典并备份、规范应用/统计地区数据；前端中文展示、存储小写国家码，旧协议及四段路径按国家码匹配，兼容中文历史值与备注地区键。完整清单、部署步骤和验证见 [country-code-regions.md](country-code-regions.md)。本次只应用到本地测试数据库，线上仍需执行脚本并刷新字典缓存。

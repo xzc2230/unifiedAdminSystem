@@ -71,7 +71,7 @@
 import { computed, onMounted, reactive, ref } from 'vue';
 import { usePermissionStore } from '/@/store/modules/permission';
 import { autoBlacklist,removeAutoBlacklist } from '/@/api/packagemanagement/dev';
-import { EDIT_FIELDS,canAppField,appEditPayload,appFieldRequired,prettyJson } from '../package-dev.mjs';
+import { APP_STATUS_OPTIONS,EDIT_FIELDS,canAppField,appEditPayload,appFieldRequired,prettyJson } from '../package-dev.mjs';
 import { message, Modal } from 'ant-design-vue';
 import { copyTextToClipboard } from '/@/hooks/web/useCopyToClipboard';
 import { BasicTable,useTable } from '/@/components/Table';
@@ -80,6 +80,7 @@ import { useGlobSetting } from '/@/hooks/setting';
 import { usePermission } from '/@/hooks/web/usePermission';
 import { packageApi,allPwa,transferTargets,transferApps,statisticsTotal,cleanLogs } from '/@/api/packagemanagement';
 import type { PackageDefinition,PackageField as PackageFieldSpec,PackageId,PackageOption } from '/@/types/packagemanagement';
+import { APP_AREA_OPTIONS, countryLabel, countryCode } from '../package-regions.mjs';
 import { fromAreas,toAreas,legacyImageUrl } from '../package-conversions.mjs';
 import PackageField from './PackageField.vue';
 import PwaEditor from './PwaEditor.vue';
@@ -108,12 +109,18 @@ const fieldsByKey=Object.fromEntries(definition.fields.map(f=>[f.key,f]));
 const editableFields=computed(()=>definition.fields.filter(f=>(!f.readonly || definition.domain === 'notifications' && ['appName','appIcon','appHost'].includes(f.key)) && (definition.domain !== 'apps' || editId.value == null || canAppField(appPermissions.value,'edit',f.key))).map(f=>definition.domain==='apps'?{...f,required:appFieldRequired(f,editId.value!=null,canAppField(appPermissions.value,'query',f.key)||dirtyAppFields.value.has(f.key))}:f));
 const detailFields=computed(()=>[...definition.fields.filter(f=>!['startReqTime','endReqTime'].includes(f.key)),...Object.keys(detail.value).filter(k=>!fieldsByKey[k]).map(key=>({key,label:({id:'编号',eventId:'事件编号',reviewsId:'评论编号',tags:'标签',score:'评分分布',reviewsRecords:'评论集合',appCode:'推广码',appSub:'域名后缀',appType:'应用类型',userId:'归属用户',userName:'归属用户名称',createTime:'创建时间',updateTime:'更新时间',updateDate:'更新时间'} as Record<string,string>)[key] || key}))].filter(f=>definition.domain!=='apps'||canAppField(appPermissions.value,'query',f.key)));
 function optionsFor(field:PackageFieldSpec):PackageOption[] {
+  if(field.dict==='app_area') {
+    const rows=dicts.app_area?.length?dicts.app_area:APP_AREA_OPTIONS;
+    return [...new Map(rows.map(row=>[countryCode(row.value),{...row,value:countryCode(row.value),label:APP_AREA_OPTIONS.find(option=>option.value===countryCode(row.value))?.label || row.label}])).values()];
+  }
+  if(field.key==='status' && definition.domain==='apps') return [...APP_STATUS_OPTIONS];
   if(field.key==='status' && definition.domain==='store') return [{value:0,label:'待上架'},{value:1,label:'已上架'},{value:2,label:'已下架'}];
   if(field.type==='parent') return parentApps.value.map(v=>({value:v.id,label:`${v.appName} (${v.appHost || v.id})`}));
   return dicts[field.dict || ''] || [];
 }
 function displayValue(key:string,value:any) {
   const field=fieldsByKey[key];
+  if(field?.dict==='app_area') return toAreas(value).map(code=>optionsFor(field).find(option=>String(option.value)===code)?.label || countryLabel(code)).join(', ');
   if(field?.dict || definition.domain==='store' && key==='status') return String(value ?? '').split(',').map(v=>optionsFor(field).find(o=>String(o.value)===v)?.label || v).join(', ');
   return value;
 }
@@ -153,6 +160,7 @@ async function openEditor(record?:Record<string,any>) {
   const defaults=definition.domain==='apps' && record?{}:{status:0,whetherRestrict:0,whetherUs:0,whetherUse:0,shunt:0,downloadCount:0,reviews:0,appEvent:'0',reviewsRecords:[],tags:'[]',score:'{}'};
   Object.assign(model,defaults,data);
   if(!Array.isArray(model.reviewsRecords)) model.reviewsRecords=[];
+  if(definition.domain==='statistics' && model.subAreas!=null) model.subAreas=countryCode(model.subAreas);
   if(definition.domain==='apps') {model.areas=toAreas(model.areas);initialAppModel.value=JSON.parse(JSON.stringify(model));dirtyAppFields.value=new Set();}
   editId.value=record?.[idKey];
   if(definition.fields.some(f=>f.type==='parent')) {

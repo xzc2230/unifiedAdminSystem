@@ -1,5 +1,6 @@
 package org.jeecg.modules.packagemanagement.application.statistics.impl;
 
+import org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -74,6 +75,7 @@ public class AppStatisticsServiceImpl implements IAppStatisticsService {
     @Override
     @Transactional
     public int insertAppStatistics(AppStatistics appStatistics) {
+        appStatistics.setSubAreas(PackageCountryRegions.normalizeAreas(appStatistics.getSubAreas()));
         AppStatistics appStatistics1 = appStatisticsMapper.selectAppStatisticsByPackageName(appStatistics.getPackageCode());
         if (appStatistics1 != null) {
             return -1;
@@ -103,6 +105,7 @@ public class AppStatisticsServiceImpl implements IAppStatisticsService {
      */
     @Override
     public int updateAppStatistics(AppStatistics appStatistics) {
+        appStatistics.setSubAreas(PackageCountryRegions.normalizeAreas(appStatistics.getSubAreas()));
         appStatistics.setUpdateTime(DateUtils.getNowDate());
         return appStatisticsMapper.updateAppStatistics(appStatistics);
     }
@@ -163,10 +166,10 @@ public class AppStatisticsServiceImpl implements IAppStatisticsService {
                 System.out.println(appStatistics.toString());
                 map.put("status", appStatistics.getStatus());
                 map.put("packageCode", appStatistics.getPackageCode());
-                String cityByIp = geo.getCityByIp(geo.getIpAddress(request));
+                String cityByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(geo.getIpAddress(request)));
                 if (appStatistics.getStatus() != 0) {
                     if (appStatistics.getSubAreas() != null && StringUtils.isNotEmpty(appStatistics.getSubAreas())) {
-                        if (Objects.equals(appStatistics.getSubAreas(), cityByIp)) {
+                        if (PackageCountryRegions.matches(appStatistics.getSubAreas(), cityByIp)) {
                             if (StringUtils.isNotEmpty(appStatistics.getSubUrl())) {
                                 if (appStatistics.getShunt() == 1) {
                                     int i = new Random().nextInt(2);

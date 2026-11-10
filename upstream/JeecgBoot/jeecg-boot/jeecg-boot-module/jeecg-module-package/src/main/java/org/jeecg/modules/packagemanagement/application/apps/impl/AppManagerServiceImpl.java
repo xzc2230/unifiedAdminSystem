@@ -72,6 +72,7 @@ public class AppManagerServiceImpl implements IAppManagerService {
     @Transactional
     public int insertAppManager(AppManager appManager) {
 
+        appManager.setAreas(org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions.normalizeAreas(appManager.getAreas()));
         if(appManager.getPackageCode()!=null)appManager.setPackageCode(appManager.getPackageCode().trim());
         AppManager appManager1 = appManagerMapper.selectAppManagerByPackageName(appManager.getPackageCode());
         if (appManager1 != null) {
@@ -100,6 +101,7 @@ public class AppManagerServiceImpl implements IAppManagerService {
     @Override
     public int updateAppManager(AppManager appManager) {
 
+        appManager.setAreas(org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions.normalizeAreas(appManager.getAreas()));
         appManager.setUpdateDate(DateUtils.getNowDate());
         StoreStatus storeStatus = storeStatusMapper.selectStoreStatusByPackageName(appManager.getPackageCode());
         if (storeStatus == null) {

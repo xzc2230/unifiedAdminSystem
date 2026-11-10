@@ -2,6 +2,7 @@ package org.jeecg.modules.packagemanagement.application.apps.impl;
 
 
 import cn.hutool.crypto.digest.DigestUtil;
+import org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import org.jeecg.modules.packagemanagement.application.legacy.DateUtils;
@@ -46,7 +47,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Object api(HttpServletRequest request) {
         String ipAddress = geo.getIpAddress(request);
-        String cityByIp = geo.getCityByIp(ipAddress);
+        String cityByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
         appLog.setReqIp("(" + cityByIp + ")" + ipAddress);
@@ -112,7 +113,7 @@ public class ClientServiceImpl implements ClientService {
         }
 
         if (app.getWhetherUs() == 1) {
-            if ("美国".equals(cityByIp)) {
+            if ("us".equals(PackageCountryRegions.code(cityByIp))) {
                 try {
                     appLog.setResultMsg("禁用美国及google、apple、amazon等运营商：" + JSONObject.toJSONString(resultMap));
                 } catch (Exception e) {
@@ -125,11 +126,11 @@ public class ClientServiceImpl implements ClientService {
             }
         }
         if (app.getWhetherRestrict() == 1) {
-            String areas = app.getAreas();
+            String areas = Objects.toString(app.getAreas(), "");
             if (areas.contains(",")) {
                 String[] split = areas.split(",");
                 List<String> list = Arrays.asList(split);
-                if (!list.contains(cityByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityByIp)) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -142,7 +143,7 @@ public class ClientServiceImpl implements ClientService {
                     return resultMap;
                 }
             } else {
-                if (!areas.equals(cityByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityByIp)) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -191,7 +192,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Object login(HttpServletRequest request) {
         String ipAddress = geo.getIpAddress(request);
-        String cityByIp = geo.getCityByIp(ipAddress);
+        String cityByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
         appLog.setReqIp("(" + cityByIp + ")" + ipAddress);
@@ -240,7 +241,7 @@ public class ClientServiceImpl implements ClientService {
             return map;
         }
         if (app.getWhetherUs() == 1) {
-            if ("美国".equals(cityByIp)) {
+            if ("us".equals(PackageCountryRegions.code(cityByIp))) {
                 try {
                     appLog.setResultMsg("禁用美国及google、apple、amazon等运营商：" + JSONObject.toJSONString(map));
                 } catch (Exception e) {
@@ -252,11 +253,11 @@ public class ClientServiceImpl implements ClientService {
             }
         }
         if (app.getWhetherRestrict() == 1) {
-            String areas = app.getAreas();
+            String areas = Objects.toString(app.getAreas(), "");
             if (areas.contains(",")) {
                 String[] split = areas.split(",");
                 List<String> list = Arrays.asList(split);
-                if (!list.contains(cityByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityByIp)) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -269,7 +270,7 @@ public class ClientServiceImpl implements ClientService {
                     return map;
                 }
             } else {
-                if (!areas.equals(cityByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityByIp)) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -322,7 +323,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void redirected(HttpServletRequest request, HttpServletResponse response) {
         String ipAddress = geo.getIpAddress(request);
-        String cityByIp = geo.getCityByIp(ipAddress);
+        String cityByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
         appLog.setReqIp("(" + cityByIp + ")" + ipAddress);
@@ -372,7 +373,7 @@ public class ClientServiceImpl implements ClientService {
 
 
             if (app.getWhetherUs() == 1) {
-                if ("美国".equals(cityByIp)) {
+                if ("us".equals(PackageCountryRegions.code(cityByIp))) {
                     String mark = app.getMark();
                     if (StringUtils.isBlank(mark)) {
                         response.sendRedirect("about:blank");
@@ -392,11 +393,11 @@ public class ClientServiceImpl implements ClientService {
                 }
             }
             if (app.getWhetherRestrict() == 1) {
-                String areas = app.getAreas();
+                String areas = Objects.toString(app.getAreas(), "");
                 if (areas.contains(",")) {
                     String[] split = areas.split(",");
                     List<String> list = Arrays.asList(split);
-                    if (!list.contains(cityByIp)) {
+                    if (!PackageCountryRegions.matches(areas, cityByIp)) {
                         String mark = app.getMark();
                         if (StringUtils.isBlank(mark)) {
                             response.sendRedirect("about:blank");
@@ -424,7 +425,7 @@ public class ClientServiceImpl implements ClientService {
                         return;
                     }
                 } else {
-                    if (!areas.equals(cityByIp)) {
+                    if (!PackageCountryRegions.matches(areas, cityByIp)) {
                         String mark = app.getMark();
                         if (StringUtils.isBlank(mark)) {
                             response.sendRedirect("about:blank");
@@ -504,7 +505,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Object getBanner(HttpServletRequest request) {
         String ipAddress = geo.getIpAddress(request);
-        String cityByIp = geo.getCityByIp(ipAddress);
+        String cityByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
         appLog.setReqIp("(" + cityByIp + ")" + ipAddress);
@@ -552,7 +553,7 @@ public class ClientServiceImpl implements ClientService {
         }
 
         if (app.getWhetherUs() == 1) {
-            if ("美国".equals(cityByIp)) {
+            if ("us".equals(PackageCountryRegions.code(cityByIp))) {
                 String mark = app.getMark();
                 if (StringUtils.isBlank(mark)) {
                     try {
@@ -578,11 +579,11 @@ public class ClientServiceImpl implements ClientService {
             }
         }
         if (app.getWhetherRestrict() == 1) {
-            String areas = app.getAreas();
+            String areas = Objects.toString(app.getAreas(), "");
             if (areas.contains(",")) {
                 String[] split = areas.split(",");
                 List<String> list = Arrays.asList(split);
-                if (!list.contains(cityByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityByIp)) {
                     String mark = app.getMark();
                     if (StringUtils.isBlank(mark)) {
                         stringBuilder.append("不在白名单");
@@ -611,7 +612,7 @@ public class ClientServiceImpl implements ClientService {
                     }
                 }
             } else {
-                if (!areas.equals(cityByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityByIp)) {
                     String mark = app.getMark();
                     if (StringUtils.isBlank(mark)) {
                         stringBuilder.append("不在白名单");
@@ -705,7 +706,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Object checkUrl(HttpServletRequest request) {
         String ipAddress = geo.getIpAddress(request);
-        String cityNameByIp = geo.getCityByIp(ipAddress);
+        String cityNameByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
         appLog.setReqIp("(" + cityNameByIp + ")" + ipAddress);
@@ -748,7 +749,7 @@ public class ClientServiceImpl implements ClientService {
 
 
         if (app.getWhetherUs() == 1) {
-            if ("美国".equals(cityNameByIp)) {
+            if ("us".equals(PackageCountryRegions.code(cityNameByIp))) {
                 try {
                     appLog.setResultMsg("禁用美国及google、apple、amazon等运营商：" + JSONObject.toJSONString(map));
                 } catch (Exception e) {
@@ -763,11 +764,11 @@ public class ClientServiceImpl implements ClientService {
         }
 
         if (app.getWhetherRestrict() == 1) {
-            String areas = app.getAreas();
+            String areas = Objects.toString(app.getAreas(), "");
             if (areas.contains(",")) {
                 String[] split = areas.split(",");
                 List<String> list = Arrays.asList(split);
-                if (!list.contains(cityNameByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityNameByIp)) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -780,7 +781,7 @@ public class ClientServiceImpl implements ClientService {
                     return map;
                 }
             } else {
-                if (!areas.equals(cityNameByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityNameByIp)) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -853,7 +854,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Object dynamicAdj(HttpServletRequest request) {
         String ipAddress = geo.getIpAddress(request);
-        String cityNameByIp = geo.getCityByIp(ipAddress);
+        String cityNameByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
         appLog.setReqIp("(" + cityNameByIp + ")" + ipAddress);
@@ -895,7 +896,7 @@ public class ClientServiceImpl implements ClientService {
 
 
         if (app.getWhetherUs() == 1) {
-            if ("美国".equals(cityNameByIp)) {
+            if ("us".equals(PackageCountryRegions.code(cityNameByIp))) {
                 try {
                     appLog.setResultMsg("禁用美国及google、apple、amazon等运营商：" + JSONObject.toJSONString(map));
                 } catch (Exception e) {
@@ -909,11 +910,11 @@ public class ClientServiceImpl implements ClientService {
         }
 
         if (app.getWhetherRestrict() == 1) {
-            String areas = app.getAreas();
+            String areas = Objects.toString(app.getAreas(), "");
             if (areas.contains(",")) {
                 String[] split = areas.split(",");
                 List<String> list = Arrays.asList(split);
-                if (!list.contains(cityNameByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityNameByIp)) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -926,7 +927,7 @@ public class ClientServiceImpl implements ClientService {
                     return map;
                 }
             } else {
-                if (!areas.equals(cityNameByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityNameByIp)) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -983,7 +984,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Object getUserInfo(HttpServletRequest request) {
         String ipAddress = geo.getIpAddress(request);
-        String cityNameByIp = geo.getCityByIp(ipAddress);
+        String cityNameByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
         appLog.setReqIp("(" + cityNameByIp + ")" + ipAddress);
@@ -1023,7 +1024,7 @@ public class ClientServiceImpl implements ClientService {
             return map;
         }
         if (app.getWhetherUs() == 1) {
-            if ("美国".equals(cityNameByIp)) {
+            if ("us".equals(PackageCountryRegions.code(cityNameByIp))) {
                 try {
                     appLog.setResultMsg("禁用美国及google、apple、amazon等运营商：" + JSONObject.toJSONString(map));
                 } catch (Exception e) {
@@ -1035,11 +1036,11 @@ public class ClientServiceImpl implements ClientService {
             }
         }
         if (app.getWhetherRestrict() == 1) {
-            String areas = app.getAreas();
+            String areas = Objects.toString(app.getAreas(), "");
             if (areas.contains(",")) {
                 String[] split = areas.split(",");
                 List<String> list = Arrays.asList(split);
-                if (!list.contains(cityNameByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityNameByIp)) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -1052,7 +1053,7 @@ public class ClientServiceImpl implements ClientService {
                     return map;
                 }
             } else {
-                if (!areas.equals(cityNameByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityNameByIp)) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -1093,7 +1094,7 @@ public class ClientServiceImpl implements ClientService {
             } else {
                 map.put("imgs", builder.toString());
                 map.put("isApp", app.getStatus());
-                map.put("user", app.getAreas());
+                map.put("user", PackageCountryRegions.normalizeAreas(app.getAreas()));
                 map.put("user_info", app.getMark());
                 try {
                     appLog.setResultMsg(JSONObject.toJSONString(map));
@@ -1162,7 +1163,7 @@ public class ClientServiceImpl implements ClientService {
             appLog.setErrorMsg(stringBuilder.toString());
         }
         String ipAddress = geo.getIpAddress(request);
-        String cityNameByIp = geo.getCityByIp(ipA.trim().isEmpty() ? ipAddress : ipA);
+        String cityNameByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipA.trim().isEmpty() ? ipAddress : ipA));
         appLog.setReqIp("(" + cityNameByIp + ")" + ipAddress);
 
         AppManager app = appRepository.selectAppManagerByPackageName(packageName);
@@ -1182,7 +1183,7 @@ public class ClientServiceImpl implements ClientService {
 
 
         if (app.getWhetherUs() == 1) {
-            if ("美国".equals(cityNameByIp)) {
+            if ("us".equals(PackageCountryRegions.code(cityNameByIp))) {
                 try {
                     appLog.setResultMsg("禁用美国及google、apple、amazon等运营商：");
                 } catch (Exception e) {
@@ -1195,11 +1196,11 @@ public class ClientServiceImpl implements ClientService {
         }
 
         if (app.getWhetherRestrict() == 1) {
-            String areas = app.getAreas();
+            String areas = Objects.toString(app.getAreas(), "");
             if (areas.contains(",")) {
                 String[] split = areas.split(",");
                 List<String> list = Arrays.asList(split);
-                if (!list.contains(cityNameByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityNameByIp)) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -1212,7 +1213,7 @@ public class ClientServiceImpl implements ClientService {
                     return null;
                 }
             } else {
-                if (!areas.equals(cityNameByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityNameByIp)) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -1232,9 +1233,7 @@ public class ClientServiceImpl implements ClientService {
             if (!cityNameByIp.isEmpty()) {
                 try {
                     JSONObject markObject = JSON.parseObject(mark);
-                    if (markObject.containsKey(cityNameByIp)) {
-                        url = markObject.getString(cityNameByIp);
-                    }
+                    url = PackageCountryRegions.regionalLink(markObject, cityNameByIp, url);
                 } catch (Exception e) {
                     stringBuilder.append(e.getMessage());
                     appLog.setErrorMsg(stringBuilder.toString());
@@ -1282,7 +1281,7 @@ public class ClientServiceImpl implements ClientService {
         String packageName = request.getParameter("index");
         appLog.setPackageName(packageName);
         String ipAddress = geo.getIpAddress(request);
-        String cityNameByIp = geo.getCityByIp(ipAddress);
+        String cityNameByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
         appLog.setReqIp("(" + cityNameByIp + ")" + ipAddress);
         AppManager app = appRepository.selectAppManagerByPackageName(packageName);
         if (app == null || app.getStatus() == 0) {
@@ -1298,7 +1297,7 @@ public class ClientServiceImpl implements ClientService {
             return null;
         }
         if (app.getWhetherUs() == 1) {
-            if ("美国".equals(cityNameByIp)) {
+            if ("us".equals(PackageCountryRegions.code(cityNameByIp))) {
                 try {
                     appLog.setResultMsg("禁用美国及google、apple、amazon等运营商");
                 } catch (Exception e) {
@@ -1310,11 +1309,11 @@ public class ClientServiceImpl implements ClientService {
             }
         }
         if (app.getWhetherRestrict() == 1) {
-            String areas = app.getAreas();
+            String areas = Objects.toString(app.getAreas(), "");
             if (areas.contains(",")) {
                 String[] split = areas.split(",");
                 List<String> list = Arrays.asList(split);
-                if (!list.contains(cityNameByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityNameByIp)) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -1327,7 +1326,7 @@ public class ClientServiceImpl implements ClientService {
                     return null;
                 }
             } else {
-                if (!areas.equals(cityNameByIp)) {
+                if (!PackageCountryRegions.matches(areas, cityNameByIp)) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -1348,9 +1347,7 @@ public class ClientServiceImpl implements ClientService {
             if (!cityNameByIp.isEmpty()) {
                 try {
                     JSONObject markObject = JSON.parseObject(mark);
-                    if (markObject.containsKey(cityNameByIp)) {
-                        url = markObject.getString(cityNameByIp);
-                    }
+                    url = PackageCountryRegions.regionalLink(markObject, cityNameByIp, url);
                 } catch (Exception e) {
                     stringBuilder.append(e.getMessage());
                     appLog.setErrorMsg(stringBuilder.toString());
@@ -1414,7 +1411,7 @@ public class ClientServiceImpl implements ClientService {
             return null;
         }
         if (app.getWhetherUs() == 1) {
-            if (cityNameByIp.get("status").equals("true") || "美国".equals(cityNameByIp.get("country"))) {
+            if (cityNameByIp.get("status").equals("true") || "us".equals(PackageCountryRegions.geoCode(cityNameByIp))) {
                 try {
                     appLog.setResultMsg("禁用美国及google、apple、amazon等运营商");
                 } catch (Exception e) {
@@ -1426,11 +1423,11 @@ public class ClientServiceImpl implements ClientService {
             }
         }
         if (app.getWhetherRestrict() == 1) {
-            String areas = app.getAreas();
+            String areas = Objects.toString(app.getAreas(), "");
             if (areas.contains(",")) {
                 String[] split = areas.split(",");
                 List<String> list = Arrays.asList(split);
-                if (!list.contains(cityNameByIp.get("country"))) {
+                if (!PackageCountryRegions.matches(areas, PackageCountryRegions.geoCode(cityNameByIp))) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -1443,7 +1440,7 @@ public class ClientServiceImpl implements ClientService {
                     return null;
                 }
             } else {
-                if (!areas.equals(cityNameByIp.get("country"))) {
+                if (!PackageCountryRegions.matches(areas, PackageCountryRegions.geoCode(cityNameByIp))) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -1522,7 +1519,7 @@ public class ClientServiceImpl implements ClientService {
             return null;
         }
         if (app.getWhetherUs() == 1) {
-            if (cityNameByIp.get("status").equals("true") || "美国".equals(cityNameByIp.get("country"))) {
+            if (cityNameByIp.get("status").equals("true") || "us".equals(PackageCountryRegions.geoCode(cityNameByIp))) {
                 try {
                     appLog.setResultMsg("禁用美国及google、apple、amazon等运营商");
                 } catch (Exception e) {
@@ -1534,11 +1531,11 @@ public class ClientServiceImpl implements ClientService {
             }
         }
         if (app.getWhetherRestrict() == 1) {
-            String areas = app.getAreas();
+            String areas = Objects.toString(app.getAreas(), "");
             if (areas.contains(",")) {
                 String[] split = areas.split(",");
                 List<String> list = Arrays.asList(split);
-                if (!list.contains(cityNameByIp.get("country"))) {
+                if (!PackageCountryRegions.matches(areas, PackageCountryRegions.geoCode(cityNameByIp))) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
@@ -1551,7 +1548,7 @@ public class ClientServiceImpl implements ClientService {
                     return null;
                 }
             } else {
-                if (!areas.equals(cityNameByIp.get("country"))) {
+                if (!PackageCountryRegions.matches(areas, PackageCountryRegions.geoCode(cityNameByIp))) {
                     stringBuilder.append("不在白名单");
                     appLog.setErrorMsg(stringBuilder.toString());
                     try {
