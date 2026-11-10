@@ -203,7 +203,11 @@
   const emit = defineEmits<{ (event: 'update-field', field: PackageField, value: any): void }>();
   const update = (field: PackageField, value: any) => emit('update-field', field, value);
   const whitelistOn = computed(() => Number(props.model.whetherRestrict) === 1);
-  const rulesFor = (field: PackageField) => (field.required ? [{ required: true, message: `请填写${field.label}` }] : []);
+  const rulesFor = (field: PackageField) => {
+    const required =
+      field.required || (field.key === 'appleAppId' && props.model.platform === 'ios');
+    return required ? [{ required: true, message: `请填写${field.label}` }] : [];
+  };
   const platformField = computed(() => props.fields.find((field) => field.key === 'platform'));
   const appleAppIdField = computed(() => props.fields.find((field) => field.key === 'appleAppId'));
   const storeRegionField = computed(() => props.fields.find((field) => field.key === 'storeRegion'));
