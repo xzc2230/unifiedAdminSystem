@@ -91,13 +91,16 @@ class ClickHouseAppLogAdapterTest {
             assertTrue(select.body.contains("{name:String}"));
             assertTrue(select.body.contains("{start:String}"));
             assertTrue(select.body.contains("toString(req_time, 'Asia/Shanghai')"));
+            assertTrue(select.body.contains("req_time < parseDateTime64BestEffort({end:String}"));
             assertFalse(select.body.contains("api_call"));
             assertFalse(select.body.contains("x' OR 1=1"));
             assertFalse(select.body.contains("com' OR 1=1"));
             String query = decode(select.uri);
             assertTrue(query.contains("param_limit=10"));
             assertTrue(query.contains("param_offset=10"));
-            assertTrue(query.contains("2023-11-14 08:00:00"));
+            assertTrue(query.contains("2023-11-14 00:00:00"));
+            assertTrue(query.contains("2023-11-15 00:00:00"));
+            assertFalse(query.contains("08:00:00"));
             assertTrue(query.contains("com.test"));
             assertTrue(query.contains("x\\' OR 1=1") || query.contains("x\\\\' OR 1=1"));
 

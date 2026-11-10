@@ -9,6 +9,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -28,7 +29,6 @@ import org.jeecg.modules.packagemanagement.exception.PackageFailure;
 /** Request logs only. The analytics api_call table is a different store. */
 public final class ClickHouseAppLogAdapter implements AppLogPort {
     private static final ZoneId SHANGHAI = ZoneId.of("Asia/Shanghai");
-    private static final DateTimeFormatter SECONDS = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(SHANGHAI);
     private static final DateTimeFormatter MILLIS = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS").withZone(SHANGHAI);
     private static final String INSERT = "INSERT INTO jeecg_analytics.app_request_log SETTINGS async_insert=1, wait_for_async_insert=1 FORMAT JSONEachRow";
     private static final String COLUMNS = "id, package_name, req_path, req_ip, req_params, req_headers, req_method, result_msg, error_msg, toString(req_time, 'Asia/Shanghai') AS req_time, is_mobile";
@@ -37,7 +37,7 @@ public final class ClickHouseAppLogAdapter implements AppLogPort {
               AND ({name:String} = '' OR positionCaseInsensitiveUTF8(package_name, {name:String}) > 0)
               AND ({bounded:UInt8} = 0 OR (
                     req_time >= parseDateTime64BestEffort({start:String}, 3, 'Asia/Shanghai')
-                AND req_time <= parseDateTime64BestEffort({end:String}, 3, 'Asia/Shanghai')))
+                AND req_time < parseDateTime64BestEffort({end:String}, 3, 'Asia/Shanghai')))
             """;
     private static final int MAX_RESPONSE = 16 * 1024 * 1024;
 
@@ -191,8 +191,8 @@ public final class ClickHouseAppLogAdapter implements AppLogPort {
         append(query, "param_packages", array(packages));
         append(query, "param_name", name);
         append(query, "param_bounded", bounded ? "1" : "0");
-        append(query, "param_start", bounded ? SECONDS.format(filter.getStartReqTime().toInstant()) : "1970-01-01 00:00:00");
-        append(query, "param_end", bounded ? SECONDS.format(filter.getEndReqTime().toInstant()) : "1970-01-01 00:00:00");
+        append(query, "param_start", bounded ? dayStart(filter.getStartReqTime()) : "1970-01-01 00:00:00");
+        append(query, "param_end", bounded ? nextDay(filter.getEndReqTime()) : "1970-01-01 00:00:00");
         if (limit != null) append(query, "param_limit", Integer.toString(limit));
         if (offset != null) append(query, "param_offset", Integer.toString(offset));
         return query.toString();
@@ -236,6 +236,15 @@ public final class ClickHouseAppLogAdapter implements AppLogPort {
         int mobile = log.getIsMobile() == null ? 0 : log.getIsMobile();
         row.put("is_mobile", Math.max(0, Math.min(255, mobile)));
         return JSON.toJSONString(row);
+    }
+
+    private static String dayStart(Date value) {
+        return value.toInstant().atZone(SHANGHAI).toLocalDate().atStartOfDay().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    private static String nextDay(Date value) {
+        LocalDate day = value.toInstant().atZone(SHANGHAI).toLocalDate().plusDays(1);
+        return day.atStartOfDay().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     private static String text(String value) { return value == null ? "" : value; }

@@ -157,16 +157,21 @@ const fileUrl=(value:string)=>legacyImageUrl(value,backend);
 const marketUrl=(pkg:string)=>`https://play.google.com/store/apps/details?id=${encodeURIComponent(pkg)}`;
 const promotionUrl=(row:any)=>`https://${row.appHost}${row.appSub}/?pZoneID=${encodeURIComponent(row.appCode || '')}`;
 const money=(value:any)=>value == null ? '0.00' : Number(value).toFixed(2);
-const schemas=definition.filters.filter(key=>definition.domain!=='apps'||canAppField(appPermissions.value,'query',key)).map(key=>{
+const todayInShanghai=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+const schemas=definition.filters.filter(key=>definition.domain!=='request-logs'||!['startReqTime','endReqTime'].includes(key)).filter(key=>definition.domain!=='apps'||canAppField(appPermissions.value,'query',key)).map(key=>{
   const f=fieldsByKey[key];
   return {field:key,label:f?.label || key,component:f?.type==='date' || f?.type==='datetime'?'DatePicker':key==='status'&&definition.domain==='store'?'Select':'Input',
     componentProps:f?.type==='date'||f?.type==='datetime'?{valueFormat:f.type==='date'?'YYYY-MM-DD':'YYYY-MM-DD HH:mm:ss',showTime:f.type==='datetime'}:key==='status'&&definition.domain==='store'?{options:optionsFor(f)}:{},colProps:{span:6}};
 });
+if(definition.domain==='request-logs'){
+  const today=todayInShanghai();
+  schemas.push({field:'reqDate',label:'日期',component:'RangePicker',defaultValue:[today,today],componentProps:{valueFormat:'YYYY-MM-DD',format:'YYYY-MM-DD',placeholder:['开始日期','结束日期']},colProps:{span:8}});
+}
 const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||key!=='applicationCode'&&canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:['appName','packageCode','packageName','reqTime'].includes(key)?180:150,ellipsis:true}));
 const [registerTable,{reload,clearSelectedRowKeys}]=useTable({
   api:async params=>{const {pageNo,pageSize,...filters}=params;lastFilters.value=filters;if(definition.domain==='apps'){selected.value=[];selectedRows.value=[];clearSelectedRowKeys();}return api.list({...params,...(definition.appType!=null?{appType:definition.appType}:{})});},
   columns,rowKey:idKey,bordered:true,showTableSetting:true,useSearchForm:true,
-  formConfig:{schemas:schemas as any,labelWidth:100,showAdvancedButton:schemas.length>3,autoSubmitOnEnter:true},
+  formConfig:{schemas:schemas as any,labelWidth:100,showAdvancedButton:schemas.length>3,autoSubmitOnEnter:true,...(definition.domain==='request-logs'?{fieldMapToTime:[['reqDate',['startReqTime','endReqTime'],'YYYY-MM-DD 00:00:00']]}:{})},
   actionColumn:{title:'操作',key:'action',dataIndex:'action',width:definition.domain==='apps'?350:190,fixed:'right'},
   rowSelection:{type:'checkbox',onChange:(keys,rows)=>{selected.value=keys;selectedRows.value=rows || [];}},
 });

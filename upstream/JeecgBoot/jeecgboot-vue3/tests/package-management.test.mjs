@@ -118,6 +118,14 @@ test('editable business fields agree with backend allowlists and preserve domain
   assert.equal(definitions.pwa.appType,0);assert.equal(definitions.w2a.appType,1);
   assert.equal(definitions.w2a.domain,'pwa');
   assert.equal(definitions['request-logs'].add,false);
+  assert.equal(definitions['request-logs'].fields.find(f=>f.key==='startReqTime').label,'开始日期');
+  assert.equal(definitions['request-logs'].fields.find(f=>f.key==='endReqTime').label,'结束日期');
+  assert.equal(definitions['request-logs'].fields.find(f=>f.key==='startReqTime').type,'date');
+  const requestLogPage=fs.readFileSync(path.join(root,'src/views/packagemanagement/components/PackagePage.vue'),'utf8');
+  assert.match(requestLogPage,/RangePicker/);
+  assert.match(requestLogPage,/开始日期/);
+  assert.match(requestLogPage,/结束日期/);
+  assert.match(requestLogPage,/Asia\/Shanghai/);
   assert.equal(definitions['app-events'].key,'eventId');assert.equal(definitions.reviews.key,'reviewsId');
   assert.equal(definitions.statistics.fields.find(f=>f.key==='paymentTotal').readonly,true);
   assert.ok(definitions['landing-counts'].filters.includes('appName'));
