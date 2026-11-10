@@ -15,7 +15,8 @@ public class PackageAccess  {
     public PackageActor current() {
         Object principal=SecurityUtils.getSubject().getPrincipal();
         if(!(principal instanceof LoginUser user))throw new PackageFailure(401,"请先登录");
-        boolean administrator=SecurityUtils.getSubject().hasRole("admin")&&repository.activeAdministrator(user.getId());
+        // Live role assignment decides scope. A cached Shiro role must not hide or keep administrator access.
+        boolean administrator=repository.activeAdministrator(user.getId());
         return resolve(user.getId(),TenantContext.getTenant(),administrator);
     }
     public PackageActor resolve(String user,String tenant,boolean administrator) {

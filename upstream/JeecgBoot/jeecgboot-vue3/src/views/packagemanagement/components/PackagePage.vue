@@ -31,9 +31,9 @@
       <template #bodyCell="{column,record,text}">
         <template v-if="column.key === 'action'"><a-space>
           <a v-auth="permission('query')" @click="showDetail(record)">详情</a>
-          <a v-if="definition.edit !== false && (definition.domain === 'apps' ? canEditApp : hasPermission(permission('edit')))" @click="openEditor(record)">编辑</a>
+          <a v-if="definition.edit !== false && (definition.domain === 'apps' ? canEditApp : hasPermission(permission('edit')))" @click="openEditor(record)">{{ definition.domain === 'apps' ? '修改' : '编辑' }}</a>
           <a v-if="canManageRow(record)" v-auth="permission('remove')" @click="confirmRemove([record[idKey]],record)">删除</a>
-          <a v-if="definition.domain === 'apps' && canManageRow(record)" v-auth="permission('transfer')" @click="openSharing(record)">共享管理</a>
+          <a v-if="definition.domain === 'apps' && canManageRow(record)" v-auth="permission('transfer')" @click="openSharing(record)">转移</a>
           <a v-if="definition.domain === 'apps' && canManageRow(record)" v-auth="'package:risk:query'" @click="openAuto(record)">自动拉黑</a>
         </a-space></template>
         <a-image v-else-if="['appIcon','appAdvertising','notifyIcon','headPortraitUrl'].includes(column.dataIndex) && text" :src="fileUrl(String(text).split(',')[0])" :width="40" :height="40" />
@@ -45,7 +45,7 @@
         <template v-else-if="fieldsByKey[column.dataIndex]">{{ displayValue(column.dataIndex,text) }}</template>
       </template>
     </BasicTable>
-    <a-modal v-model:open="editorOpen" :title="definition.domain === 'apps' ? `${editId == null ? '新增' : '编辑'}应用` : `${editId == null ? '新增' : '编辑'}${definition.title}`"
+    <a-modal v-model:open="editorOpen" :title="definition.domain === 'apps' ? `${editId == null ? '新增' : '修改'}应用` : `${editId == null ? '新增' : '编辑'}${definition.title}`"
       :width="definition.domain === 'apps' ? 960 : definition.domain === 'pwa' ? 1000 : 850"
       :wrapClassName="definition.domain === 'apps' ? 'app-editor-modal' : undefined"
       :bodyStyle="definition.domain === 'apps' ? { maxHeight: 'calc(100dvh - 200px)', overflowY: 'auto', padding: '20px 24px', background: 'var(--app-editor-background, #f5f7fa)' } : undefined"
@@ -160,7 +160,7 @@ const schemas=definition.filters.filter(key=>definition.domain!=='apps'||canAppF
   return {field:key,label:f?.label || key,component:f?.type==='date' || f?.type==='datetime'?'DatePicker':key==='status'&&definition.domain==='store'?'Select':'Input',
     componentProps:f?.type==='date'||f?.type==='datetime'?{valueFormat:f.type==='date'?'YYYY-MM-DD':'YYYY-MM-DD HH:mm:ss',showTime:f.type==='datetime'}:key==='status'&&definition.domain==='store'?{options:optionsFor(f)}:{},colProps:{span:6}};
 });
-const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:['appName','packageCode','packageName','reqTime'].includes(key)?180:150,ellipsis:true}));
+const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||key!=='applicationCode'&&canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:['appName','packageCode','packageName','reqTime'].includes(key)?180:150,ellipsis:true}));
 const [registerTable,{reload,clearSelectedRowKeys}]=useTable({
   api:async params=>{const {pageNo,pageSize,...filters}=params;lastFilters.value=filters;if(definition.domain==='apps'){selected.value=[];selectedRows.value=[];clearSelectedRowKeys();}return api.list({...params,...(definition.appType!=null?{appType:definition.appType}:{})});},
   columns,rowKey:idKey,bordered:true,showTableSetting:true,useSearchForm:true,

@@ -142,6 +142,8 @@ test('app editor offers android and ios store fields', () => {
     const code = definitions.apps.fields.find((field) => field.key === 'applicationCode');
     assert.equal(code.label, '默认编码');
     assert.equal(code.readonly, true);
+    assert.equal(definitions.apps.filters.includes('applicationCode'), false);
+    assert.match(fs.readFileSync(path.join(root, 'src/views/packagemanagement/components/PackagePage.vue'), 'utf8'), /key!=='applicationCode'/);
   });
 });
 test('app editor requires apple app id when platform is ios', () => {

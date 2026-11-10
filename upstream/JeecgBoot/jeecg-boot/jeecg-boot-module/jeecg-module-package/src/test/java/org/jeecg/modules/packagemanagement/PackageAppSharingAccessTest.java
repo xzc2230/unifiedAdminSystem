@@ -94,8 +94,11 @@ class PackageAppSharingAccessTest {
         when(subject.getPrincipal()).thenReturn(user);when(subject.isPermitted("package:*")).thenReturn(true);
         when(subject.hasRole("admin")).thenReturn(false);
         ThreadContext.bind(subject);TenantContext.setTenant("1002");
-        try {assertFalse(access.current().administrator(),"ordinary wildcard grants must not widen data scope");}
-        finally {ThreadContext.unbindSubject();TenantContext.clear();}
+        try {
+            assertFalse(access.current().administrator(),"ordinary wildcard grants must not widen data scope");
+            when(repository.activeAdministrator("ordinary")).thenReturn(true);
+            assertTrue(access.current().administrator(),"a live admin role assignment is enough when the Shiro role cache is empty");
+        } finally {ThreadContext.unbindSubject();TenantContext.clear();}
     }
 
     @Test void cachedAdministratorRoleCannotOutliveTheLiveRoleAssignment() {

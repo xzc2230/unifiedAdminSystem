@@ -1,7 +1,7 @@
 <template>
   <a-modal
     :open="visible"
-    title="共享应用"
+    title="转移"
     :width="480"
     :confirmLoading="saving"
     :maskClosable="false"

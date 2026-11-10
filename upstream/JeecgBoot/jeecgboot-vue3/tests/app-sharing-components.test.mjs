@@ -40,8 +40,10 @@ const owner = (id = '9007199254740993') => ({ id, canManage: true });
 
 test('sharing modal only asks for one recipient and does not render share lists', () => {
   const source = readFileSync(new URL('AppSharingModal.vue', directory), 'utf8');
-  assert.match(source, /label="接收人"/);
-  assert.match(source, /共享应用/);
+  const template = source.match(/<template>([\s\S]*?)<\/template>/)[1];
+  assert.match(template, /label="接收人"/);
+  assert.match(template, /title="转移"/);
+  assert.doesNotMatch(template, /共享应用/);
   assert.doesNotMatch(source, /<a-table|共享原因|撤销共享|共享审计/);
 });
 
@@ -300,11 +302,12 @@ async function renderRow(view, record) {
 test('actual row renders management and risk only for managers while recipients retain field-based editing', async () => {
   const view = mount('PackagePage.vue');
   const ownerHtml = await renderRow(view, owner('1'));
-  for (const label of ['删除', '共享管理', '自动拉黑', '编辑']) assert.ok(ownerHtml.includes(label), label);
+  for (const label of ['删除', '转移', '自动拉黑', '修改']) assert.ok(ownerHtml.includes(label), label);
+  assert.doesNotMatch(ownerHtml, /编辑|共享管理|共享应用/);
   for (const record of [{ id: '2', canManage: false }, { id: '3' }]) {
     const html = await renderRow(view, record);
-    assert.doesNotMatch(html, /删除|共享管理|自动拉黑/);
-    assert.match(html, /编辑/);
+    assert.doesNotMatch(html, /删除|转移|共享管理|自动拉黑/);
+    assert.match(html, /修改/);
     await view.state.openAuto(record);
     assert.equal(view.state.autoOpen, false);
   }

@@ -8,6 +8,7 @@ public class PackageIdentityRepository  {
         this.jdbc=jdbc;
     }
     private static final Map<String,String> TABLES=Map.ofEntries(Map.entry("pkg_app_manager","id"),Map.entry("pkg_app_statistics","id"),Map.entry("pkg_store_status","id"),Map.entry("pkg_event_config","id"),Map.entry("pkg_event_history","id"),Map.entry("pkg_event_error","id"),Map.entry("pkg_load_count","id"),Map.entry("pkg_pwa","id"),Map.entry("pkg_pwa_subscription","id"),Map.entry("pkg_notification","id"),Map.entry("pkg_app_event","event_id"),Map.entry("pkg_review","reviews_id"));
+    private static final Set<String> USER_SCOPED=Set.of("pkg_app_manager","pkg_app_statistics","pkg_load_count","pkg_pwa","pkg_notification","pkg_app_event");
     public static void validateType(String type) {
         if(!TABLES.containsKey(type))throw new PackageFailure(400,"Unknown package resource type");
     }
@@ -34,7 +35,14 @@ public class PackageIdentityRepository  {
         validateType(type);
         String sql="SELECT resource_id FROM pkg_resource_owner WHERE tenant_id=? AND resource_type=?";
         List<Long> ids=actor.administrator()?jdbc.queryForList(sql,Long.class,actor.tenantId(),type):jdbc.queryForList(sql+" AND owner_user_id=?",Long.class,actor.tenantId(),type,actor.userId());
-        return new HashSet<>(ids);
+        Set<Long> allowed=new HashSet<>(ids);
+        if(actor.administrator()) allowed.addAll(tenantBusinessIds(actor.tenantId(),type));
+        return allowed;
+    }
+    /** Administrator list scope includes tenant business rows that were never written to the owner registry. */
+    private List<Long> tenantBusinessIds(int tenant,String type) {
+        if(!USER_SCOPED.contains(type)) return List.of();
+        return jdbc.queryForList("SELECT b."+TABLES.get(type)+" FROM "+type+" b JOIN pkg_user_identity i ON i.legacy_user_id=b.user_id AND i.tenant_id=? AND i.status='ACTIVE'",Long.class,tenant);
     }
     public Set<Long> lockOwnedIds(PackageActor actor,String type) {
         validateType(type);
