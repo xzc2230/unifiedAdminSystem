@@ -14,6 +14,7 @@
 
 - 本地运行：`docs/baseline/local-runbook.md`
 - 两服务器部署：`docs/deployment/two-server-deployment.md`
+- AWS 同机 Docker Compose 部署：`deploy/aws-single/README.md`
 - 站点资源：`docs/deployment/site-resources-runbook.md`
 - 分流发布：`docs/deployment/routing-publication-runbook.md`
 - ClickHouse 统计接入：`docs/deployment/clickhouse-runbook.md`

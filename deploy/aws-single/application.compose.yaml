@@ -1,0 +1,56 @@
+name: unified-admin
+services:
+  backend:
+    image: ${JAVA_IMAGE:-eclipse-temurin:21-jre-noble}
+    restart: unless-stopped
+    network_mode: host
+    user: '10001:10001'
+    working_dir: /srv/jeecg/work
+    env_file: [./application.env]
+    environment: {TZ: Asia/Shanghai}
+    command: [java, -Xms512m, -Xmx2g, -jar, /app/jeecg.jar, --spring.profiles.active=prod, --spring.config.additional-location=file:/app/application-server.yml]
+    volumes:
+      - ./current/backend/jeecg.jar:/app/jeecg.jar:ro
+      - ./application-server.yml:/app/application-server.yml:ro
+      - ./data:/srv/jeecg
+    mem_limit: 3g
+    healthcheck:
+      test: [CMD-SHELL, 'curl -fsS http://127.0.0.1:18080/jeecg-boot/sys/randomImage/container-health | grep -q ''"success":true''']
+      start_period: 120s
+      interval: 30s
+      timeout: 10s
+      retries: 10
+    logging: &logging
+      driver: json-file
+      options: {max-size: 20m, max-file: '5'}
+  frontend:
+    image: ${NGINX_IMAGE:-nginx:stable-alpine}
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./current/frontend:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      backend: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, wget, --quiet, --spider, 'http://127.0.0.1/']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging: *logging
+  site-router:
+    profiles: [routing]
+    image: ${NODE_IMAGE:-node:24-bookworm-slim}
+    restart: unless-stopped
+    network_mode: host
+    user: '10001:10001'
+    working_dir: /app
+    env_file: [./site-router.env]
+    command: [node, src/main.mjs]
+    volumes:
+      - ./current/site-router:/app:ro
+      - ./data/site-router:/srv/jeecg/site-router
+    depends_on:
+      backend: {condition: service_healthy}
+    mem_limit: 256m
+    logging: *logging

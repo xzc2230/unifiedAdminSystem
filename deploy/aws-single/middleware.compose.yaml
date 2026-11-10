@@ -1,0 +1,63 @@
+name: unified-middleware
+services:
+  mysql:
+    image: ${MYSQL_IMAGE:-mysql:8.0.46}
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      TZ: Asia/Shanghai
+    secrets: [mysql_root_password]
+    command: [--character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci, --lower_case_table_names=1, --max_allowed_packet=128M, --log-bin=mysql-bin, --server-id=1, --binlog-expire-logs-seconds=604800]
+    ports: ['127.0.0.1:3306:3306']
+    volumes: ['./data/mysql:/var/lib/mysql']
+    healthcheck:
+      test: [CMD-SHELL, 'MYSQL_PWD=$$(cat /run/secrets/mysql_root_password) mysql -h127.0.0.1 -uroot -Nse "SELECT 1" >/dev/null']
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    mem_limit: 3g
+    logging: &logging
+      driver: json-file
+      options: {max-size: 20m, max-file: '5'}
+  redis:
+    image: ${REDIS_IMAGE:-redis:7.2}
+    restart: unless-stopped
+    command: [redis-server, /usr/local/etc/redis/redis.conf]
+    ports: ['127.0.0.1:6379:6379']
+    volumes:
+      - ./data/redis:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - ./redis-users.acl:/usr/local/etc/redis/users.acl:ro
+    healthcheck:
+      test: [CMD-SHELL, 'redis-cli ping 2>&1 | grep -q NOAUTH']
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    mem_limit: 1500m
+    logging: *logging
+  clickhouse:
+    image: ${CLICKHOUSE_IMAGE:-clickhouse/clickhouse-server:25.8.24.21@sha256:0fa332a9a05ce4138b16d883f9c9d124c8d9d81cf4e52046878d537558626e49}
+    restart: unless-stopped
+    env_file: [./clickhouse.env]
+    environment: {CLICKHOUSE_SKIP_USER_SETUP: '1', TZ: UTC}
+    ports: ['127.0.0.1:18123:8123']
+    cpus: 2.0
+    mem_limit: 3g
+    ulimits:
+      nofile: {soft: 262144, hard: 262144}
+    volumes:
+      - ./data/clickhouse:/var/lib/clickhouse
+      - ./clickhouse/config/server.xml:/etc/clickhouse-server/config.d/jeecg.xml:ro
+      - ./clickhouse/config/users.xml:/etc/clickhouse-server/users.d/zz-jeecg.xml:ro
+      - ./clickhouse/init:/opt/jeecg-init:ro
+      - ./clickhouse/init/01-schema.sh:/docker-entrypoint-initdb.d/01-schema.sh:ro
+    healthcheck:
+      test: [CMD, wget, --quiet, --spider, 'http://127.0.0.1:8123/ping']
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
+    logging: *logging
+secrets:
+  mysql_root_password:
+    file: ./secrets/mysql_root_password
