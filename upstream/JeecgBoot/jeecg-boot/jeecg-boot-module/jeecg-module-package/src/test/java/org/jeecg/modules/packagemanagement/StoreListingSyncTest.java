@@ -111,4 +111,40 @@ class StoreListingSyncTest {
         verify(stores, never()).resetStoreListing(any());
         verify(stores, never()).insertStoreStatus(any());
     }
+
+    @Test
+    void updateIosToAndroidClearsAppRowAppleFields() {
+        var mapper = mock(AppManagerMapper.class);
+        var stores = mock(StoreStatusMapper.class);
+        var service = new AppManagerServiceImpl();
+        PackageBusinessTest.inject(service, "appManagerMapper", mapper);
+        PackageBusinessTest.inject(service, "storeStatusMapper", stores);
+
+        AppManager previous = new AppManager();
+        previous.setId(1L);
+        previous.setPlatform("ios");
+        previous.setPackageCode("com.test");
+        previous.setAppleAppId("123456");
+        previous.setStoreRegion("cn");
+
+        AppManager updated = new AppManager();
+        updated.setId(1L);
+        updated.setPlatform("android");
+        updated.setPackageCode("com.test");
+
+        StoreStatus androidStore = new StoreStatus();
+        androidStore.setId(9L);
+        androidStore.setPlatform("android");
+        androidStore.setPackageCode("com.test");
+        androidStore.setStatus(1);
+
+        when(mapper.selectAppManagerById(1L)).thenReturn(previous);
+        when(stores.selectStoreStatusByPlatformAndPackage("android", "com.test")).thenReturn(androidStore);
+        when(mapper.updateAppManager(updated)).thenReturn(1);
+
+        assertEquals(1, service.updateAppManager(updated));
+
+        verify(mapper).clearAppManagerAppleStoreIdentity(1L);
+        verify(stores).resetStoreListing(any());
+    }
 }

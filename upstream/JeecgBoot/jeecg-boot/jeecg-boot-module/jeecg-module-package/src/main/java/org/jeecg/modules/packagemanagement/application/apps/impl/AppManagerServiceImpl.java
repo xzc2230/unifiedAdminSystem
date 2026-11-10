@@ -110,7 +110,12 @@ public class AppManagerServiceImpl implements IAppManagerService {
         appManager.setUpdateDate(DateUtils.getNowDate());
         appManager.setCreateDate(DateUtils.getNowDate());
 
-        int count=appManagerMapper.updateAppManager(appManager);refresh(appManager.getPackageCode());return count;
+        int count = appManagerMapper.updateAppManager(appManager);
+        if ("android".equals(appManager.getPlatform()) && identityChanged) {
+            appManagerMapper.clearAppManagerAppleStoreIdentity(appManager.getId());
+        }
+        refresh(appManager.getPackageCode());
+        return count;
     }
 
     private void syncStore(AppManager app, boolean identityChanged) {

@@ -53,6 +53,9 @@
     <select id="selectStoreStatusByPackageName" parameterType="String" resultMap="StoreStatusResult">
         <include refid="StoreStatus"/>
         where package_code = #{packageName}
+        <!-- mixed-platform package returns the android row until client lookup becomes platform-aware -->
+        order by case platform when 'android' then 0 else 1 end, id
+        limit 1
     </select>
 
     <select id="selectStoreStatusByPlatformAndPackage" resultMap="StoreStatusResult">

@@ -106,6 +106,9 @@
     <select id="selectAppManagerByPackageName" parameterType="String" resultMap="AppManagerResult">
         <include refid="selectAppManagerVo"/>
         where package_code = #{packageName}
+        <!-- mixed-platform package returns the android row until client lookup becomes platform-aware -->
+        order by case platform when 'android' then 0 else 1 end, id
+        limit 1
     </select>
 
     <select id="selectAppManagerByPlatformAndPackage" resultMap="AppManagerResult">
@@ -203,6 +206,12 @@
             <if test="whetherSimCountryRestrict != null">whether_sim_country_restrict = #{whetherSimCountryRestrict},</if>
             <if test="whetherUse != null">whether_use = #{whetherUse},</if>
         </trim>
+        where id = #{id}
+    </update>
+
+    <update id="clearAppManagerAppleStoreIdentity">
+        update pkg_app_manager
+        set apple_app_id = null, store_region = null
         where id = #{id}
     </update>
 

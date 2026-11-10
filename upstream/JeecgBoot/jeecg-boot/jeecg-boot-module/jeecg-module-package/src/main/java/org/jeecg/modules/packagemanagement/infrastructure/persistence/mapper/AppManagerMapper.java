@@ -49,6 +49,8 @@ public interface AppManagerMapper {
      */
     public int updateAppManager(AppManager appManager);
 
+    int clearAppManagerAppleStoreIdentity(@Param("id") Long id);
+
     /**
      * 删除【请填写功能名称】
      *
