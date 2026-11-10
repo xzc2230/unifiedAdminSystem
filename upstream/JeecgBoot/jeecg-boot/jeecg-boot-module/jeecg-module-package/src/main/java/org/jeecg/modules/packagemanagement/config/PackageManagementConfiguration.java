@@ -3,7 +3,7 @@ import org.springframework.context.annotation.*;import org.springframework.boot.
 import org.jeecg.modules.packagemanagement.application.port.*;import org.jeecg.modules.packagemanagement.infrastructure.integration.*;import org.jeecg.modules.packagemanagement.infrastructure.identity.*;
 @Configuration(proxyBeanMethods=false)
 @PropertySource("classpath:package-management.properties")
-@EnableConfigurationProperties(PackageManagementProperties.class)
+@EnableConfigurationProperties({PackageManagementProperties.class,RequestLogClickHouseProperties.class})
 @MapperScan("org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper")
 @ComponentScan(basePackages="org.jeecg.modules.packagemanagement.application",useDefaultFilters=false,
  includeFilters=@ComponentScan.Filter(org.springframework.stereotype.Service.class))
@@ -13,8 +13,8 @@ public class PackageManagementConfiguration {
  @Bean public PackageSnowflake packageSnowflake(){return new PackageSnowflake();}
  @Bean public HttpPort packageHttpPort(){return new JdkHttpAdapter();}
  @Bean public GeoPort packageGeoPort(HttpPort http,PackageManagementProperties settings){return new GeoHttpAdapter(http,settings);}
- @Bean public ElasticsearchAppLogAdapter packageAppLogPort(HttpPort http,PackageManagementProperties settings){return new ElasticsearchAppLogAdapter(http,settings);}
- @Bean public org.jeecg.modules.packagemanagement.application.applog.EsAppLogServiceImpl packageAppLogService(ElasticsearchAppLogAdapter adapter){return new org.jeecg.modules.packagemanagement.application.applog.EsAppLogServiceImpl(adapter);}
+ @Bean public ClickHouseAppLogAdapter packageAppLogPort(RequestLogClickHouseProperties clickHouse){return new ClickHouseAppLogAdapter(clickHouse);}
+ @Bean public org.jeecg.modules.packagemanagement.application.applog.EsAppLogServiceImpl packageAppLogService(ClickHouseAppLogAdapter adapter){return new org.jeecg.modules.packagemanagement.application.applog.EsAppLogServiceImpl(adapter);}
  @Bean public StoreProbePort packageStoreProbe(HttpPort http){return url->{
   var reply=http.exchange("GET",url,null,java.util.Map.of());
   byte[] bytes=(reply.body()==null?"":reply.body()).getBytes(java.nio.charset.StandardCharsets.UTF_8);

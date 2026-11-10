@@ -175,7 +175,34 @@ function Test-Deployment {
     if ($global.Code -ne 200) { throw "Global summary SQL failed (HTTP $($global.Code))." }
     $globalRows = @($global.Body -split "`n" | Where-Object { $_.Trim() } | ForEach-Object { ConvertFrom-Json $_ })
     if (!($globalRows | Where-Object api_id -EQ $apiId)) { throw 'Global summary did not contain the probe.' }
-    Write-Host 'PASS: version, schema, synchronous HTTP write/read, scoped denials, reader limits, and parameterized 24h summary JSONEachRow (filtered/global).'
+    $described = Invoke-Query 'DESCRIBE TABLE jeecg_analytics.app_request_log FORMAT JSON' 'READER' $credentials
+    if ($described.Code -ne 200) { throw 'Request log table is missing; rerun Setup so jeecg_analytics.app_request_log is created.' }
+    $logColumns = @((ConvertFrom-Json $described.Body).data | ForEach-Object { "$($_.name):$($_.type)" }) -join '|'
+    $logExpected = "id:String|package_name:String|req_path:String|req_ip:String|req_params:String|req_headers:String|req_method:LowCardinality(String)|result_msg:String|error_msg:String|req_time:DateTime64(3, 'Asia/Shanghai')|is_mobile:UInt8"
+    if ($logColumns -cne $logExpected) { throw 'Request log column contract mismatch; no automatic schema migration is performed.' }
+    $logSchema = Invoke-Query 'SHOW CREATE TABLE jeecg_analytics.app_request_log' 'READER' $credentials
+    foreach ($fragment in @('ENGINE = MergeTree', 'PARTITION BY toYYYYMMDD(req_time)', 'ORDER BY (package_name, req_time, id)', 'toIntervalDay(30)')) {
+        if ($logSchema.Code -ne 200 -or !$logSchema.Body.Contains($fragment)) { throw "Request log engine/key/TTL contract mismatch: $fragment" }
+    }
+    $logId = [guid]::NewGuid().ToString()
+    $logInsert = "INSERT INTO jeecg_analytics.app_request_log (id,package_name,req_path,req_ip,req_params,req_headers,req_method,result_msg,error_msg,req_time,is_mobile) VALUES ('$logId','com.probe','/probe','127.0.0.1','{}','','GET','','',now64(3),0)"
+    $logWrite = Invoke-Query $logInsert 'WRITER' $credentials
+    if ($logWrite.Code -ne 200) { throw "Request log writer INSERT failed (HTTP $($logWrite.Code))." }
+    $logRead = Invoke-Query "SELECT count() FROM jeecg_analytics.app_request_log WHERE id='$logId'" 'READER' $credentials
+    if ($logRead.Code -ne 200 -or $logRead.Body.Trim() -ne '1') { throw 'Request log reader could not read the writer probe.' }
+    foreach ($case in @(
+        @{ Role = 'WRITER'; Sql = 'SELECT count() FROM jeecg_analytics.app_request_log' },
+        @{ Role = 'READER'; Sql = $logInsert },
+        @{ Role = 'READER'; Sql = "DELETE FROM jeecg_analytics.app_request_log WHERE id='$logId'" }
+    )) {
+        $denied = Invoke-Query $case.Sql $case.Role $credentials
+        if ($denied.Code -eq 200 -or $denied.Body -notmatch 'Code: (164|192|193|194|195|497|516)\b') {
+            throw "Expected ClickHouse authorization denial for request logs role '$($case.Role)'."
+        }
+    }
+    $logDelete = Invoke-Query "DELETE FROM jeecg_analytics.app_request_log WHERE id='$logId'" 'WRITER' $credentials
+    if ($logDelete.Code -ne 200) { throw "Request log writer DELETE failed (HTTP $($logDelete.Code))." }
+    Write-Host 'PASS: version, schema, synchronous HTTP write/read, scoped denials, reader limits, parameterized 24h summary JSONEachRow (filtered/global), and request log table.'
     Write-Host 'A synthetic __deployment_probe__/UUID row remains until TTL cleanup.'
 }
 

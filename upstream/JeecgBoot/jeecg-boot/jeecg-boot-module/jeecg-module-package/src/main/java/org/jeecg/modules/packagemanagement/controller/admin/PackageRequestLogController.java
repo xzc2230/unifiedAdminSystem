@@ -38,9 +38,8 @@ public class PackageRequestLogController {
         AppLog fresh=new AppLog();copy(submitted,fresh);return Result.ok(logs.save(fresh));
     }
     @PutMapping("/{id}") public Result<AppLog> edit(@PathVariable String id,@RequestBody AppLog submitted) {
-        var actor=guard.actor("request-logs","edit");AppLog existing=owned(actor,id);
-        access.requireLogPackage(actor,submitted.getPackageName());copy(submitted,existing);
-        return Result.ok(logs.save(existing));
+        guard.actor("request-logs","edit");
+        throw new PackageFailure(400,"请求日志不支持修改");
     }
     private void copy(AppLog from,AppLog to) {
         to.setPackageName(from.getPackageName());to.setReqPath(from.getReqPath());to.setReqIp(from.getReqIp());

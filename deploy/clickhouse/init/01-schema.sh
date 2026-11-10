@@ -27,6 +27,8 @@ REVOKE ALL ON *.* FROM jeecg_writer;
 REVOKE ALL ON *.* FROM jeecg_reader;
 GRANT INSERT ON jeecg_analytics.api_call TO jeecg_writer;
 GRANT SELECT ON jeecg_analytics.api_call TO jeecg_reader;
+GRANT INSERT, DELETE ON jeecg_analytics.app_request_log TO jeecg_writer;
+GRANT SELECT ON jeecg_analytics.app_request_log TO jeecg_reader;
 SQL
 then
     echo 'ClickHouse account initialization failed.' >&2

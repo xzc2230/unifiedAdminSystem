@@ -115,7 +115,7 @@ public class App2ClientService {
             }
 
         } catch (Exception e) {
-            System.out.println(e);
+            org.slf4j.LoggerFactory.getLogger(App2ClientService.class).warn("request log was not stored: {}", e.toString());
         }
     }
 }

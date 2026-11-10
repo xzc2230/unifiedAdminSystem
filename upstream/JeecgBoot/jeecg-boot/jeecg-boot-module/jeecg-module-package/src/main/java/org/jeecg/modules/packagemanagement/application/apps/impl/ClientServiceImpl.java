@@ -1602,7 +1602,7 @@ public class ClientServiceImpl implements ClientService {
             }
 
         } catch (Exception e) {
-            System.out.println(e);
+            org.slf4j.LoggerFactory.getLogger(ClientServiceImpl.class).warn("request log was not stored: {}", e.toString());
         }
     }
 }

@@ -32,6 +32,13 @@ class PackageHttpSecurityTest {
         var mvc=MockMvcBuilders.standaloneSetup(new PackageRequestLogController(logs,guard,access)).setControllerAdvice(new PackageExceptionHandler()).build();
         assertEquals(403,mvc.perform(delete("/package-admin/request-logs/a,b")).andReturn().getResponse().getStatus());verify(logs,never()).deleteAllById(any());
     }
+    @Test void requestLogEditIsRejected() throws Exception {
+        var logs=mock(EsAppLogServiceImpl.class);var guard=mock(PackageAdminSupport.class);var access=mock(PackageAccess.class);
+        when(guard.actor("request-logs","edit")).thenReturn(new PackageActor(1,"u",1,false));
+        var mvc=MockMvcBuilders.standaloneSetup(new PackageRequestLogController(logs,guard,access)).setControllerAdvice(new PackageExceptionHandler()).build();
+        assertEquals(400,mvc.perform(put("/package-admin/request-logs/a").contentType(org.springframework.http.MediaType.APPLICATION_JSON).content("{}")).andReturn().getResponse().getStatus());
+        verify(logs,never()).save(any());
+    }
     @Test void legacyProjectionFormatsDatesLocallyAndKeepsEmptyStrings() throws Exception {
         var pwa=mock(org.jeecg.modules.packagemanagement.application.pwa.IAppPwaService.class);
         var reviews=mock(org.jeecg.modules.packagemanagement.application.pwa.IReviewsRecordService.class);
