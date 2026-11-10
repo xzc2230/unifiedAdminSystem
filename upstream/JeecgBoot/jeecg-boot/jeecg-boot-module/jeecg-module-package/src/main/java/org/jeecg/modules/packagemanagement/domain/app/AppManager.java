@@ -98,6 +98,11 @@ public class AppManager extends PackageEntity {
     private Long userId;
     private String userName;
 
+    /** Response capability, calculated from trusted ownership; never persisted or copied from input. */
+    private boolean canManage;
+    public boolean getCanManage() { return canManage; }
+    public void setCanManage(boolean canManage) { this.canManage=canManage; }
+
     public String getUserName() {
         return userName;
     }

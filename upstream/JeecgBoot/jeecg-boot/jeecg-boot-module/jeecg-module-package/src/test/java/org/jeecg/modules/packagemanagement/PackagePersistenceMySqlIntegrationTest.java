@@ -26,6 +26,19 @@ class PackagePersistenceMySqlIntegrationTest {
             "org/jeecg/modules/packagemanagement/infrastructure/persistence/mapper/xml/";
 
     @Test
+    void actualApplicationUpdateSqlPassesTheHostSafetyInterceptor() throws Exception {
+        Configuration configuration = new Configuration();
+        loadMapper(configuration, "AppManagerMapper.xml");
+        AppManager app = new AppManager();
+        app.setId(123L);app.setAppName("shared edit");app.setUrl("https://example.com");
+        app.setGaidAidThreshold(1);app.setWhetherTimezoneRestrict(0);
+        String statement = AppManagerMapper.class.getName()+".updateAppManager";
+        String sql = configuration.getMappedStatement(statement).getBoundSql(app).getSql();
+        var safety = new com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor();
+        assertDoesNotThrow(()->safety.parserMulti(sql,null),"real host interceptor must accept generated edit SQL");
+    }
+
+    @Test
     void explicitHistoricalIdsAreInsertedAndReadBackThroughMyBatis() throws Exception {
         String url = System.getenv("PACKAGE_TEST_MYSQL_URL");
         String user = System.getenv("PACKAGE_TEST_MYSQL_USER");

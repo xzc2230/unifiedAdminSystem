@@ -14,6 +14,11 @@ public class PackageIdentityRepository  {
     public boolean activeMember(int tenant,String user) {
         return jdbc.queryForObject("SELECT COUNT(*) FROM sys_user_tenant m JOIN sys_tenant t ON t.id=m.tenant_id JOIN sys_user u ON u.id=m.user_id WHERE m.tenant_id=? AND m.user_id=? AND m.status='1' AND t.status=1 AND t.del_flag=0 AND u.status=1 AND u.del_flag=0 AND (t.begin_date IS NULL OR t.begin_date<=NOW()) AND (t.end_date IS NULL OR t.end_date>NOW())",Long.class,tenant,user)>0;
     }
+    public boolean activeAdministrator(String user) {
+        Long count=jdbc.queryForObject("SELECT COUNT(*) FROM sys_user u WHERE u.id=? AND u.status=1 AND u.del_flag=0"
+                +" AND EXISTS (SELECT 1 FROM sys_user_role ur JOIN sys_role r ON r.id=ur.role_id WHERE ur.user_id=u.id AND r.role_code='admin')",Long.class,user);
+        return count!=null&&count==1;
+    }
     public List<Long> legacyIds(int tenant,String user) {
         record Identity(Long id,String status) {}
         var rows=jdbc.query("SELECT legacy_user_id,status FROM pkg_user_identity WHERE tenant_id=? AND jeecg_user_id=?",
@@ -35,6 +40,25 @@ public class PackageIdentityRepository  {
         validateType(type);
         String sql="SELECT resource_id FROM pkg_resource_owner WHERE tenant_id=? AND resource_type=?";
         return new HashSet<>(actor.administrator()?jdbc.queryForList(sql+" FOR UPDATE",Long.class,actor.tenantId(),type):jdbc.queryForList(sql+" AND owner_user_id=? FOR UPDATE",Long.class,actor.tenantId(),type,actor.userId()));
+    }
+    public Set<Long> sharedAppIds(PackageActor actor) {
+        return new HashSet<>(jdbc.queryForList("SELECT s.app_id FROM pkg_app_share s JOIN pkg_resource_owner o"
+                +" ON o.resource_type='pkg_app_manager' AND o.resource_id=s.app_id AND o.tenant_id=s.tenant_id"
+                +" WHERE s.tenant_id=? AND s.grantee_user_id=?",Long.class,actor.tenantId(),actor.userId()));
+    }
+    public Set<Long> lockEditableAppIds(PackageActor actor,Collection<Long> ids) {
+        if(ids==null||ids.isEmpty()||ids.stream().anyMatch(Objects::isNull))return Set.of();
+        List<Object> args=new ArrayList<>();args.add(actor.tenantId());args.addAll(ids);
+        // Grant/revoke operations lock the same ownership rows before touching shares.
+        var rows=jdbc.queryForList("SELECT resource_id,owner_user_id FROM pkg_resource_owner WHERE tenant_id=?"
+                +" AND resource_type='pkg_app_manager' AND resource_id IN ("+String.join(",",Collections.nCopies(ids.size(),"?"))+") ORDER BY resource_id FOR UPDATE",args.toArray());
+        Set<Long> allowed=new HashSet<>();
+        for(var row:rows) {
+            long id=((Number)row.get("resource_id")).longValue();
+            if(actor.administrator()||actor.userId().equals(row.get("owner_user_id")))allowed.add(id);
+            else if(jdbc.queryForList("SELECT app_id FROM pkg_app_share WHERE tenant_id=? AND app_id=? AND grantee_user_id=? FOR UPDATE",Long.class,actor.tenantId(),id,actor.userId()).size()==1)allowed.add(id);
+        }
+        return allowed;
     }
     public void claimCreated(PackageActor actor,String type,long id) {
         validateType(type);
@@ -74,6 +98,9 @@ public class PackageIdentityRepository  {
     }
     public void removeOwners(String type,Collection<Long> ids) {
         validateType(type);
-        for(Long id:ids)jdbc.update("DELETE FROM pkg_resource_owner WHERE resource_type=? AND resource_id=?",type,id);
+        for(Long id:ids) {
+            if("pkg_app_manager".equals(type))jdbc.update("DELETE FROM pkg_app_share WHERE app_id=?",id);
+            jdbc.update("DELETE FROM pkg_resource_owner WHERE resource_type=? AND resource_id=?",type,id);
+        }
     }
 }

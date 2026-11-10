@@ -94,7 +94,7 @@ public class PackageResourcePolicy {
             var before=stores.selectStoreStatusByPackageName(code);
             return ()->{
                 if(before==null){var created=stores.selectStoreStatusByPackageName(code);
-                    if(created!=null)access.claimCreated(actor,"pkg_store_status",created.getId());}
+                    if(created!=null)access.claimCreatedStoreFromApp(actor,created.getId(),number(value,"id"));}
             };
         }
         if(value instanceof AppPwa app) {

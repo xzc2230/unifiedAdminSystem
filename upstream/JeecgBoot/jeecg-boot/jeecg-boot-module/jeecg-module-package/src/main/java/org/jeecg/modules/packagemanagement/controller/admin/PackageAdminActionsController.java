@@ -3,6 +3,9 @@ package org.jeecg.modules.packagemanagement.controller.admin;
 import java.math.*;
 import java.util.*;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.modules.packagemanagement.application.sharing.PackageAppSharingService;
+import org.jeecg.modules.packagemanagement.exception.PackageFailure;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.jeecg.modules.packagemanagement.domain.pwa.AppPwa;
 import org.jeecg.modules.packagemanagement.domain.statistics.AppStatistics;
 import org.jeecg.modules.packagemanagement.infrastructure.identity.PackageAccess;
@@ -15,30 +18,31 @@ import org.springframework.web.bind.annotation.*;
 public class PackageAdminActionsController {
     private final PackageAdminRegistry registry;
     private final PackageAdminSupport guard;
-    private final PackageAccess access;
-    private final TransactionTemplate tx;
+    private final PackageAppSharingService sharing;
     private final JdbcTemplate jdbc;
     public PackageAdminActionsController(PackageAdminRegistry registry,PackageAdminSupport guard,
             PackageAccess access,TransactionTemplate tx,JdbcTemplate jdbc) {
-        this.registry=registry;this.guard=guard;this.access=access;this.tx=tx;this.jdbc=jdbc;
+        this(registry,guard,access,tx,jdbc,new PackageAppSharingService(access,jdbc,tx));
+    }
+    @Autowired
+    public PackageAdminActionsController(PackageAdminRegistry registry,PackageAdminSupport guard,
+            PackageAccess access,TransactionTemplate tx,JdbcTemplate jdbc,PackageAppSharingService sharing) {
+        this.registry=registry;this.guard=guard;this.sharing=sharing;this.jdbc=jdbc;
     }
     @GetMapping("/apps/transfer-targets")
     public Result<List<Map<String,Object>>> targets() {
         var actor=guard.actor("apps","transfer");
         return Result.ok(jdbc.queryForList("SELECT u.id, COALESCE(NULLIF(u.realname,''),u.username) AS displayName FROM sys_user u JOIN sys_user_tenant m ON m.user_id=u.id JOIN sys_tenant t ON t.id=m.tenant_id JOIN pkg_user_identity i ON CONVERT(i.jeecg_user_id USING utf8mb4) COLLATE utf8mb4_general_ci=CONVERT(u.id USING utf8mb4) COLLATE utf8mb4_general_ci AND i.tenant_id=m.tenant_id WHERE m.tenant_id=? AND m.status='1' AND t.status=1 AND t.del_flag=0 AND u.status=1 AND u.del_flag=0 AND (t.begin_date IS NULL OR t.begin_date<=NOW()) AND (t.end_date IS NULL OR t.end_date>NOW()) GROUP BY u.id,u.realname,u.username HAVING COUNT(*)=1 AND SUM(i.status='ACTIVE' AND i.legacy_user_id>0)=1 ORDER BY displayName",actor.tenantId()));
     }
-    public record Transfer(List<Long> ids,String targetUser) {}
+    public record Transfer(List<Long> ids,String targetUser,String reason) {
+        public Transfer(List<Long> ids,String targetUser) { this(ids,targetUser,null); }
+    }
     @PostMapping("/apps/transfer")
     public Result<Integer> transfer(@RequestBody Transfer request) {
         var actor=guard.actor("apps","transfer");
-        Integer count=tx.execute(status->{
-            access.transfer(actor,"pkg_app_manager",request.ids(),request.targetUser());
-            String name=jdbc.queryForObject("SELECT COALESCE(NULLIF(realname,''),username) FROM sys_user WHERE id=?",String.class,request.targetUser());
-            int changed=0;
-            for(Long id:request.ids())changed+=jdbc.update("UPDATE pkg_app_manager SET user_name=? WHERE id=?",name,id);
-            return changed;
-        });
-        return Result.ok(count);
+        if(request==null)throw new PackageFailure(400,"共享请求不能为空");
+        String reason=request.reason()==null||request.reason().isBlank()?"兼容 transfer 入口共享应用":request.reason();
+        return Result.ok(sharing.grant(actor,request.ids(),request.targetUser(),reason));
     }
     @SuppressWarnings("unchecked")
     @GetMapping("/pwa/all")

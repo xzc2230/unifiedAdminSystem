@@ -13,16 +13,18 @@
       <template #tableTitle><span>{{ definition.title }}</span></template>
       <template #toolbar>
         <a-button v-if="definition.add !== false" v-auth="permission('add')" type="primary" @click="openEditor()">新增</a-button>
-        <a-button v-auth="permission('remove')" danger :disabled="!selected.length" @click="confirmRemove(selected)">批量删除</a-button>
+        <a-button v-auth="permission('remove')" danger :disabled="!canRemoveSelected" @click="confirmRemove(selected)">批量删除</a-button>
         <a-button v-if="definition.export !== false" v-auth="permission('export')" :loading="exporting" @click="exportRows">导出</a-button>
-        <a-button v-if="definition.domain === 'apps'" v-auth="permission('transfer')" :disabled="!selected.length" @click="openTransfer">转移应用</a-button>
+        <a-button v-if="definition.domain === 'apps'" v-auth="permission('transfer')" :disabled="!canShareSelected" @click="openSharing()">共享应用</a-button>
         <a-button v-if="definition.domain === 'request-logs'" v-auth="permission('clean')" danger @click="confirmClean">清理日志</a-button>
       </template>
       <template #bodyCell="{column,record,text}">
         <template v-if="column.key === 'action'"><a-space>
           <a v-auth="permission('query')" @click="showDetail(record)">详情</a>
           <a v-if="definition.edit !== false && (definition.domain === 'apps' ? canEditApp : hasPermission(permission('edit')))" @click="openEditor(record)">编辑</a>
-          <a v-auth="permission('remove')" @click="confirmRemove([record[idKey]])">删除</a><a v-if="definition.domain === 'apps'" v-auth="'package:risk:query'" @click="openAuto(record)">自动拉黑</a>
+          <a v-if="canManageRow(record)" v-auth="permission('remove')" @click="confirmRemove([record[idKey]],record)">删除</a>
+          <a v-if="definition.domain === 'apps' && canManageRow(record)" v-auth="permission('transfer')" @click="openSharing(record)">共享管理</a>
+          <a v-if="definition.domain === 'apps' && canManageRow(record)" v-auth="'package:risk:query'" @click="openAuto(record)">自动拉黑</a>
         </a-space></template>
         <a-image v-else-if="['appIcon','appAdvertising','notifyIcon','headPortraitUrl'].includes(column.dataIndex) && text" :src="fileUrl(String(text).split(',')[0])" :width="40" :height="40" />
         <a v-else-if="column.dataIndex === 'storeUrl' && record.packageCode" :href="marketUrl(record.packageCode)" target="_blank" rel="noopener noreferrer">Google Play</a>
@@ -56,11 +58,7 @@
     <a-drawer v-model:open="detailOpen" :title="`${definition.title}详情`" width="760">
       <a-descriptions bordered :column="1"><a-descriptions-item v-for="field in detailFields" :key="field.key" :label="field.label"><pre class="detail-value">{{ displayDetail(detail[field.key]) }}</pre></a-descriptions-item></a-descriptions>
     </a-drawer>
-    <a-modal v-model:open="transferOpen" title="转移应用" :confirmLoading="transferring" @ok="doTransfer">
-      <p>已选择 {{ selected.length }} 个应用，请选择当前租户内已完成身份映射的接收人。</p>
-      <a-select v-model:value="targetUser" :options="targets" :loading="targetsLoading" showSearch optionFilterProp="label" placeholder="选择接收人" style="width:100%" />
-      <a-empty v-if="!targetsLoading && !targets.length" description="暂无符合条件的接收人" />
-    </a-modal>
+    <AppSharingModal v-if="definition.domain === 'apps'" ref="sharingModal" @success="refresh" />
     <a-modal v-model:open="autoOpen" :title="`自动拉黑 · ${autoPkg}`" :footer="null" width="860">
       <a-space class="notice"><a-select v-model:value="autoType" allowClear placeholder="全部类型" :options="[{value:'gaid',label:'GAID'},{value:'aid',label:'AID'}]" style="width:160px" @change="loadAuto" /><a-button :loading="autoLoading" @click="loadAuto">刷新</a-button></a-space>
       <a-table :columns="[{title:'类型',dataIndex:'type'},{title:'标识',dataIndex:'value'},{title:'原因',dataIndex:'reason'},{title:'操作',key:'action'}]" :dataSource="autoRows" :loading="autoLoading" :rowKey="row=>`${row.type}:${row.value}`" :pagination="false"><template #bodyCell="{column,record}"><a v-if="column.key==='action'" v-auth="'package:risk:remove'" @click="removeAuto(record)">解除拉黑</a></template></a-table>
@@ -78,13 +76,14 @@ import { BasicTable,useTable } from '/@/components/Table';
 import { initDictOptions } from '/@/utils/dict/JDictSelectUtil';
 import { useGlobSetting } from '/@/hooks/setting';
 import { usePermission } from '/@/hooks/web/usePermission';
-import { packageApi,allPwa,transferTargets,transferApps,statisticsTotal,cleanLogs } from '/@/api/packagemanagement';
+import { packageApi,allPwa,statisticsTotal,cleanLogs } from '/@/api/packagemanagement';
 import type { PackageDefinition,PackageField as PackageFieldSpec,PackageId,PackageOption } from '/@/types/packagemanagement';
 import { APP_AREA_OPTIONS, countryLabel, countryCode } from '../package-regions.mjs';
 import { fromAreas,toAreas,legacyImageUrl } from '../package-conversions.mjs';
 import PackageField from './PackageField.vue';
 import PwaEditor from './PwaEditor.vue';
 import AppEditor from './AppEditor.vue';
+import AppSharingModal from './AppSharingModal.vue';
 const props=defineProps<{definition:PackageDefinition}>();
 const definition=props.definition;
 const api=packageApi(definition.domain);
@@ -97,6 +96,21 @@ const idKey=definition.key || 'id';
 const dicts=reactive<Record<string,PackageOption[]>>({});
 const parentApps=ref<Record<string,any>[]>([]);
 const selected=ref<PackageId[]>([]);
+const selectedRows=ref<Record<string,any>[]>([]);
+const sharingModal=ref<InstanceType<typeof AppSharingModal>>();
+const roleAllows=(action:string)=>hasPermission(permission(action)) || hasPermission('*:*:*');
+const canManageRow=(row:Record<string,any>)=>definition.domain!=='apps' || row?.canManage===true;
+const manageableSelection=computed(()=>selected.value.length>0 && selected.value.every(id=>{
+  const row=selectedRows.value.find(row=>String(row[idKey])===String(id));
+  return row && canManageRow(row);
+}));
+const canRemoveSelected=computed(()=>roleAllows('remove') && (definition.domain==='apps'?manageableSelection.value:selected.value.length>0));
+const canShareSelected=computed(()=>definition.domain==='apps' && roleAllows('transfer') && manageableSelection.value && new Set(selected.value.map(String)).size<=100);
+function openSharing(record?:Record<string,any>) {
+  if(!roleAllows('transfer')) return;
+  if(record) { if(canManageRow(record)) sharingModal.value?.open([{id:record[idKey],canManage:record.canManage}]); }
+  else if(canShareSelected.value) sharingModal.value?.open(selected.value.map(id=>({id,canManage:selectedRows.value.find(row=>String(row[idKey])===String(id))?.canManage})));
+}
 const lastFilters=ref<Record<string,any>>({});
 const editorOpen=ref(false),detailOpen=ref(false),saving=ref(false),exporting=ref(false);
 const editId=ref<PackageId>();
@@ -107,7 +121,7 @@ const detail=ref<Record<string,any>>({});
 const editorForm=ref(),pwaEditor=ref();
 const fieldsByKey=Object.fromEntries(definition.fields.map(f=>[f.key,f]));
 const editableFields=computed(()=>definition.fields.filter(f=>(!f.readonly || definition.domain === 'notifications' && ['appName','appIcon','appHost'].includes(f.key)) && (definition.domain !== 'apps' || editId.value == null || canAppField(appPermissions.value,'edit',f.key))).map(f=>definition.domain==='apps'?{...f,required:appFieldRequired(f,editId.value!=null,canAppField(appPermissions.value,'query',f.key)||dirtyAppFields.value.has(f.key))}:f));
-const detailFields=computed(()=>[...definition.fields.filter(f=>!['startReqTime','endReqTime'].includes(f.key)),...Object.keys(detail.value).filter(k=>!fieldsByKey[k]).map(key=>({key,label:({id:'编号',eventId:'事件编号',reviewsId:'评论编号',tags:'标签',score:'评分分布',reviewsRecords:'评论集合',appCode:'推广码',appSub:'域名后缀',appType:'应用类型',userId:'归属用户',userName:'归属用户名称',createTime:'创建时间',updateTime:'更新时间',updateDate:'更新时间'} as Record<string,string>)[key] || key}))].filter(f=>definition.domain!=='apps'||canAppField(appPermissions.value,'query',f.key)));
+const detailFields=computed(()=>[...definition.fields.filter(f=>!['startReqTime','endReqTime'].includes(f.key)),...Object.keys(detail.value).filter(k=>!fieldsByKey[k]).map(key=>({key,label:({id:'编号',eventId:'事件编号',reviewsId:'评论编号',tags:'标签',score:'评分分布',reviewsRecords:'评论集合',appCode:'推广码',appSub:'域名后缀',appType:'应用类型',userId:'归属用户',userName:'归属用户名称',createTime:'创建时间',updateTime:'更新时间',updateDate:'更新时间'} as Record<string,string>)[key] || key}))].filter(f=>f.key!=='canManage' && (definition.domain!=='apps'||canAppField(appPermissions.value,'query',f.key))));
 function optionsFor(field:PackageFieldSpec):PackageOption[] {
   if(field.dict==='app_area') {
     const rows=dicts.app_area?.length?dicts.app_area:APP_AREA_OPTIONS;
@@ -139,11 +153,11 @@ const schemas=definition.filters.filter(key=>definition.domain!=='apps'||canAppF
 });
 const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:['appName','packageCode','packageName','reqTime'].includes(key)?180:150,ellipsis:true}));
 const [registerTable,{reload,clearSelectedRowKeys}]=useTable({
-  api:async params=>{const {pageNo,pageSize,...filters}=params;lastFilters.value=filters;return api.list({...params,...(definition.appType!=null?{appType:definition.appType}:{})});},
+  api:async params=>{const {pageNo,pageSize,...filters}=params;lastFilters.value=filters;if(definition.domain==='apps'){selected.value=[];selectedRows.value=[];clearSelectedRowKeys();}return api.list({...params,...(definition.appType!=null?{appType:definition.appType}:{})});},
   columns,rowKey:idKey,bordered:true,showTableSetting:true,useSearchForm:true,
   formConfig:{schemas:schemas as any,labelWidth:100,showAdvancedButton:schemas.length>3,autoSubmitOnEnter:true},
-  actionColumn:{title:'操作',key:'action',dataIndex:'action',width:definition.domain==='apps'?280:190,fixed:'right'},
-  rowSelection:{type:'checkbox',onChange:keys=>selected.value=keys},
+  actionColumn:{title:'操作',key:'action',dataIndex:'action',width:definition.domain==='apps'?350:190,fixed:'right'},
+  rowSelection:{type:'checkbox',onChange:(keys,rows)=>{selected.value=keys;selectedRows.value=rows || [];}},
 });
 async function loadChoices() {
   const codes=[...new Set(definition.fields.map(f=>f.dict).filter(Boolean))] as string[];
@@ -184,21 +198,25 @@ async function save() {
     await refresh();
   } catch(error:any) {if(error?.message) message.error(error.message);} finally {saving.value=false;}
 }
-async function refresh() {selected.value=[];clearSelectedRowKeys();await reload();if(definition.domain==='statistics') await loadTotal();}
+async function refresh() {selected.value=[];selectedRows.value=[];clearSelectedRowKeys();await reload();if(definition.domain==='statistics') await loadTotal();}
 async function showDetail(record:any) {detail.value=await api.detail(record[idKey]);detailOpen.value=true;}
-function confirmRemove(ids:PackageId[]) {Modal.confirm({title:`确认删除 ${ids.length} 条记录？`,onOk:async()=>{await api.remove(ids);message.success('删除成功');await refresh();}});}
+function confirmRemove(ids:PackageId[],record?:Record<string,any>) {
+  const snapshot=[...ids];
+  const allowed=()=>roleAllows('remove') && snapshot.length>0 && (definition.domain!=='apps' || snapshot.every(id=>{
+    const row=record && String(record[idKey])===String(id)?record:selectedRows.value.find(row=>String(row[idKey])===String(id));
+    return row && canManageRow(row);
+  }));
+  if(!allowed()) return;
+  Modal.confirm({title:`确认删除 ${snapshot.length} 条记录？`,onOk:async()=>{if(!allowed())return;await api.remove(snapshot);message.success('删除成功');await refresh();}});
+}
 async function exportRows() {exporting.value=true;try{await api.export({...lastFilters.value,...(definition.appType!=null?{appType:definition.appType}:{})});}finally{exporting.value=false;}}
 function confirmClean() {Modal.confirm({title:'清理符合当前筛选条件的日志？',content:'仅清理当前有权访问的应用日志。此操作无法撤销。',onOk:async()=>{await cleanLogs(lastFilters.value);message.success('日志已清理');await refresh();}});}
 const totalQuery=reactive({packageCode:'',subAreas:''});
 const totals=ref<Record<string,any>>({}),totalLoading=ref(false),totalError=ref('');
 async function loadTotal(){totalLoading.value=true;totalError.value='';try{totals.value=await statisticsTotal({...totalQuery});}catch{totals.value={};totalError.value='汇总加载失败，请重试';}finally{totalLoading.value=false;}}
 function resetTotal(){totalQuery.packageCode='';totalQuery.subAreas='';loadTotal();}
-const transferOpen=ref(false),targetsLoading=ref(false),transferring=ref(false),targetUser=ref<string>();
-const targets=ref<PackageOption[]>([]);
-async function openTransfer(){targetUser.value=undefined;targets.value=[];transferOpen.value=true;targetsLoading.value=true;try{targets.value=(await transferTargets()).map(v=>({value:v.id,label:v.displayName}));}finally{targetsLoading.value=false;}}
-async function doTransfer(){if(!targetUser.value){message.warning('请选择接收人');return;}transferring.value=true;try{await transferApps(selected.value,targetUser.value);message.success('应用已转移');transferOpen.value=false;await refresh();}finally{transferring.value=false;}}
 const autoOpen=ref(false),autoLoading=ref(false),autoPkg=ref(''),autoType=ref<string>(),autoRows=ref<any[]>([]);
-async function openAuto(row:any){autoPkg.value=row.packageCode;autoType.value=undefined;autoRows.value=[];autoOpen.value=true;await loadAuto();}
+async function openAuto(row:any){if(!canManageRow(row) || !(hasPermission('package:risk:query') || hasPermission('*:*:*')))return;autoPkg.value=row.packageCode;autoType.value=undefined;autoRows.value=[];autoOpen.value=true;await loadAuto();}
 async function loadAuto(){autoLoading.value=true;try{autoRows.value=await autoBlacklist(autoPkg.value,autoType.value);}finally{autoLoading.value=false;}}
 function removeAuto(row:any){Modal.confirm({title:'解除该设备的自动拉黑？',onOk:async()=>{await removeAutoBlacklist(autoPkg.value,row.type,row.value);message.success('已解除');await loadAuto();}});}
 onMounted(()=>{loadChoices();if(definition.domain==='statistics') loadTotal();});

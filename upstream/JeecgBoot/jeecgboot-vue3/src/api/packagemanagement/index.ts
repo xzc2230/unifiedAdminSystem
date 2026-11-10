@@ -20,6 +20,34 @@ export const packageApi = (domain: string) => ({
 });
 export const transferTargets = () => defHttp.get<Array<{id:string;displayName:string}>>({url:`${base}/apps/transfer-targets`});
 export const transferApps = (ids: PackageId[], targetUser: string) => defHttp.post({url:`${base}/apps/transfer`,data:{ids,targetUser}});
+export interface AppShareRecord {
+  userId: string;
+  displayName: string;
+  grantedBy: string;
+  reason: string;
+  createdAt: string;
+}
+export interface AppShareAuditRecord {
+  id: string;
+  appId: string;
+  granteeUserId: string;
+  operatorUserId: string;
+  displayName: string;
+  operatorName: string;
+  action: string;
+  reason: string;
+  createdAt: string;
+}
+type SharePage<T> = { records: T[]; total: number };
+type SharePagination = { pageNo: number; pageSize: number };
+export const shareApps = (ids: PackageId[], targetUser: string, reason: string) =>
+  defHttp.post<number>({ url: `${base}/apps/shares`, data: { ids, targetUser, reason } });
+export const revokeAppShares = (ids: PackageId[], targetUser: string, reason: string) =>
+  defHttp.post<number>({ url: `${base}/apps/shares/revoke`, data: { ids, targetUser, reason } });
+export const getAppShares = (id: PackageId, params: SharePagination = { pageNo: 1, pageSize: 20 }) =>
+  defHttp.get<SharePage<AppShareRecord>>({ url: `${base}/apps/${identifier(id)}/shares`, params });
+export const getAppShareAudit = (id: PackageId, params: SharePagination = { pageNo: 1, pageSize: 20 }) =>
+  defHttp.get<SharePage<AppShareAuditRecord>>({ url: `${base}/apps/${identifier(id)}/share-audit`, params });
 export const statisticsTotal = (params: PackageRecord) => defHttp.get({url:`${base}/statistics/getTotal`,params});
 export const allPwa = (params: PackageRecord = {}) => defHttp.get<PackageRecord[]>({url:`${base}/pwa/all`,params});
 export const cleanLogs = (params: PackageRecord) => defHttp.delete({url:`${base}/request-logs/clean`,params},{joinParamsToUrl:true});

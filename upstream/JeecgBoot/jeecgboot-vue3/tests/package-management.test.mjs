@@ -74,9 +74,10 @@ test('actual sidebar renderers expose package children instead of treating the r
   }
 });
 
-test('all 18 page entries and business editor SFCs compile', () => {
+test('all package SFCs compile and required page entries and shared components are discovered', () => {
   const {parse,compileScript,compileTemplate}=require('@vue/compiler-sfc');
-  let count=0;
+  const packageDirectory=path.join(root,'src/views/packagemanagement');
+  const compiledFiles=new Set();
   function walk(directory){for(const entry of fs.readdirSync(directory,{withFileTypes:true})){
     const file=path.join(directory,entry.name);
     if(entry.isDirectory()) walk(file);
@@ -85,11 +86,18 @@ test('all 18 page entries and business editor SFCs compile', () => {
       assert.deepEqual(errors,[],file);
       const script=compileScript(descriptor,{id:file});
       const template=compileTemplate({id:file,filename:file,source:descriptor.template.content,compilerOptions:{bindingMetadata:script.bindings}});
-      assert.deepEqual(template.errors,[],file); count++;
+      assert.deepEqual(template.errors,[],file);
+      compiledFiles.add(path.relative(packageDirectory,file).split(path.sep).join('/'));
     }
   }}
-  walk(path.join(root,'src/views/packagemanagement'));
-  assert.equal(count,24);
+  walk(packageDirectory);
+  // Check coverage without preventing additional independently compiled components.
+  const requiredFiles=[
+    ...['apps','pwa','w2a','store','notifications','statistics','reviews','app-events','event-configs','event-errors','event-history','landing-counts','packstat','request-logs','risk'].map(name=>`${name}/index.vue`),
+    ...['calllog','docs','token'].map(name=>`openapi/${name}.vue`),
+    ...['AppEditor','AppSharingModal','DevRecordPage','PackageField','PackageImageUpload','PackagePage','PwaEditor'].map(name=>`components/${name}.vue`),
+  ];
+  for(const file of requiredFiles) assert.ok(compiledFiles.has(file),`${file} must be discovered and compiled`);
 });
 test('editable business fields agree with backend allowlists and preserve domain special cases', async () => {
   const ts=require('typescript');

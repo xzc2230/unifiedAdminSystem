@@ -82,7 +82,7 @@ class PackageFinalRegressionTest {
         assertThrows(PackageFailure.class,()->resource.add(actor,create));
         var other=new AppManager();other.setId(4L);when(apps.selectAppManagerByPackageName("com.other")).thenReturn(other);
         var move=new StoreStatus();move.setPackageCode("com.other");assertThrows(PackageFailure.class,()->resource.edit(actor,2L,move));
-        verify(access,times(2)).lockRows(actor,"pkg_store_status",List.of(2L));
+        verify(access,times(2)).lockEditableRows(actor,"pkg_store_status",List.of(2L));
     }
     @Test void standaloneReviewReparentSynchronizesOwnerOnlyAfterSuccessfulUpdateInTransaction() {
         var access=mock(PackageAccess.class);var admin=new PackageActor(1,"admin",1,true);

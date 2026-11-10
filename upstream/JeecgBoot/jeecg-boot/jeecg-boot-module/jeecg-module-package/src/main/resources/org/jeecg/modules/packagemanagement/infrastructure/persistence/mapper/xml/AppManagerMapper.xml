@@ -170,8 +170,6 @@
             <if test="status != null">status = #{status},</if>
             <if test="updateDate != null">update_date = #{updateDate},</if>
             <if test="url != null">url = #{url},</if>
-
-
             <if test="whetherRestrict != null">whether_restrict = #{whetherRestrict},</if>
             <if test="whetherUs != null">whether_us = #{whetherUs},</if>
             <if test="gaidAidThreshold != null">gaid_aid_threshold = #{gaidAidThreshold},</if>

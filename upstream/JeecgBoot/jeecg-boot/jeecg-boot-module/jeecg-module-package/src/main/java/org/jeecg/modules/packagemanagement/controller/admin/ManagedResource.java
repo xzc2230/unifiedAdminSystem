@@ -48,6 +48,7 @@ public final class ManagedResource<T> {
         List<T> all=list.apply(filter);
         List<T> rows=access.filter(actor,table,all==null?List.of():all,id);
         rows.forEach(redactor);
+        capabilities(actor,rows);
         return rows;
     }
     public T detail(PackageActor actor,long key) {
@@ -55,6 +56,7 @@ public final class ManagedResource<T> {
         T row=find.apply(key);
         if(row==null)throw new PackageFailure(404,"记录不存在");
         redactor.accept(row);
+        capabilities(actor,List.of(row));
         return row;
     }
     public T add(PackageActor actor,T submitted) {
@@ -67,6 +69,7 @@ public final class ManagedResource<T> {
             if(createdOwner==null)access.claimCreated(actor,table,id.apply(fresh));else createdOwner.accept(fresh,actor);
             after.run();
             redactor.accept(fresh);
+            capabilities(actor,List.of(fresh));
             return fresh;
         });
     }
@@ -76,7 +79,7 @@ public final class ManagedResource<T> {
     public T edit(PackageActor actor,long key,T submitted,BiConsumer<T,T> validator) {
         access.requireRow(actor,table,key);
         return tx.execute(status->{
-            access.lockRows(actor,table,List.of(key));
+            access.lockEditableRows(actor,table,List.of(key));
             T existing=find.apply(key);
             if(existing==null) throw new PackageFailure(404,"记录不存在");
             validator.accept(submitted,existing);
@@ -87,6 +90,7 @@ public final class ManagedResource<T> {
             if(update.applyAsInt(existing)<=0) throw new PackageFailure(400,"修改失败");
             after.run();
             redactor.accept(existing);
+            capabilities(actor,List.of(existing));
             return existing;
         });
     }
@@ -103,6 +107,12 @@ public final class ManagedResource<T> {
     private T fresh() {
         try {return type.getDeclaredConstructor().newInstance();}
         catch(ReflectiveOperationException e) {throw new IllegalStateException(e);}
+    }
+    private void capabilities(PackageActor actor,List<T> rows) {
+        if(!"pkg_app_manager".equals(table))return;
+        Set<Long> owned=access.manageScope(actor,table);
+        for(T row:rows)if(row instanceof org.jeecg.modules.packagemanagement.domain.app.AppManager app)
+            app.setCanManage(owned.contains(app.getId()));
     }
     private void copyAllowed(T from,T to) {
         BeanWrapperImpl source=new BeanWrapperImpl(from), destination=new BeanWrapperImpl(to);

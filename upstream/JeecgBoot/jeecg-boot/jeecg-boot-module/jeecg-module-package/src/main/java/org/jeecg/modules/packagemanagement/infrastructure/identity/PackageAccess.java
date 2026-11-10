@@ -15,7 +15,8 @@ public class PackageAccess  {
     public PackageActor current() {
         Object principal=SecurityUtils.getSubject().getPrincipal();
         if(!(principal instanceof LoginUser user))throw new PackageFailure(401,"请先登录");
-        return resolve(user.getId(),TenantContext.getTenant(),SecurityUtils.getSubject().isPermitted("package:*"));
+        boolean administrator=SecurityUtils.getSubject().hasRole("admin")&&repository.activeAdministrator(user.getId());
+        return resolve(user.getId(),TenantContext.getTenant(),administrator);
     }
     public PackageActor resolve(String user,String tenant,boolean administrator) {
         if(user==null||user.isBlank()||tenant==null||!tenant.matches("[1-9][0-9]{0,8}"))throw new PackageFailure(403,"请选择已加入的有效租户");
@@ -31,6 +32,13 @@ public class PackageAccess  {
     public Set<Long> scope(PackageActor actor,String type) {
         active(actor);
         PackageIdentityRepository.validateType(type);
+        Set<Long> allowed=new HashSet<>(repository.ownedIds(actor,type));
+        if("pkg_app_manager".equals(type)&&!actor.administrator())allowed.addAll(repository.sharedAppIds(actor));
+        return allowed;
+    }
+    /** Ownership capabilities deliberately exclude shared access, even with wildcard operation grants. */
+    public Set<Long> manageScope(PackageActor actor,String type) {
+        active(actor);PackageIdentityRepository.validateType(type);
         return repository.ownedIds(actor,type);
     }
     public List<Long> filterIds(PackageActor actor,String type,Collection<Long> ids) {
@@ -56,6 +64,12 @@ public class PackageAccess  {
         active(actor);
         validateRows(ids,repository.lockOwnedIds(actor,type));
     }
+    /** Shared apps are editable, but grant no authority to delete, forward, or create child resources. */
+    public void lockEditableRows(PackageActor actor,String type,Collection<Long> ids) {
+        if(!"pkg_app_manager".equals(type)){lockRows(actor,type,ids);return;}
+        active(actor);
+        validateRows(ids,repository.lockEditableAppIds(actor,ids));
+    }
     /** Existing independently owned store/statistics rows may keep their transferred app association. */
     public void lockIndependentPackageParent(PackageActor actor,long appId) {
         active(actor);
@@ -76,6 +90,11 @@ public class PackageAccess  {
     public void claimCreatedFromParent(PackageActor actor,String child,long id,String parent,long parentId) {
         lockRows(actor,parent,List.of(parentId));
         repository.claimCreatedFromParent(actor,child,id,parent,parentId);
+    }
+    /** The app service may recreate a missing store during edit; its owner must remain the app owner. */
+    public void claimCreatedStoreFromApp(PackageActor actor,long storeId,long appId) {
+        lockEditableRows(actor,"pkg_app_manager",List.of(appId));
+        repository.claimCreatedFromParent(actor,"pkg_store_status",storeId,"pkg_app_manager",appId);
     }
     public long effectiveLegacyUserId(PackageActor actor) {
         active(actor);
