@@ -80,11 +80,12 @@ public class AppStatisticsServiceImpl implements IAppStatisticsService {
         if (appStatistics1 != null) {
             return -1;
         } else {
-            StoreStatus storeStatus = storeStatusMapper.selectStoreStatusByPackageName(appStatistics.getPackageCode());
+            StoreStatus storeStatus = storeStatusMapper.selectStoreStatusByPlatformAndPackage("android", appStatistics.getPackageCode());
             if (storeStatus == null) {
                 StoreStatus ss = new StoreStatus();
                 ss.setStatus(0);
                 ss.setPackageCode(appStatistics.getPackageCode());
+                ss.setPlatform("android");
                 ss.setStoreUrl("https://play.google.com/store/apps/details?id=" + appStatistics.getPackageCode());
                 storeStatusMapper.insertStoreStatus(ss);
             }

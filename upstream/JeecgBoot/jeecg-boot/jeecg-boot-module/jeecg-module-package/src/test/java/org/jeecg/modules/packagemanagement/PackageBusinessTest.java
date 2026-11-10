@@ -30,13 +30,13 @@ class PackageBusinessTest {
  static void inject(Object bean,String field,Object value){ReflectionTestUtils.setField(bean,field,value);}
  @Test void duplicatePackageHasNoStoreSideEffectAndPublicLookupNeedsNoLogin(){
   var mapper=mock(AppManagerMapper.class);var stores=mock(StoreStatusMapper.class);var service=new AppManagerServiceImpl();inject(service,"appManagerMapper",mapper);inject(service,"storeStatusMapper",stores);
-  AppManager app=new AppManager();app.setPackageCode("com.test");app.setUserId(1L);when(mapper.selectAppManagerByPackageName("com.test")).thenReturn(app);
+  AppManager app=new AppManager();app.setPackageCode("com.test");app.setUserId(1L);when(mapper.selectAppManagerByPackageName("com.test")).thenReturn(app);when(mapper.selectAppManagerByPlatformAndPackage("android","com.test")).thenReturn(app);
   assertSame(app,service.selectAppManagerByPackageName("com.test"));assertEquals(-1,service.insertAppManager(app));verifyNoInteractions(stores);verify(mapper,never()).insertAppManager(any());
  }
  @Test void newPackageEnsuresStoreAndPreservesNumericOwner(){
   var mapper=mock(AppManagerMapper.class);var stores=mock(StoreStatusMapper.class);var service=new AppManagerServiceImpl();inject(service,"appManagerMapper",mapper);inject(service,"storeStatusMapper",stores);
-  AppManager app=new AppManager();app.setPackageCode("com.test");app.setUserId(17L);when(mapper.insertAppManager(app)).thenReturn(1);
-  assertEquals(1,service.insertAppManager(app));verify(stores).insertStoreStatus(argThat(s->s.getStatus()==0&&s.getPackageCode().equals("com.test")&&s.getStoreUrl().endsWith("id=com.test")));assertEquals(17L,app.getUserId());assertNotNull(app.getCreateDate());
+  AppManager app=new AppManager();app.setPackageCode("com.test");app.setUserId(17L);when(mapper.selectAppManagerByPlatformAndPackage("android","com.test")).thenReturn(null);when(stores.selectStoreStatusByPlatformAndPackage("android","com.test")).thenReturn(null);when(mapper.insertAppManager(app)).thenReturn(1);
+  assertEquals(1,service.insertAppManager(app));verify(stores).insertStoreStatus(argThat(s->"android".equals(s.getPlatform())&&s.getStatus()==0&&s.getPackageCode().equals("com.test")&&s.getStoreUrl().endsWith("id=com.test")));assertEquals(17L,app.getUserId());assertNotNull(app.getCreateDate());
  }
  @Test void statisticsCountersAndAmountRoundHalfUpToTwoDecimals(){
   var mapper=mock(AppStatisticsMapper.class);var service=new AppStatisticsServiceImpl();inject(service,"appStatisticsMapper",mapper);

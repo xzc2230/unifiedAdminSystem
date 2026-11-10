@@ -53,6 +53,8 @@ public interface StoreStatusMapper
      */
     public int updateStoreStatusAndDate(StoreStatus storeStatus);
 
+    int resetStoreListing(StoreStatus storeStatus);
+
     /**
      * 删除包状态
      *

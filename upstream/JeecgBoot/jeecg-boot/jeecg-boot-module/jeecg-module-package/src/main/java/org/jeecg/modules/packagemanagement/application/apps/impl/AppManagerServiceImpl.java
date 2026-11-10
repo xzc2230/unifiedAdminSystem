@@ -8,6 +8,7 @@ import org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.App
 import org.jeecg.modules.packagemanagement.application.apps.IAppManagerService;
 import org.jeecg.modules.packagemanagement.domain.store.StoreStatus;
 import org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.StoreStatusMapper;
+import org.jeecg.modules.packagemanagement.application.store.StoreListing;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,19 +75,12 @@ public class AppManagerServiceImpl implements IAppManagerService {
 
         appManager.setAreas(org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions.normalizeAreas(appManager.getAreas()));
         if(appManager.getPackageCode()!=null)appManager.setPackageCode(appManager.getPackageCode().trim());
-        AppManager appManager1 = appManagerMapper.selectAppManagerByPackageName(appManager.getPackageCode());
+        StoreListing.normalize(appManager);
+        AppManager appManager1 = appManagerMapper.selectAppManagerByPlatformAndPackage(appManager.getPlatform(), appManager.getPackageCode());
         if (appManager1 != null) {
             return -1;
         } else {
-            StoreStatus storeStatus = storeStatusMapper.selectStoreStatusByPackageName(appManager.getPackageCode());
-            if (storeStatus == null) {
-                StoreStatus ss = new StoreStatus();
-                ss.setStatus(0);
-                ss.setPackageCode(appManager.getPackageCode());
-                ss.setCreateDate(DateUtils.getNowDate());
-                ss.setStoreUrl("https://play.google.com/store/apps/details?id=" + appManager.getPackageCode());
-                storeStatusMapper.insertStoreStatus(ss);
-            }
+            syncStore(appManager, false);
             appManager.setCreateDate(DateUtils.getNowDate());
             int count=appManagerMapper.insertAppManager(appManager);refresh(appManager.getPackageCode());return count;
         }
@@ -102,21 +96,51 @@ public class AppManagerServiceImpl implements IAppManagerService {
     public int updateAppManager(AppManager appManager) {
 
         appManager.setAreas(org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions.normalizeAreas(appManager.getAreas()));
-        appManager.setUpdateDate(DateUtils.getNowDate());
-        StoreStatus storeStatus = storeStatusMapper.selectStoreStatusByPackageName(appManager.getPackageCode());
-        if (storeStatus == null) {
-            StoreStatus ss = new StoreStatus();
-            ss.setStatus(0);
-            ss.setPackageCode(appManager.getPackageCode());
-            ss.setCreateDate(DateUtils.getNowDate());
-            ss.setStoreUrl("https://play.google.com/store/apps/details?id=" + appManager.getPackageCode());
-            storeStatusMapper.insertStoreStatus(ss);
-        } else {
-            storeStatusMapper.updateStoreStatusAndDate(storeStatus);
+        if(appManager.getPackageCode()!=null)appManager.setPackageCode(appManager.getPackageCode().trim());
+        StoreListing.normalize(appManager);
+        AppManager previous = appManager.getId() == null ? null : appManagerMapper.selectAppManagerById(appManager.getId());
+        boolean identityChanged = false;
+        if (previous != null) {
+            if (previous.getPlatform() == null || previous.getPlatform().isBlank()) {
+                previous.setPlatform("android");
+            }
+            identityChanged = StoreListing.identityChanged(previous, appManager);
         }
+        syncStore(appManager, identityChanged);
+        appManager.setUpdateDate(DateUtils.getNowDate());
         appManager.setCreateDate(DateUtils.getNowDate());
 
         int count=appManagerMapper.updateAppManager(appManager);refresh(appManager.getPackageCode());return count;
+    }
+
+    private void syncStore(AppManager app, boolean identityChanged) {
+        StoreStatus storeStatus = storeStatusMapper.selectStoreStatusByPlatformAndPackage(app.getPlatform(), app.getPackageCode());
+        if (storeStatus == null) {
+            StoreStatus ss = new StoreStatus();
+            ss.setStatus(0);
+            ss.setPackageCode(app.getPackageCode());
+            ss.setPlatform(app.getPlatform());
+            if ("ios".equals(app.getPlatform())) {
+                ss.setAppleAppId(app.getAppleAppId());
+                ss.setStoreRegion(app.getStoreRegion());
+            }
+            ss.setCreateDate(DateUtils.getNowDate());
+            ss.setStoreUrl(StoreListing.url(app));
+            storeStatusMapper.insertStoreStatus(ss);
+        } else if (identityChanged) {
+            storeStatus.setPackageCode(app.getPackageCode());
+            storeStatus.setPlatform(app.getPlatform());
+            storeStatus.setStatus(0);
+            storeStatus.setStoreUrl(StoreListing.url(app));
+            if ("android".equals(app.getPlatform())) {
+                storeStatus.setAppleAppId(null);
+                storeStatus.setStoreRegion(null);
+            } else {
+                storeStatus.setAppleAppId(app.getAppleAppId());
+                storeStatus.setStoreRegion(app.getStoreRegion());
+            }
+            storeStatusMapper.resetStoreListing(storeStatus);
+        }
     }
 
     /**

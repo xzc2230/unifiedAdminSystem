@@ -88,6 +88,19 @@
         </trim>
     </insert>
 
+    <update id="resetStoreListing" parameterType="org.jeecg.modules.packagemanagement.domain.store.StoreStatus">
+        update pkg_store_status
+        set package_code = #{packageCode},
+            platform = #{platform},
+            store_url = #{storeUrl},
+            status = #{status},
+            success_date = NULL,
+            fail_date = NULL,
+            apple_app_id = #{appleAppId},
+            store_region = #{storeRegion}
+        where id = #{id}
+    </update>
+
     <update id="updateStoreStatusAndDate" parameterType="org.jeecg.modules.packagemanagement.domain.store.StoreStatus">
         update pkg_store_status
         <trim prefix="SET" suffixOverrides=",">
