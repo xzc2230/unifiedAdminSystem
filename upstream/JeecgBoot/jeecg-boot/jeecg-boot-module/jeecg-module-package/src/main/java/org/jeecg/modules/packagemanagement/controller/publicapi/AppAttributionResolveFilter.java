@@ -12,12 +12,19 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import org.jeecg.modules.packagemanagement.application.apps.support.AppAttributionResolve;
+import org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions;
+import org.jeecg.modules.packagemanagement.application.port.AppLogPort;
+import org.jeecg.modules.packagemanagement.application.port.GeoPort;
+import org.jeecg.modules.packagemanagement.domain.applog.AppLog;
 import org.jeecg.modules.packagemanagement.exception.PackageFailure;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -28,9 +35,15 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class AppAttributionResolveFilter extends OncePerRequestFilter {
     private static final ObjectMapper JSON = new ObjectMapper();
     private final AppAttributionResolve resolve;
+    private final AppLogPort logs;
+    private final GeoPort geo;
+    private final Clock clock;
 
-    public AppAttributionResolveFilter(AppAttributionResolve resolve) {
+    public AppAttributionResolveFilter(AppAttributionResolve resolve, AppLogPort logs, GeoPort geo, @Qualifier("packageClock") Clock clock) {
         this.resolve = resolve;
+        this.logs = logs;
+        this.geo = geo;
+        this.clock = clock;
     }
 
     @Override
@@ -47,9 +60,12 @@ public class AppAttributionResolveFilter extends OncePerRequestFilter {
             chain.doFilter(replay(request, body), response);
             return;
         }
+        String packageName = applicationCode(node);
+        String params = new String(body, StandardCharsets.UTF_8);
         try {
             Map<String, Object> payload = resolve.tryResolve(node);
             if (payload == null) {
+                if (!packageName.isBlank()) record(request, packageName, params, "", "包不存在！！");
                 chain.doFilter(replay(request, body), response);
                 return;
             }
@@ -60,14 +76,50 @@ public class AppAttributionResolveFilter extends OncePerRequestFilter {
             response.setDateHeader("Date", now.toInstant().toEpochMilli());
             response.setContentType("application/json");
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            JSON.writeValue(response.getOutputStream(), payload);
+            String result = JSON.writeValueAsString(payload);
+            response.getOutputStream().write(result.getBytes(StandardCharsets.UTF_8));
+            record(request, String.valueOf(payload.get("applicationCode")), params, result, "");
         } catch (PackageFailure failure) {
             response.setStatus(failure.getCode());
             response.setHeader("Cache-Control", "no-store");
             response.setContentType("application/json");
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            JSON.writeValue(response.getOutputStream(), Map.of("message", failure.getMessage()));
+            String result = JSON.writeValueAsString(Map.of("message", failure.getMessage()));
+            response.getOutputStream().write(result.getBytes(StandardCharsets.UTF_8));
+            record(request, packageName, params, result, failure.getMessage());
         }
+    }
+
+    private void record(HttpServletRequest request, String packageName, String params, String result, String error) {
+        try {
+            if (packageName == null || packageName.isBlank()) return;
+            String ip = "";
+            String country = "";
+            try {
+                ip = geo.getIpAddress(request);
+                country = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ip));
+            } catch (RuntimeException ignored) {
+                if (ip == null || ip.isBlank()) ip = request.getRemoteAddr();
+            }
+            AppLog row = new AppLog();
+            row.setPackageName(packageName);
+            row.setReqPath(request.getRequestURI());
+            row.setReqIp("(" + country + ")" + (ip == null ? "" : ip));
+            row.setReqTime(java.util.Date.from(clock.instant()));
+            row.setReqMethod(request.getMethod());
+            row.setReqParams(params);
+            row.setResultMsg(result);
+            if (error != null && !error.isBlank()) row.setErrorMsg(error);
+            logs.save(row);
+        } catch (Exception failure) {
+            LoggerFactory.getLogger(AppAttributionResolveFilter.class).warn("request log was not stored: {}", failure.toString());
+        }
+    }
+
+    private static String applicationCode(JsonNode node) {
+        if (node == null || !node.hasNonNull("applicationCode")) return "";
+        String code = node.get("applicationCode").asText("");
+        return code == null ? "" : code.trim();
     }
 
     private static boolean isResolve(HttpServletRequest request) {
