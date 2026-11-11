@@ -32,12 +32,13 @@ public final class ClickHouseAppLogAdapter implements AppLogPort {
     private static final DateTimeFormatter MILLIS = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS").withZone(SHANGHAI);
     private static final String INSERT = "INSERT INTO jeecg_analytics.app_request_log SETTINGS async_insert=1, wait_for_async_insert=1 FORMAT JSONEachRow";
     private static final String COLUMNS = "id, package_name, req_path, req_ip, req_params, req_headers, req_method, result_msg, error_msg, toString(req_time, 'Asia/Shanghai') AS req_time, is_mobile";
+    /** Qualify req_time. The SELECT alias has the same name and would otherwise replace the column in comparisons. */
     private static final String FILTER = """
             WHERE package_name IN {packages:Array(String)}
               AND ({name:String} = '' OR positionCaseInsensitiveUTF8(package_name, {name:String}) > 0)
               AND ({bounded:UInt8} = 0 OR (
-                    req_time >= parseDateTime64BestEffort({start:String}, 3, 'Asia/Shanghai')
-                AND req_time < parseDateTime64BestEffort({end:String}, 3, 'Asia/Shanghai')))
+                    jeecg_analytics.app_request_log.req_time >= parseDateTime64BestEffort({start:String}, 3, 'Asia/Shanghai')
+                AND jeecg_analytics.app_request_log.req_time < parseDateTime64BestEffort({end:String}, 3, 'Asia/Shanghai')))
             """;
     private static final int MAX_RESPONSE = 16 * 1024 * 1024;
 
@@ -83,7 +84,7 @@ public final class ClickHouseAppLogAdapter implements AppLogPort {
     public Optional<AppLog> findById(String id) {
         requireEnabled();
         checkId(id);
-        String sql = "SELECT " + COLUMNS + " FROM jeecg_analytics.app_request_log WHERE id = {id:String} ORDER BY req_time DESC LIMIT 1 FORMAT JSONEachRow";
+        String sql = "SELECT " + COLUMNS + " FROM jeecg_analytics.app_request_log WHERE id = {id:String} ORDER BY jeecg_analytics.app_request_log.req_time DESC LIMIT 1 FORMAT JSONEachRow";
         List<AppLog> rows = rows(request("param_id=" + encode(id), sql, readerAuth));
         return rows.isEmpty() ? Optional.empty() : Optional.of(rows.get(0));
     }
@@ -96,7 +97,7 @@ public final class ClickHouseAppLogAdapter implements AppLogPort {
         if (total == 0) return new Page(List.of(), 0);
         int offset = Math.multiplyExact(page - 1, size);
         String sql = "SELECT " + COLUMNS + " FROM jeecg_analytics.app_request_log " + FILTER
-                + "ORDER BY req_time DESC, id DESC LIMIT {limit:UInt32} OFFSET {offset:UInt32} FORMAT JSONEachRow";
+                + "ORDER BY jeecg_analytics.app_request_log.req_time DESC, id DESC LIMIT {limit:UInt32} OFFSET {offset:UInt32} FORMAT JSONEachRow";
         return new Page(rows(request(parameters(filter, allowedPackages, size, offset), sql, readerAuth)), total);
     }
 

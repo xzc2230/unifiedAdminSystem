@@ -86,12 +86,12 @@ class ClickHouseAppLogAdapterTest {
             assertEquals(basic("reader", "reader-secret"), count.auth);
             assertEquals(basic("reader", "reader-secret"), select.auth);
             assertTrue(select.body.contains("jeecg_analytics.app_request_log"));
-            assertTrue(select.body.contains("ORDER BY req_time DESC"));
+            assertTrue(select.body.contains("ORDER BY jeecg_analytics.app_request_log.req_time DESC"));
             assertTrue(select.body.contains("{packages:Array(String)}"));
             assertTrue(select.body.contains("{name:String}"));
             assertTrue(select.body.contains("{start:String}"));
             assertTrue(select.body.contains("toString(req_time, 'Asia/Shanghai')"));
-            assertTrue(select.body.contains("req_time < parseDateTime64BestEffort({end:String}"));
+            assertTrue(select.body.contains("jeecg_analytics.app_request_log.req_time < parseDateTime64BestEffort({end:String}"));
             assertFalse(select.body.contains("api_call"));
             assertFalse(select.body.contains("x' OR 1=1"));
             assertFalse(select.body.contains("com' OR 1=1"));
