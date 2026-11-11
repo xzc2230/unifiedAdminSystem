@@ -46,11 +46,17 @@
             <a-table :columns="outcomeColumns" :data-source="item.outcomes" :pagination="false" size="small" row-key="when" />
           </template>
 
-          <template v-if="item.examples?.length">
-            <h3>返回示例</h3>
-            <ul class="examples">
-              <li v-for="example in item.examples" :key="example">{{ example }}</li>
-            </ul>
+          <template v-if="item.requestExample">
+            <h3>请求示例</h3>
+            <pre>{{ item.requestExample }}</pre>
+          </template>
+          <template v-if="item.responseExample">
+            <h3>响应示例</h3>
+            <pre>{{ item.responseExample }}</pre>
+          </template>
+          <template v-if="item.responseDecoded">
+            <h3>解密后</h3>
+            <pre>{{ item.responseDecoded }}</pre>
           </template>
 
           <template v-if="item.fields?.length">

@@ -278,11 +278,17 @@ test('client protocol docs list thirteen interfaces under the package menu', asy
     '/v2/api/check/url', '/app/start', '/home/index/jsp', '/xxxxxx', '/xxx/xxxx', '/xxx/xxxx/xxx', '/xxx/xxxx/xxx/xxxx',
     '/api/v1/attribution/resolve',
   ]);
+  assert.ok(CLIENT_PROTOCOL_DOC.interfaces.every((item) => item.requestExample && item.responseExample));
   const resolve = CLIENT_PROTOCOL_DOC.interfaces[12];
   assert.equal(resolve.title, '接口十三');
   assert.deepEqual(resolve.methods, ['POST']);
+  assert.equal(resolve.headers, undefined);
+  assert.equal(resolve.params.find((field) => field.name === 'applicationCode').desc, '包名');
+  assert.match(resolve.requestExample, /"applicationCode": "com\.test"/);
+  assert.doesNotMatch(resolve.requestExample, /Authorization/);
+  assert.match(resolve.responseExample, /"destinationUrl": "https:\/\/www\.example\.com\/land"/);
   assert.deepEqual(resolve.fields.map((field) => field.name), [
-    'clickRef', 'resolveToken', 'applicationCode', 'promotionCode', 'resolutionState', 'parameterSource', 'destinationUrl', 'afLinkParams', 'fbLinkParams',
+    'clickRef', 'resolveToken', 'applicationCode', 'promotionCode', 'resolutionState', 'parameterSource', 'destinationUrl', 'resolvedAt', 'tokenExpiresAt', 'data', 'afLinkParams', 'fbLinkParams',
   ]);
   assert.match(risk, /key:'abi'[\s\S]*key:'brand'/);
   assert.match(page, /CLIENT_PROTOCOL_DOC/);
