@@ -57,15 +57,28 @@
       </template>
     </BasicTable>
     <a-modal v-model:open="editorOpen" :title="definition.domain === 'apps' ? `${editId == null ? '新增' : '修改'}应用` : `${editId == null ? '新增' : '编辑'}${definition.title}`"
-      :width="definition.domain === 'apps' ? 960 : definition.domain === 'pwa' ? 1000 : 850"
-      :wrapClassName="definition.domain === 'apps' ? 'app-editor-modal' : undefined"
-      :bodyStyle="definition.domain === 'apps' ? { maxHeight: 'calc(100dvh - 200px)', overflowY: 'auto', padding: '20px 24px', background: 'var(--app-editor-background, #f5f7fa)' } : undefined"
-      :okText="definition.domain === 'apps' ? '保存应用' : undefined"
-      :cancelText="definition.domain === 'apps' ? '取消' : undefined"
+      :width="definition.domain === 'apps' || definition.domain === 'store' ? 960 : definition.domain === 'pwa' ? 1000 : 850"
+      :wrapClassName="definition.domain === 'apps' || definition.domain === 'store' ? 'app-editor-modal' : undefined"
+      :bodyStyle="definition.domain === 'apps' || definition.domain === 'store' ? { maxHeight: 'calc(100dvh - 200px)', overflowY: 'auto', padding: '20px 24px', background: 'var(--app-editor-background, #f5f7fa)' } : undefined"
+      :okText="definition.domain === 'apps' ? '保存应用' : definition.domain === 'store' ? '保存' : undefined"
+      :cancelText="definition.domain === 'apps' || definition.domain === 'store' ? '取消' : undefined"
       :confirmLoading="saving" :maskClosable="false" destroyOnClose @ok="save">
       <a-alert v-if="definition.domain === 'notifications' && editId == null" type="info" message="保存后将向所选应用发送通知；发送结果以服务器实际响应为准。" showIcon class="notice" />
       <a-form ref="editorForm" :model="model" layout="vertical">
         <AppEditor v-if="definition.domain === 'apps'" :model="model" :fields="editableFields" :optionsFor="optionsFor" :editing="editId != null" @update-field="setField" />
+        <div v-else-if="definition.domain === 'store'" class="record-editor">
+          <section class="editor-section">
+            <header class="section-heading">
+              <div><h3>上架信息</h3><p>填写包名、上架状态和通知邮箱</p></div>
+              <span class="section-caption">带 * 的为必填项</span>
+            </header>
+            <div class="field-grid">
+              <a-form-item v-for="field in editableFields" :key="field.key" :class="{ 'full-width': field.type === 'textarea' }" :label="field.label" :name="field.key" :rules="field.required ? [{required:true,message:`请填写${field.label}`}] : []">
+                <PackageField :field="field" :value="model[field.key]" :options="optionsFor(field)" :domain="definition.domain" :disabled="Boolean(field.readonly || field.immutable && editId != null)" @update:value="setField(field,$event)" />
+              </a-form-item>
+            </div>
+          </section>
+        </div>
         <a-row v-else :gutter="20">
           <a-col v-for="field in editableFields" :key="field.key" :xs="24" :md="field.type === 'textarea' || field.key === 'appAdvertising' ? 24 : 12">
             <a-form-item :label="field.label" :name="field.key" :rules="field.required ? [{required:true,message:`请填写${field.label}`}] : []">
@@ -261,6 +274,24 @@ onMounted(()=>{loadChoices();if(definition.domain==='statistics') loadTotal();})
   :deep(.jeecg-basic-table-form-container .ant-form){padding:8px 8px 0;margin-bottom:8px}
   :deep(.jeecg-basic-table-form-container .ant-form-item){margin-bottom:8px}
 }
+.record-editor{--editor-surface:#fff;--editor-border:#e4e9f0;--editor-text:#243247;--editor-muted:#66758a;color:var(--editor-text)}
+.editor-section{padding:22px 24px 4px;border:1px solid var(--editor-border);border-radius:12px;background:var(--editor-surface)}
+.section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:20px}
+.section-heading h3{margin:0;font-size:15px;font-weight:600;line-height:24px}
+.section-heading p{margin:4px 0 0;color:var(--editor-muted);font-size:12px;line-height:20px}
+.section-caption{padding-top:3px;color:var(--editor-muted);font-size:12px;white-space:nowrap}
+.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 22px}
+.field-grid>*{min-width:0}
+.full-width{grid-column:1 / -1}
+.record-editor :deep(.ant-form-item){margin-bottom:20px}
+.record-editor :deep(.ant-form-item-label){padding-bottom:6px}
+.record-editor :deep(.ant-form-item-label>label){height:auto;color:var(--editor-text);font-size:13px;font-weight:500}
+.record-editor :deep(.ant-input),
+.record-editor :deep(.ant-input-affix-wrapper),
+.record-editor :deep(.ant-input-number),
+.record-editor :deep(.ant-select-selector){border-radius:6px}
+.record-editor :deep(.ant-input-number){width:100%}
+@media (max-width:640px){.field-grid{grid-template-columns:minmax(0,1fr)}.editor-section{padding:16px 14px 0}}
 </style>
 <style lang="less">
   .app-editor-modal {
@@ -282,5 +313,11 @@ onMounted(()=>{loadChoices();if(definition.domain==='statistics') loadTotal();})
   html[data-theme='dark'] .app-editor-modal {
     --app-editor-background: #141414;
     .ant-modal-header, .ant-modal-footer { border-color: #424242; }
+  }
+  html[data-theme='dark'] .record-editor {
+    --editor-surface: #1f1f1f;
+    --editor-border: #424242;
+    --editor-text: #e5e7eb;
+    --editor-muted: #a1aab8;
   }
 </style>
