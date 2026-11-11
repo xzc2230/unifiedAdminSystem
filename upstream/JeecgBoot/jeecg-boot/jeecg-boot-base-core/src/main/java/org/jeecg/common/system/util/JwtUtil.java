@@ -145,8 +145,7 @@ public class JwtUtil {
 	}
 
 	/**
-	 * 生成签名，根据客户端类型自动选择过期时间
-	 * for [JHHB-1030]【鉴权】移动端用户token到期后续期时间变成pc端时长
+	 * 生成不设置过期时间的登录签名。退出登录时删除 Redis 中的 token 才会失效。
 	 *
 	 * @param username 用户名
 	 * @param secret   用户的密码
@@ -154,17 +153,10 @@ public class JwtUtil {
 	 * @return 加密的token
 	 */
 	public static String sign(String username, String secret, String clientType) {
-		// 根据客户端类型选择对应的过期时间
-		long expireTime = CommonConstant.CLIENT_TYPE_APP.equalsIgnoreCase(clientType) 
-			? APP_EXPIRE_TIME 
-			: EXPIRE_TIME;
-		Date date = new Date(System.currentTimeMillis() + expireTime);
 		Algorithm algorithm = Algorithm.HMAC256(secret);
-		// 附带username和clientType信息
 		return JWT.create()
 			.withClaim("username", username)
 			.withClaim("clientType", clientType)
-			.withExpiresAt(date)
 			.sign(algorithm);
 	}
 

@@ -144,12 +144,7 @@ public class TokenUtils {
                 // 从token中解析客户端类型，保持续期时使用相同的客户端类型
                 String clientType = JwtUtil.getClientType(token);
                 String newAuthorization = JwtUtil.sign(userName, passWord, clientType);
-                // 根据客户端类型设置对应的缓存有效时间
-                long expireTime = CommonConstant.CLIENT_TYPE_APP.equalsIgnoreCase(clientType) 
-                    ? JwtUtil.APP_EXPIRE_TIME * 2 / 1000 
-                    : JwtUtil.EXPIRE_TIME * 2 / 1000;
                 redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
-                redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, expireTime);
             }
             return true;
         }

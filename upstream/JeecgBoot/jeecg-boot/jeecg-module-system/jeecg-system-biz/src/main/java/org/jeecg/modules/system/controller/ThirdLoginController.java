@@ -304,8 +304,6 @@ public class ThirdLoginController {
 		// 生成token
 		String token = JwtUtil.sign(user.getUsername(), user.getPassword(), CommonConstant.CLIENT_TYPE_PC);
 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
-		// 设置超时时间
-		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME * 2 / 1000);
 		return token;
 	}
 

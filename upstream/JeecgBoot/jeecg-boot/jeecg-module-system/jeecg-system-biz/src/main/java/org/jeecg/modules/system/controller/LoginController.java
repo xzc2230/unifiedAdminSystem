@@ -501,14 +501,9 @@ public class LoginController {
 		String syspassword = sysUser.getPassword();
 		JSONObject obj = new JSONObject(new LinkedHashMap<>());
 
-		//1.生成token，并设置超时时间
+		//1.生成token。不设置 JWT 和 Redis 过期时间，退出登录时删除。
 		String token = JwtUtil.sign(username, syspassword, clientType);
 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
-		// 根据客户端类型设置对应的过期时间
-		long expireTime = CommonConstant.CLIENT_TYPE_APP.equalsIgnoreCase(clientType) 
-			? JwtUtil.APP_EXPIRE_TIME * 2 / 1000 
-			: JwtUtil.EXPIRE_TIME * 2 / 1000;
-		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, expireTime);
 		obj.put("token", token);
 
 		// 是否允许同一账号多地同时登录，踢掉之前的登录
@@ -612,9 +607,8 @@ public class LoginController {
 			log.info("【并发登录限制已开启】用户被踢下线，新token: {}，旧token：{}", newToken, oldToken);
 		}
 		
-		// 保存新的token到单点登录缓存
+		// 保存新的token到单点登录缓存，不设置过期时间
 		redisUtil.set(userTokenKey, newToken);
-		redisUtil.expire(userTokenKey, JwtUtil.EXPIRE_TIME * 2 / 1000);
 	}
 
 	/**
@@ -739,10 +733,9 @@ public class LoginController {
 		// 设置登录用户信息
 		obj.put("userInfo", sysUser);
 
-		//6. 生成token，并设置超时时间
+		//6. 生成token，不设置过期时间
 		String token = JwtUtil.sign(username, syspassword, CommonConstant.CLIENT_TYPE_APP);
 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
-		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.APP_EXPIRE_TIME*2 / 1000);
 		obj.put("token", token);
 		result.setResult(obj);
 		result.setSuccess(true);
