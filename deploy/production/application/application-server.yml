@@ -61,7 +61,7 @@ jeecg:
     lowCodeMode: prod
     dataSourceSafe: true
     enableStrongPwd: true
-    enableLoginCaptcha: true
+    enableLoginCaptcha: false
     enableDefaultPwdCheck: true
   ai-chat:
     enabled: false
