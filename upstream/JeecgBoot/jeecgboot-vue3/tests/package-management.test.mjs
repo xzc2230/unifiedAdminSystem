@@ -266,16 +266,25 @@ test('49 whitelist countries have unique codes, Chinese labels and identical ser
   assert.deepEqual(JSON.parse(client),JSON.parse(server));
 });
 
-test('client protocol docs list twelve interfaces under the package menu', async () => {
+test('client protocol docs list thirteen interfaces under the package menu', async () => {
   const { CLIENT_PROTOCOL_DOC } = await import('../src/views/packagemanagement/client-docs/client-docs.mjs');
   const page = fs.readFileSync(path.join(root, 'src/views/packagemanagement/client-docs/index.vue'), 'utf8');
   const menu = fs.readFileSync(path.join(root, '../jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/017-client-protocol-docs-menu.sql'), 'utf8');
+  const risk = fs.readFileSync(path.join(root, 'src/views/packagemanagement/risk/index.vue'), 'utf8');
   assert.equal(CLIENT_PROTOCOL_DOC.host, 'https://apivo.attrnivo.com/');
-  assert.equal(CLIENT_PROTOCOL_DOC.interfaces.length, 12);
+  assert.equal(CLIENT_PROTOCOL_DOC.interfaces.length, 13);
   assert.deepEqual(CLIENT_PROTOCOL_DOC.interfaces.map((item) => item.path), [
     '/system/xxx', '/v2/api/user/login', '/v2/api/retry/xxx', '/v2/api/banner/list/xxx', '/dynamic/xx',
     '/v2/api/check/url', '/app/start', '/home/index/jsp', '/xxxxxx', '/xxx/xxxx', '/xxx/xxxx/xxx', '/xxx/xxxx/xxx/xxxx',
+    '/api/v1/attribution/resolve',
   ]);
+  const resolve = CLIENT_PROTOCOL_DOC.interfaces[12];
+  assert.equal(resolve.title, '接口十三');
+  assert.deepEqual(resolve.methods, ['POST']);
+  assert.deepEqual(resolve.fields.map((field) => field.name), [
+    'clickRef', 'resolveToken', 'applicationCode', 'promotionCode', 'resolutionState', 'parameterSource', 'destinationUrl', 'afLinkParams', 'fbLinkParams',
+  ]);
+  assert.match(risk, /key:'abi'[\s\S]*key:'brand'/);
   assert.match(page, /CLIENT_PROTOCOL_DOC/);
   assert.match(menu, /'pkg_menu_client_docs','pkg_mgmt_root','接口文档','\/package-management\/client-docs'/);
   assert.match(menu, /packagemanagement\/client-docs\/index/);

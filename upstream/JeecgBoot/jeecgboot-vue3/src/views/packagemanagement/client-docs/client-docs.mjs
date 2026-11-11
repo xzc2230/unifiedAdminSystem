@@ -220,5 +220,42 @@ export const CLIENT_PROTOCOL_DOC = {
       ],
       aes: AES_KEY,
     },
+    {
+      key: '13',
+      title: '接口十三',
+      path: '/api/v1/attribution/resolve',
+      requestNote: 'Content-Type 为 application/json。成功响应平铺九个字段，不使用管理接口的 Result 包装，且禁止缓存。',
+      methods: ['POST'],
+      headers: [
+        { name: 'Authorization', desc: '独立主体凭据', example: 'Bearer <credential>', detail: '必填。凭据无效或过期返回 401，不能放在查询串' },
+      ],
+      params: [
+        { name: 'applicationCode', desc: '应用编码', example: 'app_xxx', detail: '必填。JSON 字符串，最长 64' },
+        { name: 'resolveToken', desc: '解析令牌', example: '<点击返回的令牌>', detail: '必填。JSON 字符串，最长 200，不能使用 number' },
+        { name: 'resolveTokenType', desc: '令牌类型', example: 'ATTRIBUTION_TOKEN', detail: '可省略，默认 ATTRIBUTION_TOKEN。另支持 DEVICE_ID、INSTALL_ID' },
+        { name: 'applicationId', desc: '应用编号', example: '', detail: '可选。只用于和 applicationCode 做一致性核验，不能替代应用编码' },
+        { name: 'clickRef', desc: '点击编号', example: '', detail: '可选。真实令牌必须与绑定点击一致；模拟模式携带时需要额外的主体关联证明' },
+      ],
+      notes: [
+        '真实令牌读取原快照：resolutionState 为 PENDING、MATCHED 或 UNMATCHED，parameterSource 为 REAL',
+        '设备或安装模式返回 FALLBACK / SIMULATED，模拟参数使用 mock_ 前缀，无真实点击时 clickRef 为空',
+        '错误体包含 code、message、traceId。400 参数非法，401 凭据或令牌无效，403 绑定不符，404 应用或记录不存在，429 限流，503 未启用或无安全目标',
+      ],
+      examples: [
+        '请求：{"applicationCode":"<应用编码>","resolveToken":"<令牌>"}',
+        '安装模式：{"applicationCode":"<应用编码>","resolveTokenType":"INSTALL_ID","resolveToken":"1930000000000000001"}',
+      ],
+      fields: [
+        { name: 'clickRef', desc: '点击编号', detail: '真实模式返回原点击；模拟模式可为空' },
+        { name: 'resolveToken', desc: '解析令牌', detail: '原样返回请求中的令牌' },
+        { name: 'applicationCode', desc: '应用编码', detail: '' },
+        { name: 'promotionCode', desc: '推广编码', detail: '可为空' },
+        { name: 'resolutionState', desc: '解析状态', detail: 'PENDING、MATCHED、UNMATCHED 或 FALLBACK' },
+        { name: 'parameterSource', desc: '参数来源', detail: 'REAL 或 SIMULATED' },
+        { name: 'destinationUrl', desc: '目标地址', detail: 'HTTP 200 时非空' },
+        { name: 'afLinkParams', desc: 'AppsFlyer 参数', detail: 'JSON 对象' },
+        { name: 'fbLinkParams', desc: '网站参数', detail: 'JSON 对象' },
+      ],
+    },
   ],
 };
