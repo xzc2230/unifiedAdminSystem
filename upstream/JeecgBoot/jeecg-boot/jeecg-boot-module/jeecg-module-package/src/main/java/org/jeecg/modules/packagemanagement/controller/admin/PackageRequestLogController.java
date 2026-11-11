@@ -48,9 +48,12 @@ public class PackageRequestLogController {
     }
     @DeleteMapping("/{ids}") public Result<Integer> delete(@PathVariable String ids) {
         var actor=guard.actor("request-logs","remove");
-        var keys=Arrays.stream(ids.split(",",-1)).distinct().toList();
-        for(String id:keys)owned(actor,id);
-        logs.deleteAllById(keys);return Result.ok(keys.size());
+        var keys=Arrays.stream(ids.split(",",-1)).map(String::trim).filter(key->!key.isEmpty()).distinct().toList();
+        if(keys.isEmpty()) throw new PackageFailure(400,"无效日志编号");
+        var packages=access.logPackages(actor);
+        if(packages==null||packages.isEmpty()) throw new PackageFailure(404,"日志不存在");
+        logs.deleteOwned(keys,packages);
+        return Result.ok(keys.size());
     }
     @DeleteMapping("/clean") public Result<Long> clean(AppLog filter) {
         var actor=guard.actor("request-logs","clean");return Result.ok(logs.clean(filter,access.logPackages(actor)));

@@ -6,5 +6,6 @@ record Page(java.util.List<org.jeecg.modules.packagemanagement.domain.applog.App
  Page query(org.jeecg.modules.packagemanagement.domain.applog.AppLog filter,int page,int size,java.util.Collection<String> allowedPackages);
  java.util.List<org.jeecg.modules.packagemanagement.domain.applog.AppLog> export(org.jeecg.modules.packagemanagement.domain.applog.AppLog filter,java.util.Collection<String> allowedPackages);
  void deleteAllById(java.lang.Iterable<String> ids);
+ void deleteOwned(java.util.Collection<String> ids, java.util.Collection<String> packages);
  long clean(org.jeecg.modules.packagemanagement.domain.applog.AppLog filter,java.util.Collection<String> allowedPackages);
 }

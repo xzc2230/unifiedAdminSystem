@@ -122,6 +122,17 @@ public final class ClickHouseAppLogAdapter implements AppLogPort {
         request("param_ids=" + encode(array(keys)), sql, writerAuth);
     }
 
+    /** Delete by id inside the caller's packages. Avoids a reader scan that the 3-second profile rejects. */
+    public void deleteOwned(Collection<String> ids, Collection<String> packages) {
+        requireEnabled();
+        if (ids == null || packages == null || packages.isEmpty()) return;
+        List<String> keys = new ArrayList<>();
+        for (String id : ids) { checkId(id); keys.add(id); }
+        if (keys.isEmpty()) return;
+        String sql = "DELETE FROM jeecg_analytics.app_request_log WHERE id IN {ids:Array(String)} AND package_name IN {packages:Array(String)}";
+        request("param_ids=" + encode(array(keys)) + "&param_packages=" + encode(array(packages)), sql, writerAuth);
+    }
+
     public long clean(AppLog filter, Collection<String> allowedPackages) {
         requireEnabled();
         if (allowedPackages == null || allowedPackages.isEmpty()) return 0;

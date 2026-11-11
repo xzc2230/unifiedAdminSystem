@@ -37,6 +37,7 @@
             <a @click="clearSelection">清空</a>
           </template>
         </a-alert>
+        <span v-else></span>
       </template>
       <template #bodyCell="{column,record,text}">
         <template v-if="column.key === 'action'"><a-space>
@@ -254,8 +255,8 @@ onMounted(()=>{loadChoices();if(definition.domain==='statistics') loadTotal();})
 <style scoped lang="less">
 .package-page{padding:16px}.summary-card{margin-bottom:16px}.totals{margin-top:16px}.notice{margin-bottom:16px}.detail-value{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;max-width:560px}
 .package-page.compact{
-  .list-actions{display:flex;justify-content:flex-end;gap:8px;width:100%;margin-left:auto}
-  :deep(.jeecg-basic-table-header__tableTitle){justify-content:flex-end}
+  .list-actions{display:flex;justify-content:flex-start;gap:8px}
+  :deep(.jeecg-basic-table-header__tableTitle){justify-content:flex-start}
   :deep(.jeecg-basic-table-form-container){padding:8px 8px 0}
   :deep(.jeecg-basic-table-form-container .ant-form){padding:8px 8px 0;margin-bottom:8px}
   :deep(.jeecg-basic-table-form-container .ant-form-item){margin-bottom:8px}

@@ -26,6 +26,7 @@
             <a @click="clearSelection">清空</a>
           </template>
         </a-alert>
+        <span v-else></span>
       </template>
       <template #bodyCell="{column,record,text}">
         <template v-if="column.key==='action'"><a-space>
@@ -100,8 +101,8 @@ defineExpose({reload:refresh});
 <style scoped lang="less">
 .dev-record-page{padding:16px}.json-value,pre{white-space:pre-wrap;overflow-wrap:anywhere;max-width:680px;margin:0}
 .dev-record-page.compact{
-  .list-actions{display:flex;justify-content:flex-end;gap:8px;width:100%;margin-left:auto}
-  :deep(.jeecg-basic-table-header__tableTitle){justify-content:flex-end}
+  .list-actions{display:flex;justify-content:flex-start;gap:8px}
+  :deep(.jeecg-basic-table-header__tableTitle){justify-content:flex-start}
   :deep(.jeecg-basic-table-form-container){padding:8px 8px 0}
   :deep(.jeecg-basic-table-form-container .ant-form){padding:8px 8px 0;margin-bottom:8px}
   :deep(.jeecg-basic-table-form-container .ant-form-item){margin-bottom:8px}

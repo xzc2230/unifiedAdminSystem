@@ -133,6 +133,10 @@ public class ElasticsearchAppLogAdapter implements AppLogPort  {
             if(scroll!=null)call("DELETE","/_search/scroll",Map.of("scroll_id",List.of(scroll)));
         }
     }
+    public void deleteOwned(Collection<String> ids, Collection<String> packages) {
+        if (packages == null || packages.isEmpty()) return;
+        deleteAllById(ids);
+    }
     public void deleteAllById(Iterable<String> ids) {
         for(String value:ids) {
             HttpPort.Reply r=http.exchange("DELETE",uri("/applog/_doc/"+id(value)),null,headers());

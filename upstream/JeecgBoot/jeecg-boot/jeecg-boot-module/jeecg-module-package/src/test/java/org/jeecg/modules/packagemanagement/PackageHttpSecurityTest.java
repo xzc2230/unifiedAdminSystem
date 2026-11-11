@@ -6,7 +6,6 @@ import org.jeecg.modules.packagemanagement.controller.*;
 import org.jeecg.modules.packagemanagement.controller.admin.*;
 import org.jeecg.modules.packagemanagement.controller.legacy.*;
 import org.jeecg.modules.packagemanagement.application.applog.EsAppLogServiceImpl;
-import org.jeecg.modules.packagemanagement.domain.applog.AppLog;
 import org.jeecg.modules.packagemanagement.infrastructure.identity.*;
 import org.jeecg.modules.packagemanagement.exception.PackageFailure;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -23,14 +22,16 @@ class PackageHttpSecurityTest {
         doThrow(new PackageFailure(403,"denied")).when(guard).actor("apps","query");
         assertEquals(403,mvc.perform(get("/package-admin/apps/1")).andReturn().getResponse().getStatus());verifyNoInteractions(registry);
     }
-    @Test void logBatchChecksEveryPackageBeforeDelete() throws Exception {
+    @Test void logDeleteScopesIdsToReadablePackagesWithoutALookup() throws Exception {
         var logs=mock(EsAppLogServiceImpl.class);var guard=mock(PackageAdminSupport.class);var access=mock(PackageAccess.class);
         var actor=new PackageActor(1,"u",1,false);when(guard.actor(anyString(),anyString())).thenReturn(actor);
-        AppLog first=new AppLog();first.setPackageName("mine");AppLog second=new AppLog();second.setPackageName("other");
-        when(logs.findById("a")).thenReturn(Optional.of(first));when(logs.findById("b")).thenReturn(Optional.of(second));
-        doThrow(new PackageFailure(403,"owner")).when(access).requireLogPackage(actor,"other");
+        when(access.logPackages(actor)).thenReturn(List.of("mine"));
         var mvc=MockMvcBuilders.standaloneSetup(new PackageRequestLogController(logs,guard,access)).setControllerAdvice(new PackageExceptionHandler()).build();
-        assertEquals(403,mvc.perform(delete("/package-admin/request-logs/a,b")).andReturn().getResponse().getStatus());verify(logs,never()).deleteAllById(any());
+        assertEquals(200,mvc.perform(delete("/package-admin/request-logs/abcdefgh,ijklmnop")).andReturn().getResponse().getStatus());
+        verify(logs).deleteOwned(List.of("abcdefgh","ijklmnop"), List.of("mine"));
+        verify(logs,never()).findById(any());
+        when(access.logPackages(actor)).thenReturn(List.of());
+        assertEquals(404,mvc.perform(delete("/package-admin/request-logs/abcdefgh")).andReturn().getResponse().getStatus());
     }
     @Test void requestLogEditIsRejected() throws Exception {
         var logs=mock(EsAppLogServiceImpl.class);var guard=mock(PackageAdminSupport.class);var access=mock(PackageAccess.class);

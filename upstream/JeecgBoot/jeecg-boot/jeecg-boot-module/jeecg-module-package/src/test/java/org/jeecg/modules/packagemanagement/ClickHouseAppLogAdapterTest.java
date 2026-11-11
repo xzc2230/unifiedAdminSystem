@@ -113,6 +113,13 @@ class ClickHouseAppLogAdapterTest {
             assertTrue(delete.body.startsWith("DELETE FROM jeecg_analytics.app_request_log"));
             assertTrue(delete.body.contains("{ids:Array(String)}"));
             assertFalse(delete.body.contains(stored.getId()));
+            int beforeOwned = calls.size();
+            adapter.deleteOwned(List.of(stored.getId()), List.of("com.test"));
+            var owned = calls.get(calls.size() - 1);
+            assertEquals(beforeOwned + 1, calls.size());
+            assertEquals(basic("writer", "writer-secret"), owned.auth);
+            assertTrue(owned.body.contains("package_name IN {packages:Array(String)}"));
+            assertFalse(owned.body.contains("com.test"));
 
             calls.clear();
             assertEquals(2, adapter.clean(filter, List.of("com.test")));

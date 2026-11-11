@@ -10,5 +10,6 @@ public class EsAppLogServiceImpl {
  public Optional<AppLog> findById(String id){return adapter.findById(id).map(row->{present(row);return row;});}
  public AppLog save(AppLog log){return adapter.save(log);}
  public void deleteAllById(Iterable<String> ids){adapter.deleteAllById(ids);}
+ public void deleteOwned(Collection<String> ids, Collection<String> packages){adapter.deleteOwned(ids, packages);}
  public long clean(AppLog filter,Collection<String> packages){return adapter.clean(filter,packages);}
 }
