@@ -28,6 +28,7 @@ REVOKE ALL ON *.* FROM jeecg_reader;
 GRANT INSERT ON jeecg_analytics.api_call TO jeecg_writer;
 GRANT SELECT ON jeecg_analytics.api_call TO jeecg_reader;
 GRANT INSERT, DELETE ON jeecg_analytics.app_request_log TO jeecg_writer;
+GRANT ALTER UPDATE(_row_exists) ON jeecg_analytics.app_request_log TO jeecg_writer;
 GRANT SELECT ON jeecg_analytics.app_request_log TO jeecg_reader;
 SQL
 then
