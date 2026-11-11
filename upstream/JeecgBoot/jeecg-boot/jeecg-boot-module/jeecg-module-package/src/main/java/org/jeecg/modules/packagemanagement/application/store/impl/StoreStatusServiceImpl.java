@@ -4,6 +4,7 @@ import org.jeecg.modules.packagemanagement.application.legacy.DateUtils;
 import org.jeecg.modules.packagemanagement.domain.store.StoreStatus;
 import org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.StoreStatusMapper;
 import org.jeecg.modules.packagemanagement.application.store.IStoreStatusService;
+import org.jeecg.modules.packagemanagement.application.store.StoreStatusQuery;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,7 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
      */
     @Override
     public List<StoreStatus> selectStoreStatusList(StoreStatus storeStatus) {
+        StoreStatusQuery.apply(storeStatus);
         return storeStatusMapper.selectStoreStatusList(storeStatus);
     }
 

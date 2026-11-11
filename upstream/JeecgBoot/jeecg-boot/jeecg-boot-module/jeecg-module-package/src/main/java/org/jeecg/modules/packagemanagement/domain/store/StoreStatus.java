@@ -1,10 +1,12 @@
 package org.jeecg.modules.packagemanagement.domain.store;
 
 import org.jeecg.modules.packagemanagement.domain.PackageEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -38,6 +40,13 @@ public class StoreStatus extends PackageEntity {
     private String storeUrl;
 
     private Integer status;
+
+    /** Comma-separated query values such as 1,ios:2. Not stored. */
+    private String statusQuery;
+
+    private List<Integer> statusIn;
+
+    private List<Integer> iosStatusIn;
 
     public Date createDate;
 
@@ -107,6 +116,33 @@ public class StoreStatus extends PackageEntity {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    @JsonIgnore
+    public String getStatusQuery() {
+        return statusQuery;
+    }
+
+    public void setStatusQuery(String statusQuery) {
+        this.statusQuery = statusQuery;
+    }
+
+    @JsonIgnore
+    public List<Integer> getStatusIn() {
+        return statusIn;
+    }
+
+    public void setStatusIn(List<Integer> statusIn) {
+        this.statusIn = statusIn;
+    }
+
+    @JsonIgnore
+    public List<Integer> getIosStatusIn() {
+        return iosStatusIn;
+    }
+
+    public void setIosStatusIn(List<Integer> iosStatusIn) {
+        this.iosStatusIn = iosStatusIn;
     }
 
     public Date getCreateDate() {

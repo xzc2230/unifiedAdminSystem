@@ -165,6 +165,12 @@ test('app editor offers android and ios store fields', () => {
       assert.equal(definitions.apps.columns.includes(hidden), false, hidden);
     }
     assert.deepEqual(definitions.store.filters, ['packageCode', 'status', 'appleAppId']);
+    const page = fs.readFileSync(path.join(root, 'src/views/packagemanagement/components/PackagePage.vue'), 'utf8');
+    assert.match(page, /mode:'multiple'/);
+    assert.match(page, /iOS待上架/);
+    assert.match(page, /iOS已上架/);
+    assert.match(page, /iOS已下架/);
+    assert.match(page, /statusQuery/);
     assert.equal(definitions.store.fields.some((field) => field.key === 'appleAppId'), true);
     assert.match(fs.readFileSync(path.join(root, 'src/views/packagemanagement/components/PackagePage.vue'), 'utf8'), /key!=='applicationCode'/);
   });

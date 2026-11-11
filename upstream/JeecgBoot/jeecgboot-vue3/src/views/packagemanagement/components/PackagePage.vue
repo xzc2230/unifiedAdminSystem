@@ -186,9 +186,10 @@ const compactList=['apps','store','request-logs'].includes(definition.domain);
 const compactCol={style:{width:'auto',flex:'0 0 auto'}};
 const schemas=definition.filters.filter(key=>definition.domain!=='request-logs'||!['startReqTime','endReqTime'].includes(key)).filter(key=>definition.domain!=='apps'||canAppField(appPermissions.value,'query',key)).map(key=>{
   const f=fieldsByKey[key];
-  const componentProps=f?.type==='date'||f?.type==='datetime'?{valueFormat:f.type==='date'?'YYYY-MM-DD':'YYYY-MM-DD HH:mm:ss',showTime:f.type==='datetime'}:key==='status'&&definition.domain==='store'?{options:optionsFor(f)}:{};
-  return {field:key,label:f?.label || key,component:f?.type==='date' || f?.type==='datetime'?'DatePicker':key==='status'&&definition.domain==='store'?'Select':'Input',
-    componentProps:compactList?{...componentProps,style:{width:'180px'}}:componentProps,colProps:compactList?compactCol:{span:6}};
+  const storeStatus=key==='status'&&definition.domain==='store';
+  const componentProps=f?.type==='date'||f?.type==='datetime'?{valueFormat:f.type==='date'?'YYYY-MM-DD':'YYYY-MM-DD HH:mm:ss',showTime:f.type==='datetime'}:storeStatus?{mode:'multiple',allowClear:true,maxTagCount:1,options:[{value:0,label:'待上架'},{value:1,label:'已上架'},{value:2,label:'已下架'},{value:'ios:0',label:'iOS待上架'},{value:'ios:1',label:'iOS已上架'},{value:'ios:2',label:'iOS已下架'}]}:{};
+  return {field:key,label:f?.label || key,component:f?.type==='date' || f?.type==='datetime'?'DatePicker':storeStatus?'Select':'Input',
+    componentProps:compactList?{...componentProps,style:storeStatus?{width:'240px'}:{width:'180px'}}:componentProps,colProps:compactList?compactCol:{span:6}};
 });
 if(definition.domain==='request-logs'){
   const today=todayInShanghai();
@@ -196,7 +197,7 @@ if(definition.domain==='request-logs'){
 }
 const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||key!=='applicationCode'&&canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:['appName','packageCode','packageName','reqTime'].includes(key)?180:150,ellipsis:true}));
 const [registerTable,{reload,clearSelectedRowKeys}]=useTable({
-  api:async params=>{const {pageNo,pageSize,...filters}=params;lastFilters.value=filters;if(definition.domain==='apps'){selected.value=[];selectedRows.value=[];clearSelectedRowKeys();}return api.list({...params,...(definition.appType!=null?{appType:definition.appType}:{})});},
+  api:async params=>{const {pageNo,pageSize,...filters}=params;const query:Record<string,any>={...params};if(definition.domain==='store'&&Array.isArray(query.status)){const picked=query.status.filter((value:unknown)=>value!=null&&String(value)!=='');delete query.status;if(picked.length)query.statusQuery=picked.join(',');}lastFilters.value=filters;if(definition.domain==='apps'){selected.value=[];selectedRows.value=[];clearSelectedRowKeys();}return api.list({...query,...(definition.appType!=null?{appType:definition.appType}:{})});},
   columns,rowKey:idKey,bordered:true,showTableSetting:true,useSearchForm:true,
   formConfig:{schemas:schemas as any,labelWidth:compactList?80:100,showAdvancedButton:schemas.length>3,autoSubmitOnEnter:true,...(compactList?{actionColOptions:compactCol,rowProps:{gutter:8}}:{}),...(definition.domain==='request-logs'?{fieldMapToTime:[['reqDate',['startReqTime','endReqTime'],'YYYY-MM-DD 00:00:00']]}:{})},
   actionColumn:{title:'操作',key:'action',dataIndex:'action',width:definition.domain==='apps'?350:190,fixed:'right'},

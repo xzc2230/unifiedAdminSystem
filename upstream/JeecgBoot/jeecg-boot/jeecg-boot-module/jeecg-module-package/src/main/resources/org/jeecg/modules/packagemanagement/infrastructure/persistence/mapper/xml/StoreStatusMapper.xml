@@ -40,7 +40,24 @@
         <where>
             <if test="id != null ">and id = #{id}</if>
             <if test="packageCode != null  and packageCode != ''">and package_code like concat('%',#{packageCode},'%')</if>
-            <if test="status != null ">and status = #{status}</if>
+            <choose>
+                <when test="(statusIn != null and statusIn.size() &gt; 0) or (iosStatusIn != null and iosStatusIn.size() &gt; 0)">
+                    and (
+                    <trim prefixOverrides="or">
+                        <if test="statusIn != null and statusIn.size() &gt; 0">
+                            status in
+                            <foreach collection="statusIn" item="item" open="(" close=")" separator=",">#{item}</foreach>
+                        </if>
+                        <if test="iosStatusIn != null and iosStatusIn.size() &gt; 0">
+                            or (platform = 'ios' and status in
+                            <foreach collection="iosStatusIn" item="item" open="(" close=")" separator=",">#{item}</foreach>
+                            )
+                        </if>
+                    </trim>
+                    )
+                </when>
+                <when test="status != null">and status = #{status}</when>
+            </choose>
             <if test="appleAppId != null and appleAppId != ''">and apple_app_id = #{appleAppId}</if>
             <if test="storeUrl != null  and store_url != ''">and store_url = #{storeUrl}</if>
         </where>
