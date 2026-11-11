@@ -149,6 +149,7 @@ test('app editor offers android and ios store fields', () => {
     assert.ok(keys.includes('platform'));
     assert.ok(keys.includes('appleAppId'));
     assert.ok(keys.includes('storeRegion'));
+    assert.notEqual(definitions.apps.fields.find((field) => field.key === 'appName').required, true);
     assert.equal(definitions.apps.fields.find((field) => field.key === 'platform').type, 'radio');
     assert.notEqual(definitions.apps.fields.find((field) => field.key === 'appleAppId').required, true);
     const region = definitions.apps.fields.find((field) => field.key === 'storeRegion');
@@ -171,6 +172,8 @@ test('app editor offers android and ios store fields', () => {
 test('app editor leaves ios apple id optional and defaults the store region', () => {
   const source = fs.readFileSync(path.join(root, 'src/views/packagemanagement/components/AppEditor.vue'), 'utf8');
   assert.doesNotMatch(source, /appleAppId' && props\.model\.platform === 'ios'/);
+  assert.match(source, /只输入数字，不要带 id/);
+  assert.match(source, /\['appName', 'applicationCode', 'packageCode', 'url', 'mark'\]/);
   assert.match(source, /model\.storeRegion \|\| 'us'/);
   assert.match(source, /optionsFor\(storeRegionField\)/);
 });

@@ -23,15 +23,14 @@
           name="appleAppId"
           :rules="rulesFor(appleAppIdField)"
           class="full-width"
+          extra="商店查询会自动拼接 id=，这里只填数字。"
         >
-          <a-input-number
-            :value="model.appleAppId === '' || model.appleAppId == null ? undefined : Number(model.appleAppId)"
-            :min="0"
-            :precision="0"
-            :controls="false"
+          <a-input
+            :value="model.appleAppId"
             class="apple-id-input"
-            placeholder="输入 Apple ID"
-            @change="update(appleAppIdField, $event == null ? '' : String($event))"
+            placeholder="只输入数字，不要带 id"
+            allowClear
+            @update:value="update(appleAppIdField, String($event || '').replace(/\D/g, ''))"
           />
         </a-form-item>
         <a-form-item
@@ -243,7 +242,7 @@
     }
   }
   const basicFields = computed(() =>
-    ['appName', 'userName', 'applicationCode', 'author', 'packageCode', 'url', 'mark'].flatMap((key) => props.fields.filter((field) => field.key === key))
+    ['appName', 'applicationCode', 'packageCode', 'url', 'mark'].flatMap((key) => props.fields.filter((field) => field.key === key))
   );
   const statusField = computed(() => props.fields.find((field) => field.key === 'status'));
   const areasField = computed(() => props.fields.find((field) => field.key === 'areas'));
