@@ -47,6 +47,18 @@ class AppAttributionResolveLogTest {
     }
 
     @Test
+    void closedRiskModeIsLoggedAndDoesNotReturnTheLink() throws Exception {
+        AppLogPort logs = mock(AppLogPort.class);
+        FilterChain chain = mock(FilterChain.class);
+        AppManager app = app("com.example.app");
+        app.setStatus(0);
+        MockHttpServletResponse response = post(filter(app, logs), chain, "{\"applicationCode\":\"com.example.app\"}");
+        assertFalse(response.getContentAsString().contains("MATCHED"));
+        assertEquals("风控全关", saved(logs).getErrorMsg());
+        verify(chain).doFilter(any(), any());
+    }
+
+    @Test
     void businessErrorIsStoredWithThePackageName() throws Exception {
         AppLogPort logs = mock(AppLogPort.class);
         MockHttpServletResponse response = post(filter(app("com.example.app"), logs), mock(FilterChain.class),
@@ -99,6 +111,7 @@ class AppAttributionResolveLogTest {
     private static AppManager app(String packageCode) {
         AppManager app = new AppManager();
         app.setId(9L);
+        app.setStatus(1);
         app.setPackageCode(packageCode);
         app.setUrl("https://example.invalid/land");
         return app;

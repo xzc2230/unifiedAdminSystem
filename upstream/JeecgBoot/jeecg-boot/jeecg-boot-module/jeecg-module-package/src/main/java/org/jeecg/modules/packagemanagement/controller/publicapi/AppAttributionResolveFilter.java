@@ -16,6 +16,7 @@ import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import org.jeecg.modules.packagemanagement.application.apps.support.AppAttributionResolve;
 import org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions;
@@ -60,15 +61,16 @@ public class AppAttributionResolveFilter extends OncePerRequestFilter {
             chain.doFilter(replay(request, body), response);
             return;
         }
-        String packageName = applicationCode(node);
         String params = new String(body, StandardCharsets.UTF_8);
+        Map<String, String> city = locate(request);
         try {
-            Map<String, Object> payload = resolve.tryResolve(node);
-            if (payload == null) {
-                if (!packageName.isBlank()) record(request, packageName, params, "", "包不存在！！");
+            AppAttributionResolve.Outcome outcome = resolve.decide(node, city);
+            if (outcome.payload() == null) {
+                if (!outcome.packageName().isBlank()) record(request, city, outcome.packageName(), params, "", outcome.denyTip());
                 chain.doFilter(replay(request, body), response);
                 return;
             }
+            Map<String, Object> payload = outcome.payload();
             OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Asia/Shanghai"));
             response.setStatus(200);
             response.setHeader("Cache-Control", "no-store");
@@ -78,7 +80,7 @@ public class AppAttributionResolveFilter extends OncePerRequestFilter {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             String result = JSON.writeValueAsString(payload);
             response.getOutputStream().write(result.getBytes(StandardCharsets.UTF_8));
-            record(request, String.valueOf(payload.get("applicationCode")), params, result, "");
+            record(request, city, String.valueOf(payload.get("applicationCode")), params, result, "");
         } catch (PackageFailure failure) {
             response.setStatus(failure.getCode());
             response.setHeader("Cache-Control", "no-store");
@@ -86,20 +88,36 @@ public class AppAttributionResolveFilter extends OncePerRequestFilter {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             String result = JSON.writeValueAsString(Map.of("message", failure.getMessage()));
             response.getOutputStream().write(result.getBytes(StandardCharsets.UTF_8));
-            record(request, packageName, params, result, failure.getMessage());
+            record(request, city, applicationCode(node), params, result, failure.getMessage());
         }
     }
 
-    private void record(HttpServletRequest request, String packageName, String params, String result, String error) {
+    private Map<String, String> locate(HttpServletRequest request) {
+        String ip = "";
+        try {
+            ip = geo.getIpAddress(request);
+            Map<String, String> city = geo.getCountryAndCountryCodeByIP(ip);
+            Map<String, String> located = city == null ? new LinkedHashMap<>() : new LinkedHashMap<>(city);
+            located.put("ip", ip == null ? "" : ip);
+            return located;
+        } catch (RuntimeException ignored) {
+            Map<String, String> located = new LinkedHashMap<>();
+            located.put("status", "true");
+            located.put("countryCode", "us");
+            located.put("ip", ip == null ? "" : ip);
+            return located;
+        }
+    }
+
+    private void record(HttpServletRequest request, Map<String, String> city, String packageName, String params, String result, String error) {
         try {
             if (packageName == null || packageName.isBlank()) return;
-            String ip = "";
+            String ip = city == null ? "" : String.valueOf(city.getOrDefault("ip", ""));
             String country = "";
             try {
-                ip = geo.getIpAddress(request);
-                country = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ip));
+                country = PackageCountryRegions.accessCode(city);
             } catch (RuntimeException ignored) {
-                if (ip == null || ip.isBlank()) ip = request.getRemoteAddr();
+                country = "";
             }
             AppLog row = new AppLog();
             row.setPackageName(packageName);
