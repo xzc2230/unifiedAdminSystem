@@ -1,5 +1,5 @@
 <template>
-  <div class="package-page">
+  <div class="package-page" :class="{compact:compactList}">
     <a-card v-if="definition.domain === 'statistics'" title="统计汇总" size="small" class="summary-card">
       <a-form layout="inline" @submit.prevent="loadTotal">
         <a-form-item label="包名"><a-input v-model:value="totalQuery.packageCode" allowClear /></a-form-item>
@@ -11,13 +11,23 @@
     </a-card>
     <BasicTable @register="registerTable">
       <template #tableTitle>
-        <span>{{ definition.title }}</span>
-        <a-button v-if="definition.add !== false" v-auth="permission('add')" type="primary" @click="openEditor()">新增</a-button>
-        <a-button v-if="definition.export !== false" v-auth="permission('export')" :loading="exporting" @click="exportRows">导出</a-button>
+        <div v-if="compactList" class="list-actions">
+          <a-button v-if="definition.add !== false" v-auth="permission('add')" type="primary" @click="openEditor()">新增</a-button>
+          <a-button v-if="definition.export !== false" v-auth="permission('export')" :loading="exporting" @click="exportRows">导出</a-button>
+          <a-button v-auth="permission('remove')" danger :disabled="!canRemoveSelected" @click="confirmRemove(selected)">批量删除</a-button>
+          <a-button v-if="definition.domain === 'request-logs'" v-auth="permission('clean')" danger @click="confirmClean">清理日志</a-button>
+        </div>
+        <template v-else>
+          <span>{{ definition.title }}</span>
+          <a-button v-if="definition.add !== false" v-auth="permission('add')" type="primary" @click="openEditor()">新增</a-button>
+          <a-button v-if="definition.export !== false" v-auth="permission('export')" :loading="exporting" @click="exportRows">导出</a-button>
+        </template>
       </template>
       <template #toolbar>
-        <a-button v-auth="permission('remove')" danger :disabled="!canRemoveSelected" @click="confirmRemove(selected)">批量删除</a-button>
-        <a-button v-if="definition.domain === 'request-logs'" v-auth="permission('clean')" danger @click="confirmClean">清理日志</a-button>
+        <template v-if="!compactList">
+          <a-button v-auth="permission('remove')" danger :disabled="!canRemoveSelected" @click="confirmRemove(selected)">批量删除</a-button>
+          <a-button v-if="definition.domain === 'request-logs'" v-auth="permission('clean')" danger @click="confirmClean">清理日志</a-button>
+        </template>
       </template>
       <template #tableTop>
         <a-alert v-if="selected.length" type="info" show-icon>
@@ -158,20 +168,23 @@ const marketUrl=(pkg:string)=>`https://play.google.com/store/apps/details?id=${e
 const promotionUrl=(row:any)=>`https://${row.appHost}${row.appSub}/?pZoneID=${encodeURIComponent(row.appCode || '')}`;
 const money=(value:any)=>value == null ? '0.00' : Number(value).toFixed(2);
 const todayInShanghai=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+const compactList=['apps','store','request-logs'].includes(definition.domain);
+const compactCol={style:{width:'auto',flex:'0 0 auto'}};
 const schemas=definition.filters.filter(key=>definition.domain!=='request-logs'||!['startReqTime','endReqTime'].includes(key)).filter(key=>definition.domain!=='apps'||canAppField(appPermissions.value,'query',key)).map(key=>{
   const f=fieldsByKey[key];
+  const componentProps=f?.type==='date'||f?.type==='datetime'?{valueFormat:f.type==='date'?'YYYY-MM-DD':'YYYY-MM-DD HH:mm:ss',showTime:f.type==='datetime'}:key==='status'&&definition.domain==='store'?{options:optionsFor(f)}:{};
   return {field:key,label:f?.label || key,component:f?.type==='date' || f?.type==='datetime'?'DatePicker':key==='status'&&definition.domain==='store'?'Select':'Input',
-    componentProps:f?.type==='date'||f?.type==='datetime'?{valueFormat:f.type==='date'?'YYYY-MM-DD':'YYYY-MM-DD HH:mm:ss',showTime:f.type==='datetime'}:key==='status'&&definition.domain==='store'?{options:optionsFor(f)}:{},colProps:{span:6}};
+    componentProps:compactList?{...componentProps,style:{width:'180px'}}:componentProps,colProps:compactList?compactCol:{span:6}};
 });
 if(definition.domain==='request-logs'){
   const today=todayInShanghai();
-  schemas.push({field:'reqDate',label:'日期',component:'RangePicker',defaultValue:[today,today],componentProps:{valueFormat:'YYYY-MM-DD',format:'YYYY-MM-DD',placeholder:['开始日期','结束日期']},colProps:{span:8}});
+  schemas.push({field:'reqDate',label:'日期',component:'RangePicker',defaultValue:[today,today],componentProps:{valueFormat:'YYYY-MM-DD',format:'YYYY-MM-DD',placeholder:['开始日期','结束日期'],style:{width:'240px'}},colProps:compactCol});
 }
 const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||key!=='applicationCode'&&canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:['appName','packageCode','packageName','reqTime'].includes(key)?180:150,ellipsis:true}));
 const [registerTable,{reload,clearSelectedRowKeys}]=useTable({
   api:async params=>{const {pageNo,pageSize,...filters}=params;lastFilters.value=filters;if(definition.domain==='apps'){selected.value=[];selectedRows.value=[];clearSelectedRowKeys();}return api.list({...params,...(definition.appType!=null?{appType:definition.appType}:{})});},
   columns,rowKey:idKey,bordered:true,showTableSetting:true,useSearchForm:true,
-  formConfig:{schemas:schemas as any,labelWidth:100,showAdvancedButton:schemas.length>3,autoSubmitOnEnter:true,...(definition.domain==='request-logs'?{fieldMapToTime:[['reqDate',['startReqTime','endReqTime'],'YYYY-MM-DD 00:00:00']]}:{})},
+  formConfig:{schemas:schemas as any,labelWidth:compactList?80:100,showAdvancedButton:schemas.length>3,autoSubmitOnEnter:true,...(compactList?{actionColOptions:compactCol,rowProps:{gutter:8}}:{}),...(definition.domain==='request-logs'?{fieldMapToTime:[['reqDate',['startReqTime','endReqTime'],'YYYY-MM-DD 00:00:00']]}:{})},
   actionColumn:{title:'操作',key:'action',dataIndex:'action',width:definition.domain==='apps'?350:190,fixed:'right'},
   rowSelection:{type:'checkbox',onChange:(keys,rows)=>{selected.value=keys;selectedRows.value=rows || [];}},
 });
@@ -238,7 +251,16 @@ async function loadAuto(){autoLoading.value=true;try{autoRows.value=await autoBl
 function removeAuto(row:any){Modal.confirm({title:'解除该设备的自动拉黑？',onOk:async()=>{await removeAutoBlacklist(autoPkg.value,row.type,row.value);message.success('已解除');await loadAuto();}});}
 onMounted(()=>{loadChoices();if(definition.domain==='statistics') loadTotal();});
 </script>
-<style scoped lang="less">.package-page{padding:16px}.summary-card{margin-bottom:16px}.totals{margin-top:16px}.notice{margin-bottom:16px}.detail-value{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;max-width:560px}</style>
+<style scoped lang="less">
+.package-page{padding:16px}.summary-card{margin-bottom:16px}.totals{margin-top:16px}.notice{margin-bottom:16px}.detail-value{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;max-width:560px}
+.package-page.compact{
+  .list-actions{display:flex;justify-content:flex-end;gap:8px;width:100%;margin-left:auto}
+  :deep(.jeecg-basic-table-header__tableTitle){justify-content:flex-end}
+  :deep(.jeecg-basic-table-form-container){padding:8px 8px 0}
+  :deep(.jeecg-basic-table-form-container .ant-form){padding:8px 8px 0;margin-bottom:8px}
+  :deep(.jeecg-basic-table-form-container .ant-form-item){margin-bottom:8px}
+}
+</style>
 <style lang="less">
   .app-editor-modal {
     .ant-modal { top: 40px; max-width: calc(100vw - 32px); padding-bottom: 24px; }

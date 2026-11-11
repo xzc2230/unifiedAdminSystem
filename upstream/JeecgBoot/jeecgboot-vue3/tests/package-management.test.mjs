@@ -126,6 +126,14 @@ test('editable business fields agree with backend allowlists and preserve domain
   assert.match(requestLogPage,/开始日期/);
   assert.match(requestLogPage,/结束日期/);
   assert.match(requestLogPage,/Asia\/Shanghai/);
+  assert.match(requestLogPage,/const compactList=\['apps','store','request-logs'\]/);
+  assert.match(requestLogPage,/width:'180px'/);
+  assert.match(requestLogPage,/width:'240px'/);
+  assert.match(requestLogPage,/class="list-actions"/);
+  const devPage=fs.readFileSync(path.join(root,'src/views/packagemanagement/components/DevRecordPage.vue'),'utf8');
+  assert.match(devPage,/domain==='risk'/);
+  assert.match(devPage,/width:'180px'/);
+  assert.match(devPage,/class="list-actions"/);
   assert.equal(definitions['app-events'].key,'eventId');assert.equal(definitions.reviews.key,'reviewsId');
   assert.equal(definitions.statistics.fields.find(f=>f.key==='paymentTotal').readonly,true);
   assert.ok(definitions['landing-counts'].filters.includes('appName'));

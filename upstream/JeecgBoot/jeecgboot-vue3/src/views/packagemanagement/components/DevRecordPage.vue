@@ -1,14 +1,22 @@
 <template>
-  <div class="dev-record-page">
+  <div class="dev-record-page" :class="{compact:domain==='risk'}">
     <slot name="summary" :query="lastQuery" />
     <BasicTable @register="registerTable">
       <template #tableTitle>
-        <span>{{ title }}</span>
-        <a-button v-if="!readonly" v-auth="permission('add')" type="primary" @click="openEditor()">新增</a-button>
+        <div v-if="domain==='risk'" class="list-actions">
+          <a-button v-if="!readonly" v-auth="permission('add')" type="primary" @click="openEditor()">新增</a-button>
+          <a-button v-if="!readonly" v-auth="permission('remove')" danger :disabled="!selected.length" @click="remove(selected)">批量删除</a-button>
+        </div>
+        <template v-else>
+          <span>{{ title }}</span>
+          <a-button v-if="!readonly" v-auth="permission('add')" type="primary" @click="openEditor()">新增</a-button>
+        </template>
       </template>
       <template #toolbar>
-        <a-button v-if="!readonly" v-auth="permission('remove')" danger :disabled="!selected.length" @click="remove(selected)">批量删除</a-button>
-        <slot name="toolbar" :reload="reload" />
+        <template v-if="domain!=='risk'">
+          <a-button v-if="!readonly" v-auth="permission('remove')" danger :disabled="!selected.length" @click="remove(selected)">批量删除</a-button>
+          <slot name="toolbar" :reload="reload" />
+        </template>
       </template>
       <template #tableTop>
         <a-alert v-if="selected.length" type="info" show-icon>
@@ -64,16 +72,19 @@ const props=withDefaults(defineProps<{title:string;path:string;domain:string;fie
 const emit=defineEmits<{(e:'query',query:Record<string,any>):void;(e:'changed'):void}>();
 const api=computed(()=>devApi(props.path));
 const permission=(action:string)=>`package:${props.domain}:${action}`;
+const compact=computed(()=>props.domain==='risk');
+const querySchemas=computed(()=>compact.value?props.filters.map(item=>({...item,colProps:{style:{width:'auto',flex:'0 0 auto'}},componentProps:{...(item.componentProps||{}),style:{width:'180px'}}})):props.filters);
+const queryForm=computed(()=>({schemas:querySchemas.value,labelWidth:compact.value?80:90,autoSubmitOnEnter:true,showAdvancedButton:props.filters.length>3,...(compact.value?{actionColOptions:{style:{width:'auto',flex:'0 0 auto'}},rowProps:{gutter:8}}:{})}));
 const selected=ref<any[]>([]),lastQuery=ref<Record<string,any>>({});
 const [registerTable,{reload,clearSelectedRowKeys,setProps}]=useTable({
  title:props.title,api:async params=>{lastQuery.value=params;emit('query',params);return api.value.list(params);},
  columns:props.fields.filter(f=>!f.hidden).map(f=>({title:f.label,key:f.key,dataIndex:f.key,width:f.width||160,ellipsis:true,json:f.json})),
  rowKey:'id',bordered:true,useSearchForm:true,showTableSetting:true,
- formConfig:{schemas:props.filters,labelWidth:90,autoSubmitOnEnter:true,showAdvancedButton:props.filters.length>3},
+ formConfig:queryForm.value,
  actionColumn:{title:'操作',dataIndex:'action',key:'action',width:props.path==='openapi/token'?260:180,fixed:'right'},
  rowSelection:props.readonly?undefined:{type:'checkbox',onChange:keys=>selected.value=keys},
 });
-watch(()=>props.filters,schemas=>setProps({formConfig:{schemas,labelWidth:90,autoSubmitOnEnter:true,showAdvancedButton:schemas.length>3}}),{deep:true});
+watch(queryForm,formConfig=>setProps({formConfig}),{deep:true});
 const open=ref(false),saving=ref(false),editingId=ref<any>(),formRef=ref(),form=reactive<Record<string,any>>({});
 const detailOpen=ref(false),detail=ref<Record<string,any>>({}),lookupLoading=ref(false),asnPreview=ref('');
 async function openEditor(row?:any){const data=row?await api.value.detail(row.id):{};Object.keys(form).forEach(k=>delete form[k]);Object.assign(form,props.defaults,data);editingId.value=row?.id;asnPreview.value='';open.value=true;}
@@ -86,4 +97,13 @@ async function copy(value:any){try{if(!copyTextToClipboard(typeof value==='strin
 async function previewAsn(){if(!form.asn)return;lookupLoading.value=true;try{const data=await lookupAsn(String(form.asn));asnPreview.value=data.asnName||data.holder||data.orgKeyword||prettyJson(data);if(data.asnName)form.asnName=data.asnName;}finally{lookupLoading.value=false;}}
 defineExpose({reload:refresh});
 </script>
-<style scoped lang="less">.dev-record-page{padding:16px}.json-value,pre{white-space:pre-wrap;overflow-wrap:anywhere;max-width:680px;margin:0}</style>
+<style scoped lang="less">
+.dev-record-page{padding:16px}.json-value,pre{white-space:pre-wrap;overflow-wrap:anywhere;max-width:680px;margin:0}
+.dev-record-page.compact{
+  .list-actions{display:flex;justify-content:flex-end;gap:8px;width:100%;margin-left:auto}
+  :deep(.jeecg-basic-table-header__tableTitle){justify-content:flex-end}
+  :deep(.jeecg-basic-table-form-container){padding:8px 8px 0}
+  :deep(.jeecg-basic-table-form-container .ant-form){padding:8px 8px 0;margin-bottom:8px}
+  :deep(.jeecg-basic-table-form-container .ant-form-item){margin-bottom:8px}
+}
+</style>
