@@ -59,7 +59,6 @@
           :label="field.label"
           :name="field.key"
           :rules="rulesFor(field)"
-          :extra="field.key === 'packageCode' && editing ? '包名是应用的唯一标识，创建后不可修改。' : undefined"
         >
           <a-textarea
             v-if="field.key === 'mark'"

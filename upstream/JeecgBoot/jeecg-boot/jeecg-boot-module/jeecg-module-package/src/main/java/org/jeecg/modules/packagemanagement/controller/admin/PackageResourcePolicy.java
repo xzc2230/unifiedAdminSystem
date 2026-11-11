@@ -90,7 +90,6 @@ public class PackageResourcePolicy {
             String code=rawCode==null?null:rawCode.trim();
             new BeanWrapperImpl(value).setPropertyValue("packageCode",code);
             if(code==null||code.isBlank())throw new PackageFailure(400,"包名不能为空");
-            if(old!=null&&!Objects.equals(property(old,"packageCode"),code))throw new PackageFailure(400,"包名不可修改");
             var before=stores.selectStoreStatusByPackageName(code);
             return ()->{
                 if(before==null){var created=stores.selectStoreStatusByPackageName(code);

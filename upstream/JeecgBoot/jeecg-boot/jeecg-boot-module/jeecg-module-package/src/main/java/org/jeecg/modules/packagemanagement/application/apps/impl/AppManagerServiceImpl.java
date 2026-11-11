@@ -81,7 +81,7 @@ public class AppManagerServiceImpl implements IAppManagerService {
         if (appManager1 != null) {
             return -1;
         } else {
-            syncStore(appManager, false);
+            syncStore(appManager, null, false);
             appManager.setCreateDate(DateUtils.getNowDate());
             int count=appManagerMapper.insertAppManager(appManager);refresh(appManager.getPackageCode());return count;
         }
@@ -106,8 +106,12 @@ public class AppManagerServiceImpl implements IAppManagerService {
                 previous.setPlatform("android");
             }
             identityChanged = StoreListing.identityChanged(previous, appManager);
+            AppManager clash = appManagerMapper.selectAppManagerByPlatformAndPackage(appManager.getPlatform(), appManager.getPackageCode());
+            if (clash != null && !clash.getId().equals(appManager.getId())) {
+                throw new org.jeecg.modules.packagemanagement.exception.PackageFailure(400, "同平台包名已存在");
+            }
         }
-        syncStore(appManager, identityChanged);
+        syncStore(appManager, previous, identityChanged);
         appManager.setUpdateDate(DateUtils.getNowDate());
         appManager.setCreateDate(DateUtils.getNowDate());
 
@@ -116,6 +120,9 @@ public class AppManagerServiceImpl implements IAppManagerService {
             appManagerMapper.clearAppManagerAppleStoreIdentity(appManager.getId());
         }
         refresh(appManager.getPackageCode());
+        if (previous != null && previous.getPackageCode() != null && !previous.getPackageCode().equals(appManager.getPackageCode())) {
+            refresh(previous.getPackageCode());
+        }
         return count;
     }
 
@@ -133,8 +140,14 @@ public class AppManagerServiceImpl implements IAppManagerService {
         app.setApplicationCode(code);
     }
 
-    private void syncStore(AppManager app, boolean identityChanged) {
+    private void syncStore(AppManager app, AppManager previous, boolean identityChanged) {
         StoreStatus storeStatus = storeStatusMapper.selectStoreStatusByPlatformAndPackage(app.getPlatform(), app.getPackageCode());
+        if (storeStatus == null && previous != null) {
+            String oldPlatform = previous.getPlatform() == null || previous.getPlatform().isBlank() ? "android" : previous.getPlatform();
+            if (!oldPlatform.equals(app.getPlatform()) || !java.util.Objects.equals(previous.getPackageCode(), app.getPackageCode())) {
+                storeStatus = storeStatusMapper.selectStoreStatusByPlatformAndPackage(oldPlatform, previous.getPackageCode());
+            }
+        }
         if (storeStatus == null) {
             StoreStatus ss = new StoreStatus();
             ss.setStatus(0);

@@ -15,11 +15,12 @@ class PackageDevFieldAndRiskTest {
   var limited=new AppManagerFieldPermissionPolicy(Set.of("package:apps:edit","package:apps:editField:appName")::contains);
   assertThrows(org.jeecg.modules.packagemanagement.exception.PackageFailure.class,()->limited.check(request,old));
   request.setUrl("before");request.setAppName("name");assertDoesNotThrow(()->limited.check(request,old));
+  request.setPlatform("ios");assertDoesNotThrow(()->limited.check(request,old));
  }
  @Test void queryMaskPreservesIdentityAndOnlyKeepsGrantedFields(){
-  var row=new AppManager();row.setId(42L);row.setPackageCode("com.test");row.setUrl("secret");row.setUserName("owner");
+  var row=new AppManager();row.setId(42L);row.setPackageCode("com.test");row.setUrl("secret");row.setUserName("owner");row.setPlatform("ios");row.setAppleAppId("123456");
   var p=new AppManagerFieldPermissionPolicy(Set.of("package:apps:query","package:apps:queryField:packageCode")::contains);p.mask(row);
-  assertEquals(42L,row.getId());assertEquals("com.test",row.getPackageCode());assertNull(row.getUrl());assertNull(row.getUserName());
+  assertEquals(42L,row.getId());assertEquals("com.test",row.getPackageCode());assertEquals("ios",row.getPlatform());assertEquals("123456",row.getAppleAppId());assertNull(row.getUrl());assertNull(row.getUserName());
  }
  @Test void asnNormalizationHasSource32BitBounds(){
   assertEquals("123",AsnLookup.normalize(" AS00123 "));assertEquals("4294967295",AsnLookup.normalize("4294967295"));

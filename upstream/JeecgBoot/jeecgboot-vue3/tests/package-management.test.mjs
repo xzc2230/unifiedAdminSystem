@@ -160,7 +160,10 @@ test('app editor offers android and ios store fields', () => {
     assert.equal(code.label, '默认编码');
     assert.equal(code.readonly, true);
     assert.deepEqual(definitions.apps.filters, ['packageCode']);
-    assert.deepEqual(definitions.apps.columns.slice(0, 2), ['id', 'appName']);
+    assert.equal(definitions.apps.columns.includes('id'), false);
+    assert.deepEqual(definitions.apps.columns.slice(0, 3), ['appName', 'platform', 'appleAppId']);
+    assert.notEqual(definitions.apps.fields.find((field) => field.key === 'packageCode').immutable, true);
+    assert.equal(definitions.statistics.fields.find((field) => field.key === 'packageCode').immutable, true);
     for (const hidden of ['author', 'applicationCode', 'gaidAidThreshold', 'aidDeviceThreshold', 'aidGaidSwitchThreshold', 'riskWindowSeconds', 'referrerBlacklistJson']) {
       assert.equal(definitions.apps.columns.includes(hidden), false, hidden);
     }
@@ -182,6 +185,7 @@ test('app editor leaves ios apple id optional and defaults the store region', ()
   assert.doesNotMatch(source, /appleAppId' && props\.model\.platform === 'ios'/);
   assert.match(source, /只输入数字，不要带 id/);
   assert.match(source, /\['appName', 'applicationCode', 'packageCode', 'url', 'mark'\]/);
+  assert.doesNotMatch(source, /创建后不可修改/);
   assert.match(source, /model\.storeRegion \|\| 'us'/);
   assert.match(source, /optionsFor\(storeRegionField\)/);
 });

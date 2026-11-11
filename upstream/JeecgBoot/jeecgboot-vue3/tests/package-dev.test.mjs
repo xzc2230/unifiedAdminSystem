@@ -23,6 +23,8 @@ test('field permissions preserve module fallback and restrict explicitly granted
  const access=['package:apps:edit','package:apps:query'];
  assert.equal(dev.canAppField(access,'edit','url'),true);
  assert.equal(dev.canAppField([...access,'package:apps:editField:status'],'edit','url'),false);
+ assert.equal(dev.canAppField([...access,'package:apps:editField:status'],'edit','platform'),true);
+ assert.equal(dev.canAppField([...access,'package:apps:queryField:appName'],'query','appleAppId'),true);
  assert.equal(dev.canAppField([...access,'package:apps:editField:status'],'edit','status'),true);
  assert.equal(dev.canAppField(['*:*:*'],'query','url'),true);
  assert.equal(dev.canAppField([],'edit','url'),false);
@@ -90,7 +92,7 @@ test('redacted application details never become default writes when saving anoth
  assert.deepEqual(dev.appEditPayload({...initial,areas:['BR']},limited,true,initial),{areas:['BR']});
  assert.deepEqual(dev.appEditPayload({...initial},limited,true,initial,['areas']),{areas:[]});
  assert.deepEqual(dev.appEditPayload({...initial,url:'https://example.com'},limited,true,initial),{});
- assert.deepEqual(dev.appEditPayload({...initial,packageCode:'changed'},permissions,true,initial),{});
+ assert.deepEqual(dev.appEditPayload({...initial,packageCode:'changed'},permissions,true,initial),{packageCode:'changed'});
  assert.equal(dev.appFieldRequired({key:'packageCode',required:true,immutable:true},true),false);
  assert.equal(dev.appFieldRequired({key:'url',required:true},true,false),false);
  assert.equal(dev.appFieldRequired({key:'url',required:true},true,true),true);

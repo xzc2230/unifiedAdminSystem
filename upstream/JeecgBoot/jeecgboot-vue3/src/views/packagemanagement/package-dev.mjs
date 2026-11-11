@@ -7,11 +7,13 @@ export const APP_STATUS_OPTIONS = Object.freeze([
  {value:2,label:'归因',remark:'使用归因模式'},
  {value:3,label:'调试',remark:'调试模式跳过 InstallReferrer 检查，仍执行地区和设备风控'},
 ]);
+const LISTING_FIELDS=new Set(['platform','appleAppId','storeRegion']);
 export function canAppField(permissions, action, key) {
  const granted=Array.isArray(permissions)?permissions:[];
  const fields=action==='edit'?EDIT_FIELDS:QUERY_FIELDS;
  const field=key==='updateTime'?'updateDate':key;
  if(granted.includes('*:*:*')) return true;
+ if(LISTING_FIELDS.has(field) && granted.includes(`package:apps:${action}`)) return true;
  if(!fields.includes(field)) return granted.includes(`package:apps:${action}`);
  const prefix=`package:apps:${action}Field:`;
  return granted.includes(prefix+field) || granted.includes(`package:apps:${action}`) && !fields.some(k=>granted.includes(prefix+k));
@@ -19,7 +21,7 @@ export function canAppField(permissions, action, key) {
 export function appEditPayload(model, permissions, editing, initial = {}, touched = []) {
  return Object.fromEntries(Object.entries(model).filter(([key,value])=>{
   if(!editing) return true;
-  if(key==='packageCode' || !canAppField(permissions,'edit',key) || value===undefined) return false;
+  if(!canAppField(permissions,'edit',key) || value===undefined) return false;
   const changed=JSON.stringify(value)!==JSON.stringify(initial[key]);
   const explicitlyEditedRedacted=touched.includes(key) && !canAppField(permissions,'query',key);
   return changed || explicitlyEditedRedacted;

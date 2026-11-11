@@ -7,7 +7,10 @@ import org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.App
 import org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.StoreStatusMapper;
 import org.junit.jupiter.api.Test;
 
+import org.jeecg.modules.packagemanagement.exception.PackageFailure;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
@@ -146,5 +149,71 @@ class StoreListingSyncTest {
 
         verify(mapper).clearAppManagerAppleStoreIdentity(1L);
         verify(stores).resetStoreListing(any());
+    }
+
+    @Test
+    void updatePackageCodeMovesTheExistingStoreRow() {
+        var mapper = mock(AppManagerMapper.class);
+        var stores = mock(StoreStatusMapper.class);
+        var service = new AppManagerServiceImpl();
+        PackageBusinessTest.inject(service, "appManagerMapper", mapper);
+        PackageBusinessTest.inject(service, "storeStatusMapper", stores);
+
+        AppManager previous = new AppManager();
+        previous.setId(1L);
+        previous.setPlatform("ios");
+        previous.setPackageCode("com.old");
+        previous.setAppleAppId("123456");
+        previous.setStoreRegion("us");
+
+        AppManager updated = new AppManager();
+        updated.setId(1L);
+        updated.setPlatform("ios");
+        updated.setPackageCode("com.new");
+        updated.setAppleAppId("123456");
+        updated.setStoreRegion("us");
+
+        StoreStatus existing = new StoreStatus();
+        existing.setId(9L);
+        existing.setPlatform("ios");
+        existing.setPackageCode("com.old");
+        existing.setStatus(1);
+
+        when(mapper.selectAppManagerById(1L)).thenReturn(previous);
+        when(mapper.selectAppManagerByPlatformAndPackage("ios", "com.new")).thenReturn(null);
+        when(stores.selectStoreStatusByPlatformAndPackage("ios", "com.new")).thenReturn(null);
+        when(stores.selectStoreStatusByPlatformAndPackage("ios", "com.old")).thenReturn(existing);
+        when(mapper.updateAppManager(updated)).thenReturn(1);
+
+        assertEquals(1, service.updateAppManager(updated));
+
+        verify(stores).resetStoreListing(argThat(row ->
+                row.getId() == 9L && "com.new".equals(row.getPackageCode()) && "ios".equals(row.getPlatform())));
+        verify(stores, never()).insertStoreStatus(any());
+    }
+
+    @Test
+    void updateRejectsPackageCodeAlreadyUsedOnTheSamePlatform() {
+        var mapper = mock(AppManagerMapper.class);
+        var stores = mock(StoreStatusMapper.class);
+        var service = new AppManagerServiceImpl();
+        PackageBusinessTest.inject(service, "appManagerMapper", mapper);
+        PackageBusinessTest.inject(service, "storeStatusMapper", stores);
+
+        AppManager previous = new AppManager();
+        previous.setId(1L);
+        previous.setPlatform("android");
+        previous.setPackageCode("com.old");
+        AppManager updated = new AppManager();
+        updated.setId(1L);
+        updated.setPlatform("android");
+        updated.setPackageCode("com.new");
+        AppManager other = new AppManager();
+        other.setId(2L);
+        when(mapper.selectAppManagerById(1L)).thenReturn(previous);
+        when(mapper.selectAppManagerByPlatformAndPackage("android", "com.new")).thenReturn(other);
+
+        assertThrows(PackageFailure.class, () -> service.updateAppManager(updated));
+        verify(mapper, never()).updateAppManager(any());
     }
 }
