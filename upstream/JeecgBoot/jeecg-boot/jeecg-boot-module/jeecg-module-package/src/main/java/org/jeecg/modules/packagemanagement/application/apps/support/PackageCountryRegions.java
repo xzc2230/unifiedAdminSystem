@@ -8,16 +8,33 @@ import java.util.*;
 /** Country identifiers shared by legacy protocols, risk checks and administrative writes. */
 public final class PackageCountryRegions {
     private static final Map<String, String> ALIASES;
+    private static final Map<String, String> LABELS;
     static {
         try (InputStream input = PackageCountryRegions.class.getResourceAsStream("/package-country-regions.json")) {
             if (input == null) throw new IllegalStateException("Missing country region mapping");
             JSONObject data = JSONObject.parseObject(new String(input.readAllBytes(), StandardCharsets.UTF_8));
             Map<String, String> aliases = new HashMap<>();
             data.getJSONObject("aliases").forEach((key, value) -> aliases.put(key, value.toString()));
+            Map<String, String> labels = new HashMap<>();
+            data.getJSONArray("regions").forEach(item -> {
+                JSONObject row = (JSONObject) item;
+                labels.put(row.getString("value"), row.getString("label"));
+            });
             ALIASES = Collections.unmodifiableMap(aliases);
+            LABELS = Collections.unmodifiableMap(labels);
         } catch (Exception error) { throw new ExceptionInInitializerError(error); }
     }
     private PackageCountryRegions() {}
+    /** Show a stored `(countryCode)ip` value with the shared Chinese country name. */
+    public static String displayReqIp(String reqIp) {
+        if (reqIp == null || reqIp.length() < 4 || reqIp.charAt(0) != '(') return reqIp;
+        int end = reqIp.indexOf(')');
+        if (end != 3) return reqIp;
+        String code = reqIp.substring(1, end).toLowerCase(Locale.ROOT);
+        String label = LABELS.get(code);
+        if (label == null) return reqIp;
+        return "(" + label + ")" + reqIp.substring(end + 1);
+    }
     public static String code(String value) {
         if (value == null) return "";
         String raw = value.trim();

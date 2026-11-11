@@ -78,10 +78,16 @@ class PackageDevFieldAndRiskTest {
 
  @Test void administrativeRequestLogFormattingPreservesInvalidText(){
   var adapter=mock(org.jeecg.modules.packagemanagement.infrastructure.integration.ElasticsearchAppLogAdapter.class);
-  var log=new org.jeecg.modules.packagemanagement.domain.applog.AppLog();log.setReqParams("{\"a\":1}");
+  var log=new org.jeecg.modules.packagemanagement.domain.applog.AppLog();log.setReqParams("{\"a\":1}");log.setReqIp("(us)203.0.113.8");
   when(adapter.query(any(),anyInt(),anyInt(),any())).thenReturn(new org.jeecg.modules.packagemanagement.application.port.AppLogPort.Page(List.of(log),1));
   var service=new org.jeecg.modules.packagemanagement.application.applog.EsAppLogServiceImpl(adapter);
-  assertTrue(service.list(new org.jeecg.modules.packagemanagement.domain.applog.AppLog(),1,10,List.of("com.test")).rows().get(0).getReqParams().contains("\n"));
+  var listed=service.list(new org.jeecg.modules.packagemanagement.domain.applog.AppLog(),1,10,List.of("com.test")).rows().get(0);
+  assertTrue(listed.getReqParams().contains("\n"));
+  assertEquals("(美国)203.0.113.8",listed.getReqIp());
   log.setReqParams("plain");assertEquals("plain",service.list(new org.jeecg.modules.packagemanagement.domain.applog.AppLog(),1,10,List.of("com.test")).rows().get(0).getReqParams());
+  log.setReqIp("(br)203.0.113.8");when(adapter.findById("1")).thenReturn(java.util.Optional.of(log));
+  assertEquals("(巴西)203.0.113.8",service.findById("1").orElseThrow().getReqIp());
+  log.setReqIp("(sg)203.0.113.8");when(adapter.export(any(),any())).thenReturn(List.of(log));
+  assertEquals("(新加坡)203.0.113.8",service.export(new org.jeecg.modules.packagemanagement.domain.applog.AppLog(),List.of("com.test")).get(0).getReqIp());
  }
 }

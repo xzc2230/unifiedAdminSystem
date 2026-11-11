@@ -29,6 +29,14 @@ class PackageCountryRegionsTest {
         assertEquals("us", PackageCountryRegions.accessCode(Map.of("countryCode", "br", "status", "true")));
         assertEquals("", PackageCountryRegions.geoCode(Map.of()));
     }
+    @Test void requestIpShowsKnownCountryCodesInChinese() {
+        assertEquals("(巴西)203.0.113.8", PackageCountryRegions.displayReqIp("(br)203.0.113.8"));
+        assertEquals("(美国)1.1.1.1", PackageCountryRegions.displayReqIp("(US)1.1.1.1"));
+        assertEquals("(zz)1.1.1.1", PackageCountryRegions.displayReqIp("(zz)1.1.1.1"));
+        assertEquals("(中国)1.1.1.1", PackageCountryRegions.displayReqIp("(中国)1.1.1.1"));
+        assertEquals("203.0.113.8", PackageCountryRegions.displayReqIp("203.0.113.8"));
+        assertNull(PackageCountryRegions.displayReqIp(null));
+    }
     @Test void countryCodeLinkWinsOverLegacyAliasesAndUnmatchedLinkUsesDefault() {
         JSONObject links = JSONObject.of("巴西", "old", "br", "new", "PH", "philippines");
         assertEquals("new", PackageCountryRegions.regionalLink(links,"BR","default"));
