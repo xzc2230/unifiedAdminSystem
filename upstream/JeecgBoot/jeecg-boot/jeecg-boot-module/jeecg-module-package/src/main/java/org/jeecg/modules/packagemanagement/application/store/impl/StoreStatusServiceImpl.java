@@ -129,10 +129,12 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
         if (!filteredList.isEmpty()) {
             for (StoreStatus s : filteredList) {
                 try {
+                    String previousProduct = s.getProductStatus();
                     Boolean isOnline = resolveOnline(s);
                     if (isOnline == null) {
                         continue;
                     }
+                    boolean productChanged = s.getProductStatus() != null && !s.getProductStatus().equals(previousProduct);
                     if (s.getStatus() == 0 && isOnline) {
                         org.slf4j.LoggerFactory.getLogger(getClass()).info("Store transition package={} status=0->1", s.getPackageCode());
                         s.setStatus(1);
@@ -153,6 +155,8 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
                             stringBuffer.append(stringBuffer.isEmpty() ? "" : ",").append(s.getFailEmail());
                         }
                         sendTransitionEmail(stringBuffer.toString(), delistingEmailSubject(s), s.getStoreUrl());
+                    } else if (productChanged) {
+                        storeStatusMapper.updateStoreStatusAndDate(s);
                     }
                 } catch (RuntimeException failure) {
                     org.slf4j.LoggerFactory.getLogger(getClass()).warn("Package store probe failed package={}", s.getPackageCode(), failure);
@@ -194,7 +198,12 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
                     org.slf4j.LoggerFactory.getLogger(getClass()).warn("iOS store probe lookup missing resultCount package={}", storeStatus.getPackageCode());
                     return null;
                 }
-                return resultCount >= 1;
+                if (resultCount >= 1) {
+                    storeStatus.setProductStatus(preorder(reply.body()) ? "预购" : "已上架");
+                    return true;
+                }
+                storeStatus.setProductStatus(storeStatus.getStatus() != null && storeStatus.getStatus() == 1 ? "已下架" : "待上架");
+                return false;
             } catch (RuntimeException failure) {
                 org.slf4j.LoggerFactory.getLogger(getClass()).warn("iOS store probe failed package={}", storeStatus.getPackageCode(), failure);
                 return null;
@@ -202,6 +211,10 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
         }
         org.slf4j.LoggerFactory.getLogger(getClass()).warn("Store probe skipped, unknown platform package={} platform={}", storeStatus.getPackageCode(), platform);
         return null;
+    }
+
+    private static boolean preorder(String body) {
+        return body != null && body.replace(" ", "").contains("\"isPreorder\":true");
     }
 
     private static Integer parseResultCount(String body) {

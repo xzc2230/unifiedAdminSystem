@@ -53,6 +53,7 @@
         <template v-else-if="column.dataIndex === 'paymentTotal'">{{ money(text) }}</template>
         <a-tooltip v-else-if="definition.domain === 'request-logs' && column.dataIndex === 'reqParams'" placement="topLeft"><template #title><pre class="detail-value">{{ prettyJson(text) }}</pre><a @click="copyValue(text)">复制</a></template><span>{{ text }}</span></a-tooltip>
         <a-tooltip v-else-if="fieldsByKey[column.dataIndex] && fieldsByKey[column.dataIndex].dict && dictRemark(column.dataIndex,text)" :title="dictRemark(column.dataIndex,text)">{{ displayValue(column.dataIndex,text) }}</a-tooltip>
+        <template v-else-if="definition.domain === 'store' && column.dataIndex === 'status'">{{ record.productStatus || displayValue(column.dataIndex, text) }}</template>
         <template v-else-if="fieldsByKey[column.dataIndex]">{{ displayValue(column.dataIndex,text) }}</template>
       </template>
     </BasicTable>
@@ -182,12 +183,14 @@ const marketUrl=(pkg:string)=>`https://play.google.com/store/apps/details?id=${e
 const promotionUrl=(row:any)=>`https://${row.appHost}${row.appSub}/?pZoneID=${encodeURIComponent(row.appCode || '')}`;
 const money=(value:any)=>value == null ? '0.00' : Number(value).toFixed(2);
 const todayInShanghai=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+const IOS_PRODUCT_STATUSES=['待上架','准备提交','等待审核','正在审核','审核被拒','元数据被拒','无效的二进制文件','开发者已拒绝','可供销售','预购','等待开发者发布','等待 Apple 发布','正在处理','已上架','已下架','被开发者下架'];
+const storeStatusOptions=[{value:0,label:'待上架'},{value:1,label:'已上架'},{value:2,label:'已下架'},...IOS_PRODUCT_STATUSES.map(label=>({value:`ios:${label}`,label:`iOS${label}`}))];
 const compactList=['apps','store','request-logs'].includes(definition.domain);
 const compactCol={style:{width:'auto',flex:'0 0 auto'}};
 const schemas=definition.filters.filter(key=>definition.domain!=='request-logs'||!['startReqTime','endReqTime'].includes(key)).filter(key=>definition.domain!=='apps'||canAppField(appPermissions.value,'query',key)).map(key=>{
   const f=fieldsByKey[key];
   const storeStatus=key==='status'&&definition.domain==='store';
-  const componentProps=f?.type==='date'||f?.type==='datetime'?{valueFormat:f.type==='date'?'YYYY-MM-DD':'YYYY-MM-DD HH:mm:ss',showTime:f.type==='datetime'}:storeStatus?{mode:'multiple',allowClear:true,maxTagCount:1,options:[{value:0,label:'待上架'},{value:1,label:'已上架'},{value:2,label:'已下架'},{value:'ios:0',label:'iOS待上架'},{value:'ios:1',label:'iOS已上架'},{value:'ios:2',label:'iOS已下架'}]}:{};
+  const componentProps=f?.type==='date'||f?.type==='datetime'?{valueFormat:f.type==='date'?'YYYY-MM-DD':'YYYY-MM-DD HH:mm:ss',showTime:f.type==='datetime'}:storeStatus?{mode:'multiple',allowClear:true,maxTagCount:1,options:storeStatusOptions}:{};
   return {field:key,label:f?.label || key,component:f?.type==='date' || f?.type==='datetime'?'DatePicker':storeStatus?'Select':'Input',
     componentProps:compactList?{...componentProps,style:storeStatus?{width:'240px'}:{width:'180px'}}:componentProps,colProps:compactList?compactCol:{span:6}};
 });

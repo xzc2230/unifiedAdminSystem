@@ -11,6 +11,7 @@
         <result property="appleAppId" column="apple_app_id"/>
         <result property="storeRegion" column="store_region"/>
         <result property="status" column="status"/>
+        <result property="productStatus" column="product_status"/>
         <result property="storeUrl" column="store_url"/>
         <result property="createDate"   column="create_date"/>
         <result property="successDate"   column="success_date"/>
@@ -26,6 +27,7 @@
                apple_app_id,
                store_region,
                status,
+               product_status,
                store_url,
                create_date,
                success_date,
@@ -41,7 +43,7 @@
             <if test="id != null ">and id = #{id}</if>
             <if test="packageCode != null  and packageCode != ''">and package_code like concat('%',#{packageCode},'%')</if>
             <choose>
-                <when test="(statusIn != null and statusIn.size() &gt; 0) or (iosStatusIn != null and iosStatusIn.size() &gt; 0)">
+                <when test="(statusIn != null and statusIn.size() &gt; 0) or (iosStatusIn != null and iosStatusIn.size() &gt; 0) or (iosProductIn != null and iosProductIn.size() &gt; 0)">
                     and (
                     <trim prefixOverrides="or">
                         <if test="statusIn != null and statusIn.size() &gt; 0">
@@ -52,6 +54,17 @@
                             or (platform = 'ios' and status in
                             <foreach collection="iosStatusIn" item="item" open="(" close=")" separator=",">#{item}</foreach>
                             )
+                        </if>
+                        <if test="iosProductIn != null and iosProductIn.size() &gt; 0">
+                            or (platform = 'ios' and (
+                            product_status in
+                            <foreach collection="iosProductIn" item="item" open="(" close=")" separator=",">#{item}</foreach>
+                            <if test="iosLegacyIn != null and iosLegacyIn.size() &gt; 0">
+                                or (product_status is null and status in
+                                <foreach collection="iosLegacyIn" item="item" open="(" close=")" separator=",">#{item}</foreach>
+                                )
+                            </if>
+                            ))
                         </if>
                     </trim>
                     )
@@ -90,6 +103,7 @@
             <if test="appleAppId != null">apple_app_id,</if>
             <if test="storeRegion != null">store_region,</if>
             <if test="status != null">status,</if>
+            <if test="productStatus != null">product_status,</if>
             <if test="storeUrl != null">store_url,</if>
             <if test="createDate != null">create_date,</if>
             <if test="successEmail != null">success_email,</if>
@@ -102,6 +116,7 @@
             <if test="appleAppId != null">#{appleAppId},</if>
             <if test="storeRegion != null">#{storeRegion},</if>
             <if test="status != null">#{status},</if>
+            <if test="productStatus != null">#{productStatus},</if>
             <if test="storeUrl != null">#{storeUrl},</if>
             <if test="createDate != null">#{createDate},</if>
             <if test="successEmail != null">#{successEmail},</if>
@@ -118,7 +133,8 @@
             success_date = NULL,
             fail_date = NULL,
             apple_app_id = #{appleAppId},
-            store_region = #{storeRegion}
+            store_region = #{storeRegion},
+            product_status = NULL
         where id = #{id}
     </update>
 
@@ -130,6 +146,7 @@
             <if test="appleAppId != null">apple_app_id = #{appleAppId},</if>
             <if test="storeRegion != null">store_region = #{storeRegion},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="productStatus != null">product_status = #{productStatus},</if>
             <if test="storeUrl != null">store_url = #{storeUrl},</if>
             <if test="successDate != null">success_date = #{successDate},</if>
             <if test="failDate != null">fail_date = #{failDate},</if>
@@ -147,6 +164,7 @@
             <if test="appleAppId != null">apple_app_id = #{appleAppId},</if>
             <if test="storeRegion != null">store_region = #{storeRegion},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="productStatus != null">product_status = #{productStatus},</if>
             <if test="storeUrl != null">store_url = #{storeUrl},</if>
             <if test="successDate != null">success_date = #{successDate},</if>
             <if test="failDate != null">fail_date = #{failDate},</if>

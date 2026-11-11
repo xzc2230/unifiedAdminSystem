@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS `pkg_store_status` (
   `apple_app_id` VARCHAR(32) NULL,
   `store_region` VARCHAR(8) NULL,
   `status` INT NULL,
+  `product_status` VARCHAR(64) NULL,
   `store_url` TEXT NULL,
   `create_date` DATETIME NULL,
   `success_date` DATETIME NULL,

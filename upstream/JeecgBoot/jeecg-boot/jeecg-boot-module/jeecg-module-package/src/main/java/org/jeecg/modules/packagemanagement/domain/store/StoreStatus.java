@@ -41,12 +41,19 @@ public class StoreStatus extends PackageEntity {
 
     private Integer status;
 
+    /** iOS App Store product status, such as 可供销售 or 等待审核. */
+    private String productStatus;
+
     /** Comma-separated query values such as 1,ios:2. Not stored. */
     private String statusQuery;
 
     private List<Integer> statusIn;
 
     private List<Integer> iosStatusIn;
+
+    private List<String> iosProductIn;
+
+    private List<Integer> iosLegacyIn;
 
     public Date createDate;
 
@@ -118,6 +125,14 @@ public class StoreStatus extends PackageEntity {
         this.status = status;
     }
 
+    public String getProductStatus() {
+        return productStatus;
+    }
+
+    public void setProductStatus(String productStatus) {
+        this.productStatus = productStatus;
+    }
+
     @JsonIgnore
     public String getStatusQuery() {
         return statusQuery;
@@ -143,6 +158,24 @@ public class StoreStatus extends PackageEntity {
 
     public void setIosStatusIn(List<Integer> iosStatusIn) {
         this.iosStatusIn = iosStatusIn;
+    }
+
+    @JsonIgnore
+    public List<String> getIosProductIn() {
+        return iosProductIn;
+    }
+
+    public void setIosProductIn(List<String> iosProductIn) {
+        this.iosProductIn = iosProductIn;
+    }
+
+    @JsonIgnore
+    public List<Integer> getIosLegacyIn() {
+        return iosLegacyIn;
+    }
+
+    public void setIosLegacyIn(List<Integer> iosLegacyIn) {
+        this.iosLegacyIn = iosLegacyIn;
     }
 
     public Date getCreateDate() {

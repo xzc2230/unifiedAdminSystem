@@ -24,9 +24,18 @@ class StoreStatusQueryTest {
     }
 
     @Test
+    void namedIosProductStatusDoesNotCollapseToTheThreeListingCodes() {
+        StoreStatus row = new StoreStatus();
+        row.setStatusQuery("ios:准备提交,ios:可供销售,ios:预购");
+        StoreStatusQuery.apply(row);
+        assertEquals(List.of("准备提交", "可供销售", "已上架", "预购"), row.getIosProductIn());
+        assertEquals(List.of(1), row.getIosLegacyIn());
+    }
+
+    @Test
     void unknownStatusIsRejected() {
         StoreStatus row = new StoreStatus();
-        row.setStatusQuery("ios:9");
+        row.setStatusQuery("ios:不是状态");
         PackageFailure failure = assertThrows(PackageFailure.class, () -> StoreStatusQuery.apply(row));
         assertEquals(400, failure.getCode());
     }

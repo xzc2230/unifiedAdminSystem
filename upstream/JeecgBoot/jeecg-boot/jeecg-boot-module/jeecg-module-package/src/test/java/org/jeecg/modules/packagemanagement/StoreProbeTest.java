@@ -40,6 +40,7 @@ class StoreProbeTest {
                 .thenReturn(new HttpPort.Reply(200, "{\"resultCount\":1}"));
         service.getStatus();
         assertEquals(1, ios.getStatus());
+        assertEquals("已上架", ios.getProductStatus());
         verify(mail).sendEmail(anyString(), eq("App Store上架"), eq(ios.getStoreUrl()));
         verifyNoInteractions(probe);
     }
