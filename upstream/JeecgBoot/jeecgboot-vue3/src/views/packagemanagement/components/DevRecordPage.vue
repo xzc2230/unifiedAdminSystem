@@ -19,7 +19,7 @@
         </template>
       </template>
       <template #tableTop>
-        <a-alert v-if="selected.length" type="info" show-icon>
+        <a-alert v-if="domain !== 'risk' && selected.length" type="info" show-icon>
           <template #message>
             <span>已选中 {{ selected.length }} 条记录</span>
             <a-divider type="vertical" />
@@ -124,6 +124,7 @@ defineExpose({reload:refresh});
   :deep(.jeecg-basic-table-form-container){padding:8px 8px 0}
   :deep(.jeecg-basic-table-form-container .ant-form){padding:8px 8px 0;margin-bottom:8px}
   :deep(.jeecg-basic-table-form-container .ant-form-item){margin-bottom:8px}
+  :deep(.jeecg-basic-table-header__table-title-box + div){display:none}
 }
 .record-editor{--editor-surface:#fff;--editor-border:#e4e9f0;--editor-text:#243247;--editor-muted:#66758a;color:var(--editor-text)}
 .editor-section{padding:22px 24px 4px;border:1px solid var(--editor-border);border-radius:12px;background:var(--editor-surface)}

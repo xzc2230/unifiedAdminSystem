@@ -164,7 +164,7 @@ test('app editor offers android and ios store fields', () => {
     assert.deepEqual(definitions.apps.columns.slice(0, 3), ['appName', 'platform', 'appleAppId']);
     assert.notEqual(definitions.apps.fields.find((field) => field.key === 'packageCode').immutable, true);
     assert.equal(definitions.statistics.fields.find((field) => field.key === 'packageCode').immutable, true);
-    for (const hidden of ['author', 'applicationCode', 'gaidAidThreshold', 'aidDeviceThreshold', 'aidGaidSwitchThreshold', 'riskWindowSeconds', 'referrerBlacklistJson']) {
+    for (const hidden of ['author', 'applicationCode', 'storeRegion', 'whetherUse', 'gaidAidThreshold', 'aidDeviceThreshold', 'aidGaidSwitchThreshold', 'riskWindowSeconds', 'referrerBlacklistJson']) {
       assert.equal(definitions.apps.columns.includes(hidden), false, hidden);
     }
     assert.deepEqual(definitions.store.filters, ['packageCode', 'status', 'appleAppId']);

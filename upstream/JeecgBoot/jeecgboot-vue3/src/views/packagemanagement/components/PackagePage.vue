@@ -1,5 +1,5 @@
 <template>
-  <div class="package-page" :class="{compact:compactList}">
+  <div class="package-page" :class="{compact:compactList, 'apps-list':definition.domain==='apps'}">
     <a-card v-if="definition.domain === 'statistics'" title="统计汇总" size="small" class="summary-card">
       <a-form layout="inline" @submit.prevent="loadTotal">
         <a-form-item label="包名"><a-input v-model:value="totalQuery.packageCode" allowClear /></a-form-item>
@@ -30,7 +30,7 @@
         </template>
       </template>
       <template #tableTop>
-        <a-alert v-if="selected.length" type="info" show-icon>
+        <a-alert v-if="!compactList && selected.length" type="info" show-icon>
           <template #message>
             <span>已选中 {{ selected.length }} 条记录</span>
             <a-divider type="vertical" />
@@ -40,7 +40,7 @@
         <span v-else></span>
       </template>
       <template #bodyCell="{column,record,text}">
-        <template v-if="column.key === 'action'"><a-space>
+        <template v-if="column.key === 'action'"><a-space class="row-actions" :size="10">
           <a v-auth="permission('query')" @click="showDetail(record)">详情</a>
           <a v-if="definition.edit !== false && (definition.domain === 'apps' ? canEditApp : hasPermission(permission('edit')))" @click="openEditor(record)">{{ definition.domain === 'apps' ? '修改' : '编辑' }}</a>
           <a v-if="canManageRow(record)" v-auth="permission('remove')" @click="confirmRemove([record[idKey]],record)">删除</a>
@@ -52,6 +52,10 @@
         <a v-else-if="column.dataIndex === 'appHost' && definition.domain === 'pwa' && record.appHost && record.appSub" :href="promotionUrl(record)" target="_blank" rel="noopener noreferrer">{{ promotionUrl(record) }}</a>
         <template v-else-if="column.dataIndex === 'paymentTotal'">{{ money(text) }}</template>
         <a-tooltip v-else-if="definition.domain === 'request-logs' && column.dataIndex === 'reqParams'" placement="topLeft"><template #title><pre class="detail-value">{{ prettyJson(text) }}</pre><a @click="copyValue(text)">复制</a></template><span>{{ text }}</span></a-tooltip>
+        <a-tag v-else-if="definition.domain === 'apps' && column.dataIndex === 'platform'" :color="text === 'ios' ? 'blue' : 'green'">{{ displayValue(column.dataIndex, text) || '安卓' }}</a-tag>
+        <a-tag v-else-if="definition.domain === 'apps' && column.dataIndex === 'status'" :color="appStatusColor(text)">{{ displayValue(column.dataIndex, text) || '—' }}</a-tag>
+        <a-tag v-else-if="definition.domain === 'apps' && ['whetherRestrict','whetherUs'].includes(column.dataIndex)" :color="Number(text) === 1 ? 'orange' : 'default'">{{ displayValue(column.dataIndex, text) || '—' }}</a-tag>
+        <span v-else-if="definition.domain === 'apps' && column.dataIndex === 'appleAppId'" class="apple-id">{{ text || '—' }}</span>
         <a-tooltip v-else-if="fieldsByKey[column.dataIndex] && fieldsByKey[column.dataIndex].dict && dictRemark(column.dataIndex,text)" :title="dictRemark(column.dataIndex,text)">{{ displayValue(column.dataIndex,text) }}</a-tooltip>
         <template v-else-if="definition.domain === 'store' && column.dataIndex === 'status'">{{ record.productStatus || displayValue(column.dataIndex, text) }}</template>
         <template v-else-if="fieldsByKey[column.dataIndex]">{{ displayValue(column.dataIndex,text) }}</template>
@@ -198,12 +202,14 @@ if(definition.domain==='request-logs'){
   const today=todayInShanghai();
   schemas.push({field:'reqDate',label:'日期',component:'RangePicker',defaultValue:[today,today],componentProps:{valueFormat:'YYYY-MM-DD',format:'YYYY-MM-DD',placeholder:['开始日期','结束日期'],style:{width:'240px'}},colProps:compactCol});
 }
-const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||key!=='applicationCode'&&canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:['appName','packageCode','packageName','reqTime'].includes(key)?180:150,ellipsis:true}));
+const appColumnWidths:Record<string,number>={appName:168,platform:88,appleAppId:132,packageCode:220,url:240,status:96,whetherRestrict:96,areas:180,whetherUs:100,mark:180,userName:112,updateDate:168};
+function appStatusColor(value:any){return ({0:'default',1:'green',2:'blue',3:'gold'} as Record<string,string>)[String(value)] || 'default';}
+const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||key!=='applicationCode'&&canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:definition.domain==='apps'?appColumnWidths[key] || 140:['appName','packageCode','packageName','reqTime'].includes(key)?180:150,ellipsis:true}));
 const [registerTable,{reload,clearSelectedRowKeys}]=useTable({
   api:async params=>{const {pageNo,pageSize,...filters}=params;const query:Record<string,any>={...params};if(definition.domain==='store'&&Array.isArray(query.status)){const picked=query.status.filter((value:unknown)=>value!=null&&String(value)!=='');delete query.status;if(picked.length)query.statusQuery=picked.join(',');}lastFilters.value=filters;if(definition.domain==='apps'){selected.value=[];selectedRows.value=[];clearSelectedRowKeys();}return api.list({...query,...(definition.appType!=null?{appType:definition.appType}:{})});},
-  columns,rowKey:idKey,bordered:true,showTableSetting:true,useSearchForm:true,
+  columns,rowKey:idKey,bordered:true,showTableSetting:true,useSearchForm:true,size:definition.domain==='apps'?'small':'middle',
   formConfig:{schemas:schemas as any,labelWidth:compactList?80:100,showAdvancedButton:schemas.length>3,autoSubmitOnEnter:true,...(compactList?{actionColOptions:compactCol,rowProps:{gutter:8}}:{}),...(definition.domain==='request-logs'?{fieldMapToTime:[['reqDate',['startReqTime','endReqTime'],'YYYY-MM-DD 00:00:00']]}:{})},
-  actionColumn:{title:'操作',key:'action',dataIndex:'action',width:definition.domain==='apps'?350:190,fixed:'right'},
+  actionColumn:{title:'操作',key:'action',dataIndex:'action',width:definition.domain==='apps'?268:190,fixed:'right'},
   rowSelection:{type:'checkbox',onChange:(keys,rows)=>{selected.value=keys;selectedRows.value=rows || [];}},
 });
 async function loadChoices() {
@@ -277,6 +283,13 @@ onMounted(()=>{loadChoices();if(definition.domain==='statistics') loadTotal();})
   :deep(.jeecg-basic-table-form-container){padding:8px 8px 0}
   :deep(.jeecg-basic-table-form-container .ant-form){padding:8px 8px 0;margin-bottom:8px}
   :deep(.jeecg-basic-table-form-container .ant-form-item){margin-bottom:8px}
+  :deep(.jeecg-basic-table-header__table-title-box + div){display:none}
+}
+.package-page.apps-list{
+  .apple-id{font-variant-numeric:tabular-nums;letter-spacing:.02em}
+  .row-actions{white-space:nowrap}
+  :deep(.ant-tag){margin-inline-end:0;border-radius:4px;line-height:20px}
+  :deep(.ant-table-tbody > tr > td){vertical-align:middle}
 }
 .record-editor{--editor-surface:#fff;--editor-border:#e4e9f0;--editor-text:#243247;--editor-muted:#66758a;color:var(--editor-text)}
 .editor-section{padding:22px 24px 4px;border:1px solid var(--editor-border);border-radius:12px;background:var(--editor-surface)}

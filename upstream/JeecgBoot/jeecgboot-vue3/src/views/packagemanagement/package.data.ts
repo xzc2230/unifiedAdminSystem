@@ -23,7 +23,7 @@ const historyFields = Object.entries(historyLabels).map(([key,label]) => field(k
   type:['jsonStr','originalUrl','userAgent'].includes(key)?'textarea':key==='status'?'number':'text',required:['path','status'].includes(key),
 }));
 export const definitions: Record<string,PackageDefinition> = {
-  apps:{domain:'apps',title:'应用管理',filters:['packageCode'],columns:['appName','platform','appleAppId','storeRegion','packageCode','url','status','whetherRestrict','areas','whetherUs','whetherUse','mark','userName','updateDate'],fields:[field('id','应用ID',{readonly:true}),field('appName','应用名称'),field('applicationCode','默认编码',{readonly:true}),field('author','出包人'),
+  apps:{domain:'apps',title:'应用管理',filters:['packageCode'],columns:['appName','platform','appleAppId','packageCode','url','status','whetherRestrict','areas','whetherUs','mark','userName','updateDate'],fields:[field('id','应用ID',{readonly:true}),field('appName','应用名称'),field('applicationCode','默认编码',{readonly:true}),field('author','出包人'),
     field('platform','平台',{type:'radio',options:[{value:'android',label:'安卓'},{value:'ios',label:'iOS'}],required:true} as Partial<PackageField>),
     field('appleAppId','Apple ID'),field('storeRegion','商店地区',{type:'dict',dict:'app_area'}),{...pkg,immutable:false},field('url','链接',{required:true}),status,
     field('whetherRestrict','白名单',{type:'dict',dict:'app_where'}),field('areas','白名单地区',{type:'dict',dict:'app_area',multiple:true}),
