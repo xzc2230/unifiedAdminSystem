@@ -59,19 +59,21 @@
         <a-tooltip v-else-if="fieldsByKey[column.dataIndex] && fieldsByKey[column.dataIndex].dict && dictRemark(column.dataIndex,text)" :title="dictRemark(column.dataIndex,text)">{{ displayValue(column.dataIndex,text) }}</a-tooltip>
         <template v-else-if="definition.domain === 'store' && column.dataIndex === 'status'">{{ record.productStatus || displayValue(column.dataIndex, text) }}</template>
         <template v-else-if="definition.domain === 'domains' && column.dataIndex === 'status'">
-          <div>{{ displayValue(column.dataIndex, text) }}</div>
-          <div v-if="text === 'pending' && record.nameservers" class="domain-ns">{{ String(record.nameservers).split(',').join('\n') }}</div>
-          <div v-else-if="text === 'failed' && record.errorMessage" class="domain-ns">{{ record.errorMessage }}</div>
+          <div class="domain-status">
+            <a-tag :color="domainStatusColor(text)">{{ displayValue(column.dataIndex, text) || '—' }}</a-tag>
+            <div v-if="text === 'pending' && record.nameservers" class="domain-ns">{{ String(record.nameservers).split(',').join('\n') }}</div>
+            <div v-else-if="text === 'failed' && record.errorMessage" class="domain-ns">{{ record.errorMessage }}</div>
+          </div>
         </template>
         <template v-else-if="fieldsByKey[column.dataIndex]">{{ displayValue(column.dataIndex,text) }}</template>
       </template>
     </BasicTable>
-    <a-modal v-model:open="editorOpen" :title="definition.domain === 'apps' ? `${editId == null ? '新增' : '修改'}应用` : `${editId == null ? '新增' : '编辑'}${definition.title}`"
-      :width="definition.domain === 'apps' || definition.domain === 'store' ? 960 : definition.domain === 'pwa' ? 1000 : 850"
-      :wrapClassName="definition.domain === 'apps' || definition.domain === 'store' ? 'app-editor-modal' : undefined"
-      :bodyStyle="definition.domain === 'apps' || definition.domain === 'store' ? { maxHeight: 'calc(100dvh - 200px)', overflowY: 'auto', padding: '20px 24px', background: 'var(--app-editor-background, #f5f7fa)' } : undefined"
-      :okText="definition.domain === 'apps' ? '保存应用' : definition.domain === 'store' ? '保存' : undefined"
-      :cancelText="definition.domain === 'apps' || definition.domain === 'store' ? '取消' : undefined"
+    <a-modal v-model:open="editorOpen" :title="editorTitle"
+      :width="editorShell ? 960 : definition.domain === 'pwa' ? 1000 : 850"
+      :wrapClassName="editorShell ? 'app-editor-modal' : undefined"
+      :bodyStyle="editorShell ? { maxHeight: 'calc(100dvh - 200px)', overflowY: 'auto', padding: '20px 24px', background: 'var(--app-editor-background, #f5f7fa)' } : undefined"
+      :okText="definition.domain === 'apps' ? '保存应用' : definition.domain === 'domains' ? '保存域名' : definition.domain === 'store' ? '保存' : undefined"
+      :cancelText="editorShell ? '取消' : undefined"
       :confirmLoading="saving" :maskClosable="false" destroyOnClose @ok="save">
       <a-alert v-if="definition.domain === 'notifications' && editId == null" type="info" message="保存后将向所选应用发送通知；发送结果以服务器实际响应为准。" showIcon class="notice" />
       <a-form ref="editorForm" :model="model" layout="vertical">
@@ -87,6 +89,17 @@
                 <PackageField :field="field" :value="model[field.key]" :options="optionsFor(field)" :domain="definition.domain" :disabled="Boolean(field.readonly || field.immutable && editId != null)" @update:value="setField(field,$event)" />
               </a-form-item>
             </div>
+          </section>
+        </div>
+        <div v-else-if="definition.domain === 'domains'" class="record-editor">
+          <section class="editor-section" aria-labelledby="domain-basic-heading">
+            <header class="section-heading">
+              <div><h3 id="domain-basic-heading">域名信息</h3><p>填写要接入的注册一级域名</p></div>
+              <span class="section-caption">带 * 的为必填项</span>
+            </header>
+            <a-form-item label="域名" name="apex" :rules="[{required:true,message:'请填写域名'}]" extra="只填写注册一级域名，例如 example.com。不要带 www、协议或子域名。">
+              <a-input :value="model.apex" placeholder="example.com" allowClear @update:value="setField(fieldsByKey.apex, $event)" />
+            </a-form-item>
           </section>
         </div>
         <a-row v-else :gutter="20">
@@ -213,7 +226,10 @@ const promotionUrl=(row:any)=>`https://${row.appHost}${row.appSub}/?pZoneID=${en
 const money=(value:any)=>value == null ? '0.00' : Number(value).toFixed(2);
 const todayInShanghai=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 const storeStatusOptions=[{value:0,label:'待上架'},{value:1,label:'已上架'},{value:2,label:'已下架'},{value:'ios:预购',label:'预购'}];
-const compactList=['apps','store','request-logs'].includes(definition.domain);
+const compactList=['apps','store','request-logs','domains'].includes(definition.domain);
+const editorShell=['apps','store','domains'].includes(definition.domain);
+const editorTitle=computed(()=>definition.domain==='apps'?`${editId.value==null?'新增':'修改'}应用`:definition.domain==='domains'?'新增域名':`${editId.value==null?'新增':'编辑'}${definition.title}`);
+function domainStatusColor(value:any){return ({pending:'gold',ready:'green',failed:'red'} as Record<string,string>)[String(value)] || 'default';}
 const compactCol={style:{width:'auto',flex:'0 0 auto'}};
 const schemas=definition.filters.filter(key=>definition.domain!=='request-logs'||!['startReqTime','endReqTime'].includes(key)).filter(key=>definition.domain!=='apps'||canAppField(appPermissions.value,'query',key)).map(key=>{
   const f=fieldsByKey[key];
@@ -303,7 +319,7 @@ function removeAuto(row:any){Modal.confirm({title:'解除该设备的自动拉�
 onMounted(()=>{loadChoices();if(definition.domain==='statistics') loadTotal();});
 </script>
 <style scoped lang="less">
-.package-page{padding:16px}.summary-card{margin-bottom:16px}.totals{margin-top:16px}.notice{margin-bottom:16px}.detail-value{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;max-width:560px}.domain-ns{margin-top:4px;color:#66758a;font-size:12px;line-height:18px;white-space:pre-line}
+.package-page{padding:16px}.summary-card{margin-bottom:16px}.totals{margin-top:16px}.notice{margin-bottom:16px}.detail-value{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;max-width:560px}.domain-status{display:flex;flex-direction:column;align-items:flex-start;gap:4px}.domain-ns{color:#66758a;font-size:12px;line-height:18px;white-space:pre-line}
 .package-page.compact{
   .list-actions{display:flex;justify-content:flex-start;gap:8px}
   :deep(.jeecg-basic-table-header__tableTitle){justify-content:flex-start}

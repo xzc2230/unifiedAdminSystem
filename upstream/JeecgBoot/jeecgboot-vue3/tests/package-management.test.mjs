@@ -128,12 +128,15 @@ test('editable business fields agree with backend allowlists and preserve domain
   assert.deepEqual(definitions.domains.columns,['apex','status','createTime','expiresAt']);
   assert.deepEqual(definitions.domains.fields.find((field)=>field.key==='status').options.map((option)=>option.label),['待NS','已就绪','失败']);
   const requestLogPage=fs.readFileSync(path.join(root,'src/views/packagemanagement/components/PackagePage.vue'),'utf8');
+  assert.match(requestLogPage,/新增域名/);
+  assert.match(requestLogPage,/保存域名/);
+  assert.match(requestLogPage,/id="domain-basic-heading">域名信息/);
   assert.match(requestLogPage,/支持模糊查询/);
   assert.match(requestLogPage,/RangePicker/);
   assert.match(requestLogPage,/开始日期/);
   assert.match(requestLogPage,/结束日期/);
   assert.match(requestLogPage,/Asia\/Shanghai/);
-  assert.match(requestLogPage,/const compactList=\['apps','store','request-logs'\]/);
+  assert.match(requestLogPage,/const compactList=\['apps','store','request-logs','domains'\]/);
   assert.match(requestLogPage,/clickToRowSelect:!compactList/);
   assert.match(requestLogPage,/width:'180px'/);
   assert.match(requestLogPage,/width:'240px'/);
