@@ -1,5 +1,6 @@
 package org.jeecg.modules.packagemanagement;
 
+import org.jeecg.modules.packagemanagement.application.apps.support.BlockedProviders;
 import org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions;
 import com.alibaba.fastjson2.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -42,5 +43,14 @@ class PackageCountryRegionsTest {
         assertEquals("new", PackageCountryRegions.regionalLink(links,"BR","default"));
         assertEquals("philippines", PackageCountryRegions.regionalLink(links,"ph","default"));
         assertEquals("default", PackageCountryRegions.regionalLink(links,"sg","default"));
+    }
+    @Test void providerSelectionMatchesOnlyChosenCarriers() {
+        assertEquals("google,amazon", BlockedProviders.detect("AS1 Amazon", "Google LLC", "local"));
+        assertEquals("apple", BlockedProviders.detect("Apple Inc", "local", "local"));
+        assertEquals("google,apple,amazon", BlockedProviders.normalize("amazon,google,unknown,apple"));
+        assertNull(BlockedProviders.normalize(null));
+        assertEquals("", BlockedProviders.hit("apple", "google"));
+        assertEquals("google", BlockedProviders.hit("google,apple", "google"));
+        assertEquals("", BlockedProviders.hit("", "google,apple,amazon"));
     }
 }

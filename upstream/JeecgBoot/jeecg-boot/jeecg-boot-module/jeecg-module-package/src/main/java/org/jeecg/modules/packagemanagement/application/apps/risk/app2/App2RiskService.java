@@ -1,5 +1,6 @@
 package org.jeecg.modules.packagemanagement.application.apps.risk.app2;
 
+import org.jeecg.modules.packagemanagement.application.apps.support.BlockedProviders;
 import org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions;
 import org.jeecg.modules.packagemanagement.domain.app.AppManager;
 import org.apache.commons.lang3.StringUtils;
@@ -94,6 +95,10 @@ public class App2RiskService {
             if ("true".equals(cityMap.get("status")) || "us".equals(country)) {
                 return App2RiskResult.reject(TIP_US);
             }
+        }
+        String providers = BlockedProviders.hit(app.getBlockedProviders(), cityMap == null ? "" : cityMap.get("providers"));
+        if (!providers.isEmpty()) {
+            return App2RiskResult.reject("禁用运营商：" + providers);
         }
         if (app.getWhetherRestrict() != null && app.getWhetherRestrict() == 1) {
             String areas = app.getAreas();

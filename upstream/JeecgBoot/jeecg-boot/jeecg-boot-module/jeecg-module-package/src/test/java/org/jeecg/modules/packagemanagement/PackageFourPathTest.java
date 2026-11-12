@@ -122,7 +122,12 @@ class PackageFourPathTest {
         app.setStatus(3); app.setWhetherUs(1);
         when(geo.getFourPathCountryAndCountryCodeByIP(any())).thenReturn(Map.of("country","美国","status","true"));
         assertNull(client.execute(request("{}",KEY))); verifyNoInteractions(redis);
-        app.setWhetherUs(0); app.setWhetherRestrict(1); app.setAreas("中国,巴西");
+        app.setWhetherUs(0); app.setBlockedProviders("google");
+        when(geo.getFourPathCountryAndCountryCodeByIP(any())).thenReturn(Map.of("country","巴西","countryCode","br","status","false","providers","google"));
+        assertNull(client.execute(request("{}",KEY))); verifyNoInteractions(redis);
+        app.setBlockedProviders("");
+        when(geo.getFourPathCountryAndCountryCodeByIP(any())).thenReturn(Map.of("country","美国","status","true"));
+        app.setWhetherRestrict(1); app.setAreas("中国,巴西");
         assertNull(client.execute(request("{}",KEY))); verifyNoInteractions(redis);
     }
     @Test void statusModesAndRedisDenialKeepSourceOrder() {

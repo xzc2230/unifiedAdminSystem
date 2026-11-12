@@ -32,7 +32,7 @@ public final class PackageAdminRegistry {
         resources.put("apps",new ManagedResource<>("pkg_app_manager",AppManager.class,AppManager::getId,
                 apps::selectAppManagerList,apps::selectAppManagerById,apps::insertAppManager,apps::updateAppManager,
                 apps::deleteAppManagerByIds,(r,a)->{r.setUserId(access.effectiveLegacyUserId(a));if(SecurityUtils.getSubject().getPrincipal() instanceof LoginUser user && user.getUsername()!=null && !user.getUsername().isBlank())r.setUserName(user.getUsername());},
-                List.of("appName","areas","author","mark","packageCode","platform","appleAppId","storeRegion","status","url","whetherRestrict","whetherUs","whetherUse","gaidAidThreshold","aidDeviceThreshold","aidGaidSwitchThreshold","riskWindowSeconds","referrerBlacklistJson"),
+                List.of("appName","areas","author","mark","packageCode","platform","appleAppId","storeRegion","status","url","whetherRestrict","whetherUs","blockedProviders","whetherUse","gaidAidThreshold","aidDeviceThreshold","aidGaidSwitchThreshold","riskWindowSeconds","referrerBlacklistJson"),
                 cols("applicationCode","默认编码","packageCode","包名","platform","平台","appName","应用名称","status","状态","url","地址","areas","地区"),access,tx));
         resources.put("store",new ManagedResource<>("pkg_store_status",StoreStatus.class,StoreStatus::getId,
                 store::selectStoreStatusList,store::selectStoreStatusById,store::insertStoreStatus,store::updateStoreStatus,

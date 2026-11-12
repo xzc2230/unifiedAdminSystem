@@ -94,6 +94,9 @@ public class AppManager extends PackageEntity {
 
     private Integer whetherUs;
 
+    /** Comma-separated providers to block: google, apple, amazon. */
+    private String blockedProviders;
+
     /**
      * $column.columnComment
      */
@@ -255,6 +258,14 @@ public class AppManager extends PackageEntity {
         return whetherUs;
     }
 
+    public void setBlockedProviders(String blockedProviders) {
+        this.blockedProviders = blockedProviders;
+    }
+
+    public String getBlockedProviders() {
+        return blockedProviders;
+    }
+
     public void setWhetherUse(Integer whetherUse) {
         this.whetherUse = whetherUse;
     }
@@ -281,6 +292,7 @@ public class AppManager extends PackageEntity {
                 .append("url", getUrl())
                 .append("whetherRestrict", getWhetherRestrict())
                 .append("whetherUs", getWhetherUs())
+                .append("blockedProviders", getBlockedProviders())
                 .append("whetherUse", getWhetherUse())
                 .append("userId", getUserId())
                 .toString();

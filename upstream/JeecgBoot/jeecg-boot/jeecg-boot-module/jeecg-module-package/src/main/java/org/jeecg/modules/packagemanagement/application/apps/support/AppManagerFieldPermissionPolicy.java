@@ -9,8 +9,8 @@ import org.springframework.beans.BeanWrapperImpl;
 
 /** Administrative field grants only. Public client/Token services never use Shiro field grants. */
 public final class AppManagerFieldPermissionPolicy {
- public static final List<String> EDIT=List.of("appName","author","platform","appleAppId","storeRegion","packageCode","url","status","whetherRestrict","areas","mark","whetherUs","gaidAidThreshold","aidDeviceThreshold","aidGaidSwitchThreshold","riskWindowSeconds","referrerBlacklistJson");
- public static final List<String> QUERY=List.of("appName","author","userName","platform","appleAppId","storeRegion","packageCode","status","url","whetherRestrict","areas","whetherUs","mark","updateDate");
+ public static final List<String> EDIT=List.of("appName","author","platform","appleAppId","storeRegion","packageCode","url","status","whetherRestrict","areas","mark","whetherUs","blockedProviders","gaidAidThreshold","aidDeviceThreshold","aidGaidSwitchThreshold","riskWindowSeconds","referrerBlacklistJson");
+ public static final List<String> QUERY=List.of("appName","author","userName","platform","appleAppId","storeRegion","packageCode","status","url","whetherRestrict","areas","whetherUs","blockedProviders","mark","updateDate");
  private static final Set<String> LISTING=Set.of("platform","appleAppId","storeRegion");
  private final Predicate<String> granted;
  public AppManagerFieldPermissionPolicy(){this(p->SecurityUtils.getSubject().isPermitted(p));}

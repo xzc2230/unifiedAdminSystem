@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS `pkg_app_manager` (
   `user_name` VARCHAR(255) NULL,
   `whether_restrict` INT NULL,
   `whether_us` INT NULL,
+  `blocked_providers` VARCHAR(64) NULL,
   `whether_use` INT NULL,
   gaid_aid_threshold INT NOT NULL DEFAULT 1,
   aid_device_threshold INT NOT NULL DEFAULT 1,

@@ -121,6 +121,8 @@ import { packageApi,allPwa,statisticsTotal,cleanLogs } from '/@/api/packagemanag
 import type { PackageDefinition,PackageField as PackageFieldSpec,PackageId,PackageOption } from '/@/types/packagemanagement';
 import { APP_AREA_OPTIONS, countryLabel, countryCode } from '../package-regions.mjs';
 import { fromAreas,toAreas,legacyImageUrl } from '../package-conversions.mjs';
+const toProviders=(value:any)=>[...new Set((Array.isArray(value)?value:String(value||'').split(',')).map(item=>String(item||'').trim().toLowerCase()).filter(item=>['google','apple','amazon'].includes(item)))];
+const fromProviders=(value:any)=>toProviders(value).join(',');
 const PackageField = defineAsyncComponent(() => import('./PackageField.vue'));
 const PwaEditor = defineAsyncComponent(() => import('./PwaEditor.vue'));
 const AppEditor = defineAsyncComponent(() => import('./AppEditor.vue'));
@@ -181,7 +183,7 @@ function displayValue(key:string,value:any) {
   const field=fieldsByKey[key];
   if(field?.dict==='app_area') return toAreas(value).map(code=>optionsFor(field).find(option=>String(option.value)===code)?.label || countryLabel(code)).join(', ');
   if(field?.dict || definition.domain==='store' && key==='status') return String(value ?? '').split(',').map(v=>optionsFor(field).find(o=>String(o.value)===v)?.label || v).join(', ');
-  if(field?.options?.length) return field.options.find(option=>String(option.value)===String(value))?.label || value;
+  if(field?.options?.length) return String(value ?? '').split(',').map(item=>item.trim()).filter(Boolean).map(item=>field.options.find(option=>String(option.value)===item)?.label || item).join(', ') || value;
   return value;
 }
 function displayDetail(value:any) { return prettyJson(value); }
@@ -219,7 +221,7 @@ if(definition.domain==='request-logs'){
   const today=todayInShanghai();
   schemas.push({field:'reqDate',label:'日期',component:'RangePicker',defaultValue:[today,today],componentProps:{valueFormat:'YYYY-MM-DD',format:'YYYY-MM-DD',placeholder:['开始日期','结束日期'],style:{width:'240px'}},colProps:compactCol});
 }
-const appColumnWidths:Record<string,number>={appName:168,platform:88,appleAppId:132,packageCode:220,url:240,status:96,whetherRestrict:96,areas:180,whetherUs:100,mark:180,userName:112,updateDate:168};
+const appColumnWidths:Record<string,number>={appName:168,platform:88,appleAppId:132,packageCode:220,url:240,status:96,whetherRestrict:96,areas:180,whetherUs:100,blockedProviders:160,mark:180,userName:112,updateDate:168};
 function appStatusColor(value:any){return ({0:'default',1:'green',2:'blue',3:'gold'} as Record<string,string>)[String(value)] || 'default';}
 const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||key!=='applicationCode'&&canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:definition.domain==='apps'?appColumnWidths[key] || 140:['appName','packageCode','packageName','reqTime'].includes(key)?180:150,ellipsis:true}));
 const [registerTable,{reload,clearSelectedRowKeys}]=useTable({
@@ -249,7 +251,7 @@ async function openEditor(record?:Record<string,any>) {
   if(definition.domain==='apps' && !record) model.userName=useUserStore().getUserInfo?.username || '';
   if(!Array.isArray(model.reviewsRecords)) model.reviewsRecords=[];
   if(definition.domain==='statistics' && model.subAreas!=null) model.subAreas=countryCode(model.subAreas);
-  if(definition.domain==='apps') {model.areas=toAreas(model.areas);initialAppModel.value=JSON.parse(JSON.stringify(model));dirtyAppFields.value=new Set();}
+  if(definition.domain==='apps') {model.areas=toAreas(model.areas);model.blockedProviders=toProviders(model.blockedProviders);initialAppModel.value=JSON.parse(JSON.stringify(model));dirtyAppFields.value=new Set();}
   editId.value=record?.[idKey];
   if(definition.fields.some(f=>f.type==='parent')) {
     parentApps.value=[];
@@ -263,7 +265,7 @@ async function save() {
   saving.value=true;
   try {
     let payload=Object.fromEntries(editableFields.value.filter(f=>!f.readonly).map(f=>[f.key,model[f.key]]));
-    if(definition.domain==='apps') {payload=appEditPayload(payload,appPermissions.value,editId.value!=null,initialAppModel.value,[...dirtyAppFields.value]);if('areas' in payload)payload.areas=fromAreas(payload.areas);}
+    if(definition.domain==='apps') {payload=appEditPayload(payload,appPermissions.value,editId.value!=null,initialAppModel.value,[...dirtyAppFields.value]);if('areas' in payload)payload.areas=fromAreas(payload.areas);if('blockedProviders' in payload)payload.blockedProviders=fromProviders(payload.blockedProviders);}
     if(definition.domain==='store') {const link=marketLink(model);if(link) payload.storeUrl=link.href;}
     if(definition.domain==='pwa') {const pwa=pwaEditor.value.payload();payload={...payload,appType:definition.appType,appSub:pwa.appSub,tags:pwa.tags,score:pwa.score,reviewsRecords:pwa.reviewsRecords};}
     await api.save(payload,editId.value);

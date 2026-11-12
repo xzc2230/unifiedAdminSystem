@@ -74,6 +74,7 @@ public class AppManagerServiceImpl implements IAppManagerService {
     public int insertAppManager(AppManager appManager) {
 
         appManager.setAreas(org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions.normalizeAreas(appManager.getAreas()));
+        appManager.setBlockedProviders(org.jeecg.modules.packagemanagement.application.apps.support.BlockedProviders.normalize(appManager.getBlockedProviders()));
         if(appManager.getPackageCode()!=null)appManager.setPackageCode(appManager.getPackageCode().trim());
         StoreListing.normalize(appManager);
         assignApplicationCode(appManager);
@@ -97,6 +98,7 @@ public class AppManagerServiceImpl implements IAppManagerService {
     public int updateAppManager(AppManager appManager) {
 
         appManager.setAreas(org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions.normalizeAreas(appManager.getAreas()));
+        appManager.setBlockedProviders(org.jeecg.modules.packagemanagement.application.apps.support.BlockedProviders.normalize(appManager.getBlockedProviders()));
         if(appManager.getPackageCode()!=null)appManager.setPackageCode(appManager.getPackageCode().trim());
         StoreListing.normalize(appManager);
         AppManager previous = appManager.getId() == null ? null : appManagerMapper.selectAppManagerById(appManager.getId());

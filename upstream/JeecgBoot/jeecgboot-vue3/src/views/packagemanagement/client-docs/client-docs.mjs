@@ -266,7 +266,7 @@ export const CLIENT_PROTOCOL_DOC = {
       notes: [
         '找到包名后返回 MATCHED / REAL，destinationUrl 为应用链接',
         'afLinkParams 七个字段为空。fbLinkParams 使用模拟广告编号，campaign_name 为 website_launch',
-        '查包与前十二个接口相同：风控模式全关、命中禁用美国、不在地区白名单，或 gaid/aid 超过风控阈值时，不返回解析结果',
+        '查包与前十二个接口相同：风控模式全关、命中禁用美国、命中已选运营商、不在地区白名单，或 gaid/aid 超过风控阈值时，不返回解析结果',
         '包名不存在时不由此接口直接返回；applicationId 与包名不一致返回 400',
       ],
       requestExample: 'POST /api/v1/attribution/resolve\nContent-Type: application/json\n\n{\n  "applicationCode": "com.test"\n}',
@@ -306,7 +306,7 @@ export const CLIENT_PROTOCOL_DOC = {
       notes: [
         '找到包名后返回 MATCHED / REAL，destinationUrl 为应用链接',
         'afLinkParams 七个字段为空。fbLinkParams 使用模拟广告编号，campaign_name 为 website_launch',
-        '查包与前十二个接口相同：风控模式全关、命中禁用美国、不在地区白名单，或 gaid/aid 超过风控阈值时，不返回解析结果',
+        '查包与前十二个接口相同：风控模式全关、命中禁用美国、命中已选运营商、不在地区白名单，或 gaid/aid 超过风控阈值时，不返回解析结果',
         '包名不存在时不由此接口直接返回；applicationId 与包名不一致返回 400',
       ],
       requestExample: 'POST /xxx/xxxx/xxx/xxxx/xxx\nContent-Type: application/json\n\n{\n  "applicationCode": "com.test"\n}',

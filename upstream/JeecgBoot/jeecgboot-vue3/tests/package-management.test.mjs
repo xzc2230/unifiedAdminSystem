@@ -168,6 +168,8 @@ test('app editor offers android and ios store fields', () => {
     assert.deepEqual(definitions.apps.filters, ['packageCode']);
     assert.equal(definitions.apps.columns.includes('id'), false);
     assert.deepEqual(definitions.apps.columns.slice(0, 3), ['appName', 'platform', 'appleAppId']);
+    assert.equal(definitions.apps.fields.find((field) => field.key === 'blockedProviders').label, '禁用运营商');
+    assert.ok(definitions.apps.columns.indexOf('blockedProviders') > definitions.apps.columns.indexOf('whetherUs'));
     assert.notEqual(definitions.apps.fields.find((field) => field.key === 'packageCode').immutable, true);
     assert.equal(definitions.statistics.fields.find((field) => field.key === 'packageCode').immutable, true);
     for (const hidden of ['author', 'applicationCode', 'storeRegion', 'whetherUse', 'gaidAidThreshold', 'aidDeviceThreshold', 'aidGaidSwitchThreshold', 'riskWindowSeconds', 'referrerBlacklistJson']) {
@@ -202,6 +204,8 @@ test('app editor leaves ios apple id optional and defaults the store region', ()
   assert.ok(source.indexOf('class="span-third platform-form-item"') < source.indexOf('v-for="field in identityFields"'));
   assert.match(source, /\['applicationCode', 'url', 'mark'\]/);
   assert.match(source, /class="field-grid basic-grid identity-row"/);
+  assert.match(source, /name="blockedProviders"/);
+  assert.match(source, /mode="multiple"/);
   assert.doesNotMatch(source, /创建后不可修改/);
   assert.match(source, /model\.storeRegion \|\| 'us'/);
   assert.match(source, /optionsFor\(storeRegionField\)/);

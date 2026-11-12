@@ -10,6 +10,7 @@ import org.jeecg.modules.packagemanagement.domain.app.AppManager;
 import org.jeecg.modules.packagemanagement.application.apps.ClientService;
 import org.jeecg.modules.packagemanagement.application.apps.IAppManagerService;
 import org.jeecg.modules.packagemanagement.application.applog.RequestLogHost;
+import org.jeecg.modules.packagemanagement.application.apps.support.BlockedProviders;
 import org.jeecg.modules.packagemanagement.domain.applog.AppLog;
 import org.jeecg.modules.packagemanagement.application.port.AppLogPort;
 import org.jeecg.modules.packagemanagement.application.legacy.AESUtils;
@@ -48,7 +49,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Object api(HttpServletRequest request) {
         String ipAddress = geo.getIpAddress(request);
-        String cityByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
+        Map<String, String> geoInfo = geo.getCountryAndCountryCodeByIP(ipAddress);
+        String cityByIp = PackageCountryRegions.accessCode(geoInfo);
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
         appLog.setReqHost(RequestLogHost.from(request));
@@ -127,6 +129,11 @@ public class ClientServiceImpl implements ClientService {
                 return resultMap;
             }
         }
+        String blockedProvider = providerHit(app, geoInfo);
+        if (!blockedProvider.isEmpty()) {
+            logProvider(appLog, stringBuilder, "禁用运营商：" + blockedProvider);
+            return resultMap;
+        }
         if (app.getWhetherRestrict() == 1) {
             String areas = Objects.toString(app.getAreas(), "");
             if (areas.contains(",")) {
@@ -194,7 +201,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Object login(HttpServletRequest request) {
         String ipAddress = geo.getIpAddress(request);
-        String cityByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
+        Map<String, String> geoInfo = geo.getCountryAndCountryCodeByIP(ipAddress);
+        String cityByIp = PackageCountryRegions.accessCode(geoInfo);
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
         appLog.setReqHost(RequestLogHost.from(request));
@@ -254,6 +262,11 @@ public class ClientServiceImpl implements ClientService {
                 log(appLog);
                 return map;
             }
+        }
+        String blockedProvider = providerHit(app, geoInfo);
+        if (!blockedProvider.isEmpty()) {
+            logProvider(appLog, stringBuilder, "禁用运营商：" + blockedProvider);
+            return map;
         }
         if (app.getWhetherRestrict() == 1) {
             String areas = Objects.toString(app.getAreas(), "");
@@ -326,7 +339,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void redirected(HttpServletRequest request, HttpServletResponse response) {
         String ipAddress = geo.getIpAddress(request);
-        String cityByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
+        Map<String, String> geoInfo = geo.getCountryAndCountryCodeByIP(ipAddress);
+        String cityByIp = PackageCountryRegions.accessCode(geoInfo);
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
         appLog.setReqHost(RequestLogHost.from(request));
@@ -395,6 +409,17 @@ public class ClientServiceImpl implements ClientService {
 
                     return;
                 }
+            }
+            String blockedProvider = providerHit(app, geoInfo);
+            if (!blockedProvider.isEmpty()) {
+                String mark = app.getMark();
+                if (StringUtils.isBlank(mark)) {
+                    response.sendRedirect("about:blank");
+                } else {
+                    response.sendRedirect(mark);
+                }
+                logProvider(appLog, stringBuilder, "禁用运营商：" + blockedProvider + "：" + (StringUtils.isBlank(mark) ? "about:blank" : mark));
+                return;
             }
             if (app.getWhetherRestrict() == 1) {
                 String areas = Objects.toString(app.getAreas(), "");
@@ -509,7 +534,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Object getBanner(HttpServletRequest request) {
         String ipAddress = geo.getIpAddress(request);
-        String cityByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
+        Map<String, String> geoInfo = geo.getCountryAndCountryCodeByIP(ipAddress);
+        String cityByIp = PackageCountryRegions.accessCode(geoInfo);
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
         appLog.setReqHost(RequestLogHost.from(request));
@@ -582,6 +608,12 @@ public class ClientServiceImpl implements ClientService {
                     return mark;
                 }
             }
+        }
+        String blockedProvider = providerHit(app, geoInfo);
+        if (!blockedProvider.isEmpty()) {
+            String mark = app.getMark();
+            logProvider(appLog, stringBuilder, "禁用运营商：" + blockedProvider + (StringUtils.isBlank(mark) ? "" : "：备注：" + mark));
+            return StringUtils.isBlank(mark) ? "" : mark;
         }
         if (app.getWhetherRestrict() == 1) {
             String areas = Objects.toString(app.getAreas(), "");
@@ -711,7 +743,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Object checkUrl(HttpServletRequest request) {
         String ipAddress = geo.getIpAddress(request);
-        String cityNameByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
+        Map<String, String> geoInfo = geo.getCountryAndCountryCodeByIP(ipAddress);
+        String cityNameByIp = PackageCountryRegions.accessCode(geoInfo);
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
         appLog.setReqHost(RequestLogHost.from(request));
@@ -767,6 +800,12 @@ public class ClientServiceImpl implements ClientService {
 
                 return map;
             }
+        }
+
+        String blockedProvider = providerHit(app, geoInfo);
+        if (!blockedProvider.isEmpty()) {
+            logProvider(appLog, stringBuilder, "禁用运营商：" + blockedProvider);
+            return map;
         }
 
         if (app.getWhetherRestrict() == 1) {
@@ -860,7 +899,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Object dynamicAdj(HttpServletRequest request) {
         String ipAddress = geo.getIpAddress(request);
-        String cityNameByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
+        Map<String, String> geoInfo = geo.getCountryAndCountryCodeByIP(ipAddress);
+        String cityNameByIp = PackageCountryRegions.accessCode(geoInfo);
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
         appLog.setReqHost(RequestLogHost.from(request));
@@ -914,6 +954,12 @@ public class ClientServiceImpl implements ClientService {
 
                 return map;
             }
+        }
+
+        String blockedProvider = providerHit(app, geoInfo);
+        if (!blockedProvider.isEmpty()) {
+            logProvider(appLog, stringBuilder, "禁用运营商：" + blockedProvider);
+            return map;
         }
 
         if (app.getWhetherRestrict() == 1) {
@@ -991,7 +1037,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Object getUserInfo(HttpServletRequest request) {
         String ipAddress = geo.getIpAddress(request);
-        String cityNameByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
+        Map<String, String> geoInfo = geo.getCountryAndCountryCodeByIP(ipAddress);
+        String cityNameByIp = PackageCountryRegions.accessCode(geoInfo);
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
         appLog.setReqHost(RequestLogHost.from(request));
@@ -1042,6 +1089,11 @@ public class ClientServiceImpl implements ClientService {
                 log(appLog);
                 return map;
             }
+        }
+        String blockedProvider = providerHit(app, geoInfo);
+        if (!blockedProvider.isEmpty()) {
+            logProvider(appLog, stringBuilder, "禁用运营商：" + blockedProvider);
+            return map;
         }
         if (app.getWhetherRestrict() == 1) {
             String areas = Objects.toString(app.getAreas(), "");
@@ -1172,7 +1224,8 @@ public class ClientServiceImpl implements ClientService {
             appLog.setErrorMsg(stringBuilder.toString());
         }
         String ipAddress = geo.getIpAddress(request);
-        String cityNameByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipA.trim().isEmpty() ? ipAddress : ipA));
+        Map<String, String> geoInfo = geo.getCountryAndCountryCodeByIP(ipA.trim().isEmpty() ? ipAddress : ipA);
+        String cityNameByIp = PackageCountryRegions.accessCode(geoInfo);
         appLog.setReqIp("(" + cityNameByIp + ")" + ipAddress);
 
         AppManager app = appRepository.selectAppManagerByPackageName(packageName);
@@ -1202,6 +1255,12 @@ public class ClientServiceImpl implements ClientService {
                 log(appLog);
                 return null;
             }
+        }
+
+        String blockedProvider = providerHit(app, geoInfo);
+        if (!blockedProvider.isEmpty()) {
+            logProvider(appLog, stringBuilder, "禁用运营商：" + blockedProvider);
+            return null;
         }
 
         if (app.getWhetherRestrict() == 1) {
@@ -1291,7 +1350,8 @@ public class ClientServiceImpl implements ClientService {
         String packageName = request.getParameter("index");
         appLog.setPackageName(packageName);
         String ipAddress = geo.getIpAddress(request);
-        String cityNameByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
+        Map<String, String> geoInfo = geo.getCountryAndCountryCodeByIP(ipAddress);
+        String cityNameByIp = PackageCountryRegions.accessCode(geoInfo);
         appLog.setReqIp("(" + cityNameByIp + ")" + ipAddress);
         AppManager app = appRepository.selectAppManagerByPackageName(packageName);
         if (app == null || app.getStatus() == 0) {
@@ -1317,6 +1377,11 @@ public class ClientServiceImpl implements ClientService {
                 log(appLog);
                 return null;
             }
+        }
+        String blockedProvider = providerHit(app, geoInfo);
+        if (!blockedProvider.isEmpty()) {
+            logProvider(appLog, stringBuilder, "禁用运营商：" + blockedProvider);
+            return null;
         }
         if (app.getWhetherRestrict() == 1) {
             String areas = Objects.toString(app.getAreas(), "");
@@ -1433,6 +1498,11 @@ public class ClientServiceImpl implements ClientService {
                 return null;
             }
         }
+        String blockedProvider = providerHit(app, cityNameByIp);
+        if (!blockedProvider.isEmpty()) {
+            logProvider(appLog, stringBuilder, "禁用运营商：" + blockedProvider);
+            return null;
+        }
         if (app.getWhetherRestrict() == 1) {
             String areas = Objects.toString(app.getAreas(), "");
             if (areas.contains(",")) {
@@ -1542,6 +1612,11 @@ public class ClientServiceImpl implements ClientService {
                 return null;
             }
         }
+        String blockedProvider = providerHit(app, cityNameByIp);
+        if (!blockedProvider.isEmpty()) {
+            logProvider(appLog, stringBuilder, "禁用运营商：" + blockedProvider);
+            return null;
+        }
         if (app.getWhetherRestrict() == 1) {
             String areas = Objects.toString(app.getAreas(), "");
             if (areas.contains(",")) {
@@ -1606,6 +1681,20 @@ public class ClientServiceImpl implements ClientService {
         return s;
     }
 
+
+    private String providerHit(AppManager app, Map<String, String> geoInfo) {
+        return BlockedProviders.hit(app == null ? null : app.getBlockedProviders(), geoInfo == null ? null : geoInfo.get("providers"));
+    }
+
+    private void logProvider(AppLog appLog, StringBuilder stringBuilder, String detail) {
+        try {
+            appLog.setResultMsg(detail);
+        } catch (Exception e) {
+            stringBuilder.append(e.getMessage());
+            appLog.setErrorMsg(stringBuilder.toString());
+        }
+        log(appLog);
+    }
 
     public void log(AppLog appLog) {
         try {

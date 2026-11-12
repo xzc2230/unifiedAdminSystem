@@ -23,6 +23,7 @@
         <result property="userName" column="user_name"/>
         <result property="whetherRestrict" column="whether_restrict"/>
         <result property="whetherUs" column="whether_us"/>
+        <result property="blockedProviders" column="blocked_providers"/>
         <result property="whetherUse" column="whether_use"/>
         <result property="gaidAidThreshold" column="gaid_aid_threshold"/>
         <result property="aidDeviceThreshold" column="aid_device_threshold"/>
@@ -52,6 +53,7 @@
                url,
                whether_restrict,
                whether_us,
+               blocked_providers,
                user_id,
                user_name,
                gaid_aid_threshold,
@@ -144,6 +146,7 @@
             <if test="userName != null ">user_name,</if>
             <if test="whetherRestrict != null">whether_restrict,</if>
             <if test="whetherUs != null">whether_us,</if>
+            <if test="blockedProviders != null">blocked_providers,</if>
             <if test="gaidAidThreshold != null">gaid_aid_threshold,</if>
             <if test="aidDeviceThreshold != null">aid_device_threshold,</if>
             <if test="aidGaidSwitchThreshold != null">aid_gaid_switch_threshold,</if>
@@ -174,6 +177,7 @@
             <if test="userName != null ">#{userName},</if>
             <if test="whetherRestrict != null">#{whetherRestrict},</if>
             <if test="whetherUs != null">#{whetherUs},</if>
+            <if test="blockedProviders != null">#{blockedProviders},</if>
             <if test="gaidAidThreshold != null">#{gaidAidThreshold},</if>
             <if test="aidDeviceThreshold != null">#{aidDeviceThreshold},</if>
             <if test="aidGaidSwitchThreshold != null">#{aidGaidSwitchThreshold},</if>
@@ -204,6 +208,7 @@
             <if test="url != null">url = #{url},</if>
             <if test="whetherRestrict != null">whether_restrict = #{whetherRestrict},</if>
             <if test="whetherUs != null">whether_us = #{whetherUs},</if>
+            <if test="blockedProviders != null">blocked_providers = #{blockedProviders},</if>
             <if test="gaidAidThreshold != null">gaid_aid_threshold = #{gaidAidThreshold},</if>
             <if test="aidDeviceThreshold != null">aid_device_threshold = #{aidDeviceThreshold},</if>
             <if test="aidGaidSwitchThreshold != null">aid_gaid_switch_threshold = #{aidGaidSwitchThreshold},</if>

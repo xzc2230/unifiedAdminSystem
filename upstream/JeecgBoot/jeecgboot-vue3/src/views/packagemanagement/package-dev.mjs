@@ -1,5 +1,5 @@
-export const EDIT_FIELDS = Object.freeze(['appName','author','platform','appleAppId','storeRegion','packageCode','url','status','whetherRestrict','areas','mark','whetherUs','gaidAidThreshold','aidDeviceThreshold','aidGaidSwitchThreshold','riskWindowSeconds','referrerBlacklistJson']);
-export const QUERY_FIELDS = Object.freeze(['appName','author','userName','platform','appleAppId','storeRegion','packageCode','status','url','whetherRestrict','areas','whetherUs','mark','updateDate']);
+export const EDIT_FIELDS = Object.freeze(['appName','author','platform','appleAppId','storeRegion','packageCode','url','status','whetherRestrict','areas','mark','whetherUs','blockedProviders','gaidAidThreshold','aidDeviceThreshold','aidGaidSwitchThreshold','riskWindowSeconds','referrerBlacklistJson']);
+export const QUERY_FIELDS = Object.freeze(['appName','author','userName','platform','appleAppId','storeRegion','packageCode','status','url','whetherRestrict','areas','whetherUs','blockedProviders','mark','updateDate']);
 // These values are part of the legacy client protocol (App2RiskConstants).
 export const APP_STATUS_OPTIONS = Object.freeze([
  {value:0,label:'全关',remark:'关闭应用访问'},

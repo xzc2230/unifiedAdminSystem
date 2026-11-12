@@ -23,11 +23,11 @@ const historyFields = Object.entries(historyLabels).map(([key,label]) => field(k
   type:['jsonStr','originalUrl','userAgent'].includes(key)?'textarea':key==='status'?'number':'text',required:['path','status'].includes(key),
 }));
 export const definitions: Record<string,PackageDefinition> = {
-  apps:{domain:'apps',title:'应用管理',filters:['packageCode'],columns:['appName','platform','appleAppId','packageCode','url','status','whetherRestrict','areas','whetherUs','mark','userName','updateDate'],fields:[field('id','应用ID',{readonly:true}),field('appName','应用名称'),field('applicationCode','默认编码',{readonly:true}),field('author','出包人'),
+  apps:{domain:'apps',title:'应用管理',filters:['packageCode'],columns:['appName','platform','appleAppId','packageCode','url','status','whetherRestrict','areas','whetherUs','blockedProviders','mark','userName','updateDate'],fields:[field('id','应用ID',{readonly:true}),field('appName','应用名称'),field('applicationCode','默认编码',{readonly:true}),field('author','出包人'),
     field('platform','平台',{type:'radio',options:[{value:'android',label:'安卓'},{value:'ios',label:'iOS'}],required:true} as Partial<PackageField>),
     field('appleAppId','Apple ID'),field('storeRegion','商店地区',{type:'dict',dict:'app_area'}),{...pkg,immutable:false},field('url','链接',{required:true}),status,
     field('whetherRestrict','白名单',{type:'dict',dict:'app_where'}),field('areas','白名单地区',{type:'dict',dict:'app_area',multiple:true}),
-    field('whetherUs','禁用美国',{type:'dict',dict:'app_where'}),field('whetherUse','是否自用',{type:'dict',dict:'app_where'}),field('mark','备注',{type:'textarea'}),
+    field('whetherUs','禁用美国',{type:'dict',dict:'app_where'}),field('blockedProviders','禁用运营商',{multiple:true,options:[{value:'google',label:'Google'},{value:'apple',label:'Apple'},{value:'amazon',label:'Amazon'}]}),field('whetherUse','是否自用',{type:'dict',dict:'app_where'}),field('mark','备注',{type:'textarea'}),
     field('gaidAidThreshold','同一 GAID 关联 AID 阈值',{type:'number'}),field('aidDeviceThreshold','同一 AID 设备数阈值',{type:'number'}),
     field('aidGaidSwitchThreshold','同一 AID 的 GAID 切换阈值',{type:'number'}),field('riskWindowSeconds','风控计数窗口（秒）',{type:'number'}),
     field('referrerBlacklistJson','InstallReferrer 黑名单模板（JSON）',{type:'textarea'}),field('userName','归属用户',{readonly:true}),field('updateDate','更新时间',{type:'datetime',readonly:true})]},

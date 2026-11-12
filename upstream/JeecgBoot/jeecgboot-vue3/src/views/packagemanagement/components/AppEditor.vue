@@ -133,6 +133,22 @@
       </div>
       <p v-if="toggleFields.some((field) => !optionsFor(field).length)" class="field-help">开关选项暂不可用，请联系管理员配置应用开关字典。</p>
       <a-form-item
+        v-if="providerField"
+        :label="providerField.label"
+        name="blockedProviders"
+        class="areas-form-item"
+        extra="不选则不禁用运营商。勾选后只拦截所选的 Google、Apple、Amazon。"
+      >
+        <a-select
+          :value="model.blockedProviders"
+          :options="providerField.options || providerOptions"
+          mode="multiple"
+          allowClear
+          placeholder="选择要禁用的运营商"
+          @change="update(providerField, $event || [])"
+        />
+      </a-form-item>
+      <a-form-item
         v-if="areasField"
         :label="areasField.label"
         name="areas"
@@ -289,6 +305,12 @@
   const riskAdvancedOpen = ref(hasCustomRisk(props.model));
   const statusField = computed(() => props.fields.find((field) => field.key === 'status'));
   const areasField = computed(() => props.fields.find((field) => field.key === 'areas'));
+  const providerField = computed(() => props.fields.find((field) => field.key === 'blockedProviders'));
+  const providerOptions = [
+    { value: 'google', label: 'Google' },
+    { value: 'apple', label: 'Apple' },
+    { value: 'amazon', label: 'Amazon' },
+  ];
   function onToggle(field: PackageField, checked: boolean) {
     update(field, checked ? 1 : 0);
   }

@@ -102,6 +102,8 @@ public class AppAttributionResolve {
         if (app.getWhetherUs() != null && app.getWhetherUs() == 1 && ("true".equals(city.get("status")) || "us".equals(country))) {
             return TIP_US;
         }
+        String providers = BlockedProviders.hit(app.getBlockedProviders(), city.get("providers"));
+        if (!providers.isEmpty()) return "禁用运营商：" + providers;
         if (app.getWhetherRestrict() != null && app.getWhetherRestrict() == 1) {
             String areas = app.getAreas();
             if (areas == null || areas.isBlank() || !PackageCountryRegions.matches(areas, country)) return TIP_AREA;
