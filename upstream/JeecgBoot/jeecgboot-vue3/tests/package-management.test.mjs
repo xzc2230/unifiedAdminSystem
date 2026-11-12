@@ -196,6 +196,11 @@ test('app editor leaves ios apple id optional and defaults the store region', ()
   assert.match(source, /optionsFor\(storeRegionField\)/);
   assert.match(source, /:value="model\.areas"/);
   assert.doesNotMatch(source, /update\(areasField\.value, \[\]\)/);
+  assert.match(source, /class="field-grid basic-grid"/);
+  assert.match(source, /key === 'url' \|\| key === 'mark' \? 'span-all' : 'span-third'/);
+  assert.match(source, /v-show="riskAdvancedOpen"/);
+  assert.match(source, /高级配置/);
+  assert.doesNotMatch(source, /class="full-width"\s+extra="商店查询会自动拼接/);
 });
 test('actual package bodyCell slot preserves Ant Table custom checkbox and index renderers',async()=>{
   const {createSSRApp,h,compile}=require('vue');

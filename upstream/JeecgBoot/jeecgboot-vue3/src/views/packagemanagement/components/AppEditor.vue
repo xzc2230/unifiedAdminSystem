@@ -22,7 +22,6 @@
           :label="appleAppIdField.label"
           name="appleAppId"
           :rules="rulesFor(appleAppIdField)"
-          class="full-width"
           extra="商店查询会自动拼接 id=，这里只填数字。"
         >
           <a-input
@@ -38,7 +37,6 @@
           :label="storeRegionField.label"
           name="storeRegion"
           :rules="rulesFor(storeRegionField)"
-          class="full-width"
         >
           <a-select
             :value="model.storeRegion || 'us'"
@@ -51,11 +49,11 @@
           />
         </a-form-item>
       </div>
-      <div class="field-grid">
+      <div class="field-grid basic-grid">
         <a-form-item
           v-for="field in basicFields"
           :key="field.key"
-          :class="{ 'full-width': field.key !== 'appName' && field.key !== 'author' }"
+          :class="basicSpan(field.key)"
           :label="field.label"
           :name="field.key"
           :rules="rulesFor(field)"
@@ -139,10 +137,16 @@
     </section>
 
     <section class="editor-section" aria-labelledby="app-risk-heading">
-      <header class="section-heading"
-        ><div><h3 id="app-risk-heading">风控阈值</h3><p>按应用配置设备关联与切换限制</p></div
-        ><span class="section-caption">高级配置</span></header
-      >
+      <header class="section-heading">
+        <div>
+          <h3 id="app-risk-heading">风控阈值</h3>
+          <p>{{ riskAdvancedOpen ? '按应用配置设备关联与切换限制' : '当前使用默认阈值' }}</p>
+        </div>
+        <button type="button" class="advanced-toggle" :aria-expanded="riskAdvancedOpen" aria-controls="app-risk-fields" @click="riskAdvancedOpen = !riskAdvancedOpen">
+          {{ riskAdvancedOpen ? '收起' : '高级配置' }}
+        </button>
+      </header>
+      <div id="app-risk-fields" v-show="riskAdvancedOpen">
       <div class="risk-notice">关联与切换阈值留空或设为 0 时使用默认值 1；计数窗口小于 60 秒时使用默认值 86400 秒（24 小时）。</div>
       <div class="field-grid">
         <a-form-item
@@ -163,6 +167,7 @@
             <template #addonAfter>{{ field.key === 'riskWindowSeconds' ? '秒' : field.key === 'aidGaidSwitchThreshold' ? '次' : '个' }}</template>
           </a-input-number>
         </a-form-item>
+      </div>
       </div>
     </section>
 
@@ -192,7 +197,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, watchEffect } from 'vue';
+  import { computed, ref, watchEffect } from 'vue';
   import type { PackageField, PackageOption } from '/@/types/packagemanagement';
 
   const props = defineProps<{
@@ -243,6 +248,24 @@
   const basicFields = computed(() =>
     ['appName', 'applicationCode', 'packageCode', 'url', 'mark'].flatMap((key) => props.fields.filter((field) => field.key === key))
   );
+  function basicSpan(key: string) {
+    return key === 'url' || key === 'mark' ? 'span-all' : 'span-third';
+  }
+  function hasCustomRisk(model: Record<string, any>) {
+    const customCount = ['gaidAidThreshold', 'aidDeviceThreshold', 'aidGaidSwitchThreshold'].some((key) => {
+      const value = Number(model[key]);
+      return model[key] != null && model[key] !== '' && Number.isFinite(value) && value > 0 && value !== 1;
+    });
+    const windowValue = Number(model.riskWindowSeconds);
+    const customWindow =
+      model.riskWindowSeconds != null &&
+      model.riskWindowSeconds !== '' &&
+      Number.isFinite(windowValue) &&
+      windowValue >= 60 &&
+      windowValue !== 86400;
+    return customCount || customWindow;
+  }
+  const riskAdvancedOpen = ref(hasCustomRisk(props.model));
   const statusField = computed(() => props.fields.find((field) => field.key === 'status'));
   const areasField = computed(() => props.fields.find((field) => field.key === 'areas'));
   function onToggle(field: PackageField, checked: boolean) {
@@ -328,10 +351,38 @@
     font-size: 12px;
     white-space: nowrap;
   }
+  .advanced-toggle {
+    flex: none;
+    margin-top: 2px;
+    padding: 4px 12px;
+    border: 1px solid #91caff;
+    border-radius: 6px;
+    background: #f0f6ff;
+    color: #1677ff;
+    font-size: 12px;
+    line-height: 20px;
+    cursor: pointer;
+  }
+  .advanced-toggle:hover {
+    border-color: #1677ff;
+  }
+  .advanced-toggle:focus-visible {
+    outline: 2px solid #1677ff;
+    outline-offset: 2px;
+  }
   .field-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0 22px;
+  }
+  .basic-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .span-third {
+    grid-column: span 2;
+  }
+  .span-all {
+    grid-column: 1 / -1;
   }
   .field-grid > *,
   .control-grid > * {
@@ -485,7 +536,8 @@
     --editor-muted: #a1aab8;
   }
   :global(html[data-theme='dark'] .app-editor .mode-option-selected),
-  :global(html[data-theme='dark'] .app-editor .risk-notice) {
+  :global(html[data-theme='dark'] .app-editor .risk-notice),
+  :global(html[data-theme='dark'] .app-editor .advanced-toggle) {
     background: #162c46;
   }
   :global(html[data-theme='dark'] .app-editor .json-editor) {
@@ -497,8 +549,13 @@
       border-radius: 8px;
     }
     .field-grid,
+    .basic-grid,
     .control-grid {
       grid-template-columns: minmax(0, 1fr);
+    }
+    .span-third,
+    .span-all {
+      grid-column: 1 / -1;
     }
     .mode-options {
       grid-template-columns: repeat(2, minmax(0, 1fr));
