@@ -5,17 +5,35 @@
         <div><h3 id="app-basic-heading">基础信息</h3><p>设置应用标识与访问链接</p></div>
         <span class="section-caption">带 * 的为必填项</span>
       </header>
-      <a-form-item
-        v-if="platformField"
-        :label="platformField.label"
-        name="platform"
-        :rules="rulesFor(platformField)"
-        class="platform-form-item"
-      >
-        <a-radio-group :value="model.platform || 'android'" class="platform-options" @change="onPlatformChange($event.target.value)">
-          <a-radio v-for="option in platformOptions" :key="String(option.value)" :value="option.value">{{ option.label }}</a-radio>
-        </a-radio-group>
-      </a-form-item>
+      <div class="field-grid basic-grid identity-row">
+        <a-form-item
+          v-for="field in identityFields"
+          :key="field.key"
+          class="span-third"
+          :label="field.label"
+          :name="field.key"
+          :rules="rulesFor(field)"
+        >
+          <a-input
+            :value="model[field.key]"
+            :disabled="Boolean(field.readonly || (field.immutable && editing))"
+            :placeholder="placeholders[field.key]"
+            allowClear
+            @update:value="update(field, $event)"
+          />
+        </a-form-item>
+        <a-form-item
+          v-if="platformField"
+          :label="platformField.label"
+          name="platform"
+          :rules="rulesFor(platformField)"
+          class="span-third platform-form-item"
+        >
+          <a-radio-group :value="model.platform || 'android'" class="platform-options" @change="onPlatformChange($event.target.value)">
+            <a-radio v-for="option in platformOptions" :key="String(option.value)" :value="option.value">{{ option.label }}</a-radio>
+          </a-radio-group>
+        </a-form-item>
+      </div>
       <div v-if="model.platform === 'ios'" class="field-grid ios-store-fields">
         <a-form-item
           v-if="appleAppIdField"
@@ -245,8 +263,11 @@
       if (storeRegionField.value) update(storeRegionField.value, '');
     }
   }
+  const identityFields = computed(() =>
+    ['appName', 'packageCode'].flatMap((key) => props.fields.filter((field) => field.key === key))
+  );
   const basicFields = computed(() =>
-    ['appName', 'applicationCode', 'packageCode', 'url', 'mark'].flatMap((key) => props.fields.filter((field) => field.key === key))
+    ['applicationCode', 'url', 'mark'].flatMap((key) => props.fields.filter((field) => field.key === key))
   );
   function basicSpan(key: string) {
     return key === 'url' || key === 'mark' ? 'span-all' : 'span-third';
@@ -411,6 +432,12 @@
   }
   .platform-form-item {
     margin-bottom: 20px;
+  }
+  .platform-options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 32px;
   }
   .app-editor :deep(.ant-input-number-group-wrapper) {
     width: 100%;

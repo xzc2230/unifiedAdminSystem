@@ -197,7 +197,9 @@ test('app editor leaves ios apple id optional and defaults the store region', ()
   const source = fs.readFileSync(path.join(root, 'src/views/packagemanagement/components/AppEditor.vue'), 'utf8');
   assert.doesNotMatch(source, /appleAppId' && props\.model\.platform === 'ios'/);
   assert.match(source, /只输入数字，不要带 id/);
-  assert.match(source, /\['appName', 'applicationCode', 'packageCode', 'url', 'mark'\]/);
+  assert.match(source, /\['appName', 'packageCode'\]/);
+  assert.match(source, /\['applicationCode', 'url', 'mark'\]/);
+  assert.match(source, /class="field-grid basic-grid identity-row"/);
   assert.doesNotMatch(source, /创建后不可修改/);
   assert.match(source, /model\.storeRegion \|\| 'us'/);
   assert.match(source, /optionsFor\(storeRegionField\)/);
