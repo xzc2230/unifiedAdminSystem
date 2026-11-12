@@ -3,9 +3,9 @@ import { warn } from '/@/utils/log';
 import { registerDynamicRouter } from '/@/utils/monorepo/dynamicRouter';
 
 // 懒加载模块配置（按需加载，访问相关路由时才加载对应包）
-const lazyPackages = [
+const lazyPackages: { name: string; importer: () => Promise<any> }[] = import.meta.env.VITE_ENABLE_AI === 'true' ? [
   { name: '@jeecg/aiflow', importer: () => import('@jeecg/aiflow') },
-];
+] : [];
 
 let appInstance: App | null = null;
 

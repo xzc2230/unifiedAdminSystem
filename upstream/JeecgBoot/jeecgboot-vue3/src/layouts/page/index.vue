@@ -14,7 +14,7 @@
       <!--        mode="out-in"-->
       <!--        appear-->
       <!--      >-->
-      <keep-alive v-if="openCache" :include="getCaches">
+      <keep-alive v-if="openCache" :key="cacheScope" :include="getCaches" :max="12">
         <template v-if="Component">
           <component :is="Component" :key="route.fullPath"/>
         </template>
@@ -41,6 +41,8 @@
   import { getTransitionName } from './transition';
 
   import { useMultipleTabStore } from '/@/store/modules/multipleTab';
+  import { useUserStore } from '/@/store/modules/user';
+  import { usePermissionStore } from '/@/store/modules/permission';
 
   export default defineComponent({
     name: 'PageLayout',
@@ -48,6 +50,9 @@
     setup() {
       const { getShowMultipleTab } = useMultipleTabSetting();
       const tabStore = useMultipleTabStore();
+      const userStore = useUserStore();
+      const permissionStore = usePermissionStore();
+      const cacheScope = computed(() => JSON.stringify([userStore.getUserInfo.id, userStore.getTenant, permissionStore.getLastBuildMenuTime]));
 
       const { getOpenKeepAlive, getCanEmbedIFramePage } = useRootSetting();
 
@@ -62,6 +67,7 @@
         return tabStore.getCachedTabList;
       });
       return {
+        cacheScope,
         getTransitionName,
         openCache,
         getEnableTransition,

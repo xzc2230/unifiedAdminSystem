@@ -1,7 +1,7 @@
 import type { AppRouteRecordRaw } from '/@/router/types';
 import { LAYOUT } from '/@/router/constant';
 
-export const AI_ROUTE: AppRouteRecordRaw = {
+const AI_ROUTE: AppRouteRecordRaw | undefined = import.meta.env.VITE_ENABLE_AI === 'true' ? {
   path: '',
   name: 'ai-parent',
   component: LAYOUT,
@@ -18,6 +18,6 @@ export const AI_ROUTE: AppRouteRecordRaw = {
       },
     },
   ],
-};
+} : undefined;
 
-export const staticRoutesList = [AI_ROUTE];
+export const staticRoutesList = AI_ROUTE ? [AI_ROUTE] : [];

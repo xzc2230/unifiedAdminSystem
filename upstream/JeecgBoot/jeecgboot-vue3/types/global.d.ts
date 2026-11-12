@@ -55,6 +55,7 @@ declare global {
   }
 
   declare interface ViteEnv {
+    VITE_ENABLE_AI: string;
     VITE_PORT: number;
     VITE_USE_MOCK: boolean;
     VITE_PUBLIC_PATH: string;

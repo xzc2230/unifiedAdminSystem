@@ -63,6 +63,8 @@ sudo python3 deploy/aws-single/verify.py
 
 ## 运行检查
 
+2026-11-11 前端缓存迁移、AI 开关、资源缓存验收与回退步骤见 `docs/deployment/frontend-performance-2026-11-11.md`。发布脚本不会自动执行菜单缓存 SQL，需按该说明单独应用。
+
 ```bash
 sudo docker compose --project-directory /opt/middleware ps
 sudo docker compose --project-directory /opt/unifiedAdminSystem ps

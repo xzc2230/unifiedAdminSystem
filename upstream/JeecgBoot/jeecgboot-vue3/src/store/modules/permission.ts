@@ -9,6 +9,8 @@ import { toRaw } from 'vue';
 import { transformObjToRoute, flatMultiLevelRoutes, addSlashToRouteComponent } from '/@/router/helper/routeHelper';
 import { transformRouteToMenu } from '/@/router/helper/menuHelper';
 import { normalizePackageMenus } from '/@/views/packagemanagement/package-conversions.mjs';
+import { AI_ENABLED } from '/@/settings/features';
+import { filterAiMenus } from '/@/settings/featureMenus';
 
 import projectSetting from '/@/settings/projectSetting';
 
@@ -260,7 +262,7 @@ export const usePermissionStore = defineStore('app-permission', {
             console.error(error);
           }
           // 组件地址前加斜杠处理  author: lsq date:2021-09-08
-          routeList = addSlashToRouteComponent(normalizePackageMenus(routeList));
+          routeList = addSlashToRouteComponent(normalizePackageMenus(filterAiMenus(routeList, AI_ENABLED)));
           // 动态引入组件
           routeList = transformObjToRoute(routeList);
 

@@ -62,8 +62,8 @@
 
   import { useRouter } from 'vue-router';
   import { usePermissionStore } from '/@/store/modules/permission';
+  import { AI_ENABLED } from '/@/settings/features';
   import { hasAiAssistantMenu } from './aiAssistantMenu';
-  import Aide from "/@/views/dashboard/ai/components/aide/index.vue"
 
   export default defineComponent({
     name: 'MultipleTabs',
@@ -73,7 +73,6 @@
       Tabs,
       TabPane: Tabs.TabPane,
       TabContent,
-      Aide,
     },
     setup() {
       const affixTextList = initAffixTabs();
@@ -97,7 +96,7 @@
 
       // 极简模式隐藏标签栏AI入口图标；未分配 AI 助手菜单时也不展示
       const getIsSimpleTheme = computed(() => unref(getTabsTheme) === TabsThemeEnum.SIMPLE);
-      const showAiAssistant = computed(() => !unref(getIsSimpleTheme) && hasAiAssistantMenu(permissionStore.getBackMenuList));
+      const showAiAssistant = computed(() => AI_ENABLED && !unref(getIsSimpleTheme) && hasAiAssistantMenu(permissionStore.getBackMenuList));
 
       const getWrapClass = computed(() => {
         return [

@@ -8,6 +8,7 @@ import { createProxy } from './build/vite/proxy';
 import { wrapperEnv } from './build/utils';
 import { createVitePlugins } from './build/vite/plugin';
 import { OUTPUT_DIR } from './build/constant';
+import { lazyChunks } from './build/vite/lazyChunks';
 
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir);
@@ -104,12 +105,16 @@ export default async ({ command, mode }: ConfigEnv): Promise<UserConfig> => {
           'src/views/system/dict/index.vue',
           'src/views/super/online/cgform/index.vue',
           'src/views/super/online/cgform/auto/default/OnlineAutoList.vue',
-          'src/views/super/airag/aiapp/AiAppList.vue',
+          'src/views/packagemanagement/apps/index.vue',
+          'src/views/packagemanagement/request-logs/index.vue',
+          'src/views/packagemanagement/packstat/index.vue',
+          ...(env.VITE_ENABLE_AI === 'true' ? ['src/views/super/airag/aiapp/AiAppList.vue'] : []),
         ],
       },
       // update-end--author:liaozhiyang---date:20260306---for:【QQYUN-14801】vite启动的时候，预构建一些入口页面，访问时快一些
     },
     build: {
+      manifest: true,
       // Vite 8 默认使用 Oxc minifier；'esbuild' 已 deprecated。
       // 这里保留 minify=true 显式启用，并对 console/debugger 做 drop。
       minify: true,
@@ -117,39 +122,17 @@ export default async ({ command, mode }: ConfigEnv): Promise<UserConfig> => {
       cssTarget: 'chrome80',
       outDir: OUTPUT_DIR,
       rollupOptions: {
+        preserveEntrySignatures: false,
         output: {
           chunkFileNames: 'js/[name]-[hash].js',
           entryFileNames: 'js/[name]-[hash].js',
-          // update-begin--author:copilot---date:20260711---for:【vite8升级】rolldown不再支持对象形式的manualChunks，改为函数形式
-          // 官方推荐写法：id.includes('node_modules') + split('node_modules/') 取出包名，再映射到 chunk 名（依赖包从大到小排列）
-          manualChunks(id: string) {
-            const normalizedId = id.replace(/\\/g, '/');
-            // tinymceGlobalShim 必须和 tinymce 核心/插件打进同一 chunk，保证 window.tinymce 挂载早于各 plugin/theme 顶层代码执行
-            if (normalizedId.includes('/src/utils/tinymceGlobalShim')) {
-              return 'tinymce-vendor';
-            }
-            if (!normalizedId.includes('node_modules/')) {
-              return;
-            }
-            const segments = normalizedId.split('node_modules/').pop()!.split('/');
-            const pkgName = segments[0].startsWith('@') ? `${segments[0]}/${segments[1]}` : segments[0];
-            const packageToChunk: Record<string, string> = {
-              vue: 'vue-vendor',
-              'vue-router': 'vue-vendor',
-              'emoji-mart-vue-fast': 'emoji-mart-vue-fast',
-              html2canvas: 'html2canvas-vendor',
-              'pinyin-pro': 'pinyin-pro-vendor',
-              'vue-grid-layout': 'grid-layout-vendor',
-              vuedraggable: 'vuedraggable-vendor',
-              tinymce: 'tinymce-vendor',
-              '@tinymce/tinymce-vue': 'tinymce-vendor',
-            };
-            return packageToChunk[pkgName];
-          },
-          // update-end--author:copilot---date:20260711---for:【vite8升级】rolldown不再支持对象形式的manualChunks，改为函数形式
+          // Keep editor core/plugins/shim together without capturing shared Vue/runtime helpers.
+          // Other dependencies use automatic splitting so unrelated routes do not load them.
+          strictExecutionOrder: true,
+          codeSplitting: lazyChunks,
           // Vite 8 用 Oxc 替代 esbuild；原 esbuild.drop 迁移到这里。
           // 详见 https://oxc.rs/docs/guide/usage/minifier/dead-code-elimination
-          minify: isBuild ? { compress: { drop: ['console', 'debugger'] } } : false,
+          minify: isBuild ? { compress: { dropConsole: true, dropDebugger: true } } : false,
         },
       },
       // 关闭brotliSize显示可以稍微减少打包时间

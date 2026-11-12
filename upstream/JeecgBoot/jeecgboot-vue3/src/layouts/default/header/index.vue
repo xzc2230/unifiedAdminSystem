@@ -74,7 +74,10 @@
   import LoginSelect from '/@/views/sys/login/LoginSelect.vue';
   import { useUserStore } from '/@/store/modules/user';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import Aide from "@/views/dashboard/ai/components/aide/index.vue"
+  // Local env condition removes the import before chunk splitting.
+  const Aide = import.meta.env.VITE_ENABLE_AI === 'true'
+    ? createAsyncComponent(() => import('/@/views/dashboard/ai/components/aide/index.vue'))
+    : { render: () => null };
   const { t } = useI18n();
 
   export default defineComponent({

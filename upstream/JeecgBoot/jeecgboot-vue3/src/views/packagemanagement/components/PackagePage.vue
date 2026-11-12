@@ -105,7 +105,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, defineAsyncComponent, onMounted, reactive, ref } from 'vue';
+import { useCachedPageRefresh } from '/@/hooks/web/useCachedPageRefresh';
 import { usePermissionStore } from '/@/store/modules/permission';
 import { autoBlacklist,removeAutoBlacklist } from '/@/api/packagemanagement/dev';
 import { APP_STATUS_OPTIONS,EDIT_FIELDS,canAppField,appEditPayload,appFieldRequired,prettyJson } from '../package-dev.mjs';
@@ -120,12 +121,17 @@ import { packageApi,allPwa,statisticsTotal,cleanLogs } from '/@/api/packagemanag
 import type { PackageDefinition,PackageField as PackageFieldSpec,PackageId,PackageOption } from '/@/types/packagemanagement';
 import { APP_AREA_OPTIONS, countryLabel, countryCode } from '../package-regions.mjs';
 import { fromAreas,toAreas,legacyImageUrl } from '../package-conversions.mjs';
-import PackageField from './PackageField.vue';
-import PwaEditor from './PwaEditor.vue';
-import AppEditor from './AppEditor.vue';
+const PackageField = defineAsyncComponent(() => import('./PackageField.vue'));
+const PwaEditor = defineAsyncComponent(() => import('./PwaEditor.vue'));
+const AppEditor = defineAsyncComponent(() => import('./AppEditor.vue'));
 import AppSharingModal from './AppSharingModal.vue';
 const props=defineProps<{definition:PackageDefinition}>();
 const definition=props.definition;
+const freshness=useCachedPageRefresh(async()=>{
+  const rows=await reload();
+  if(rows===undefined) throw new Error('列表刷新失败');
+  if(definition.domain==='statistics') await loadTotal();
+}, ['request-logs','event-history','event-errors','app-events','landing-counts','statistics','store'].includes(definition.domain)?5_000:30_000);
 const api=packageApi(definition.domain);
 const {hasPermission}=usePermission();
 const permissionStore=usePermissionStore();
@@ -206,7 +212,7 @@ const appColumnWidths:Record<string,number>={appName:168,platform:88,appleAppId:
 function appStatusColor(value:any){return ({0:'default',1:'green',2:'blue',3:'gold'} as Record<string,string>)[String(value)] || 'default';}
 const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||key!=='applicationCode'&&canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:definition.domain==='apps'?appColumnWidths[key] || 140:['appName','packageCode','packageName','reqTime'].includes(key)?180:150,ellipsis:true}));
 const [registerTable,{reload,clearSelectedRowKeys}]=useTable({
-  api:async params=>{const {pageNo,pageSize,...filters}=params;const query:Record<string,any>={...params};if(definition.domain==='store'&&Array.isArray(query.status)){const picked=query.status.filter((value:unknown)=>value!=null&&String(value)!=='');delete query.status;if(picked.length)query.statusQuery=picked.join(',');}lastFilters.value=filters;if(definition.domain==='apps'){selected.value=[];selectedRows.value=[];clearSelectedRowKeys();}return api.list({...query,...(definition.appType!=null?{appType:definition.appType}:{})});},
+  api:async params=>{const {pageNo,pageSize,...filters}=params;const query:Record<string,any>={...params};if(definition.domain==='store'&&Array.isArray(query.status)){const picked=query.status.filter((value:unknown)=>value!=null&&String(value)!=='');delete query.status;if(picked.length)query.statusQuery=picked.join(',');}lastFilters.value=filters;if(definition.domain==='apps'){selected.value=[];selectedRows.value=[];clearSelectedRowKeys();}return freshness.trackRequest(()=>api.list({...query,...(definition.appType!=null?{appType:definition.appType}:{})}));},
   columns,rowKey:idKey,bordered:true,showTableSetting:true,useSearchForm:true,size:definition.domain==='apps'?'small':'middle',
   formConfig:{schemas:schemas as any,labelWidth:compactList?80:100,showAdvancedButton:schemas.length>3,autoSubmitOnEnter:true,...(compactList?{actionColOptions:compactCol,rowProps:{gutter:8}}:{}),...(definition.domain==='request-logs'?{fieldMapToTime:[['reqDate',['startReqTime','endReqTime'],'YYYY-MM-DD 00:00:00']]}:{})},
   actionColumn:{title:'操作',key:'action',dataIndex:'action',width:definition.domain==='apps'?268:190,fixed:'right'},
@@ -223,6 +229,8 @@ function setField(field:PackageFieldSpec,value:any) {
   if(field.type==='parent') {const app=parentApps.value.find(v=>String(v.id)===String(value));for(const key of ['appName','appIcon','appHost']) model[key]=app?.[key];}
 }
 async function openEditor(record?:Record<string,any>) {
+  // Load form components before opening so the first Save sees registered fields/refs.
+  await Promise.all([import('./PackageField.vue'),...(definition.domain==='apps'?[import('./AppEditor.vue')]:[]),...(definition.domain==='pwa'?[import('./PwaEditor.vue')]:[])]);
   const data=record ? await api.detail(record[idKey]) : {};
   Object.keys(model).forEach(k=>delete model[k]);
   const defaults=definition.domain==='apps' && record?{}:{status:0,whetherRestrict:0,whetherUs:0,whetherUse:0,shunt:0,downloadCount:0,reviews:0,appEvent:'0',reviewsRecords:[],tags:'[]',score:'{}'};

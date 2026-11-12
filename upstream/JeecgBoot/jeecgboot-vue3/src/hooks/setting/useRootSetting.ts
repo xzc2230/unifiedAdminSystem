@@ -3,6 +3,7 @@ import type { ProjectConfig } from '/#/config';
 import { computed } from 'vue';
 
 import { useAppStore } from '/@/store/modules/app';
+import { AI_ENABLED } from '/@/settings/features';
 import { ContentEnum, ThemeEnum } from '/@/enums/appEnum';
 
 type RootSetting = Omit<ProjectConfig, 'locale' | 'headerSetting' | 'menuSetting' | 'multiTabsSetting'>;
@@ -44,7 +45,7 @@ export function useRootSetting() {
 
   const getGrayMode = computed(() => appStore.getProjectConfig.grayMode);
   // 代码逻辑说明: 【QQYUN-10952】AI助手支持通过设置来配置是否显示
-  const getAiIconShow = computed(() => appStore.getProjectConfig.aiIconShow);
+  const getAiIconShow = computed(() => AI_ENABLED && appStore.getProjectConfig.aiIconShow);
   const getLockTime = computed(() => appStore.getProjectConfig.lockTime);
 
   const getShowDarkModeToggle = computed(() => appStore.getProjectConfig.showDarkModeToggle);

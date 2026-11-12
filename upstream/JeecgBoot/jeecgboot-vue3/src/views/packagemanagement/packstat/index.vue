@@ -1,9 +1,10 @@
 <template>
-  <DevRecordPage ref="page" title="包统计" path="packstat" domain="packstat" :fields="fields" :filters="filters" :defaults="defaults" @query="queryChanged" @changed="loadChoicesAndSummary">
+  <DevRecordPage ref="page" title="包统计" path="packstat" domain="packstat" :fields="fields" :filters="filters" :defaults="defaults" :refreshChoices="loadChoices" @query="queryChanged" @changed="loadChoicesAndSummary">
     <template #summary><a-card v-if="summaryQuery.packer" title="包存活 / 使用时间分布" size="small" class="summary"><a-alert v-if="summaryError" :message="summaryError" type="error" /><a-table :columns="summaryColumns" :dataSource="summaryRows(summary)" :loading="summaryLoading" :pagination="false" rowKey="metric" size="small" bordered /><p>7～14 天为独立分桶，15 天包含 15 天及以上。</p></a-card></template>
   </DevRecordPage>
 </template>
 <script setup lang="ts">
+defineOptions({ name: "Packagepackstat" });
 import {computed,onMounted,ref} from 'vue';
 import {packstatAuthors,packstatRegions,packstatSummary} from '/@/api/packagemanagement/dev';
 import DevRecordPage from '../components/DevRecordPage.vue';
@@ -24,6 +25,7 @@ const summaryColumns=[{title:'指标',key:'metric',dataIndex:'metric'},...SURVIV
 let generation=0;
 async function queryChanged(query:any){summaryQuery.value={packer:query.packer,passMonth:query.passMonth};await loadSummary();}
 async function loadSummary(){const version=++generation;if(!summaryQuery.value.packer){summary.value={noRecord:true};return;}summaryLoading.value=true;summaryError.value='';try{const value=await packstatSummary(summaryQuery.value);if(version===generation)summary.value=value;}catch{if(version===generation){summary.value={noRecord:true};summaryError.value='统计加载失败，请重试';}}finally{if(version===generation)summaryLoading.value=false;}}
-async function loadChoicesAndSummary(){const [a,r]=await Promise.all([packstatAuthors(),packstatRegions()]);authors.value=(a||[]).map(v=>typeof v==='string'?v:v.packer||v.author||v.name).filter(Boolean);regions.value=r||[];await loadSummary();}
+async function loadChoices(){const [a,r]=await Promise.all([packstatAuthors(),packstatRegions()]);authors.value=(a||[]).map(v=>typeof v==='string'?v:v.packer||v.author||v.name).filter(Boolean);regions.value=r||[];}
+async function loadChoicesAndSummary(){await loadChoices();await loadSummary();}
 onMounted(loadChoicesAndSummary);
 </script><style scoped>.summary{margin-bottom:16px}.summary p{margin:10px 0 0;color:#666}</style>

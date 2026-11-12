@@ -12,6 +12,7 @@ import { createStateGuard } from './stateGuard';
 import nProgress from 'nprogress';
 import projectSetting from '/@/settings/projectSetting';
 import { createParamMenuGuard } from './paramMenuGuard';
+import { setupPageLoadingGuard } from './pageLoading';
 
 // Don't change the order of creation
 export function setupRouterGuard(router: Router) {
@@ -41,8 +42,8 @@ function createPageGuard(router: Router) {
     return true;
   });
 
-  router.afterEach((to) => {
-    loadedPageMap.set(to.path, true);
+  router.afterEach((to, _from, failure) => {
+    if (!failure) loadedPageMap.set(to.path, true);
   });
 }
 
@@ -51,30 +52,9 @@ function createPageLoadingGuard(router: Router) {
   const userStore = useUserStoreWithOut();
   const appStore = useAppStoreWithOut();
   const { getOpenPageLoading } = useTransitionSetting();
-  router.beforeEach(async (to) => {
-    if (!userStore.getToken) {
-      return true;
-    }
-    if (to.meta.loaded) {
-      return true;
-    }
-
-    if (unref(getOpenPageLoading)) {
-      appStore.setPageLoadingAction(true);
-      return true;
-    }
-
-    return true;
-  });
-  router.afterEach(async () => {
-    if (unref(getOpenPageLoading)) {
-      // TODO Looking for a better way
-      // The timer simulates the loading time to prevent flashing too fast,
-      setTimeout(() => {
-        appStore.setPageLoading(false);
-      }, 220);
-    }
-    return true;
+  setupPageLoadingGuard(router, {
+    shouldLoad: (to) => !!userStore.getToken && !to.meta.loaded && unref(getOpenPageLoading),
+    setLoading: (loading) => { void appStore.setPageLoadingAction(loading); },
   });
 }
 

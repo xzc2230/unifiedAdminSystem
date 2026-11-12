@@ -32,6 +32,7 @@ export function useDataSource(
   });
   const dataSourceRef = ref<Recordable[]>([]);
   const rawDataSourceRef = ref<Recordable>({});
+  let requestSequence = 0;
 
   watchEffect(() => {
     tableData.value = unref(dataSourceRef);
@@ -220,6 +221,7 @@ export function useDataSource(
   async function fetch(opt?: FetchParams) {
     const { api, searchInfo, defSort, fetchSetting, beforeFetch, afterFetch, useSearchForm, pagination } = unref(propsRef);
     if (!api || !isFunction(api)) return;
+    const request = ++requestSequence;
     try {
       setLoading(true);
       const { pageField, sizeField, listField, totalField } = Object.assign({}, FETCH_SETTING, fetchSetting);
@@ -267,6 +269,7 @@ export function useDataSource(
         };
       };
       const res = await api(params);
+      if (request !== requestSequence) return;
       rawDataSourceRef.value = res;
 
       const isArrayResult = Array.isArray(res);
@@ -288,6 +291,7 @@ export function useDataSource(
       if (afterFetch && isFunction(afterFetch)) {
         resultItems = (await afterFetch(resultItems)) || resultItems;
       }
+      if (request !== requestSequence) return;
       dataSourceRef.value = resultItems;
       setPagination({
         total: Number(resultTotal) || 0,
@@ -303,13 +307,14 @@ export function useDataSource(
       });
       return resultItems;
     } catch (error) {
+      if (request !== requestSequence) return;
       emit('fetch-error', error);
       dataSourceRef.value = [];
       setPagination({
         total: 0,
       });
     } finally {
-      setLoading(false);
+      if (request === requestSequence) setLoading(false);
     }
   }
 

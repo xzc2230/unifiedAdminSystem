@@ -85,6 +85,7 @@ function mount(filename = 'AppSharingModal.vue', overrides = {}, domain = 'apps'
     'ant-design-vue': { message: { success() {}, warning() {}, error() {} }, Modal: { confirm: (config) => confirmations.push(config) } },
     '/@/hooks/web/useCopyToClipboard': {},
     '/@/utils/dict/JDictSelectUtil': { initDictOptions: async () => [] },
+    '/@/hooks/web/useCachedPageRefresh': { useCachedPageRefresh: () => ({ trackRequest: request => request() }) },
     '/@/hooks/setting': { useGlobSetting: () => ({ domainUrl: '' }) },
     '/@/components/Table': {
       BasicTable: {},

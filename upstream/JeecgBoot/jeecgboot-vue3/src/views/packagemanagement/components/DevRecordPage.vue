@@ -82,12 +82,13 @@
 </template>
 <script setup lang="ts">
 import {computed,reactive,ref,watch} from 'vue';
+import {useCachedPageRefresh} from '/@/hooks/web/useCachedPageRefresh';
 import {message,Modal} from 'ant-design-vue';
 import {copyTextToClipboard} from '/@/hooks/web/useCopyToClipboard';
 import {BasicTable,useTable} from '/@/components/Table';
 import {devApi,lookupAsn} from '/@/api/packagemanagement/dev';
 import {displayDuration,maskToken,packstatPayload,prettyJson} from '../package-dev.mjs';
-const props=withDefaults(defineProps<{title:string;path:string;domain:string;fields:any[];filters:any[];readonly?:boolean;defaults?:Record<string,any>}>(),{readonly:false,defaults:()=>({})});
+const props=withDefaults(defineProps<{title:string;path:string;domain:string;fields:any[];filters:any[];readonly?:boolean;defaults?:Record<string,any>;refreshChoices?:()=>Promise<void>}>(),{readonly:false,defaults:()=>({})});
 const emit=defineEmits<{(e:'query',query:Record<string,any>):void;(e:'changed'):void}>();
 const api=computed(()=>devApi(props.path));
 const permission=(action:string)=>`package:${props.domain}:${action}`;
@@ -95,8 +96,9 @@ const compact=computed(()=>props.domain==='risk');
 const querySchemas=computed(()=>compact.value?props.filters.map(item=>({...item,colProps:{style:{width:'auto',flex:'0 0 auto'}},componentProps:{...(item.componentProps||{}),style:{width:'180px'}}})):props.filters);
 const queryForm=computed(()=>({schemas:querySchemas.value,labelWidth:compact.value?80:90,autoSubmitOnEnter:true,showAdvancedButton:props.filters.length>3,...(compact.value?{actionColOptions:{style:{width:'auto',flex:'0 0 auto'}},rowProps:{gutter:8}}:{})}));
 const selected=ref<any[]>([]),lastQuery=ref<Record<string,any>>({});
+const freshness=useCachedPageRefresh(async()=>{await props.refreshChoices?.();const rows=await reload();if(rows===undefined)throw new Error('列表刷新失败');},props.path==='packstat'?5_000:30_000);
 const [registerTable,{reload,clearSelectedRowKeys,setProps}]=useTable({
- title:props.title,api:async params=>{lastQuery.value=params;emit('query',params);return api.value.list(params);},
+ title:props.title,api:async params=>{lastQuery.value=params;emit('query',params);return freshness.trackRequest(()=>api.value.list(params));},
  columns:props.fields.filter(f=>!f.hidden).map(f=>({title:f.label,key:f.key,dataIndex:f.key,width:f.width||160,ellipsis:true,json:f.json})),
  rowKey:'id',bordered:true,useSearchForm:true,showTableSetting:true,
  formConfig:queryForm.value,

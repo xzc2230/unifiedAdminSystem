@@ -43,8 +43,7 @@ export function configPwaPlugin(isBuild: boolean): PluginOption | PluginOption[]
         'assets/index-*.css', // 仅入口 CSS
         'favicon.ico',
         'logo.png',
-        'js/index-*.js',
-        'js/*-vendor-*.js',
+        // Route/vendor resources are cached on demand, not eagerly fetched.
       ],
       
       // 不使用导航回退功能
@@ -53,11 +52,10 @@ export function configPwaPlugin(isBuild: boolean): PluginOption | PluginOption[]
       // 运行时缓存：按需加载的资源
       runtimeCaching: [
         {
-          urlPattern: /\/js\/.*\.js$/i,
-          handler: 'NetworkFirst',
+          urlPattern: /\/js\/[^/]+-[\w-]{8,}\.js$/i,
+          handler: 'CacheFirst',
           options: {
-            cacheName: 'js-chunks-cache',
-            networkTimeoutSeconds: 3,
+            cacheName: 'js-hashed-chunks-v2',
             expiration: {
               maxEntries: 100,
               maxAgeSeconds: 60 * 60 * 24 * 7, // 7天
