@@ -199,6 +199,7 @@ test('app editor leaves ios apple id optional and defaults the store region', ()
   assert.doesNotMatch(source, /appleAppId' && props\.model\.platform === 'ios'/);
   assert.match(source, /只输入数字，不要带 id/);
   assert.match(source, /\['appName', 'packageCode'\]/);
+  assert.ok(source.indexOf('class="span-third platform-form-item"') < source.indexOf('v-for="field in identityFields"'));
   assert.match(source, /\['applicationCode', 'url', 'mark'\]/);
   assert.match(source, /class="field-grid basic-grid identity-row"/);
   assert.doesNotMatch(source, /创建后不可修改/);

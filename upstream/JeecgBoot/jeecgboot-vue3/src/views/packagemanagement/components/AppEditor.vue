@@ -7,6 +7,17 @@
       </header>
       <div class="field-grid basic-grid identity-row">
         <a-form-item
+          v-if="platformField"
+          :label="platformField.label"
+          name="platform"
+          :rules="rulesFor(platformField)"
+          class="span-third platform-form-item"
+        >
+          <a-radio-group :value="model.platform || 'android'" class="platform-options" @change="onPlatformChange($event.target.value)">
+            <a-radio v-for="option in platformOptions" :key="String(option.value)" :value="option.value">{{ option.label }}</a-radio>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item
           v-for="field in identityFields"
           :key="field.key"
           class="span-third"
@@ -21,17 +32,6 @@
             allowClear
             @update:value="update(field, $event)"
           />
-        </a-form-item>
-        <a-form-item
-          v-if="platformField"
-          :label="platformField.label"
-          name="platform"
-          :rules="rulesFor(platformField)"
-          class="span-third platform-form-item"
-        >
-          <a-radio-group :value="model.platform || 'android'" class="platform-options" @change="onPlatformChange($event.target.value)">
-            <a-radio v-for="option in platformOptions" :key="String(option.value)" :value="option.value">{{ option.label }}</a-radio>
-          </a-radio-group>
         </a-form-item>
       </div>
       <div v-if="model.platform === 'ios'" class="field-grid ios-store-fields">
