@@ -210,6 +210,7 @@ const [registerTable,{reload,clearSelectedRowKeys}]=useTable({
   columns,rowKey:idKey,bordered:true,showTableSetting:true,useSearchForm:true,size:definition.domain==='apps'?'small':'middle',
   formConfig:{schemas:schemas as any,labelWidth:compactList?80:100,showAdvancedButton:schemas.length>3,autoSubmitOnEnter:true,...(compactList?{actionColOptions:compactCol,rowProps:{gutter:8}}:{}),...(definition.domain==='request-logs'?{fieldMapToTime:[['reqDate',['startReqTime','endReqTime'],'YYYY-MM-DD 00:00:00']]}:{})},
   actionColumn:{title:'操作',key:'action',dataIndex:'action',width:definition.domain==='apps'?268:190,fixed:'right'},
+  clickToRowSelect:!compactList,
   rowSelection:{type:'checkbox',onChange:(keys,rows)=>{selected.value=keys;selectedRows.value=rows || [];}},
 });
 async function loadChoices() {
@@ -264,7 +265,7 @@ function confirmRemove(ids:PackageId[],record?:Record<string,any>) {
   Modal.confirm({title:`确认删除 ${snapshot.length} 条记录？`,onOk:async()=>{if(!allowed())return;await api.remove(snapshot);message.success('删除成功');await refresh();}});
 }
 async function exportRows() {exporting.value=true;try{await api.export({...lastFilters.value,...(definition.appType!=null?{appType:definition.appType}:{})});}finally{exporting.value=false;}}
-function confirmClean() {Modal.confirm({title:'清理符合当前筛选条件的日志？',content:'仅清理当前有权访问的应用日志。此操作无法撤销。',onOk:async()=>{await cleanLogs(lastFilters.value);message.success('日志已清理');await refresh();}});}
+function confirmClean() {Modal.confirm({title:'确认删除全部请求日志？',content:'将删除当前账号可见的全部请求日志，不受列表筛选条件影响。此操作无法撤销。',onOk:async()=>{await cleanLogs({});message.success('日志已清理');await refresh();}});}
 const totalQuery=reactive({packageCode:'',subAreas:''});
 const totals=ref<Record<string,any>>({}),totalLoading=ref(false),totalError=ref('');
 async function loadTotal(){totalLoading.value=true;totalError.value='';try{totals.value=await statisticsTotal({...totalQuery});}catch{totals.value={};totalError.value='汇总加载失败，请重试';}finally{totalLoading.value=false;}}

@@ -55,8 +55,8 @@ public class PackageRequestLogController {
         logs.deleteOwned(keys,packages);
         return Result.ok(keys.size());
     }
-    @DeleteMapping("/clean") public Result<Long> clean(AppLog filter) {
-        var actor=guard.actor("request-logs","clean");return Result.ok(logs.clean(filter,access.logPackages(actor)));
+    @DeleteMapping("/clean") public Result<Long> clean() {
+        var actor=guard.actor("request-logs","clean");return Result.ok(logs.clean(new AppLog(),access.logPackages(actor)));
     }
     @PostMapping("/export") public void export(AppLog filter,HttpServletResponse response) throws IOException {
         var actor=guard.actor("request-logs","export");var rows=logs.export(filter,access.logPackages(actor));

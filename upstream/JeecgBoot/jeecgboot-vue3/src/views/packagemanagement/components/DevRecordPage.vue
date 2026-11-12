@@ -101,6 +101,7 @@ const [registerTable,{reload,clearSelectedRowKeys,setProps}]=useTable({
  rowKey:'id',bordered:true,useSearchForm:true,showTableSetting:true,
  formConfig:queryForm.value,
  actionColumn:{title:'操作',dataIndex:'action',key:'action',width:props.path==='openapi/token'?260:180,fixed:'right'},
+ clickToRowSelect:props.domain!=='risk',
  rowSelection:props.readonly?undefined:{type:'checkbox',onChange:keys=>selected.value=keys},
 });
 watch(queryForm,formConfig=>setProps({formConfig}),{deep:true});
