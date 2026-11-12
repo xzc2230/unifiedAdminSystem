@@ -121,7 +121,7 @@ import { packageApi,allPwa,statisticsTotal,cleanLogs } from '/@/api/packagemanag
 import type { PackageDefinition,PackageField as PackageFieldSpec,PackageId,PackageOption } from '/@/types/packagemanagement';
 import { APP_AREA_OPTIONS, countryLabel, countryCode } from '../package-regions.mjs';
 import { fromAreas,toAreas,legacyImageUrl } from '../package-conversions.mjs';
-const toProviders=(value:any)=>[...new Set((Array.isArray(value)?value:String(value||'').split(',')).map(item=>String(item||'').trim().toLowerCase()).filter(item=>['google','apple','amazon'].includes(item)))];
+const toProviders=(value:any)=>[...new Set((Array.isArray(value)?value:String(value||'').split(',')).map(item=>String(item||'').trim().toLowerCase()).filter(item=>['google','apple','meta','facebook','tiktok'].includes(item)))];
 const fromProviders=(value:any)=>toProviders(value).join(',');
 const PackageField = defineAsyncComponent(() => import('./PackageField.vue'));
 const PwaEditor = defineAsyncComponent(() => import('./PwaEditor.vue'));
@@ -221,7 +221,7 @@ if(definition.domain==='request-logs'){
   const today=todayInShanghai();
   schemas.push({field:'reqDate',label:'日期',component:'RangePicker',defaultValue:[today,today],componentProps:{valueFormat:'YYYY-MM-DD',format:'YYYY-MM-DD',placeholder:['开始日期','结束日期'],style:{width:'240px'}},colProps:compactCol});
 }
-const appColumnWidths:Record<string,number>={appName:168,platform:88,appleAppId:132,packageCode:220,url:240,status:96,whetherRestrict:96,areas:180,whetherUs:100,blockedProviders:160,mark:180,userName:112,updateDate:168};
+const appColumnWidths:Record<string,number>={appName:168,platform:88,appleAppId:132,packageCode:220,url:240,status:96,whetherRestrict:96,areas:180,whetherUs:100,blockedProviders:220,mark:180,userName:112,updateDate:168};
 function appStatusColor(value:any){return ({0:'default',1:'green',2:'blue',3:'gold'} as Record<string,string>)[String(value)] || 'default';}
 const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||key!=='applicationCode'&&canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:definition.domain==='apps'?appColumnWidths[key] || 140:['appName','packageCode','packageName','reqTime'].includes(key)?180:150,ellipsis:true}));
 const [registerTable,{reload,clearSelectedRowKeys}]=useTable({

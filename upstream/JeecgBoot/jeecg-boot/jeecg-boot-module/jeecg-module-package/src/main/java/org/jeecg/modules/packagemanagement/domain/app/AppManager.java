@@ -94,7 +94,7 @@ public class AppManager extends PackageEntity {
 
     private Integer whetherUs;
 
-    /** Comma-separated providers to block: google, apple, amazon. */
+    /** Comma-separated providers to block: google, apple, meta, facebook, tiktok. */
     private String blockedProviders;
 
     /**

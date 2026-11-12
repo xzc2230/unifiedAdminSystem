@@ -170,7 +170,7 @@ test('app editor offers android and ios store fields', () => {
     assert.deepEqual(definitions.apps.filters, ['packageCode']);
     assert.equal(definitions.apps.columns.includes('id'), false);
     assert.deepEqual(definitions.apps.columns.slice(0, 3), ['appName', 'platform', 'appleAppId']);
-    assert.equal(definitions.apps.fields.find((field) => field.key === 'blockedProviders').label, '禁用运营商');
+    assert.deepEqual(definitions.apps.fields.find((field) => field.key === 'blockedProviders').options.map((option) => option.value), ['google','apple','meta','facebook','tiktok']);
     assert.ok(definitions.apps.columns.indexOf('blockedProviders') > definitions.apps.columns.indexOf('whetherUs'));
     assert.notEqual(definitions.apps.fields.find((field) => field.key === 'packageCode').immutable, true);
     assert.equal(definitions.statistics.fields.find((field) => field.key === 'packageCode').immutable, true);

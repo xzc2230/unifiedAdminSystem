@@ -45,12 +45,15 @@ class PackageCountryRegionsTest {
         assertEquals("default", PackageCountryRegions.regionalLink(links,"sg","default"));
     }
     @Test void providerSelectionMatchesOnlyChosenCarriers() {
-        assertEquals("google,amazon", BlockedProviders.detect("AS1 Amazon", "Google LLC", "local"));
+        assertEquals("google,facebook", BlockedProviders.detect("AS32934 Facebook, Inc.", "Google LLC", "local"));
         assertEquals("apple", BlockedProviders.detect("Apple Inc", "local", "local"));
-        assertEquals("google,apple,amazon", BlockedProviders.normalize("amazon,google,unknown,apple"));
+        assertEquals("meta", BlockedProviders.detect("AS32934", "Meta Platforms, Inc.", "local"));
+        assertEquals("tiktok", BlockedProviders.detect("AS138699 ByteDance", "TikTok Pte. Ltd.", "local"));
+        assertEquals("", BlockedProviders.detect("AS1 Amazon", "Amazon.com", "Amazon"));
+        assertEquals("google,apple,meta,facebook,tiktok", BlockedProviders.normalize("tiktok,amazon,google,unknown,apple,meta,facebook"));
         assertNull(BlockedProviders.normalize(null));
         assertEquals("", BlockedProviders.hit("apple", "google"));
         assertEquals("google", BlockedProviders.hit("google,apple", "google"));
-        assertEquals("", BlockedProviders.hit("", "google,apple,amazon"));
+        assertEquals("", BlockedProviders.hit("amazon", "amazon"));
     }
 }

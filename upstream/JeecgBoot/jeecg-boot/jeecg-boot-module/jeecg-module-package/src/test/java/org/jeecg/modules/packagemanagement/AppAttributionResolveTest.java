@@ -99,7 +99,7 @@ class AppAttributionResolveTest {
         app.setBlockedProviders("apple");
         outcome = decide(app, Map.of("countryCode", "sg", "status", "false", "providers", "google"), "{\"applicationCode\":\"com.example.app\"}");
         assertNotNull(outcome.payload());
-        app.setBlockedProviders("google,amazon");
+        app.setBlockedProviders("google,facebook");
         outcome = decide(app, Map.of("countryCode", "sg", "status", "false", "providers", "google"), "{\"applicationCode\":\"com.example.app\"}");
         assertNull(outcome.payload());
         assertEquals("禁用运营商：google", outcome.denyTip());

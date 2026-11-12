@@ -137,7 +137,7 @@
         :label="providerField.label"
         name="blockedProviders"
         class="areas-form-item"
-        extra="不选则不禁用运营商。勾选后只拦截所选的 Google、Apple、Amazon。"
+        extra="不选则不禁用运营商。勾选后只拦截所选的 Google、Apple、Meta、Facebook、TikTok。"
       >
         <a-select
           :value="model.blockedProviders"
@@ -309,7 +309,9 @@
   const providerOptions = [
     { value: 'google', label: 'Google' },
     { value: 'apple', label: 'Apple' },
-    { value: 'amazon', label: 'Amazon' },
+    { value: 'meta', label: 'Meta' },
+    { value: 'facebook', label: 'Facebook' },
+    { value: 'tiktok', label: 'TikTok' },
   ];
   function onToggle(field: PackageField, checked: boolean) {
     update(field, checked ? 1 : 0);

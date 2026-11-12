@@ -6,25 +6,28 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-/** Google, Apple and Amazon provider gates chosen per application. */
+/** Google, Apple, Meta, Facebook and TikTok provider gates chosen per application. */
 public final class BlockedProviders {
-    public static final List<String> CODES = List.of("google", "apple", "amazon");
+    public static final List<String> CODES = List.of("google", "apple", "meta", "facebook", "tiktok");
 
     private BlockedProviders() {}
 
-    /** Providers visible on an IP lookup. Google matches AS, org or ISP; Apple and Amazon match AS. */
+    /** Providers visible on an IP lookup. Apple matches AS. The others match AS, org or ISP. TikTok also matches ByteDance. */
     public static String detect(String as, String org, String isp) {
         String network = lower(as);
         String organization = lower(org);
         String carrier = lower(isp);
+        String text = network + "\n" + organization + "\n" + carrier;
         List<String> found = new ArrayList<>();
         if (network.contains("google") || organization.contains("google") || carrier.contains("google")) found.add("google");
         if (network.contains("apple")) found.add("apple");
-        if (network.contains("amazon")) found.add("amazon");
+        if (text.contains("meta platforms") || text.matches("(?s).*\\bmeta\\b.*")) found.add("meta");
+        if (text.contains("facebook")) found.add("facebook");
+        if (text.contains("tiktok") || text.contains("bytedance")) found.add("tiktok");
         return String.join(",", found);
     }
 
-    /** Keep only known providers, in Google, Apple, Amazon order. Null stays null so an absent edit is not stored. */
+    /** Keep only known providers, in selection order. Null stays null so an absent edit is not stored. */
     public static String normalize(String selected) {
         if (selected == null) return null;
         Set<String> kept = new LinkedHashSet<>();
