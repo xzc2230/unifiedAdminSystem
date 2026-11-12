@@ -9,6 +9,7 @@ import org.jeecg.modules.packagemanagement.application.legacy.DateUtils;
 import org.jeecg.modules.packagemanagement.domain.app.AppManager;
 import org.jeecg.modules.packagemanagement.application.apps.ClientService;
 import org.jeecg.modules.packagemanagement.application.apps.IAppManagerService;
+import org.jeecg.modules.packagemanagement.application.applog.RequestLogHost;
 import org.jeecg.modules.packagemanagement.domain.applog.AppLog;
 import org.jeecg.modules.packagemanagement.application.port.AppLogPort;
 import org.jeecg.modules.packagemanagement.application.legacy.AESUtils;
@@ -50,6 +51,7 @@ public class ClientServiceImpl implements ClientService {
         String cityByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
+        appLog.setReqHost(RequestLogHost.from(request));
         appLog.setReqIp("(" + cityByIp + ")" + ipAddress);
         appLog.setReqTime(java.util.Date.from(clock.instant()));
         appLog.setReqMethod(request.getMethod());
@@ -195,6 +197,7 @@ public class ClientServiceImpl implements ClientService {
         String cityByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
+        appLog.setReqHost(RequestLogHost.from(request));
         appLog.setReqIp("(" + cityByIp + ")" + ipAddress);
         appLog.setReqTime(java.util.Date.from(clock.instant()));
         appLog.setReqMethod(request.getMethod());
@@ -326,6 +329,7 @@ public class ClientServiceImpl implements ClientService {
         String cityByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
+        appLog.setReqHost(RequestLogHost.from(request));
         appLog.setReqIp("(" + cityByIp + ")" + ipAddress);
         appLog.setReqTime(java.util.Date.from(clock.instant()));
         appLog.setReqMethod(request.getMethod());
@@ -508,6 +512,7 @@ public class ClientServiceImpl implements ClientService {
         String cityByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
+        appLog.setReqHost(RequestLogHost.from(request));
         appLog.setReqIp("(" + cityByIp + ")" + ipAddress);
         appLog.setReqTime(java.util.Date.from(clock.instant()));
         appLog.setReqMethod(request.getMethod());
@@ -709,6 +714,7 @@ public class ClientServiceImpl implements ClientService {
         String cityNameByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
+        appLog.setReqHost(RequestLogHost.from(request));
         appLog.setReqIp("(" + cityNameByIp + ")" + ipAddress);
         appLog.setReqTime(java.util.Date.from(clock.instant()));
         appLog.setReqMethod(request.getMethod());
@@ -857,6 +863,7 @@ public class ClientServiceImpl implements ClientService {
         String cityNameByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
+        appLog.setReqHost(RequestLogHost.from(request));
         appLog.setReqIp("(" + cityNameByIp + ")" + ipAddress);
         appLog.setReqTime(java.util.Date.from(clock.instant()));
         appLog.setReqMethod(request.getMethod());
@@ -987,6 +994,7 @@ public class ClientServiceImpl implements ClientService {
         String cityNameByIp = PackageCountryRegions.accessCode(geo.getCountryAndCountryCodeByIP(ipAddress));
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
+        appLog.setReqHost(RequestLogHost.from(request));
         appLog.setReqIp("(" + cityNameByIp + ")" + ipAddress);
         appLog.setReqTime(java.util.Date.from(clock.instant()));
         appLog.setReqMethod(request.getMethod());
@@ -1123,6 +1131,7 @@ public class ClientServiceImpl implements ClientService {
     public Object base64Data(HttpServletRequest request) {
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
+        appLog.setReqHost(RequestLogHost.from(request));
         appLog.setReqTime(java.util.Date.from(clock.instant()));
         appLog.setReqMethod(request.getMethod());
         StringBuilder stringBuilder = new StringBuilder();
@@ -1268,6 +1277,7 @@ public class ClientServiceImpl implements ClientService {
     public Object base64Data2(HttpServletRequest request) {
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
+        appLog.setReqHost(RequestLogHost.from(request));
         appLog.setReqTime(java.util.Date.from(clock.instant()));
         appLog.setReqMethod(request.getMethod());
         StringBuilder stringBuilder = new StringBuilder();
@@ -1382,6 +1392,7 @@ public class ClientServiceImpl implements ClientService {
     public Object base64Data3(HttpServletRequest request) {
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
+        appLog.setReqHost(RequestLogHost.from(request));
         appLog.setReqTime(java.util.Date.from(clock.instant()));
         appLog.setReqMethod(request.getMethod());
         StringBuilder stringBuilder = new StringBuilder();
@@ -1483,6 +1494,7 @@ public class ClientServiceImpl implements ClientService {
     public Object app1(HttpServletRequest request) {
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
+        appLog.setReqHost(RequestLogHost.from(request));
         appLog.setReqTime(java.util.Date.from(clock.instant()));
         appLog.setReqMethod(request.getMethod());
         StringBuilder stringBuilder = new StringBuilder();

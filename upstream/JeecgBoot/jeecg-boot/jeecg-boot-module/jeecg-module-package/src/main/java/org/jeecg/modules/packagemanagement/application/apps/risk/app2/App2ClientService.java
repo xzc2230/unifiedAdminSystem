@@ -16,6 +16,7 @@ import org.jeecg.modules.packagemanagement.application.legacy.AESUtils;
 import org.jeecg.modules.packagemanagement.application.legacy.ClientRiskPayloadCodec;
 import org.jeecg.modules.packagemanagement.config.PackageManagementProperties;
 import org.jeecg.modules.packagemanagement.domain.app.AppManager;
+import org.jeecg.modules.packagemanagement.application.applog.RequestLogHost;
 import org.jeecg.modules.packagemanagement.domain.applog.AppLog;
 
 /** Four-segment client protocol, isolated from earlier client implementations. */
@@ -31,6 +32,7 @@ public class App2ClientService {
     public Object execute(HttpServletRequest request) {
         AppLog appLog = new AppLog();
         appLog.setReqPath(request.getRequestURI());
+        appLog.setReqHost(RequestLogHost.from(request));
         appLog.setReqTime(java.util.Date.from(clock.instant()));
         appLog.setReqMethod(request.getMethod());
         StringBuilder stringBuilder = new StringBuilder();

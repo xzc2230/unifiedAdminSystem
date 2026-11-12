@@ -120,7 +120,8 @@ test('editable business fields agree with backend allowlists and preserve domain
   assert.equal(definitions['request-logs'].add,false);
   assert.equal(definitions['request-logs'].fields.find(f=>f.key==='startReqTime').label,'开始日期');
   assert.equal(definitions['request-logs'].fields.find(f=>f.key==='endReqTime').label,'结束日期');
-  assert.equal(definitions['request-logs'].fields.find(f=>f.key==='startReqTime').type,'date');
+  assert.equal(definitions['request-logs'].fields.find(f=>f.key==='reqHost').label,'域名');
+  assert.equal(definitions['request-logs'].columns[1],'reqHost');
   const requestLogPage=fs.readFileSync(path.join(root,'src/views/packagemanagement/components/PackagePage.vue'),'utf8');
   assert.match(requestLogPage,/RangePicker/);
   assert.match(requestLogPage,/开始日期/);

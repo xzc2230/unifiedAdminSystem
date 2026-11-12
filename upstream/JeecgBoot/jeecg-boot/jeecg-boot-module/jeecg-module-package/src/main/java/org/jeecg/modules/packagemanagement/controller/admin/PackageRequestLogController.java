@@ -42,7 +42,7 @@ public class PackageRequestLogController {
         throw new PackageFailure(400,"请求日志不支持修改");
     }
     private void copy(AppLog from,AppLog to) {
-        to.setPackageName(from.getPackageName());to.setReqPath(from.getReqPath());to.setReqIp(from.getReqIp());
+        to.setPackageName(from.getPackageName());to.setReqPath(from.getReqPath());to.setReqHost(from.getReqHost());to.setReqIp(from.getReqIp());
         to.setReqParams(from.getReqParams());to.setReqHeards(from.getReqHeards());to.setReqMethod(from.getReqMethod());
         to.setResultMsg(from.getResultMsg());to.setErrorMsg(from.getErrorMsg());to.setReqTime(from.getReqTime());to.setIsMobile(from.getIsMobile());
     }
@@ -63,11 +63,11 @@ public class PackageRequestLogController {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition","attachment; filename=request-logs.xlsx");
         try(var book=new XSSFWorkbook()) {
-            var sheet=book.createSheet("请求日志");String[] headers={"包名","请求地址","请求IP","请求参数","请求头","请求方式","请求结果","异常信息","请求时间","是否手机"};
+            var sheet=book.createSheet("请求日志");String[] headers={"包名","域名","请求地址","请求IP","请求参数","请求头","请求方式","请求结果","异常信息","请求时间","是否手机"};
             var header=sheet.createRow(0);for(int i=0;i<headers.length;i++)header.createCell(i).setCellValue(headers[i]);
             var date=new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");date.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
             int r=1;for(var item:rows) {
-                Object[] values={item.getPackageName(),item.getReqPath(),item.getReqIp(),item.getReqParams(),item.getReqHeards(),item.getReqMethod(),item.getResultMsg(),item.getErrorMsg(),item.getReqTime()==null?null:date.format(item.getReqTime()),item.getIsMobile()};
+                Object[] values={item.getPackageName(),item.getReqHost(),item.getReqPath(),item.getReqIp(),item.getReqParams(),item.getReqHeards(),item.getReqMethod(),item.getResultMsg(),item.getErrorMsg(),item.getReqTime()==null?null:date.format(item.getReqTime()),item.getIsMobile()};
                 var row=sheet.createRow(r++);for(int c=0;c<values.length;c++)row.createCell(c).setCellValue(values[c]==null?"":values[c].toString());
             }
             book.write(response.getOutputStream());

@@ -31,7 +31,7 @@ public final class ClickHouseAppLogAdapter implements AppLogPort {
     private static final ZoneId SHANGHAI = ZoneId.of("Asia/Shanghai");
     private static final DateTimeFormatter MILLIS = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS").withZone(SHANGHAI);
     private static final String INSERT = "INSERT INTO jeecg_analytics.app_request_log SETTINGS async_insert=1, wait_for_async_insert=1 FORMAT JSONEachRow";
-    private static final String COLUMNS = "id, package_name, req_path, req_ip, req_params, req_headers, req_method, result_msg, error_msg, toString(req_time, 'Asia/Shanghai') AS req_time, is_mobile";
+    private static final String COLUMNS = "id, package_name, req_path, req_host, req_ip, req_params, req_headers, req_method, result_msg, error_msg, toString(req_time, 'Asia/Shanghai') AS req_time, is_mobile";
     /** Qualify req_time. The SELECT alias has the same name and would otherwise replace the column in comparisons. */
     private static final String FILTER = """
             WHERE package_name IN {packages:Array(String)}
@@ -166,6 +166,7 @@ public final class ClickHouseAppLogAdapter implements AppLogPort {
         log.setId(json.getString("id"));
         log.setPackageName(json.getString("package_name"));
         log.setReqPath(json.getString("req_path"));
+        log.setReqHost(json.getString("req_host"));
         log.setReqIp(json.getString("req_ip"));
         log.setReqParams(json.getString("req_params"));
         log.setReqHeards(json.getString("req_headers"));
@@ -238,6 +239,7 @@ public final class ClickHouseAppLogAdapter implements AppLogPort {
         row.put("id", log.getId());
         row.put("package_name", text(log.getPackageName()));
         row.put("req_path", text(log.getReqPath()));
+        row.put("req_host", text(log.getReqHost()));
         row.put("req_ip", text(log.getReqIp()));
         row.put("req_params", text(log.getReqParams()));
         row.put("req_headers", text(log.getReqHeards()));

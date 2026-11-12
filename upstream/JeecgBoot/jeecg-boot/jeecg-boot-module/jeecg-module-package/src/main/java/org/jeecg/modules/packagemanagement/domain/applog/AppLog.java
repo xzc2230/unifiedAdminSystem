@@ -38,6 +38,11 @@ public class AppLog extends PackageEntity {
     private String reqPath;
 
     /**
+     * 调用域名
+     */
+    private String reqHost;
+
+    /**
      * 请求IP
      */
 
@@ -127,6 +132,14 @@ public class AppLog extends PackageEntity {
         return reqPath;
     }
 
+    public void setReqHost(String reqHost) {
+        this.reqHost = reqHost;
+    }
+
+    public String getReqHost() {
+        return reqHost;
+    }
+
     public void setReqIp(String reqIp) {
         this.reqIp = reqIp;
     }
@@ -213,6 +226,7 @@ public class AppLog extends PackageEntity {
                 .append("id", getId())
                 .append("packageName", getPackageName())
                 .append("reqPath", getReqPath())
+                .append("reqHost", getReqHost())
                 .append("reqIp", getReqIp())
                 .append("reqParams", getReqParams())
                 .append("reqHeards", getReqHeards())

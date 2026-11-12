@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS jeecg_analytics.app_request_log
     id String,
     package_name String,
     req_path String,
+    req_host String,
     req_ip String,
     req_params String,
     req_headers String,
@@ -30,3 +31,4 @@ ENGINE = MergeTree
 PARTITION BY toYYYYMMDD(req_time)
 ORDER BY (package_name, req_time, id)
 TTL req_time + INTERVAL 30 DAY;
+ALTER TABLE jeecg_analytics.app_request_log ADD COLUMN IF NOT EXISTS req_host String AFTER req_path;

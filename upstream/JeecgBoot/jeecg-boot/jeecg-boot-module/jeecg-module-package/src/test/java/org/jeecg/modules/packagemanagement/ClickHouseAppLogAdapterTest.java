@@ -50,7 +50,7 @@ class ClickHouseAppLogAdapterTest {
             if (body.startsWith("INSERT")) return "";
             if (body.contains("count()")) return "{\"total\":\"2\"}\n";
             if (body.startsWith("DELETE")) return "";
-            return "{\"id\":\"fixed-id\",\"package_name\":\"com.test\",\"req_path\":\"/p\",\"req_ip\":\"1.1.1.1\",\"req_params\":\"{\\\"a\\\":1}\",\"req_headers\":\"h\",\"req_method\":\"GET\",\"result_msg\":\"ok\",\"error_msg\":\"\",\"req_time\":\"2023-11-14 08:00:00.000\",\"is_mobile\":1}\n";
+            return "{\"id\":\"fixed-id\",\"package_name\":\"com.test\",\"req_path\":\"/p\",\"req_host\":\"client.example\",\"req_ip\":\"1.1.1.1\",\"req_params\":\"{\\\"a\\\":1}\",\"req_headers\":\"h\",\"req_method\":\"GET\",\"result_msg\":\"ok\",\"error_msg\":\"\",\"req_time\":\"2023-11-14 08:00:00.000\",\"is_mobile\":1}\n";
         });
         try {
             var adapter = new ClickHouseAppLogAdapter(properties(server));
@@ -68,6 +68,7 @@ class ClickHouseAppLogAdapterTest {
             assertFalse(insert.uri.contains("writer-secret"));
             assertTrue(insert.body.contains("\"package_name\":\"com.test\""));
             assertTrue(insert.body.contains("\"req_headers\":\"h\""));
+            assertTrue(insert.body.contains("\"req_host\":\"client.example\""));
             assertTrue(insert.body.contains("\"req_time\":\"2023-11-14 08:00:00.000\""));
             assertFalse(insert.body.contains("secret"));
 
@@ -79,6 +80,7 @@ class ClickHouseAppLogAdapterTest {
             assertEquals(2, page.total());
             assertEquals("fixed-id", page.rows().get(0).getId());
             assertEquals("h", page.rows().get(0).getReqHeards());
+            assertEquals("client.example", page.rows().get(0).getReqHost());
             assertEquals(1, page.rows().get(0).getIsMobile());
             assertEquals(stored.getReqTime(), page.rows().get(0).getReqTime());
             var count = calls.get(1);
@@ -143,6 +145,7 @@ class ClickHouseAppLogAdapterTest {
     private static AppLog log() {
         var log = new AppLog();
         log.setPackageName("com.test");
+        log.setReqHost("client.example");
         log.setReqTime(Date.from(Instant.parse("2023-11-14T00:00:00Z")));
         return log;
     }

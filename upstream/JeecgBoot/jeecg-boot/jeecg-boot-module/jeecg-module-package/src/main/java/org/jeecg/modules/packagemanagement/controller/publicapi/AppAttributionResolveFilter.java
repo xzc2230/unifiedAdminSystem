@@ -18,6 +18,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.jeecg.modules.packagemanagement.application.applog.RequestLogHost;
 import org.jeecg.modules.packagemanagement.application.apps.support.AppAttributionResolve;
 import org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions;
 import org.jeecg.modules.packagemanagement.application.port.AppLogPort;
@@ -122,6 +123,7 @@ public class AppAttributionResolveFilter extends OncePerRequestFilter {
             AppLog row = new AppLog();
             row.setPackageName(packageName);
             row.setReqPath(request.getRequestURI());
+            row.setReqHost(RequestLogHost.from(request));
             row.setReqIp("(" + country + ")" + (ip == null ? "" : ip));
             row.setReqTime(java.util.Date.from(clock.instant()));
             row.setReqMethod(request.getMethod());

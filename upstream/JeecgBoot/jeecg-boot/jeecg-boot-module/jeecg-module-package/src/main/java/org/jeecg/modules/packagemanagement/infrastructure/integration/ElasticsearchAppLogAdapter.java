@@ -37,7 +37,7 @@ public class ElasticsearchAppLogAdapter implements AppLogPort  {
         HttpPort.Reply exists=http.exchange("HEAD",uri("/applog"),null,headers());
         if(exists.status()==404) {
             Map<String,Object> properties=new LinkedHashMap<>();
-            for(String field:List.of("id","packageName","reqPath","reqIp","reqParams","reqHeards","reqMethod","resultMsg","errorMsg"))properties.put(field,Map.of("type","keyword"));
+            for(String field:List.of("id","packageName","reqPath","reqHost","reqIp","reqParams","reqHeards","reqMethod","resultMsg","errorMsg"))properties.put(field,Map.of("type","keyword"));
             properties.put("reqTime",Map.of("type","date","format","yyyy-MM-dd HH:mm:ss"));
             properties.put("isMobile",Map.of("type","integer"));
             HttpPort.Reply created=http.exchange("PUT",uri("/applog"),JSON.toJSONString(Map.of("mappings",Map.of("properties",properties))),headers());

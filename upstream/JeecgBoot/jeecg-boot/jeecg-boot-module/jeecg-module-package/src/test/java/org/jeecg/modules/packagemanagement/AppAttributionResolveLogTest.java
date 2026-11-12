@@ -39,6 +39,7 @@ class AppAttributionResolveLogTest {
         assertEquals("com.example.app", row.getPackageName());
         assertEquals("POST", row.getReqMethod());
         assertTrue(row.getReqPath().endsWith("/api/v1/attribution/resolve"));
+        assertEquals("client.example", row.getReqHost());
         assertEquals("(sg)1.2.3.4", row.getReqIp());
         assertTrue(row.getReqParams().contains("com.example.app"));
         assertTrue(row.getResultMsg().contains("MATCHED"));
@@ -145,6 +146,7 @@ class AppAttributionResolveLogTest {
     private static MockHttpServletResponse post(AppAttributionResolveFilter filter, FilterChain chain, String path, String body) throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest("POST", path);
         request.setServletPath(path);
+        request.addHeader("Host", "client.example:443");
         request.setContent(body.getBytes(StandardCharsets.UTF_8));
         MockHttpServletResponse response = new MockHttpServletResponse();
         filter.doFilter(request, response, chain);
