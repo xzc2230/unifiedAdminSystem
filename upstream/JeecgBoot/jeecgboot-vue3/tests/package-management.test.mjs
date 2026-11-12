@@ -308,7 +308,9 @@ test('client protocol docs list thirteen interfaces under the package menu', asy
   const page = fs.readFileSync(path.join(root, 'src/views/packagemanagement/client-docs/index.vue'), 'utf8');
   const menu = fs.readFileSync(path.join(root, '../jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/017-client-protocol-docs-menu.sql'), 'utf8');
   const risk = fs.readFileSync(path.join(root, 'src/views/packagemanagement/risk/index.vue'), 'utf8');
-  assert.equal(CLIENT_PROTOCOL_DOC.host, 'https://apivo.attrnivo.com/');
+  assert.equal(CLIENT_PROTOCOL_DOC.host, undefined);
+  assert.equal(page.includes('后台地址'), false);
+  assert.ok(CLIENT_PROTOCOL_DOC.interfaces.every((item) => !String(item.requestExample).includes('apivo.attrnivo.com')));
   assert.equal(CLIENT_PROTOCOL_DOC.interfaces.length, 13);
   assert.deepEqual(CLIENT_PROTOCOL_DOC.interfaces.map((item) => item.path), [
     '/system/xxx', '/v2/api/user/login', '/v2/api/retry/xxx', '/v2/api/banner/list/xxx', '/dynamic/xx',

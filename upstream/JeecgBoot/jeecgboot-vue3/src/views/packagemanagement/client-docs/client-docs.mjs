@@ -7,7 +7,6 @@ const AES_KEY = 'lXaKEclwgjBZVOSeQJKlUMLnVzvczqXk';
 export const CLIENT_PROTOCOL_DOC = {
   title: '（新）后台说明',
   section: '域名文档',
-  host: 'https://apivo.attrnivo.com/',
   interfaces: [
     {
       key: '1',
@@ -20,7 +19,7 @@ export const CLIENT_PROTOCOL_DOC = {
         { name: 'af_id', desc: 'afUid', example: '' },
       ],
       responseNote: '响应体是整段 JSON 的 Base64。下面按状态 2、自用 1 模拟。',
-      requestExample: 'GET https://apivo.attrnivo.com/system/abc?id=Y29tLnRlc3Q=&af_id=af-uid-001',
+      requestExample: 'GET /system/abc?id=Y29tLnRlc3Q=&af_id=af-uid-001',
       responseExample: 'eyJzdGF0dXMiOjIsInVybCI6ImFIUjBjSE02THk5M2QzY3VaWGhoYlhCc1pTNWpiMjB2YkdGdVpEOWhjSEJ6Wm14NVpYSmZhV1E5WVdZdGRXbGtMVEF3TVE9PSIsImNvZGUiOjF9',
       responseDecoded: '{\n  "status": 2,\n  "url": "aHR0cHM6Ly93d3cuZXhhbXBsZS5jb20vbGFuZD9hcHBzZmx5ZXJfaWQ9YWYtdWlkLTAwMQ==",\n  "code": 1\n}\nurl 再 Base64 解密：https://www.example.com/land?appsflyer_id=af-uid-001',
       fields: [
@@ -38,7 +37,7 @@ export const CLIENT_PROTOCOL_DOC = {
         { name: 'username', desc: '包名', example: 'com.test' },
         { name: 'password', desc: 'afUid', example: 'af-uid-001' },
       ],
-      requestExample: 'GET https://apivo.attrnivo.com/v2/api/user/login?username=com.test&password=af-uid-001',
+      requestExample: 'GET /v2/api/user/login?username=com.test&password=af-uid-001',
       responseExample: '{\n  "code": 1,\n  "message": "request was successful",\n  "data": {\n    "show": 2,\n    "path": "https://www.example.com/land?appsflyer_id=af-uid-001",\n    "useAF": 1\n  }\n}',
       fields: [
         { name: 'show', desc: '开关、归因开关', detail: SWITCH_012 },
@@ -60,7 +59,7 @@ export const CLIENT_PROTOCOL_DOC = {
         { when: '开', result: '链接' },
         { when: '关', result: '备注' },
       ],
-      requestExample: 'GET https://apivo.attrnivo.com/v2/api/retry/abc?packName=com.test&af_id=af-uid-001',
+      requestExample: 'GET /v2/api/retry/abc?packName=com.test&af_id=af-uid-001',
       responseExample: 'HTTP 302\nLocation: https://www.example.com/land?appsflyer_id=af-uid-001',
     },
     {
@@ -73,7 +72,7 @@ export const CLIENT_PROTOCOL_DOC = {
         { name: 'systemName', desc: '包名', example: 'com.test' },
         { name: 'systemID', desc: 'afUid', example: 'af-uid-001' },
       ],
-      requestExample: 'GET https://apivo.attrnivo.com/v2/api/banner/list/abc?systemName=com.test&systemID=af-uid-001',
+      requestExample: 'GET /v2/api/banner/list/abc?systemName=com.test&systemID=af-uid-001',
       responseExample: 'https://www.example.com/land?appsflyer_id=af-uid-001',
     },
     {
@@ -83,7 +82,7 @@ export const CLIENT_PROTOCOL_DOC = {
       pathNote: 'xx 为随机字符串',
       methods: ['GET', 'POST'],
       params: [{ name: 'id', desc: '包名', example: 'com.test' }],
-      requestExample: 'GET https://apivo.attrnivo.com/dynamic/ab?id=com.test',
+      requestExample: 'GET /dynamic/ab?id=com.test',
       responseExample: '{\n  "app_name": "测试应用",\n  "app_cache": 2,\n  "app_id": "com.test",\n  "app_dynamic": "备注内容",\n  "app_limit": "https://www.example.com/land"\n}',
       fields: [
         { name: 'app_name', desc: '应用名', detail: 'com.test' },
@@ -106,7 +105,7 @@ export const CLIENT_PROTOCOL_DOC = {
         { name: 'key', desc: '包名', example: 'com.test' },
         { name: 'value', desc: 'afuid', example: 'af-uid-001' },
       ],
-      requestExample: 'GET https://apivo.attrnivo.com/v2/api/check/url?key=com.test&value=af-uid-001\ntokenID: key\nbaseTime: value',
+      requestExample: 'GET /v2/api/check/url?key=com.test&value=af-uid-001\ntokenID: key\nbaseTime: value',
       responseExample: '{\n  "event": true,\n  "canLoad": false,\n  "load": "https://www.example.com/land?appsflyer_id=af-uid-001",\n  "canAppend": true,\n  "token": "af-uid-001"\n}',
       fields: [
         { name: 'event', desc: '开关状态', detail: 'true 开，false 关' },
@@ -125,7 +124,7 @@ export const CLIENT_PROTOCOL_DOC = {
         { name: 'user_id', desc: '包名', example: 'com.test' },
         { name: 'user_token', desc: 'afUid', example: 'af-uid-001' },
       ],
-      requestExample: 'GET https://apivo.attrnivo.com/app/start?user_id=com.test&user_token=af-uid-001',
+      requestExample: 'GET /app/start?user_id=com.test&user_token=af-uid-001',
       responseExample: '{\n  "imgs": "https://www.example.com/land?appsflyer_id=af-uid-001",\n  "ty": "Mozilla/5.0",\n  "user_info": "备注内容",\n  "v": "1",\n  "isApp": 2,\n  "user": "br,ph",\n  "timestamp": 1729999934465,\n  "token": "7335a3a4a6e7ba14d24112151cec26d9"\n}',
       fields: [
         { name: 'imgs', desc: '应用名或链接', detail: '关：应用名\n开：链接' },
@@ -147,7 +146,7 @@ export const CLIENT_PROTOCOL_DOC = {
         { name: 'pack_a', desc: '包名', example: 'com.test' },
         { name: 'data_a', desc: 'jsonstring（非必传）', example: '{"sim_a":"5","ip_a":"192.168.1.1"}' },
       ],
-      requestExample: 'GET https://apivo.attrnivo.com/home/index/jsp?pack_a=com.test&data_a=%7B%22sim_a%22%3A%225%22%2C%22ip_a%22%3A%22192.168.1.1%22%7D',
+      requestExample: 'GET /home/index/jsp?pack_a=com.test&data_a=%7B%22sim_a%22%3A%225%22%2C%22ip_a%22%3A%22192.168.1.1%22%7D',
       responseExample: 'eyJzX2NvZSI6MiwibGlua19vdGgiOiJodHRwczovL3d3dy5leGFtcGxlLmNvbS9sYW5kIiwiYnlfbWUiOjF9comtest',
       responseDecoded: '{\n  "s_coe": 2,\n  "link_oth": "https://www.example.com/land",\n  "by_me": 1\n}\n末尾 comtest 是去掉点号后的包名，不参与 Base64。',
       notes: ['sim_a：不包含 5 返回空', 'ip_a：根据配置判断'],
@@ -166,7 +165,7 @@ export const CLIENT_PROTOCOL_DOC = {
       methods: ['GET', 'POST'],
       params: [{ name: 'index', desc: '包名', example: 'com.test' }],
       regions: REGION_LINKS,
-      requestExample: 'GET https://apivo.attrnivo.com/1730000000000?index=com.test',
+      requestExample: 'GET /1730000000000?index=com.test',
       responseExample: 'eyJ0b3RhbF9wYWdlcyI6MiwibGlzdF9kZXRhaWxzIjoiaHR0cHM6Ly93d3cuZXhhbXBsZS5jb20vbGFuZCIsIm1heF9wYWdlIjoxLCJkYXRhX3R5cGUiOiJKU09OIiwiZ3JvdXAiOiJNVGN6TURBd01EQXdNREF3TUE9PSIsImlzTm93IjoxNzMwMDAwMDAwMDAwLCJkYXRlX3RpbWUiOiIyMDI2LTExLTExIDE2OjAwOjAwIn0=comtest',
       responseDecoded: '{\n  "total_pages": 2,\n  "list_details": "https://www.example.com/land",\n  "max_page": 1,\n  "data_type": "JSON",\n  "group": "MTczMDAwMDAwMDAwMA==",\n  "isNow": 1730000000000,\n  "date_time": "2026-11-11 16:00:00"\n}\n末尾 comtest 是去掉点号后的包名。',
       fields: [
@@ -185,7 +184,7 @@ export const CLIENT_PROTOCOL_DOC = {
       path: '/xxx/xxxx',
       methods: ['GET', 'POST'],
       params: [{ name: 'timestamp', desc: '包名', example: 'com.test' }],
-      requestExample: 'GET https://apivo.attrnivo.com/xxx/xxxx?timestamp=com.test',
+      requestExample: 'GET /xxx/xxxx?timestamp=com.test',
       responseExample: 'eyJwaWQiOjIsIm9yaWdpbiI6Imh0dHBzOi8vd3d3LmV4YW1wbGUuY29tL2xhbmQiLCJzcGlkIjoxLCJtYXJrIjoi5aSH5rOo5YaF5a65In0=',
       responseDecoded: '{\n  "pid": 2,\n  "origin": "https://www.example.com/land",\n  "spid": 1,\n  "mark": "备注内容"\n}',
       fields: [
@@ -202,7 +201,7 @@ export const CLIENT_PROTOCOL_DOC = {
       requestNote: '请求参数为 key=value，只能有一个参数带点 “.”',
       methods: ['GET', 'POST'],
       params: [{ name: 'xxx', desc: '包名', example: 'com.test' }],
-      requestExample: 'GET https://apivo.attrnivo.com/xxx/xxxx/xxx?id=com.test',
+      requestExample: 'GET /xxx/xxxx/xxx?id=com.test',
       responseExample: '7kvdFUG/e4VpO8T+KoxTKS2gw5we5u/qpqNyX0FF6vV/BE0JoXJIcgrFL1oSLuhzqbwoBYJUldll0evaymhJQKUIXsRC6ANmdcHfsKriZrc=',
       responseDecoded: '{\n  "code": 2,\n  "data": "https://www.example.com/land",\n  "byme": 1,\n  "ps": "备注内容"\n}\n示例使用默认 AES 密钥。配置了 16/24/32 字节应用名时改用应用名。',
       fields: [
@@ -236,7 +235,7 @@ export const CLIENT_PROTOCOL_DOC = {
       ],
       uaJoin: 't={timezone}&f1={sim_country}&b={brand}&abi={abi}&x={random}',
       uaNote: '拼接后再 XOR，然后 Base64，作为 body.p',
-      requestExample: 'POST https://apivo.attrnivo.com/a/b/c/d\nx-pkg: com.test\nContent-Type: application/json\n\n{\n  "t": "1730000000",\n  "p": "GGUgOCwCQyQOBCU7JiAhAHcselEmKmoMawkXDgkENgxKOQMieAIeGlFebyxuLnUdbHItXzR0fQ=="\n}',
+      requestExample: 'POST /a/b/c/d\nx-pkg: com.test\nContent-Type: application/json\n\n{\n  "t": "1730000000",\n  "p": "GGUgOCwCQyQOBCU7JiAhAHcselEmKmoMawkXDgkENgxKOQMieAIeGlFebyxuLnUdbHItXzR0fQ=="\n}',
       responseExample: '7kvdFUG/e4VpO8T+KoxTKS2gw5we5u/qpqNyX0FF6vV/BE0JoXJIcgrFL1oSLuhzqbwoBYJUldll0evaymhJQKUIXsRC6ANmdcHfsKriZrc=',
       responseDecoded: '{\n  "code": 2,\n  "data": "https://www.example.com/land",\n  "byme": 1,\n  "ps": "备注内容"\n}\np 的明文：t=Asia/Singapore&f1=sg&b=samsung&abi=arm64-v8a&x=8f3a91',
       fields: [
@@ -270,7 +269,7 @@ export const CLIENT_PROTOCOL_DOC = {
         '查包与前十二个接口相同：风控模式全关、命中禁用美国、不在地区白名单，或 gaid/aid 超过风控阈值时，不返回解析结果',
         '包名不存在时不由此接口直接返回；applicationId 与包名不一致返回 400',
       ],
-      requestExample: 'POST https://apivo.attrnivo.com/api/v1/attribution/resolve\nContent-Type: application/json\n\n{\n  "applicationCode": "com.test"\n}',
+      requestExample: 'POST /api/v1/attribution/resolve\nContent-Type: application/json\n\n{\n  "applicationCode": "com.test"\n}',
       responseExample: '{\n  "clickRef": null,\n  "resolveToken": "Ab12Cd34Ef56Gh78",\n  "applicationCode": "com.test",\n  "promotionCode": null,\n  "resolutionState": "MATCHED",\n  "parameterSource": "REAL",\n  "destinationUrl": "https://www.example.com/land",\n  "resolvedAt": "2026-11-11T16:00:00+08:00",\n  "tokenExpiresAt": "2026-11-11T16:10:00+08:00",\n  "data": "备注内容",\n  "afLinkParams": {\n    "pid": null,\n    "c": null,\n    "af_c_id": null,\n    "af_adset": null,\n    "af_adset_id": null,\n    "af_ad": null,\n    "af_ad_id": null\n  },\n  "fbLinkParams": {\n    "campaign_id": 123456,\n    "campaign_name": "website_launch",\n    "adset_id": 1234567,\n    "adset_name": null,\n    "ad_id": 12345678,\n    "ad_name": null\n  }\n}',
       fields: [
         { name: 'clickRef', desc: '点击编号', detail: '请求未带时为空' },

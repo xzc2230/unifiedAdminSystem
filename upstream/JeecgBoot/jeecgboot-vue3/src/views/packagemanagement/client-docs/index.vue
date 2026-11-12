@@ -3,7 +3,6 @@
     <header class="mast">
       <p class="eyebrow">{{ doc.section }}</p>
       <h1>{{ doc.title }}</h1>
-      <p class="host-line">后台地址 <a :href="doc.host" target="_blank" rel="noreferrer">{{ doc.host }}</a></p>
     </header>
     <div class="layout">
       <nav class="rail" aria-label="接口目录">
@@ -121,14 +120,6 @@
     font-size: 28px;
     font-weight: 650;
     letter-spacing: -0.02em;
-  }
-  .host-line {
-    margin: 8px 0 0;
-    color: #3d4b5c;
-  }
-  .host-line a {
-    color: #0b6e4f;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
   .layout {
     display: grid;
