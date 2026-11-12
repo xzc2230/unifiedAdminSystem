@@ -8,12 +8,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-/** Turns the store-status multi-select into generic, iOS numeric, and iOS product-status filters. */
+/** Turns the store-status multi-select into generic and iTunes lookup product-status filters. */
 public final class StoreStatusQuery {
-    public static final List<String> IOS_LABELS = List.of(
-            "待上架", "准备提交", "等待审核", "正在审核", "审核被拒", "元数据被拒",
-            "无效的二进制文件", "开发者已拒绝", "可供销售", "预购",
-            "等待开发者发布", "等待 Apple 发布", "正在处理", "已上架", "已下架", "被开发者下架");
+    /** Labels written from https://itunes.apple.com/lookup resultCount and isPreorder. */
+    public static final List<String> IOS_LABELS = List.of("待上架", "已上架", "已下架", "预购");
 
     private StoreStatusQuery() {}
 
@@ -34,7 +32,6 @@ public final class StoreStatusQuery {
                 }
                 if (!IOS_LABELS.contains(value)) throw new PackageFailure(400, "上架状态无效");
                 products.add(value);
-                if ("可供销售".equals(value)) products.add("已上架");
                 if ("已上架".equals(value)) products.add("可供销售");
                 Integer listed = legacyStatus(value);
                 if (listed != null) legacy.add(listed);
@@ -55,7 +52,7 @@ public final class StoreStatusQuery {
     private static Integer legacyStatus(String label) {
         return switch (label) {
             case "待上架" -> 0;
-            case "已上架", "可供销售" -> 1;
+            case "已上架" -> 1;
             case "已下架" -> 2;
             default -> null;
         };
