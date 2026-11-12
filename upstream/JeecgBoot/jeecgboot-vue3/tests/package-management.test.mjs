@@ -176,6 +176,7 @@ test('app editor offers android and ios store fields', () => {
     assert.match(page, /被开发者下架/);
     assert.match(page, /iOS\$\{label\}/);
     assert.match(page, /statusQuery/);
+    assert.match(page, /v-if="definition\.domain !== 'apps'" v-auth="permission\('query'\)" @click="showDetail\(record\)">详情/);
     assert.equal(definitions.store.fields.some((field) => field.key === 'appleAppId'), true);
     assert.match(fs.readFileSync(path.join(root, 'src/views/packagemanagement/components/PackagePage.vue'), 'utf8'), /key!=='applicationCode'/);
   });
@@ -188,6 +189,8 @@ test('app editor leaves ios apple id optional and defaults the store region', ()
   assert.doesNotMatch(source, /创建后不可修改/);
   assert.match(source, /model\.storeRegion \|\| 'us'/);
   assert.match(source, /optionsFor\(storeRegionField\)/);
+  assert.match(source, /:value="model\.areas"/);
+  assert.doesNotMatch(source, /update\(areasField\.value, \[\]\)/);
 });
 test('actual package bodyCell slot preserves Ant Table custom checkbox and index renderers',async()=>{
   const {createSSRApp,h,compile}=require('vue');

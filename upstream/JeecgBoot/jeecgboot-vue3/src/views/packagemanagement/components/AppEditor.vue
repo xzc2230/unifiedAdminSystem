@@ -122,10 +122,10 @@
         name="areas"
         :rules="rulesFor(areasField)"
         class="areas-form-item"
-        :extra="whitelistOn ? '白名单已开启，请选择允许访问的地区。' : '白名单关闭时不能选择地区，开启后才能选择。'"
+        :extra="whitelistOn ? '白名单已开启，请选择允许访问的地区。' : '白名单关闭时不能修改地区，已选地区会保留。'"
       >
         <a-select
-          :value="whitelistOn ? model.areas : []"
+          :value="model.areas"
           :options="optionsFor(areasField)"
           mode="multiple"
           allowClear
@@ -246,9 +246,7 @@
   const statusField = computed(() => props.fields.find((field) => field.key === 'status'));
   const areasField = computed(() => props.fields.find((field) => field.key === 'areas'));
   function onToggle(field: PackageField, checked: boolean) {
-    const value = checked ? 1 : 0;
-    update(field, value);
-    if (field.key === 'whetherRestrict' && value !== 1 && areasField.value) update(areasField.value, []);
+    update(field, checked ? 1 : 0);
   }
   const toggleFields = computed(() => props.fields.filter((field) => ['whetherRestrict', 'whetherUs'].includes(field.key)));
   const riskFields = computed(() =>

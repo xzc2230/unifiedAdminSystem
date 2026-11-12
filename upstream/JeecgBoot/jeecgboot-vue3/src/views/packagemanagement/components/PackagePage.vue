@@ -41,7 +41,7 @@
       </template>
       <template #bodyCell="{column,record,text}">
         <template v-if="column.key === 'action'"><a-space class="row-actions" :size="10">
-          <a v-auth="permission('query')" @click="showDetail(record)">详情</a>
+          <a v-if="definition.domain !== 'apps'" v-auth="permission('query')" @click="showDetail(record)">详情</a>
           <a v-if="definition.edit !== false && (definition.domain === 'apps' ? canEditApp : hasPermission(permission('edit')))" @click="openEditor(record)">{{ definition.domain === 'apps' ? '修改' : '编辑' }}</a>
           <a v-if="canManageRow(record)" v-auth="permission('remove')" @click="confirmRemove([record[idKey]],record)">删除</a>
           <a v-if="definition.domain === 'apps' && canManageRow(record)" v-auth="permission('transfer')" @click="openSharing(record)">转移</a>
