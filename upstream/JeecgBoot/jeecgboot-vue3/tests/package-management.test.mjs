@@ -182,6 +182,10 @@ test('app editor offers android and ios store fields', () => {
     assert.match(page, /iOS\$\{label\}/);
     assert.match(page, /statusQuery/);
     assert.match(page, /v-if="definition\.domain !== 'apps'" v-auth="permission\('query'\)" @click="showDetail\(record\)">详情/);
+    assert.match(page, /https:\/\/apps\.apple\.com\/\$\{region\}\/app\/id\$\{appleId\}/);
+    assert.match(page, /label:'App Store'/);
+    assert.match(page, /const link=marketLink\(model\);if\(link\) payload\.storeUrl=link\.href/);
+    assert.doesNotMatch(page, /payload\.storeUrl=marketUrl\(model\.packageCode\)/);
     assert.equal(definitions.store.fields.some((field) => field.key === 'appleAppId'), true);
     assert.match(fs.readFileSync(path.join(root, 'src/views/packagemanagement/components/PackagePage.vue'), 'utf8'), /key!=='applicationCode'/);
   });
