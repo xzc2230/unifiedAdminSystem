@@ -7,7 +7,7 @@ public class PackageIdentityRepository  {
     public PackageIdentityRepository(JdbcTemplate jdbc) {
         this.jdbc=jdbc;
     }
-    private static final Map<String,String> TABLES=Map.ofEntries(Map.entry("pkg_app_manager","id"),Map.entry("pkg_app_statistics","id"),Map.entry("pkg_store_status","id"),Map.entry("pkg_event_config","id"),Map.entry("pkg_event_history","id"),Map.entry("pkg_event_error","id"),Map.entry("pkg_load_count","id"),Map.entry("pkg_pwa","id"),Map.entry("pkg_pwa_subscription","id"),Map.entry("pkg_notification","id"),Map.entry("pkg_app_event","event_id"),Map.entry("pkg_review","reviews_id"));
+    private static final Map<String,String> TABLES=Map.ofEntries(Map.entry("pkg_app_manager","id"),Map.entry("pkg_app_statistics","id"),Map.entry("pkg_store_status","id"),Map.entry("pkg_event_config","id"),Map.entry("pkg_event_history","id"),Map.entry("pkg_event_error","id"),Map.entry("pkg_load_count","id"),Map.entry("pkg_pwa","id"),Map.entry("pkg_pwa_subscription","id"),Map.entry("pkg_notification","id"),Map.entry("pkg_app_event","event_id"),Map.entry("pkg_review","reviews_id"),Map.entry("pkg_client_domain","id"));
     private static final Set<String> USER_SCOPED=Set.of("pkg_app_manager","pkg_app_statistics","pkg_load_count","pkg_pwa","pkg_notification","pkg_app_event");
     public static void validateType(String type) {
         if(!TABLES.containsKey(type))throw new PackageFailure(400,"Unknown package resource type");

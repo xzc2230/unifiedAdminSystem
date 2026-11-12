@@ -33,6 +33,7 @@ class PackagePersistenceMappingTest {
         TABLES.put("AppNotify", "pkg_notification");
         TABLES.put("AppEventRecord", "pkg_app_event");
         TABLES.put("ReviewsRecord", "pkg_review");
+        TABLES.put("ClientDomain", "pkg_client_domain");
     }
 
     @Test

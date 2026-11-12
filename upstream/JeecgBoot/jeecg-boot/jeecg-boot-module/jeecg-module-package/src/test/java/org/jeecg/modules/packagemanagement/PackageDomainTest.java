@@ -22,10 +22,15 @@ import org.jeecg.modules.packagemanagement.application.port.HttpPort;
 import org.jeecg.modules.packagemanagement.config.PackageManagementProperties;
 import org.jeecg.modules.packagemanagement.domain.domain.ClientDomain;
 import org.jeecg.modules.packagemanagement.exception.PackageFailure;
+import org.jeecg.modules.packagemanagement.infrastructure.identity.PackageIdentityRepository;
 import org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.ClientDomainMapper;
 import org.junit.jupiter.api.Test;
 
 class PackageDomainTest {
+    @Test void clientDomainIsAKnownOwnershipTable() {
+        assertDoesNotThrow(() -> PackageIdentityRepository.validateType("pkg_client_domain"));
+    }
+
     @Test void apexRejectsSubdomainsAndNormalizesTheRegistrableName() {
         assertEquals("example.com", RegistrableApex.normalize(" Example.COM. "));
         assertEquals("example.co.uk", RegistrableApex.normalize("example.co.uk"));
