@@ -48,7 +48,7 @@
           <a v-if="definition.domain === 'apps' && canManageRow(record)" v-auth="'package:risk:query'" @click="openAuto(record)">自动拉黑</a>
         </a-space></template>
         <a-image v-else-if="['appIcon','appAdvertising','notifyIcon','headPortraitUrl'].includes(column.dataIndex) && text" :src="fileUrl(String(text).split(',')[0])" :width="40" :height="40" />
-        <a v-else-if="column.dataIndex === 'storeUrl' && record.packageCode" :href="marketUrl(record.packageCode)" target="_blank" rel="noopener noreferrer">Google Play</a>
+        <a v-else-if="column.dataIndex === 'storeUrl' && marketLink(record)" :href="marketLink(record).href" target="_blank" rel="noopener noreferrer">{{ marketLink(record).label }}</a>
         <a v-else-if="column.dataIndex === 'appHost' && definition.domain === 'pwa' && record.appHost && record.appSub" :href="promotionUrl(record)" target="_blank" rel="noopener noreferrer">{{ promotionUrl(record) }}</a>
         <template v-else-if="column.dataIndex === 'paymentTotal'">{{ money(text) }}</template>
         <a-tooltip v-else-if="definition.domain === 'request-logs' && column.dataIndex === 'reqParams'" placement="topLeft"><template #title><pre class="detail-value">{{ prettyJson(text) }}</pre><a @click="copyValue(text)">复制</a></template><span>{{ text }}</span></a-tooltip>
@@ -183,7 +183,19 @@ function dictRemark(key:string,value:any){return optionsFor(fieldsByKey[key]).fi
 async function copyValue(value:any){try{if(!copyTextToClipboard(typeof value==='string'?value:prettyJson(value)))throw new Error('copy');message.success('已复制');}catch{message.error('复制失败，请手动复制');}}
 const backend=useGlobSetting().domainUrl;
 const fileUrl=(value:string)=>legacyImageUrl(value,backend);
-const marketUrl=(pkg:string)=>`https://play.google.com/store/apps/details?id=${encodeURIComponent(pkg)}`;
+function marketLink(record:Record<string,any>) {
+  const stored=String(record?.storeUrl || '');
+  const platform=String(record?.platform || '').toLowerCase();
+  const appleId=String(record?.appleAppId || '').trim();
+  const region=String(record?.storeRegion || 'us').trim().toLowerCase();
+  if(platform==='ios' || /^https:\/\/apps\.apple\.com\//i.test(stored)) {
+    const href=/^https:\/\/apps\.apple\.com\//i.test(stored)?stored:(/^[0-9]+$/.test(appleId) && /^[a-z]{2}$/.test(region)?`https://apps.apple.com/${region}/app/id${appleId}`:'');
+    return href?{href,label:'App Store'}:null;
+  }
+  const pkg=String(record?.packageCode || '').trim();
+  const href=/^https:\/\/play\.google\.com\//i.test(stored)?stored:(pkg?`https://play.google.com/store/apps/details?id=${encodeURIComponent(pkg)}`:'');
+  return href?{href,label:'Google Play'}:null;
+}
 const promotionUrl=(row:any)=>`https://${row.appHost}${row.appSub}/?pZoneID=${encodeURIComponent(row.appCode || '')}`;
 const money=(value:any)=>value == null ? '0.00' : Number(value).toFixed(2);
 const todayInShanghai=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
@@ -244,7 +256,7 @@ async function save() {
   try {
     let payload=Object.fromEntries(editableFields.value.filter(f=>!f.readonly).map(f=>[f.key,model[f.key]]));
     if(definition.domain==='apps') {payload=appEditPayload(payload,appPermissions.value,editId.value!=null,initialAppModel.value,[...dirtyAppFields.value]);if('areas' in payload)payload.areas=fromAreas(payload.areas);}
-    if(definition.domain==='store') payload.storeUrl=marketUrl(model.packageCode);
+    if(definition.domain==='store') {const link=marketLink(model);if(link) payload.storeUrl=link.href;}
     if(definition.domain==='pwa') {const pwa=pwaEditor.value.payload();payload={...payload,appType:definition.appType,appSub:pwa.appSub,tags:pwa.tags,score:pwa.score,reviewsRecords:pwa.reviewsRecords};}
     await api.save(payload,editId.value);
     message.success(definition.domain==='notifications' && editId.value==null?'通知已提交发送':'保存成功');
