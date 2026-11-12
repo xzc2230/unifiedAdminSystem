@@ -36,6 +36,7 @@ public final class ClickHouseAppLogAdapter implements AppLogPort {
     private static final String FILTER = """
             WHERE package_name IN {packages:Array(String)}
               AND ({name:String} = '' OR positionCaseInsensitiveUTF8(package_name, {name:String}) > 0)
+              AND ({host:String} = '' OR positionCaseInsensitiveUTF8(req_host, {host:String}) > 0)
               AND ({bounded:UInt8} = 0 OR (
                     jeecg_analytics.app_request_log.req_time >= parseDateTime64BestEffort({start:String}, 3, 'Asia/Shanghai')
                 AND jeecg_analytics.app_request_log.req_time < parseDateTime64BestEffort({end:String}, 3, 'Asia/Shanghai')))
@@ -200,9 +201,12 @@ public final class ClickHouseAppLogAdapter implements AppLogPort {
         boolean bounded = filter != null && filter.getStartReqTime() != null && filter.getEndReqTime() != null;
         String name = filter == null || filter.getPackageName() == null ? "" : filter.getPackageName();
         if (name.length() > 256) throw new PackageFailure(400, "无效包名");
+        String host = filter == null || filter.getReqHost() == null ? "" : filter.getReqHost().trim();
+        if (host.length() > 253) throw new PackageFailure(400, "无效域名");
         StringBuilder query = new StringBuilder();
         append(query, "param_packages", array(packages));
         append(query, "param_name", name);
+        append(query, "param_host", host);
         append(query, "param_bounded", bounded ? "1" : "0");
         append(query, "param_start", bounded ? dayStart(filter.getStartReqTime()) : "1970-01-01 00:00:00");
         append(query, "param_end", bounded ? nextDay(filter.getEndReqTime()) : "1970-01-01 00:00:00");

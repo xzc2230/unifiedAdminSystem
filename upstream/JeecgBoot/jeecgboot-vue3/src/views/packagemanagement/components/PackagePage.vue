@@ -213,7 +213,7 @@ const compactCol={style:{width:'auto',flex:'0 0 auto'}};
 const schemas=definition.filters.filter(key=>definition.domain!=='request-logs'||!['startReqTime','endReqTime'].includes(key)).filter(key=>definition.domain!=='apps'||canAppField(appPermissions.value,'query',key)).map(key=>{
   const f=fieldsByKey[key];
   const storeStatus=key==='status'&&definition.domain==='store';
-  const componentProps=f?.type==='date'||f?.type==='datetime'?{valueFormat:f.type==='date'?'YYYY-MM-DD':'YYYY-MM-DD HH:mm:ss',showTime:f.type==='datetime'}:storeStatus?{mode:'multiple',allowClear:true,maxTagCount:1,options:storeStatusOptions}:{};
+  const componentProps=f?.type==='date'||f?.type==='datetime'?{valueFormat:f.type==='date'?'YYYY-MM-DD':'YYYY-MM-DD HH:mm:ss',showTime:f.type==='datetime'}:storeStatus?{mode:'multiple',allowClear:true,maxTagCount:1,options:storeStatusOptions}:key==='reqHost'?{placeholder:'支持模糊查询'}:{};
   return {field:key,label:f?.label || key,component:f?.type==='date' || f?.type==='datetime'?'DatePicker':storeStatus?'Select':'Input',
     componentProps:compactList?{...componentProps,style:storeStatus?{width:'240px'}:{width:'180px'}}:componentProps,colProps:compactList?compactCol:{span:6}};
 });

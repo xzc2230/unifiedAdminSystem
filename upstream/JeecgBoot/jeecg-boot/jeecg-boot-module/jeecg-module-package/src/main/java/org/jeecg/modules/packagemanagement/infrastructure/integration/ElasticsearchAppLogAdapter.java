@@ -78,6 +78,7 @@ public class ElasticsearchAppLogAdapter implements AppLogPort  {
     private static Map<String,Object> queryBody(AppLog filter,Collection<String> allowedPackages,boolean listTimezone) {
         List<Object> must=new ArrayList<>();
         if(filter!=null&&filter.getPackageName()!=null)must.add(Map.of("wildcard",Map.of("packageName","*"+filter.getPackageName()+"*")));
+        if(filter!=null&&filter.getReqHost()!=null&&!filter.getReqHost().isBlank())must.add(Map.of("wildcard",Map.of("reqHost","*"+filter.getReqHost().trim()+"*")));
         if(filter!=null&&filter.getStartReqTime()!=null&&filter.getEndReqTime()!=null) {
             Map<String,Object> range=new LinkedHashMap<>();
             range.put("gte",DATE.format(filter.getStartReqTime().toInstant()));

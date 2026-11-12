@@ -74,6 +74,7 @@ class ClickHouseAppLogAdapterTest {
 
             var filter = new AppLog();
             filter.setPackageName("com' OR 1=1");
+            filter.setReqHost("client");
             filter.setStartReqTime(Date.from(Instant.parse("2023-11-14T00:00:00Z")));
             filter.setEndReqTime(new Date(filter.getStartReqTime().getTime() + 1000));
             var page = adapter.query(filter, 2, 10, List.of("com.test", "x' OR 1=1"));
@@ -91,6 +92,7 @@ class ClickHouseAppLogAdapterTest {
             assertTrue(select.body.contains("ORDER BY jeecg_analytics.app_request_log.req_time DESC"));
             assertTrue(select.body.contains("{packages:Array(String)}"));
             assertTrue(select.body.contains("{name:String}"));
+            assertTrue(select.body.contains("positionCaseInsensitiveUTF8(req_host, {host:String})"));
             assertTrue(select.body.contains("{start:String}"));
             assertTrue(select.body.contains("toString(req_time, 'Asia/Shanghai')"));
             assertTrue(select.body.contains("jeecg_analytics.app_request_log.req_time < parseDateTime64BestEffort({end:String}"));
@@ -99,6 +101,7 @@ class ClickHouseAppLogAdapterTest {
             assertFalse(select.body.contains("com' OR 1=1"));
             String query = decode(select.uri);
             assertTrue(query.contains("param_limit=10"));
+            assertTrue(query.contains("param_host=client"));
             assertTrue(query.contains("param_offset=10"));
             assertTrue(query.contains("2023-11-14 00:00:00"));
             assertTrue(query.contains("2023-11-15 00:00:00"));
