@@ -25,7 +25,7 @@ class PackageBusinessTest {
  @Test void mailFailureDoesNotStopLaterStoreTransitions(){
   var mapper=mock(StoreStatusMapper.class);var probe=mock(StoreProbePort.class);var mail=mock(MailPort.class);var service=new StoreStatusServiceImpl();inject(service,"storeStatusMapper",mapper);inject(service,"probe",probe);inject(service,"mail",mail);inject(service,"settings",new PackageManagementProperties());
   StoreStatus one=new StoreStatus();one.setStatus(0);one.setStoreUrl("one");StoreStatus two=new StoreStatus();two.setStatus(0);two.setStoreUrl("two");when(mapper.selectStoreStatusList(any())).thenReturn(List.of(one,two));when(probe.getStatus(anyString())).thenReturn(true);doThrow(new IllegalStateException("fake mail failure")).when(mail).sendEmail(anyString(),anyString(),eq("one"));
-  assertDoesNotThrow(service::getStatus);assertEquals(1,two.getStatus());verify(mapper,times(2)).updateStoreStatusAndDate(any());
+  assertDoesNotThrow(() -> service.getStatus());assertEquals(1,two.getStatus());verify(mapper,times(2)).updateStoreStatusAndDate(any());
  }
  static void inject(Object bean,String field,Object value){ReflectionTestUtils.setField(bean,field,value);}
  @Test void duplicatePackageHasNoStoreSideEffectAndPublicLookupNeedsNoLogin(){

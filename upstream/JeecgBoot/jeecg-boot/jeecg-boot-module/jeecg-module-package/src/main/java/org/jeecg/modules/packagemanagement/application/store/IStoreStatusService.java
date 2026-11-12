@@ -64,4 +64,7 @@ public interface IStoreStatusService
     public int updateStoreStatus(StoreStatus storeStatus);
 
     public  void getStatus();
+
+    /** Probe one platform from application management: {@code android} or {@code ios}. */
+    public void getStatus(String platform);
 }

@@ -1,7 +1,9 @@
 package org.jeecg.modules.packagemanagement.application.store.impl;
 
 import org.jeecg.modules.packagemanagement.application.legacy.DateUtils;
+import org.jeecg.modules.packagemanagement.domain.app.AppManager;
 import org.jeecg.modules.packagemanagement.domain.store.StoreStatus;
+import org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.AppManagerMapper;
 import org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.StoreStatusMapper;
 import org.jeecg.modules.packagemanagement.application.store.IStoreStatusService;
 import org.jeecg.modules.packagemanagement.application.store.StoreStatusQuery;
@@ -37,6 +39,8 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
     private org.jeecg.modules.packagemanagement.config.PackageManagementProperties settings;
     @Autowired
     private StoreStatusMapper storeStatusMapper;
+    @Autowired
+    private AppManagerMapper appManagerMapper;
 
     /**
      * 查询包状态
@@ -121,10 +125,17 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
 
     @Override
     public void getStatus() {
+        getStatus(null);
+    }
+
+    @Override
+    public void getStatus(String platform) {
+        String only = platform == null || platform.isBlank() ? null : platform.trim().toLowerCase();
         StoreStatus storeStatus = new StoreStatus();
         List<StoreStatus> storeStatusList = storeStatusMapper.selectStoreStatusList(storeStatus);
         List<StoreStatus> filteredList = storeStatusList.stream()
                 .filter(status -> status.getStatus() != 2)
+                .filter(status -> only == null || only.equals(appPlatform(status)))
                 .collect(Collectors.toList());
         if (!filteredList.isEmpty()) {
             for (StoreStatus s : filteredList) {
@@ -163,6 +174,24 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
                 }
             }
         }
+    }
+
+    /** Application management is the platform source. A missing app keeps the store row's own platform. */
+    private String appPlatform(StoreStatus row) {
+        String stored = row.getPlatform() == null || row.getPlatform().isBlank() ? "android" : row.getPlatform().trim().toLowerCase();
+        if (appManagerMapper == null || row.getPackageCode() == null || row.getPackageCode().isBlank()) return stored;
+        AppManager exact = appManagerMapper.selectAppManagerByPlatformAndPackage(stored, row.getPackageCode());
+        AppManager app = exact;
+        if (app == null) {
+            AppManager android = "android".equals(stored) ? null : appManagerMapper.selectAppManagerByPlatformAndPackage("android", row.getPackageCode());
+            AppManager ios = "ios".equals(stored) ? null : appManagerMapper.selectAppManagerByPlatformAndPackage("ios", row.getPackageCode());
+            if (android != null && ios == null) app = android;
+            else if (ios != null && android == null) app = ios;
+        }
+        if (app == null || app.getPlatform() == null || app.getPlatform().isBlank()) return stored;
+        String platform = app.getPlatform().trim().toLowerCase();
+        row.setPlatform(platform);
+        return platform;
     }
 
     private Boolean resolveOnline(StoreStatus storeStatus) {
