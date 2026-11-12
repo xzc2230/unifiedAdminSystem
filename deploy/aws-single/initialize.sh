@@ -50,6 +50,8 @@ write(app / 'application.env', '\n'.join([
     'CLICKHOUSE_ENABLED=true', 'CLICKHOUSE_ENDPOINT=http://127.0.0.1:18123',
     'CLICKHOUSE_WRITER_USER=jeecg_writer', 'CLICKHOUSE_WRITER_PASSWORD=' + passwords['clickhouse_writer_password'],
     'CLICKHOUSE_READER_USER=jeecg_reader', 'CLICKHOUSE_READER_PASSWORD=' + passwords['clickhouse_reader_password'],
+    'PACKAGE_GEO_URL=https://pro.ip-api.com/json/{ip}?key={key}&fields=country,countryCode,city,timezone,isp,org,as,query',
+    'PACKAGE_GEO_API_KEY=',
     'SP_NODE_TOKEN=' + passwords['node_token'], '']))
 write(app / 'site-router.env', '\n'.join([
     'SP_NODE_ID=aws-single', 'SP_NODE_TOKEN=' + passwords['node_token'],
