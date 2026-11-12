@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.ClientDomainMapper">
+    <resultMap type="org.jeecg.modules.packagemanagement.domain.domain.ClientDomain" id="ClientDomainResult">
+        <result property="id" column="id" />
+        <result property="apex" column="apex" />
+        <result property="status" column="status" />
+        <result property="nameservers" column="nameservers" />
+        <result property="zoneId" column="zone_id" />
+        <result property="errorMessage" column="error_message" />
+        <result property="expiresAt" column="expires_at" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+    <sql id="selectClientDomainVo">
+        select id, apex, status, nameservers, zone_id, error_message, expires_at, create_time, update_time from pkg_client_domain
+    </sql>
+    <select id="selectClientDomainList" parameterType="org.jeecg.modules.packagemanagement.domain.domain.ClientDomain" resultMap="ClientDomainResult">
+        <include refid="selectClientDomainVo"/>
+        <where>
+            <if test="apex != null and apex != ''"> and apex like concat('%', #{apex}, '%')</if>
+            <if test="status != null and status != ''"> and status = #{status}</if>
+        </where>
+        order by id desc
+    </select>
+    <select id="selectClientDomainById" parameterType="Long" resultMap="ClientDomainResult">
+        <include refid="selectClientDomainVo"/> where id = #{id}
+    </select>
+    <select id="selectClientDomainByApex" parameterType="String" resultMap="ClientDomainResult">
+        <include refid="selectClientDomainVo"/> where apex = #{apex}
+    </select>
+    <select id="selectClientDomainByStatus" parameterType="String" resultMap="ClientDomainResult">
+        <include refid="selectClientDomainVo"/> where status = #{status} order by id
+    </select>
+    <select id="selectClientDomainByStatuses" resultMap="ClientDomainResult">
+        <include refid="selectClientDomainVo"/>
+        where status in
+        <foreach collection="list" item="status" open="(" separator="," close=")">#{status}</foreach>
+        order by id
+    </select>
+    <insert id="insertClientDomain" parameterType="org.jeecg.modules.packagemanagement.domain.domain.ClientDomain" useGeneratedKeys="true" keyProperty="id">
+        insert into pkg_client_domain (apex, status, nameservers, zone_id, error_message, expires_at, create_time, update_time)
+        values (#{apex}, #{status}, #{nameservers}, #{zoneId}, #{errorMessage}, #{expiresAt}, #{createTime}, #{updateTime})
+    </insert>
+    <update id="updateClientDomain" parameterType="org.jeecg.modules.packagemanagement.domain.domain.ClientDomain">
+        update pkg_client_domain
+        set status = #{status}, nameservers = #{nameservers}, zone_id = #{zoneId}, error_message = #{errorMessage},
+            expires_at = #{expiresAt}, update_time = #{updateTime}
+        where id = #{id}
+    </update>
+    <delete id="deleteClientDomainByIds" parameterType="Long">
+        delete from pkg_client_domain where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+</mapper>

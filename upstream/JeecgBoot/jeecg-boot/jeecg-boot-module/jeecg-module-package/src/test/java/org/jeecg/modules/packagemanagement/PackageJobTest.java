@@ -2,7 +2,9 @@ package org.jeecg.modules.packagemanagement;
 
 import org.junit.jupiter.api.Test;
 import org.quartz.Job;
+import org.jeecg.modules.packagemanagement.application.domains.IClientDomainService;
 import org.jeecg.modules.packagemanagement.job.PackageAndroidStoreJob;
+import org.jeecg.modules.packagemanagement.job.PackageDomainJob;
 import org.jeecg.modules.packagemanagement.job.PackageIosStoreJob;
 import org.jeecg.modules.packagemanagement.job.PackageStoreJob;
 import org.jeecg.modules.packagemanagement.application.store.IStoreStatusService;
@@ -18,5 +20,8 @@ class PackageJobTest {
   ((Job)new PackageIosStoreJob(service)).execute(null);verify(service).getStatus("ios");
   assertInstanceOf(Job.class,PackageAndroidStoreJob.class.getDeclaredConstructor().newInstance());
   assertInstanceOf(Job.class,PackageIosStoreJob.class.getDeclaredConstructor().newInstance());
+  IClientDomainService domains=mock(IClientDomainService.class);
+  ((Job)new PackageDomainJob(domains)).execute(null);verify(domains).syncPending();
+  assertInstanceOf(Job.class,PackageDomainJob.class.getDeclaredConstructor().newInstance());
  }
 }

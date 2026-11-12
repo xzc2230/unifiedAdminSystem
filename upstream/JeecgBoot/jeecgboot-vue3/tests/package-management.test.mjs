@@ -93,7 +93,7 @@ test('all package SFCs compile and required page entries and shared components a
   walk(packageDirectory);
   // Check coverage without preventing additional independently compiled components.
   const requiredFiles=[
-    ...['apps','pwa','w2a','store','notifications','statistics','reviews','app-events','event-configs','event-errors','event-history','landing-counts','packstat','request-logs','risk','client-docs'].map(name=>`${name}/index.vue`),
+    ...['apps','pwa','w2a','store','notifications','statistics','reviews','app-events','event-configs','event-errors','event-history','landing-counts','packstat','request-logs','risk','client-docs','domains'].map(name=>`${name}/index.vue`),
     ...['calllog','docs','token'].map(name=>`openapi/${name}.vue`),
     ...['AppEditor','AppSharingModal','DevRecordPage','PackageField','PackageImageUpload','PackagePage','PwaEditor'].map(name=>`components/${name}.vue`),
   ];
@@ -105,7 +105,7 @@ test('editable business fields agree with backend allowlists and preserve domain
   const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText;
   const {definitions}=await import('data:text/javascript;base64,'+Buffer.from(compiled).toString('base64'));
   const registry=fs.readFileSync(path.join(root,'../jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/java/org/jeecg/modules/packagemanagement/controller/admin/PackageAdminRegistry.java'),'utf8');
-  assert.equal(Object.keys(definitions).length,13);
+  assert.equal(Object.keys(definitions).length,14);
   for(const [name,definition] of Object.entries(definitions)){
     if(name==='request-logs')continue;
     const section=registry.split(`resources.put("${definition.domain}"`)[1].split('resources.put(')[0];
@@ -123,6 +123,10 @@ test('editable business fields agree with backend allowlists and preserve domain
   assert.equal(definitions['request-logs'].filters[1],'reqHost');
   assert.equal(definitions['request-logs'].fields.find(f=>f.key==='reqHost').label,'域名');
   assert.equal(definitions['request-logs'].columns[1],'reqHost');
+  assert.equal(definitions.domains.edit,false);
+  assert.equal(definitions.domains.export,false);
+  assert.deepEqual(definitions.domains.columns,['apex','status','createTime','expiresAt']);
+  assert.deepEqual(definitions.domains.fields.find((field)=>field.key==='status').options.map((option)=>option.label),['待NS','已就绪','失败']);
   const requestLogPage=fs.readFileSync(path.join(root,'src/views/packagemanagement/components/PackagePage.vue'),'utf8');
   assert.match(requestLogPage,/支持模糊查询/);
   assert.match(requestLogPage,/RangePicker/);

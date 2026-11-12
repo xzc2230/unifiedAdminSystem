@@ -58,6 +58,11 @@
         <span v-else-if="definition.domain === 'apps' && column.dataIndex === 'appleAppId'" class="apple-id">{{ text || '—' }}</span>
         <a-tooltip v-else-if="fieldsByKey[column.dataIndex] && fieldsByKey[column.dataIndex].dict && dictRemark(column.dataIndex,text)" :title="dictRemark(column.dataIndex,text)">{{ displayValue(column.dataIndex,text) }}</a-tooltip>
         <template v-else-if="definition.domain === 'store' && column.dataIndex === 'status'">{{ record.productStatus || displayValue(column.dataIndex, text) }}</template>
+        <template v-else-if="definition.domain === 'domains' && column.dataIndex === 'status'">
+          <div>{{ displayValue(column.dataIndex, text) }}</div>
+          <div v-if="text === 'pending' && record.nameservers" class="domain-ns">{{ String(record.nameservers).split(',').join('\n') }}</div>
+          <div v-else-if="text === 'failed' && record.errorMessage" class="domain-ns">{{ record.errorMessage }}</div>
+        </template>
         <template v-else-if="fieldsByKey[column.dataIndex]">{{ displayValue(column.dataIndex,text) }}</template>
       </template>
     </BasicTable>
@@ -223,7 +228,7 @@ if(definition.domain==='request-logs'){
 }
 const appColumnWidths:Record<string,number>={appName:168,platform:88,appleAppId:132,packageCode:220,url:240,status:96,whetherRestrict:96,areas:180,whetherUs:100,blockedProviders:220,mark:180,userName:112,updateDate:168};
 function appStatusColor(value:any){return ({0:'default',1:'green',2:'blue',3:'gold'} as Record<string,string>)[String(value)] || 'default';}
-const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||key!=='applicationCode'&&canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:definition.domain==='apps'?appColumnWidths[key] || 140:['appName','packageCode','packageName','reqTime'].includes(key)?180:150,ellipsis:true}));
+const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||key!=='applicationCode'&&canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:definition.domain==='apps'?appColumnWidths[key] || 140:definition.domain==='domains'&&key==='status'?240:['appName','packageCode','packageName','reqTime','apex'].includes(key)?180:150,ellipsis:!(definition.domain==='domains'&&key==='status')}));
 const [registerTable,{reload,clearSelectedRowKeys}]=useTable({
   api:async params=>{const {pageNo,pageSize,...filters}=params;const query:Record<string,any>={...params};if(definition.domain==='store'&&Array.isArray(query.status)){const picked=query.status.filter((value:unknown)=>value!=null&&String(value)!=='');delete query.status;if(picked.length)query.statusQuery=picked.join(',');}lastFilters.value=filters;if(definition.domain==='apps'){selected.value=[];selectedRows.value=[];clearSelectedRowKeys();}return freshness.trackRequest(()=>api.list({...query,...(definition.appType!=null?{appType:definition.appType}:{})}));},
   columns,rowKey:idKey,bordered:true,showTableSetting:true,useSearchForm:true,size:definition.domain==='apps'?'small':'middle',
@@ -298,7 +303,7 @@ function removeAuto(row:any){Modal.confirm({title:'解除该设备的自动拉�
 onMounted(()=>{loadChoices();if(definition.domain==='statistics') loadTotal();});
 </script>
 <style scoped lang="less">
-.package-page{padding:16px}.summary-card{margin-bottom:16px}.totals{margin-top:16px}.notice{margin-bottom:16px}.detail-value{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;max-width:560px}
+.package-page{padding:16px}.summary-card{margin-bottom:16px}.totals{margin-top:16px}.notice{margin-bottom:16px}.detail-value{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;max-width:560px}.domain-ns{margin-top:4px;color:#66758a;font-size:12px;line-height:18px;white-space:pre-line}
 .package-page.compact{
   .list-actions{display:flex;justify-content:flex-start;gap:8px}
   :deep(.jeecg-basic-table-header__tableTitle){justify-content:flex-start}

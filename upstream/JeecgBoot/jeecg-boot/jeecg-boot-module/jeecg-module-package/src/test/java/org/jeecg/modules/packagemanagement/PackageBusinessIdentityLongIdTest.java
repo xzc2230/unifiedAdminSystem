@@ -57,7 +57,7 @@ class PackageBusinessIdentityLongIdTest {
         var registry = new PackageAdminRegistry(apps, mock(IStoreStatusService.class), statistics,
                 mock(IEventConfigService.class), mock(IEvnetHistoryService.class), mock(IEventErrorService.class),
                 mock(IAppPwaService.class), mock(ILoadCountService.class), mock(IAppEventRecordService.class),
-                mock(IReviewsRecordService.class), mock(IAppNotifyService.class), access, transaction, policy);
+                mock(IReviewsRecordService.class), mock(IAppNotifyService.class), mock(org.jeecg.modules.packagemanagement.application.domains.IClientDomainService.class), access, transaction, policy);
         var resource = (ManagedResource<AppStatistics>) registry.get("statistics");
         var submitted = new AppStatistics();
         submitted.setPackageCode("com.long.identity");

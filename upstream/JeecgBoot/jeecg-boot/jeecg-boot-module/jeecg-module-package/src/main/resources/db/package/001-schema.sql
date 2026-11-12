@@ -253,3 +253,17 @@ CREATE TABLE IF NOT EXISTS `pkg_resource_owner` (
   PRIMARY KEY (`resource_type`, `resource_id`),
   KEY `idx_pkg_resource_owner_actor` (`owner_user_id`, `tenant_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `pkg_client_domain` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `apex` VARCHAR(253) NOT NULL,
+  `status` VARCHAR(16) NOT NULL,
+  `nameservers` VARCHAR(255) NULL,
+  `zone_id` VARCHAR(64) NULL,
+  `error_message` VARCHAR(500) NULL,
+  `expires_at` DATETIME NULL,
+  `create_time` DATETIME NULL,
+  `update_time` DATETIME NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_pkg_client_domain_apex` (`apex`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

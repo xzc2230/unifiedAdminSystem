@@ -63,4 +63,9 @@ public class PackageManagementProperties {
  public void setPushSubject(String value){pushSubject=value;}
  private int smtpPort=587; public int getSmtpPort(){return smtpPort;} public void setSmtpPort(int port){smtpPort=port;}
  private boolean smtpStartTls=true; public boolean isSmtpStartTls(){return smtpStartTls;} public void setSmtpStartTls(boolean value){smtpStartTls=value;}
+ private String cloudflareApiToken=""; public String getCloudflareApiToken(){return cloudflareApiToken;} public void setCloudflareApiToken(String value){cloudflareApiToken=value;}
+ private String cloudflareAccountId=""; public String getCloudflareAccountId(){return cloudflareAccountId;} public void setCloudflareAccountId(String value){cloudflareAccountId=value;}
+ private String domainOriginIp="13.222.19.112"; public String getDomainOriginIp(){return domainOriginIp;} public void setDomainOriginIp(String value){domainOriginIp=value;}
+ private String domainNginxInclude=""; public String getDomainNginxInclude(){return domainNginxInclude;} public void setDomainNginxInclude(String value){domainNginxInclude=value;}
+ private String domainNginxReload=""; public String getDomainNginxReload(){return domainNginxReload;} public void setDomainNginxReload(String value){domainNginxReload=value;}
 }

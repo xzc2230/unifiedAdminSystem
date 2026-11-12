@@ -29,4 +29,5 @@ public class PackageManagementConfiguration {
  @Bean public PackageIdentityRepository packageIdentityRepository(org.springframework.jdbc.core.JdbcTemplate jdbc){return new PackageIdentityRepository(jdbc);}
  @Bean public PackageAccess packageAccess(PackageIdentityRepository repository){return new PackageAccess(repository);}
  @Bean public org.jeecg.modules.packagemanagement.job.PackageStoreJob packageStoreJob(org.jeecg.modules.packagemanagement.application.store.IStoreStatusService service){return new org.jeecg.modules.packagemanagement.job.PackageStoreJob(service);}
+ @Bean public org.jeecg.modules.packagemanagement.job.PackageDomainJob packageDomainJob(org.jeecg.modules.packagemanagement.application.domains.IClientDomainService service){return new org.jeecg.modules.packagemanagement.job.PackageDomainJob(service);}
 }

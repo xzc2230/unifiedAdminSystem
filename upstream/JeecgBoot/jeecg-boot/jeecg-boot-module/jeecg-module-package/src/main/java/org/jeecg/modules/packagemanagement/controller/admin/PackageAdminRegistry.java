@@ -2,6 +2,8 @@ package org.jeecg.modules.packagemanagement.controller.admin;
 
 import java.util.*;
 import org.jeecg.modules.packagemanagement.application.apps.IAppManagerService;
+import org.jeecg.modules.packagemanagement.application.domains.IClientDomainService;
+import org.jeecg.modules.packagemanagement.domain.domain.ClientDomain;
 import org.jeecg.modules.packagemanagement.application.event.*;
 import org.jeecg.modules.packagemanagement.application.notification.IAppNotifyService;
 import org.jeecg.modules.packagemanagement.application.pwa.*;
@@ -27,7 +29,7 @@ public final class PackageAdminRegistry {
     public PackageAdminRegistry(IAppManagerService apps,IStoreStatusService store,IAppStatisticsService statistics,
             IEventConfigService configs,IEvnetHistoryService history,IEventErrorService errors,
             IAppPwaService pwa,ILoadCountService counts,IAppEventRecordService appEvents,
-            IReviewsRecordService reviews,IAppNotifyService notifications,PackageAccess access,
+            IReviewsRecordService reviews,IAppNotifyService notifications,IClientDomainService domains,PackageAccess access,
             TransactionTemplate tx,PackageResourcePolicy policy) {
         resources.put("apps",new ManagedResource<>("pkg_app_manager",AppManager.class,AppManager::getId,
                 apps::selectAppManagerList,apps::selectAppManagerById,apps::insertAppManager,apps::updateAppManager,
@@ -89,6 +91,11 @@ public final class PackageAdminRegistry {
                 notifications::deleteAppNotifyByIds,(r,a)->r.setUserId(access.effectiveLegacyUserId(a)),
                 List.of("appId","notifyTitle","notifyMessage","notifyIcon"),
                 cols("appId","appId","appName","app名称","appIcon","ap图标","appHost","ap域名","notifyTitle","通知标题","userId","用户ID","notifyMessage","通知内容","notifyIcon","通知图标"),access,tx));
+        resources.put("domains",new ManagedResource<>("pkg_client_domain",ClientDomain.class,ClientDomain::getId,
+                domains::selectClientDomainList,domains::selectClientDomainById,domains::insertClientDomain,
+                domains::updateClientDomain,domains::deleteClientDomainByIds,(r,a)->{},
+                List.of("apex"),
+                cols("apex","域名","status","状态","createTime","创建时间","expiresAt","过期时间"),access,tx));
         resources.values().forEach(policy::attach);
     }
     private static Map<String,String> cols(String... names) {
