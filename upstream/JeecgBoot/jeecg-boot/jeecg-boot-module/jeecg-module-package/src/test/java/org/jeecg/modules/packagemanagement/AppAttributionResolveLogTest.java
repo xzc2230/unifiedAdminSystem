@@ -91,6 +91,27 @@ class AppAttributionResolveLogTest {
     }
 
     @Test
+    void fiveSegmentAliasUsesTheSameResolveAndStoresItsPath() throws Exception {
+        AppLogPort logs = mock(AppLogPort.class);
+        FilterChain chain = mock(FilterChain.class);
+        MockHttpServletResponse response = post(filter(app("com.example.app"), logs), chain, "/package-legacy/a/b/c/d/e", "{\"applicationCode\":\"com.example.app\"}");
+        assertEquals(200, response.getStatus());
+        assertTrue(response.getContentAsString().contains("\"resolutionState\":\"MATCHED\""));
+        assertTrue(saved(logs).getReqPath().endsWith("/package-legacy/a/b/c/d/e"));
+        verify(chain, never()).doFilter(any(), any());
+    }
+
+    @Test
+    void fourSegmentAndBannerListStayOutsideResolve() throws Exception {
+        AppLogPort logs = mock(AppLogPort.class);
+        FilterChain chain = mock(FilterChain.class);
+        post(filter(app("com.example.app"), logs), chain, "/package-legacy/a/b/c/d", "{\"applicationCode\":\"com.example.app\"}");
+        post(filter(app("com.example.app"), logs), chain, "/package-legacy/v2/api/banner/list/abc", "{\"applicationCode\":\"com.example.app\"}");
+        verify(logs, never()).save(any());
+        verify(chain, org.mockito.Mockito.times(2)).doFilter(any(), any());
+    }
+
+    @Test
     void storageFailureDoesNotChangeTheClientResponse() throws Exception {
         AppLogPort logs = mock(AppLogPort.class);
         doThrow(new IllegalStateException("down")).when(logs).save(any());
@@ -118,8 +139,12 @@ class AppAttributionResolveLogTest {
     }
 
     private static MockHttpServletResponse post(AppAttributionResolveFilter filter, FilterChain chain, String body) throws Exception {
-        MockHttpServletRequest request = new MockHttpServletRequest("POST", "/api/v1/attribution/resolve");
-        request.setServletPath("/api/v1/attribution/resolve");
+        return post(filter, chain, "/api/v1/attribution/resolve", body);
+    }
+
+    private static MockHttpServletResponse post(AppAttributionResolveFilter filter, FilterChain chain, String path, String body) throws Exception {
+        MockHttpServletRequest request = new MockHttpServletRequest("POST", path);
+        request.setServletPath(path);
         request.setContent(body.getBytes(StandardCharsets.UTF_8));
         MockHttpServletResponse response = new MockHttpServletResponse();
         filter.doFilter(request, response, chain);

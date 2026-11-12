@@ -141,9 +141,26 @@ public class AppAttributionResolveFilter extends OncePerRequestFilter {
     }
 
     private static boolean isResolve(HttpServletRequest request) {
+        if (!"POST".equalsIgnoreCase(request.getMethod())) return false;
         String path = request.getServletPath();
         if (path == null || path.isBlank()) path = request.getRequestURI();
-        return "POST".equalsIgnoreCase(request.getMethod()) && path != null && path.endsWith("/api/v1/attribution/resolve");
+        if (path == null || path.isBlank()) return false;
+        int query = path.indexOf('?');
+        if (query >= 0) path = path.substring(0, query);
+        if (path.endsWith("/api/v1/attribution/resolve")) return true;
+        return fiveSegmentAlias(path);
+    }
+
+    /** Interface 14: five non-empty segments, the same shape as interface 12 plus one segment. */
+    private static boolean fiveSegmentAlias(String path) {
+        String rest = path.startsWith("/package-legacy/") ? path.substring("/package-legacy".length()) : path;
+        if (rest.length() > 1 && rest.endsWith("/")) rest = rest.substring(0, rest.length() - 1);
+        if (rest.startsWith("/v2/api/banner/list/")) return false;
+        int segments = 0;
+        for (String part : rest.split("/", -1)) {
+            if (!part.isEmpty()) segments++;
+        }
+        return rest.startsWith("/") && segments == 5;
     }
 
     private static HttpServletRequest replay(HttpServletRequest request, byte[] body) {

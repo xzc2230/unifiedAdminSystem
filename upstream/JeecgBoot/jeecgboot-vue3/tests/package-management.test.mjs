@@ -303,7 +303,7 @@ test('49 whitelist countries have unique codes, Chinese labels and identical ser
   assert.deepEqual(JSON.parse(client),JSON.parse(server));
 });
 
-test('client protocol docs list thirteen interfaces under the package menu', async () => {
+test('client protocol docs list fourteen interfaces under the package menu', async () => {
   const { CLIENT_PROTOCOL_DOC } = await import('../src/views/packagemanagement/client-docs/client-docs.mjs');
   const page = fs.readFileSync(path.join(root, 'src/views/packagemanagement/client-docs/index.vue'), 'utf8');
   const menu = fs.readFileSync(path.join(root, '../jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/017-client-protocol-docs-menu.sql'), 'utf8');
@@ -311,11 +311,11 @@ test('client protocol docs list thirteen interfaces under the package menu', asy
   assert.equal(CLIENT_PROTOCOL_DOC.host, undefined);
   assert.equal(page.includes('后台地址'), false);
   assert.ok(CLIENT_PROTOCOL_DOC.interfaces.every((item) => !String(item.requestExample).includes('apivo.attrnivo.com')));
-  assert.equal(CLIENT_PROTOCOL_DOC.interfaces.length, 13);
+  assert.equal(CLIENT_PROTOCOL_DOC.interfaces.length, 14);
   assert.deepEqual(CLIENT_PROTOCOL_DOC.interfaces.map((item) => item.path), [
     '/system/xxx', '/v2/api/user/login', '/v2/api/retry/xxx', '/v2/api/banner/list/xxx', '/dynamic/xx',
     '/v2/api/check/url', '/app/start', '/home/index/jsp', '/xxxxxx', '/xxx/xxxx', '/xxx/xxxx/xxx', '/xxx/xxxx/xxx/xxxx',
-    '/api/v1/attribution/resolve',
+    '/api/v1/attribution/resolve', '/xxx/xxxx/xxx/xxxx/xxx',
   ]);
   assert.ok(CLIENT_PROTOCOL_DOC.interfaces.every((item) => item.requestExample && item.responseExample));
   const resolve = CLIENT_PROTOCOL_DOC.interfaces[12];
@@ -329,6 +329,13 @@ test('client protocol docs list thirteen interfaces under the package menu', asy
   assert.deepEqual(resolve.fields.map((field) => field.name), [
     'clickRef', 'resolveToken', 'applicationCode', 'promotionCode', 'resolutionState', 'parameterSource', 'destinationUrl', 'resolvedAt', 'tokenExpiresAt', 'data', 'afLinkParams', 'fbLinkParams',
   ]);
+  const alias = CLIENT_PROTOCOL_DOC.interfaces[13];
+  assert.equal(alias.title, '接口十四');
+  assert.equal(alias.path, '/xxx/xxxx/xxx/xxxx/xxx');
+  assert.deepEqual(alias.methods, resolve.methods);
+  assert.deepEqual(alias.params, resolve.params);
+  assert.deepEqual(alias.fields, resolve.fields);
+  assert.match(alias.requestExample, /^POST \/xxx\/xxxx\/xxx\/xxxx\/xxx\n/);
   assert.match(risk, /key:'abi'[\s\S]*key:'brand'/);
   assert.match(page, /CLIENT_PROTOCOL_DOC/);
   assert.match(menu, /'pkg_menu_client_docs','pkg_mgmt_root','接口文档','\/package-management\/client-docs'/);
