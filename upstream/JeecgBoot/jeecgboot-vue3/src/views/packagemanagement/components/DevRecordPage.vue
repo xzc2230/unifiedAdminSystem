@@ -198,6 +198,7 @@ defineExpose({reload:refresh});
     --editor-text: #e5e7eb;
     --editor-muted: #a1aab8;
   }
-  .cell-preview-overlay .ant-tooltip-inner { max-width: 480px; }
-  .cell-preview-body { max-width: 100%; max-height: 360px; margin: 0 0 8px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .ant-tooltip.cell-preview-overlay { max-width: min(960px, calc(100vw - 48px)) !important; }
+  .ant-tooltip.cell-preview-overlay .ant-tooltip-inner { max-width: min(960px, calc(100vw - 48px)); }
+  .cell-preview-body { max-width: 100%; max-height: min(640px, 72vh); margin: 0 0 8px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
 </style>
