@@ -142,9 +142,34 @@
       <a-descriptions bordered :column="1"><a-descriptions-item v-for="field in detailFields" :key="field.key" :label="field.label"><pre class="detail-value">{{ displayDetail(detail[field.key]) }}</pre></a-descriptions-item></a-descriptions>
     </a-drawer>
     <AppSharingModal v-if="definition.domain === 'apps'" ref="sharingModal" @success="refresh" />
-    <a-modal v-model:open="autoOpen" :title="`自动拉黑 · ${autoPkg}`" :footer="null" width="860">
-      <a-space class="notice"><a-select v-model:value="autoType" allowClear placeholder="全部类型" :options="[{value:'gaid',label:'GAID'},{value:'aid',label:'AID'}]" style="width:160px" @change="loadAuto" /><a-button :loading="autoLoading" @click="loadAuto">刷新</a-button></a-space>
-      <a-table :columns="[{title:'类型',dataIndex:'type'},{title:'标识',dataIndex:'value'},{title:'原因',dataIndex:'reason'},{title:'操作',key:'action'}]" :dataSource="autoRows" :loading="autoLoading" :rowKey="row=>`${row.type}:${row.value}`" :pagination="false"><template #bodyCell="{column,record}"><a v-if="column.key==='action'" v-auth="'package:risk:remove'" @click="removeAuto(record)">解除拉黑</a></template></a-table>
+    <a-modal v-model:open="autoOpen" title="自动拉黑" :width="960" wrapClassName="app-editor-modal" :bodyStyle="{ maxHeight: 'calc(100dvh - 200px)', overflowY: 'auto', padding: '20px 24px', background: 'var(--app-editor-background, #f5f7fa)' }" :maskClosable="false">
+      <div class="record-editor">
+        <section class="editor-section auto-blacklist" aria-labelledby="auto-blacklist-heading">
+          <header class="section-heading">
+            <div>
+              <h3 id="auto-blacklist-heading">拉黑记录</h3>
+              <p>{{ autoPkg }} 当前被自动拉黑的 GAID 和 AID</p>
+            </div>
+            <span class="section-caption">共 {{ autoRows.length }} 条</span>
+          </header>
+          <div class="auto-filter">
+            <span>类型</span>
+            <a-select v-model:value="autoType" allowClear placeholder="全部类型" :options="[{value:'gaid',label:'GAID'},{value:'aid',label:'AID'}]" @change="loadAuto" />
+            <a-button :loading="autoLoading" @click="loadAuto">刷新</a-button>
+          </div>
+          <a-table class="auto-table" :columns="autoColumns" :dataSource="autoRows" :loading="autoLoading" :rowKey="row => `${row.type}:${row.value}`" :pagination="false" :locale="{ emptyText: '暂无自动拉黑记录' }">
+            <template #bodyCell="{ column, record }">
+              <a-tag v-if="column.dataIndex === 'type'" :color="record.type === 'gaid' ? 'blue' : 'green'">{{ record.type === 'gaid' ? 'GAID' : 'AID' }}</a-tag>
+              <span v-else-if="column.dataIndex === 'value'" class="auto-value">{{ record.value }}</span>
+              <span v-else-if="column.dataIndex === 'reason'">{{ record.reason || '—' }}</span>
+              <a v-else-if="column.key === 'action'" v-auth="'package:risk:remove'" class="auto-release" @click="removeAuto(record)">解除拉黑</a>
+            </template>
+          </a-table>
+        </section>
+      </div>
+      <template #footer>
+        <a-button @click="autoOpen = false">关闭</a-button>
+      </template>
     </a-modal>
   </div>
 </template>
@@ -387,6 +412,7 @@ const totals=ref<Record<string,any>>({}),totalLoading=ref(false),totalError=ref(
 async function loadTotal(){totalLoading.value=true;totalError.value='';try{totals.value=await statisticsTotal({...totalQuery});}catch{totals.value={};totalError.value='汇总加载失败，请重试';}finally{totalLoading.value=false;}}
 function resetTotal(){totalQuery.packageCode='';totalQuery.subAreas='';loadTotal();}
 const autoOpen=ref(false),autoLoading=ref(false),autoPkg=ref(''),autoType=ref<string>(),autoRows=ref<any[]>([]);
+const autoColumns=[{title:'类型',dataIndex:'type',width:110},{title:'标识',dataIndex:'value'},{title:'原因',dataIndex:'reason'},{title:'操作',key:'action',width:110}];
 async function openAuto(row:any){if(!canManageRow(row) || !(hasPermission('package:risk:query') || hasPermission('*:*:*')))return;autoPkg.value=row.packageCode;autoType.value=undefined;autoRows.value=[];autoOpen.value=true;await loadAuto();}
 async function loadAuto(){autoLoading.value=true;try{autoRows.value=await autoBlacklist(autoPkg.value,autoType.value);}finally{autoLoading.value=false;}}
 function removeAuto(row:any){Modal.confirm({title:'解除该设备的自动拉黑？',onOk:async()=>{await removeAutoBlacklist(autoPkg.value,row.type,row.value);message.success('已解除');await loadAuto();}});}
@@ -427,6 +453,12 @@ onMounted(()=>{loadChoices();if(definition.domain==='statistics') loadTotal();})
 .record-editor :deep(.ant-input-number),
 .record-editor :deep(.ant-select-selector){border-radius:6px}
 .record-editor :deep(.ant-input-number){width:100%}
+.auto-blacklist{padding-bottom:20px}
+.auto-filter{display:flex;align-items:center;gap:12px;margin-bottom:16px;color:var(--editor-text);font-size:13px;font-weight:500}
+.auto-filter :deep(.ant-select){width:180px}
+.auto-filter :deep(.ant-select-selector),.auto-filter :deep(.ant-btn){border-radius:6px}
+.auto-value{overflow-wrap:anywhere}
+.auto-release{color:#cf1322}
 @media (max-width:640px){.field-grid{grid-template-columns:minmax(0,1fr)}.editor-section{padding:16px 14px 0}}
 </style>
 <style lang="less">
