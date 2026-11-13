@@ -148,7 +148,11 @@ test('editable business fields agree with backend allowlists and preserve domain
   assert.doesNotMatch(requestLogPage,/cleanLogs\(lastFilters\.value\)/);
   const devPage=fs.readFileSync(path.join(root,'src/views/packagemanagement/components/DevRecordPage.vue'),'utf8');
   assert.match(devPage,/domain==='risk'/);
-  assert.match(devPage,/clickToRowSelect:props\.domain!=='risk'/);
+  assert.match(devPage,/const editorShell=\['risk','packstat'\]/);
+  assert.match(devPage,/clickToRowSelect:!editorShell/);
+  assert.match(devPage,/保存包统计/);
+  assert.match(devPage,/packstat-basic-heading/);
+  assert.match(devPage,/'包信息'/);
   assert.match(devPage,/width:'180px'/);
   assert.match(devPage,/class="list-actions"/);
   assert.equal(definitions['app-events'].key,'eventId');assert.equal(definitions.reviews.key,'reviewsId');

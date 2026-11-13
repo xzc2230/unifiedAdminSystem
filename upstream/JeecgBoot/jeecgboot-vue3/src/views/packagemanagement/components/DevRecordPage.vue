@@ -1,9 +1,9 @@
 <template>
-  <div class="dev-record-page" :class="{compact:domain==='risk'}">
+  <div class="dev-record-page" :class="{compact:editorShell}">
     <slot name="summary" :query="lastQuery" />
     <BasicTable @register="registerTable">
       <template #tableTitle>
-        <div v-if="domain==='risk'" class="list-actions">
+        <div v-if="editorShell" class="list-actions">
           <a-button v-if="!readonly" v-auth="permission('add')" type="primary" @click="openEditor()">新增</a-button>
           <a-button v-if="!readonly" v-auth="permission('remove')" danger :disabled="!selected.length" @click="remove(selected)">批量删除</a-button>
         </div>
@@ -13,13 +13,13 @@
         </template>
       </template>
       <template #toolbar>
-        <template v-if="domain!=='risk'">
+        <template v-if="!editorShell">
           <a-button v-if="!readonly" v-auth="permission('remove')" danger :disabled="!selected.length" @click="remove(selected)">批量删除</a-button>
           <slot name="toolbar" :reload="reload" />
         </template>
       </template>
       <template #tableTop>
-        <a-alert v-if="domain !== 'risk' && selected.length" type="info" show-icon>
+        <a-alert v-if="!editorShell && selected.length" type="info" show-icon>
           <template #message>
             <span>已选中 {{ selected.length }} 条记录</span>
             <a-divider type="vertical" />
@@ -44,18 +44,19 @@
         <template v-else-if="column.dataIndex==='status' && path==='openapi/token'">{{ Number(text)===1?'启用':'停用' }}</template>
       </template>
     </BasicTable>
-    <a-modal v-model:open="open" :title="`${editingId==null?'新增':'编辑'}${title}`" :width="domain==='risk'?960:780" :wrapClassName="domain==='risk'?'app-editor-modal':undefined" :bodyStyle="domain==='risk'?{maxHeight:'calc(100dvh - 200px)',overflowY:'auto',padding:'20px 24px',background:'var(--app-editor-background, #f5f7fa)'}:undefined" :okText="domain==='risk'?'保存':undefined" :cancelText="domain==='risk'?'取消':undefined" :confirmLoading="saving" :maskClosable="false" @ok="save">
+    <a-modal v-model:open="open" :title="`${editingId==null?'新增':'编辑'}${title}`" :width="editorShell?960:780" :wrapClassName="editorShell?'app-editor-modal':undefined" :bodyStyle="editorShell?{maxHeight:'calc(100dvh - 200px)',overflowY:'auto',padding:'20px 24px',background:'var(--app-editor-background, #f5f7fa)'}:undefined" :okText="domain==='packstat'?'保存包统计':domain==='risk'?'保存':undefined" :cancelText="editorShell?'取消':undefined" :confirmLoading="saving" :maskClosable="false" @ok="save">
       <a-form ref="formRef" :model="form" layout="vertical">
-        <div v-if="domain==='risk'" class="record-editor">
-          <section class="editor-section">
+        <div v-if="editorShell" class="record-editor">
+          <section class="editor-section" :aria-labelledby="domain==='packstat'?'packstat-basic-heading':'risk-basic-heading'">
             <header class="section-heading">
-              <div><h3>规则信息</h3><p>填写匹配条件和处置动作</p></div>
+              <div><h3 :id="domain==='packstat'?'packstat-basic-heading':'risk-basic-heading'">{{ domain==='packstat'?'包信息':'规则信息' }}</h3><p>{{ domain==='packstat'?'填写上架、客户和过包信息':'填写匹配条件和处置动作' }}</p></div>
               <span class="section-caption">带 * 的为必填项</span>
             </header>
             <div class="field-grid">
               <a-form-item v-for="field in fields.filter(f=>!f.readonly)" :key="field.key" :class="{ 'full-width': field.type==='textarea' }" :label="field.label" :name="field.key" :rules="field.required?[{required:true,message:`请填写${field.label}`}]:[]">
                 <a-select v-if="field.options" v-model:value="form[field.key]" :options="field.options" showSearch optionFilterProp="label" allowClear />
                 <a-input-number v-else-if="field.type==='number'" v-model:value="form[field.key]" style="width:100%" />
+                <a-date-picker v-else-if="field.type==='date'||field.type==='datetime'" v-model:value="form[field.key]" :showTime="field.type==='datetime'" :valueFormat="field.type==='date'?'YYYY-MM-DD':'YYYY-MM-DD HH:mm:ss'" style="width:100%" />
                 <a-textarea v-else-if="field.type==='textarea'" v-model:value="form[field.key]" :rows="3" />
                 <a-input v-else v-model:value="form[field.key]" :placeholder="field.placeholder" allowClear />
                 <template v-if="field.key==='asn'"><a-button size="small" class="asn-lookup" :loading="lookupLoading" @click="previewAsn">查询 ASN 组织</a-button><p v-if="asnPreview" class="asn-preview">{{ asnPreview }}</p></template>
@@ -92,9 +93,9 @@ const props=withDefaults(defineProps<{title:string;path:string;domain:string;fie
 const emit=defineEmits<{(e:'query',query:Record<string,any>):void;(e:'changed'):void}>();
 const api=computed(()=>devApi(props.path));
 const permission=(action:string)=>`package:${props.domain}:${action}`;
-const compact=computed(()=>props.domain==='risk');
-const querySchemas=computed(()=>compact.value?props.filters.map(item=>({...item,colProps:{style:{width:'auto',flex:'0 0 auto'}},componentProps:{...(item.componentProps||{}),style:{width:'180px'}}})):props.filters);
-const queryForm=computed(()=>({schemas:querySchemas.value,labelWidth:compact.value?80:90,autoSubmitOnEnter:true,showAdvancedButton:props.filters.length>3,...(compact.value?{actionColOptions:{style:{width:'auto',flex:'0 0 auto'}},rowProps:{gutter:8}}:{})}));
+const editorShell=['risk','packstat'].includes(props.domain);
+const querySchemas=computed(()=>editorShell?props.filters.map(item=>({...item,colProps:{style:{width:'auto',flex:'0 0 auto'}},componentProps:{...(item.componentProps||{}),style:{width:'180px'}}})):props.filters);
+const queryForm=computed(()=>({schemas:querySchemas.value,labelWidth:editorShell?80:90,autoSubmitOnEnter:true,showAdvancedButton:props.filters.length>3,...(editorShell?{actionColOptions:{style:{width:'auto',flex:'0 0 auto'}},rowProps:{gutter:8}}:{})}));
 const selected=ref<any[]>([]),lastQuery=ref<Record<string,any>>({});
 const freshness=useCachedPageRefresh(async()=>{await props.refreshChoices?.();const rows=await reload();if(rows===undefined)throw new Error('列表刷新失败');},props.path==='packstat'?5_000:30_000);
 const [registerTable,{reload,clearSelectedRowKeys,setProps}]=useTable({
@@ -103,7 +104,7 @@ const [registerTable,{reload,clearSelectedRowKeys,setProps}]=useTable({
  rowKey:'id',bordered:true,useSearchForm:true,showTableSetting:true,
  formConfig:queryForm.value,
  actionColumn:{title:'操作',dataIndex:'action',key:'action',width:props.path==='openapi/token'?260:180,fixed:'right'},
- clickToRowSelect:props.domain!=='risk',
+ clickToRowSelect:!editorShell,
  rowSelection:props.readonly?undefined:{type:'checkbox',onChange:keys=>selected.value=keys},
 });
 watch(queryForm,formConfig=>setProps({formConfig}),{deep:true});
@@ -146,7 +147,8 @@ defineExpose({reload:refresh});
 .record-editor :deep(.ant-input-number),
 .record-editor :deep(.ant-select-selector){border-radius:6px}
 .record-editor :deep(.ant-input-number),
-.record-editor :deep(.ant-select){width:100%}
+.record-editor :deep(.ant-select),
+.record-editor :deep(.ant-picker){width:100%}
 .asn-lookup{margin-top:8px}
 .asn-preview{margin:6px 0 0;color:var(--editor-muted);font-size:12px}
 @media (max-width:640px){.field-grid{grid-template-columns:minmax(0,1fr)}.editor-section{padding:16px 14px 0}}
