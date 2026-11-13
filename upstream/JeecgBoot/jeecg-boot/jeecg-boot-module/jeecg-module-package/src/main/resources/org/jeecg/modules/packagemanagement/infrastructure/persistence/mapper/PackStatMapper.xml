@@ -8,6 +8,7 @@
         <result property="platform" column="platform"/>
         <result property="storeUrl" column="store_url"/>
         <result property="regionCode" column="region_code"/>
+        <result property="customerCategory" column="customer_category"/>
         <result property="customer" column="customer"/>
         <result property="isReplenish" column="is_replenish"/>
         <result property="replenishUrl" column="replenish_url"/>
@@ -27,7 +28,7 @@
     </resultMap>
 
     <sql id="selectVo">
-        select id, tenant_id, owner_user_id, platform, store_url, region_code, customer, is_replenish, replenish_url, packer,
+        select id, tenant_id, owner_user_id, platform, store_url, region_code, customer_category, customer, is_replenish, replenish_url, packer,
                notify_email, pass_date, customer_use_date, drop_date, designer, remark,
                coalesce(survive_days,
                    case when drop_date is null then null else greatest(0, datediff(drop_date, pass_date)) end) as survive_days,
@@ -67,6 +68,7 @@
             <if test="platform != null">platform,</if>
             <if test="storeUrl != null">store_url,</if>
             <if test="regionCode != null">region_code,</if>
+            <if test="customerCategory != null">customer_category,</if>
             <if test="customer != null">customer,</if>
             <if test="isReplenish != null">is_replenish,</if>
             <if test="replenishUrl != null">replenish_url,</if>
@@ -87,6 +89,7 @@
             <if test="platform != null">#{platform},</if>
             <if test="storeUrl != null">#{storeUrl},</if>
             <if test="regionCode != null">#{regionCode},</if>
+            <if test="customerCategory != null">#{customerCategory},</if>
             <if test="customer != null">#{customer},</if>
             <if test="isReplenish != null">#{isReplenish},</if>
             <if test="replenishUrl != null">#{replenishUrl},</if>
@@ -110,6 +113,7 @@
             <if test="platform != null">platform = #{platform},</if>
             <if test="storeUrl != null">store_url = #{storeUrl},</if>
             <if test="regionCode != null">region_code = #{regionCode},</if>
+            <if test="customerCategory != null">customer_category = #{customerCategory},</if>
             <if test="customer != null">customer = #{customer},</if>
             <if test="isReplenish != null">is_replenish = #{isReplenish},</if>
             replenish_url = #{replenishUrl},

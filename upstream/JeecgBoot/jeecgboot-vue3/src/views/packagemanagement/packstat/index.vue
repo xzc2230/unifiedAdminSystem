@@ -11,11 +11,11 @@ import DevRecordPage from '../components/DevRecordPage.vue';
 import {SURVIVE_DAY_KEYS,summaryRows} from '../package-dev.mjs';
 const page=ref(),authors=ref<string[]>([]),regions=ref<any[]>([]),summaryQuery=ref<Record<string,any>>({}),summary=ref<any>({noRecord:true}),summaryLoading=ref(false),summaryError=ref('');
 const day=new Date();const today=`${day.getFullYear()}-${String(day.getMonth()+1).padStart(2,'0')}-${String(day.getDate()).padStart(2,'0')}`;
-const defaults={platform:'android',isReplenish:0,passDate:today,customerUseDate:today};
+const defaults={platform:'android',isReplenish:0,passDate:today,customerUseDate:today,customerCategory:'公司'};
 const fields=computed(()=>[
  {key:'platform',label:'系统',required:true,options:[{value:'android',label:'Android'},{value:'ios',label:'iOS'}]},
  {key:'storeUrl',label:'商店链接',required:true,width:240},{key:'regionCode',label:'上架地区',required:true,options:regions.value.map(r=>({value:r.code,label:`${r.nameCn||r.name_cn||r.regionName||''} (${r.code})`}))},
- {key:'customer',label:'客户'},{key:'isReplenish',label:'是否补包',required:true,options:[{value:0,label:'否'},{value:1,label:'是'}]},{key:'replenishUrl',label:'补包链接'},
+ {key:'customerCategory',label:'分类',required:true,options:[{value:'CT',label:'CT'},{value:'公司',label:'公司'}]},{key:'customer',label:'客户'},{key:'isReplenish',label:'是否补包',required:true,options:[{value:0,label:'否'},{value:1,label:'是'}]},{key:'replenishUrl',label:'补包链接'},
  {key:'packer',label:'出包人',required:true},{key:'notifyEmail',label:'通知邮箱'},
  {key:'passDate',label:'过包日期',type:'date',required:true},{key:'customerUseDate',label:'客户使用日期',type:'date',required:true},{key:'dropDate',label:'掉包日期',type:'date'},
  {key:'aliveDays',label:'存活时长',readonly:true},{key:'useDays',label:'使用时长',readonly:true},{key:'designer',label:'美工'},{key:'remark',label:'备注',type:'textarea'},

@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS pkg_pack_stat (
   platform           VARCHAR(16)  NOT NULL COMMENT 'android/ios',
   store_url          VARCHAR(512) NOT NULL COMMENT '商店链接',
   region_code        VARCHAR(8)   NULL DEFAULT NULL COMMENT '上架地区 ISO alpha-2',
+  customer_category  VARCHAR(16)  NOT NULL DEFAULT '公司' COMMENT '分类：CT/公司',
   customer           VARCHAR(128) NULL DEFAULT NULL COMMENT '客户',
   is_replenish       TINYINT(1)   NOT NULL DEFAULT 0 COMMENT '是否补包 0否 1是',
   replenish_url      VARCHAR(512) NULL DEFAULT NULL COMMENT '补包链接',

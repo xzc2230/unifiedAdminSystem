@@ -10,7 +10,11 @@ class PackagePackStatServiceTest {
  private final PackStatService service=new PackStatService(mapper,regions);private final PackageActor actor=new PackageActor(8,"alice",11,false);
  @Test void insertionDefaultsDatesInfersPlatformAndIgnoresClientOwnership(){
   PackStat row=new PackStat();row.setId(900L);row.setTenantId(99);row.setOwnerUserId("bob");row.setStoreUrl("https://apps.apple.com/sg/app/demo/id123456");service.add(row,actor);
-  assertNull(row.getId());assertEquals(8,row.getTenantId());assertEquals("alice",row.getOwnerUserId());assertEquals("ios",row.getPlatform());assertEquals("sg",row.getRegionCode());assertEquals(0,row.getIsReplenish());assertNotNull(row.getPassDate());assertNotNull(row.getCustomerUseDate());verify(mapper).insertPackStat(row);
+  assertNull(row.getId());assertEquals(8,row.getTenantId());assertEquals("alice",row.getOwnerUserId());assertEquals("ios",row.getPlatform());assertEquals("sg",row.getRegionCode());assertEquals("公司",row.getCustomerCategory());assertEquals(0,row.getIsReplenish());assertNotNull(row.getPassDate());assertNotNull(row.getCustomerUseDate());verify(mapper).insertPackStat(row);
+ }
+ @Test void categoryKeepsCtAndRejectsAnythingElse(){
+  PackStat ct=new PackStat();ct.setStoreUrl("https://example.com");ct.setCustomerCategory("CT");service.add(ct,actor);assertEquals("CT",ct.getCustomerCategory());
+  PackStat other=new PackStat();other.setCustomerCategory("其他");assertThrows(org.jeecg.modules.packagemanagement.exception.PackageFailure.class,()->service.add(other,actor));
  }
  @Test void batchDeleteRejectsForeignRecordBeforeAnyDelete(){PackStat own=new PackStat();own.setTenantId(8);own.setOwnerUserId("alice");PackStat foreign=new PackStat();foreign.setTenantId(9);foreign.setOwnerUserId("alice");when(mapper.selectPackStatById(1L)).thenReturn(own);when(mapper.selectPackStatById(2L)).thenReturn(foreign);
   assertThrows(RuntimeException.class,()->service.delete(new Long[]{1L,2L},actor));verify(mapper,never()).deletePackStatByIds(any());

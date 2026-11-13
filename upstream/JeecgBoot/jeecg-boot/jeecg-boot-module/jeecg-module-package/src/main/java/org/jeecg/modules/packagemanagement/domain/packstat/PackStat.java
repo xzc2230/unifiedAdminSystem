@@ -21,6 +21,7 @@ public class PackStat extends PackageEntity
     private String platform;
     private String storeUrl;
     private String regionCode;
+    private String customerCategory;
     private String customer;
     private Integer isReplenish;
     private String replenishUrl;
@@ -82,6 +83,16 @@ public class PackStat extends PackageEntity
     public void setRegionCode(String regionCode)
     {
         this.regionCode = regionCode;
+    }
+
+    public String getCustomerCategory()
+    {
+        return customerCategory;
+    }
+
+    public void setCustomerCategory(String customerCategory)
+    {
+        this.customerCategory = customerCategory;
     }
 
     public String getCustomer()

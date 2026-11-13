@@ -22,12 +22,14 @@ public class PackStatService {
   if(row.getCustomerUseDate()==null)row.setCustomerUseDate(today);
   if(row.getIsReplenish()==null)row.setIsReplenish(0);
   row.setCreateTime(new Date());row.setCreateBy(actor.userId());row.setUpdateBy(null);row.setUpdateTime(null);
+  category(row);
   return mapper.insertPackStat(row);
  }
  @Transactional public int edit(PackStat row,PackageActor actor){
   if(row.getId()==null)throw new PackageFailure(400,"缺少包统计ID");
   PackStat existing=detail(row.getId(),actor);hints(row);
   row.setTenantId(existing.getTenantId());row.setOwnerUserId(existing.getOwnerUserId());
+  category(row);
   row.setUpdateBy(actor.userId());row.setUpdateTime(new Date());return mapper.updatePackStat(row);
  }
  @Transactional public int delete(Long[] ids,PackageActor actor){
@@ -56,5 +58,10 @@ public class PackStatService {
   PackStatUrlParser.Parsed parsed=PackStatUrlParser.tryParse(row.getStoreUrl());if(parsed==null)return;
   if(row.getPlatform()==null||row.getPlatform().isEmpty())row.setPlatform(parsed.getPlatform());
   if(row.getRegionCode()==null||row.getRegionCode().isEmpty())row.setRegionCode(parsed.getRegion());
+ }
+ private static void category(PackStat row){
+  String value=row.getCustomerCategory();
+  if(value==null||value.isBlank()){row.setCustomerCategory("公司");return;}
+  if(!value.equals("CT")&&!value.equals("公司"))throw new PackageFailure(400,"分类无效");
  }
 }
