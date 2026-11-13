@@ -14,6 +14,7 @@ import org.jeecg.modules.packagemanagement.application.domains.impl.ClientDomain
 import org.jeecg.modules.packagemanagement.application.domains.support.ClientNginxConfig;
 import org.jeecg.modules.packagemanagement.application.domains.support.ClientNginxPublisher;
 import org.jeecg.modules.packagemanagement.application.domains.support.CloudflareDomains;
+import org.jeecg.modules.packagemanagement.application.domains.support.DomainBatch;
 import org.jeecg.modules.packagemanagement.application.domains.support.NameserverSet;
 import org.jeecg.modules.packagemanagement.application.domains.support.PublicNameservers;
 import org.jeecg.modules.packagemanagement.application.domains.support.RdapExpiration;
@@ -29,6 +30,17 @@ import org.junit.jupiter.api.Test;
 class PackageDomainTest {
     @Test void clientDomainIsAKnownOwnershipTable() {
         assertDoesNotThrow(() -> PackageIdentityRepository.validateType("pkg_client_domain"));
+    }
+
+    @Test void batchTokensSplitOnWhitespaceAndKeepTheFirstDuplicate() {
+        assertEquals(List.of("vtsqzm.com", "ucawkr.com"), DomainBatch.tokens("vtsqzm.com\r\nucawkr.com"));
+        assertEquals(List.of("vtsqzm.com", "ucawkr.com"), DomainBatch.tokens("vtsqzm.com ucawkr.com"));
+        assertEquals(List.of("vtsqzm.com", "ucawkr.com"), DomainBatch.tokens("vtsqzm.com\tucawkr.com"));
+        assertEquals(List.of("Example.com"), DomainBatch.tokens("Example.com example.com"));
+        assertEquals("请填写域名", assertThrows(PackageFailure.class, () -> DomainBatch.tokens(" \n\t")).getMessage());
+        StringBuilder many = new StringBuilder();
+        for (int index = 0; index < 51; index++) many.append("d").append(index).append(".com ");
+        assertEquals("一次最多接入 50 个域名", assertThrows(PackageFailure.class, () -> DomainBatch.tokens(many.toString())).getMessage());
     }
 
     @Test void apexRejectsSubdomainsAndNormalizesTheRegistrableName() {

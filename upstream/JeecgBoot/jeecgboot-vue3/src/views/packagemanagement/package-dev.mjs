@@ -48,6 +48,13 @@ export function displayDuration(row,key,start) {
  const diff=Math.round((date(row.dropDate)-date(row[start]))/86400000);
  return Number.isFinite(diff)?Math.max(0,diff):'';
 }
+export function formatDomainNameservers(rows) {
+ return (Array.isArray(rows)?rows:[]).flatMap((row)=>{
+  const apex=String(row?.apex??'').trim();
+  const names=String(row?.nameservers??'').split(',').map((item)=>item.trim()).filter(Boolean);
+  return apex&&names.length?[[apex,...names].join(' ')]:[];
+ }).join('\n');
+}
 export function packstatPayload(model) {
  if(Number(model.isReplenish)===1 && !String(model.replenishUrl||'').trim()) throw new Error('补包链接不能为空');
  const data=Object.fromEntries(Object.entries(model).map(([k,v])=>[k,v===''||v===undefined?null:v]));

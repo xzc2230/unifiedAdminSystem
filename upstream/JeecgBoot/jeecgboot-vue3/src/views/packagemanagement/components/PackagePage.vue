@@ -12,7 +12,8 @@
     <BasicTable @register="registerTable">
       <template #tableTitle>
         <div v-if="compactList" class="list-actions">
-          <a-button v-if="definition.add !== false" v-auth="permission('add')" type="primary" @click="openEditor()">新增</a-button>
+          <a-button v-if="definition.add !== false" v-auth="permission('add')" type="primary" @click="openEditor()">{{ definition.domain === 'domains' ? '批量新增' : '新增' }}</a-button>
+          <a-button v-if="definition.domain === 'domains'" v-auth="permission('query')" @click="copyVisibleNameservers">复制 NS</a-button>
           <a-button v-if="definition.export !== false" v-auth="permission('export')" :loading="exporting" @click="exportRows">导出</a-button>
           <a-button v-auth="permission('remove')" danger :disabled="!canRemoveSelected" @click="confirmRemove(selected)">批量删除</a-button>
           <a-button v-if="definition.domain === 'request-logs'" v-auth="permission('clean')" danger @click="confirmClean">清理日志</a-button>
@@ -72,7 +73,7 @@
       :width="editorShell ? 960 : definition.domain === 'pwa' ? 1000 : 850"
       :wrapClassName="editorShell ? 'app-editor-modal' : undefined"
       :bodyStyle="editorShell ? { maxHeight: 'calc(100dvh - 200px)', overflowY: 'auto', padding: '20px 24px', background: 'var(--app-editor-background, #f5f7fa)' } : undefined"
-      :okText="definition.domain === 'apps' ? '保存应用' : definition.domain === 'domains' ? '保存域名' : definition.domain === 'store' ? '保存' : undefined"
+      :okText="definition.domain === 'apps' ? '保存应用' : definition.domain === 'domains' ? (domainBatch.length ? '完成' : '开始接入') : definition.domain === 'store' ? '保存' : undefined"
       :cancelText="editorShell ? '取消' : undefined"
       :confirmLoading="saving" :maskClosable="false" destroyOnClose @ok="save">
       <a-alert v-if="definition.domain === 'notifications' && editId == null" type="info" message="保存后将向所选应用发送通知；发送结果以服务器实际响应为准。" showIcon class="notice" />
@@ -94,12 +95,24 @@
         <div v-else-if="definition.domain === 'domains'" class="record-editor">
           <section class="editor-section" aria-labelledby="domain-basic-heading">
             <header class="section-heading">
-              <div><h3 id="domain-basic-heading">域名信息</h3><p>填写要接入的注册一级域名</p></div>
+              <div><h3 id="domain-basic-heading">域名信息</h3><p>一次接入多个注册一级域名</p></div>
               <span class="section-caption">带 * 的为必填项</span>
             </header>
-            <a-form-item label="域名" name="apex" :rules="[{required:true,message:'请填写域名'}]" extra="只填写注册一级域名，例如 example.com。不要带 www、协议或子域名。">
-              <a-input :value="model.apex" placeholder="example.com" allowClear @update:value="setField(fieldsByKey.apex, $event)" />
+            <a-form-item label="域名" name="apexText" :rules="domainBatch.length ? [] : [{required:true,whitespace:true,message:'请填写域名'}]" extra="可用空格、回车或从 Excel 粘贴多行。只填写注册一级域名，不要带 www、协议或子域名。一次最多 50 个。">
+              <a-textarea :value="model.apexText" :rows="8" :disabled="domainBatch.length > 0" placeholder="每行一个域名，也可用空格分隔" @update:value="model.apexText = $event" />
             </a-form-item>
+          </section>
+          <section v-if="domainBatch.length" class="editor-section domain-batch-result" aria-labelledby="domain-batch-heading">
+            <header class="section-heading">
+              <div><h3 id="domain-batch-heading">接入结果</h3><p>把下面的 NS 填到域名注册商</p></div>
+              <a-button size="small" @click="copyBatchNameservers">复制全部 NS</a-button>
+            </header>
+            <ul class="domain-batch-list">
+              <li v-for="(item, index) in domainBatch" :key="`${item.apex}-${index}`">
+                <span>{{ item.nameservers ? formatDomainNameservers([item]) : item.apex }}</span>
+                <span v-if="item.error" class="domain-batch-error">{{ item.error }}</span>
+              </li>
+            </ul>
           </section>
         </div>
         <a-row v-else :gutter="20">
@@ -127,7 +140,7 @@ import { computed, defineAsyncComponent, onMounted, reactive, ref } from 'vue';
 import { useCachedPageRefresh } from '/@/hooks/web/useCachedPageRefresh';
 import { usePermissionStore } from '/@/store/modules/permission';
 import { autoBlacklist,removeAutoBlacklist } from '/@/api/packagemanagement/dev';
-import { APP_STATUS_OPTIONS,EDIT_FIELDS,canAppField,appEditPayload,appFieldRequired,prettyJson } from '../package-dev.mjs';
+import { APP_STATUS_OPTIONS,EDIT_FIELDS,canAppField,appEditPayload,appFieldRequired,formatDomainNameservers,prettyJson } from '../package-dev.mjs';
 import { message, Modal } from 'ant-design-vue';
 import { copyTextToClipboard } from '/@/hooks/web/useCopyToClipboard';
 import { BasicTable,useTable } from '/@/components/Table';
@@ -135,7 +148,7 @@ import { initDictOptions } from '/@/utils/dict/JDictSelectUtil';
 import { useGlobSetting } from '/@/hooks/setting';
   import { usePermission } from '/@/hooks/web/usePermission';
   import { useUserStore } from '/@/store/modules/user';
-import { packageApi,allPwa,statisticsTotal,cleanLogs } from '/@/api/packagemanagement';
+import { packageApi,allPwa,statisticsTotal,cleanLogs,batchDomains } from '/@/api/packagemanagement';
 import type { PackageDefinition,PackageField as PackageFieldSpec,PackageId,PackageOption } from '/@/types/packagemanagement';
 import { APP_AREA_OPTIONS, countryLabel, countryCode } from '../package-regions.mjs';
 import { fromAreas,toAreas,legacyImageUrl } from '../package-conversions.mjs';
@@ -228,7 +241,8 @@ const todayInShanghai=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shangh
 const storeStatusOptions=[{value:0,label:'待上架'},{value:1,label:'已上架'},{value:2,label:'已下架'},{value:'ios:预购',label:'预购'}];
 const compactList=['apps','store','request-logs','domains'].includes(definition.domain);
 const editorShell=['apps','store','domains'].includes(definition.domain);
-const editorTitle=computed(()=>definition.domain==='apps'?`${editId.value==null?'新增':'修改'}应用`:definition.domain==='domains'?'新增域名':`${editId.value==null?'新增':'编辑'}${definition.title}`);
+const editorTitle=computed(()=>definition.domain==='apps'?`${editId.value==null?'新增':'修改'}应用`:definition.domain==='domains'?'批量新增域名':`${editId.value==null?'新增':'编辑'}${definition.title}`);
+const domainBatch=ref<Array<{apex:string;status?:string;nameservers?:string;error?:string}>>([]);
 function domainStatusColor(value:any){return ({pending:'gold',ready:'green',failed:'red'} as Record<string,string>)[String(value)] || 'default';}
 const compactCol={style:{width:'auto',flex:'0 0 auto'}};
 const schemas=definition.filters.filter(key=>definition.domain!=='request-logs'||!['startReqTime','endReqTime'].includes(key)).filter(key=>definition.domain!=='apps'||canAppField(appPermissions.value,'query',key)).map(key=>{
@@ -245,7 +259,7 @@ if(definition.domain==='request-logs'){
 const appColumnWidths:Record<string,number>={appName:168,platform:88,appleAppId:132,packageCode:220,url:240,status:96,whetherRestrict:96,areas:180,whetherUs:100,blockedProviders:220,mark:180,userName:112,updateDate:168};
 function appStatusColor(value:any){return ({0:'default',1:'green',2:'blue',3:'gold'} as Record<string,string>)[String(value)] || 'default';}
 const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||key!=='applicationCode'&&canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,width:definition.domain==='apps'?appColumnWidths[key] || 140:definition.domain==='domains'&&key==='status'?240:['appName','packageCode','packageName','reqTime','apex'].includes(key)?180:150,ellipsis:!(definition.domain==='domains'&&key==='status')}));
-const [registerTable,{reload,clearSelectedRowKeys}]=useTable({
+const [registerTable,{reload,clearSelectedRowKeys,getDataSource}]=useTable({
   api:async params=>{const {pageNo,pageSize,...filters}=params;const query:Record<string,any>={...params};if(definition.domain==='store'&&Array.isArray(query.status)){const picked=query.status.filter((value:unknown)=>value!=null&&String(value)!=='');delete query.status;if(picked.length)query.statusQuery=picked.join(',');}lastFilters.value=filters;if(definition.domain==='apps'){selected.value=[];selectedRows.value=[];clearSelectedRowKeys();}return freshness.trackRequest(()=>api.list({...query,...(definition.appType!=null?{appType:definition.appType}:{})}));},
   columns,rowKey:idKey,bordered:true,showTableSetting:true,useSearchForm:true,size:definition.domain==='apps'?'small':'middle',
   formConfig:{schemas:schemas as any,labelWidth:compactList?80:100,showAdvancedButton:schemas.length>3,autoSubmitOnEnter:true,...(compactList?{actionColOptions:compactCol,rowProps:{gutter:8}}:{}),...(definition.domain==='request-logs'?{fieldMapToTime:[['reqDate',['startReqTime','endReqTime'],'YYYY-MM-DD 00:00:00']]}:{})},
@@ -262,7 +276,18 @@ function setField(field:PackageFieldSpec,value:any) {
   if(definition.domain==='apps')dirtyAppFields.value.add(field.key);
   if(field.type==='parent') {const app=parentApps.value.find(v=>String(v.id)===String(value));for(const key of ['appName','appIcon','appHost']) model[key]=app?.[key];}
 }
+async function copyNameserverText(rows:Array<Record<string,any>>) {
+  const text=formatDomainNameservers(rows);
+  if(!text){message.warning('没有可复制的 NS');return;}
+  await copyValue(text);
+}
+function copyVisibleNameservers() {
+  const rows=selectedRows.value.length?selectedRows.value:(getDataSource() || []).filter((row:Record<string,any>)=>row.status==='pending');
+  return copyNameserverText(rows);
+}
+function copyBatchNameservers() {return copyNameserverText(domainBatch.value);}
 async function openEditor(record?:Record<string,any>) {
+  domainBatch.value=[];
   // Load form components before opening so the first Save sees registered fields/refs.
   await Promise.all([import('./PackageField.vue'),...(definition.domain==='apps'?[import('./AppEditor.vue')]:[]),...(definition.domain==='pwa'?[import('./PwaEditor.vue')]:[])]);
   const data=record ? await api.detail(record[idKey]) : {};
@@ -282,6 +307,7 @@ async function openEditor(record?:Record<string,any>) {
   editorOpen.value=true;
 }
 async function save() {
+  if(definition.domain==='domains') return saveDomains();
   await editorForm.value.validate();
   saving.value=true;
   try {
@@ -293,6 +319,16 @@ async function save() {
     message.success(definition.domain==='notifications' && editId.value==null?'通知已提交发送':'保存成功');
     editorOpen.value=false;
     await refresh();
+  } catch(error:any) {if(error?.message) message.error(error.message);} finally {saving.value=false;}
+}
+async function saveDomains() {
+  if(domainBatch.value.length){editorOpen.value=false;return;}
+  await editorForm.value.validate();
+  saving.value=true;
+  try {
+    const result=await batchDomains(String(model.apexText || ''));
+    domainBatch.value=Array.isArray(result?.items)?result.items:[];
+    if(domainBatch.value.some(item=>item.nameservers)) await reload();
   } catch(error:any) {if(error?.message) message.error(error.message);} finally {saving.value=false;}
 }
 async function refresh() {selected.value=[];selectedRows.value=[];clearSelectedRowKeys();await reload();if(definition.domain==='statistics') await loadTotal();}
@@ -320,6 +356,7 @@ onMounted(()=>{loadChoices();if(definition.domain==='statistics') loadTotal();})
 </script>
 <style scoped lang="less">
 .package-page{padding:16px}.summary-card{margin-bottom:16px}.totals{margin-top:16px}.notice{margin-bottom:16px}.detail-value{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;max-width:560px}.domain-status{display:flex;flex-direction:column;align-items:flex-start;gap:4px}.domain-ns{color:#66758a;font-size:12px;line-height:18px;white-space:pre-line}
+.domain-batch-result{margin-top:18px}.domain-batch-list{margin:0 0 20px;padding:0;list-style:none}.domain-batch-list li{display:flex;flex-direction:column;gap:2px;padding:8px 0;border-top:1px solid var(--editor-border);font-size:13px;line-height:20px;overflow-wrap:anywhere}.domain-batch-error{color:#cf1322;font-size:12px}
 .package-page.compact{
   .list-actions{display:flex;justify-content:flex-start;gap:8px}
   :deep(.jeecg-basic-table-header__tableTitle){justify-content:flex-start}

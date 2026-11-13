@@ -51,3 +51,4 @@ export const getAppShareAudit = (id: PackageId, params: SharePagination = { page
 export const statisticsTotal = (params: PackageRecord) => defHttp.get({url:`${base}/statistics/getTotal`,params});
 export const allPwa = (params: PackageRecord = {}) => defHttp.get<PackageRecord[]>({url:`${base}/pwa/all`,params});
 export const cleanLogs = (params: PackageRecord) => defHttp.delete({url:`${base}/request-logs/clean`,params},{joinParamsToUrl:true});
+export const batchDomains = (apexes: string) => defHttp.post<{items:Array<{apex:string;status?:string;nameservers?:string;error?:string}>}>({url:`${base}/domains/batch`,data:{apexes}});

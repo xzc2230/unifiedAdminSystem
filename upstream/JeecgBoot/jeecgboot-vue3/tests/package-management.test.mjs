@@ -128,8 +128,10 @@ test('editable business fields agree with backend allowlists and preserve domain
   assert.deepEqual(definitions.domains.columns,['apex','status','createTime','expiresAt']);
   assert.deepEqual(definitions.domains.fields.find((field)=>field.key==='status').options.map((option)=>option.label),['待NS','已就绪','失败']);
   const requestLogPage=fs.readFileSync(path.join(root,'src/views/packagemanagement/components/PackagePage.vue'),'utf8');
-  assert.match(requestLogPage,/新增域名/);
-  assert.match(requestLogPage,/保存域名/);
+  assert.match(requestLogPage,/批量新增域名/);
+  assert.match(requestLogPage,/开始接入/);
+  assert.match(requestLogPage,/复制全部 NS/);
+  assert.match(requestLogPage,/复制 NS/);
   assert.match(requestLogPage,/id="domain-basic-heading">域名信息/);
   assert.match(requestLogPage,/支持模糊查询/);
   assert.match(requestLogPage,/RangePicker/);

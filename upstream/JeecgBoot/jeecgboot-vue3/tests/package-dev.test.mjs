@@ -31,6 +31,13 @@ test('field permissions preserve module fallback and restrict explicitly granted
  assert.equal(dev.canAppField(['package:apps:query','package:apps:queryField:updateDate'],'query','updateTime'),true);
  assert.deepEqual(dev.appEditPayload({url:'secret',status:2,packageCode:'old'},['package:apps:edit','package:apps:editField:status'],true),{status:2});
 });
+test('domain nameserver copy puts each apex and its names on one line', () => {
+ assert.equal(dev.formatDomainNameservers([
+  {apex:'vtsqzm.com', nameservers:'addyson.ns.cloudflare.com,harvey.ns.cloudflare.com'},
+  {apex:'ucawkr.com', nameservers:'addyson.ns.cloudflare.com,harvey.ns.cloudflare.com'},
+  {apex:'broken.com', error:'域名已存在'},
+ ]), 'vtsqzm.com addyson.ns.cloudflare.com harvey.ns.cloudflare.com\nucawkr.com addyson.ns.cloudflare.com harvey.ns.cloudflare.com');
+});
 test('packstat durations and payload retain date and replenish semantics',()=>{
  assert.equal(dev.displayDuration({passDate:'2026-11-01',dropDate:'2026-11-10'},'aliveDays','passDate'),9);
  assert.equal(dev.displayDuration({aliveDays:0},'aliveDays','passDate'),0);

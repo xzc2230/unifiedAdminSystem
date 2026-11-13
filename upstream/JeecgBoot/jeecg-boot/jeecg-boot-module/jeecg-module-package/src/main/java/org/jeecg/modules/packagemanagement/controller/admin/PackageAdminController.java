@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.modules.packagemanagement.application.domains.support.DomainBatch;
 import org.jeecg.modules.packagemanagement.infrastructure.identity.PackageActor;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.web.bind.annotation.*;
@@ -78,6 +79,34 @@ public class PackageAdminController {
     public Result<Object> add(@PathVariable String domain,@RequestBody Map<String,Object> data) {
         PackageActor actor=guard.actor(domain,"add");
         var resource=resource(domain); Object row=resource.add(actor,body(resource,data));mask(row);return Result.ok(row);
+    }
+    @PostMapping("/domains/batch")
+    public Result<Map<String,Object>> addDomains(@RequestBody Map<String,Object> data) {
+        PackageActor actor=guard.actor("domains","add");
+        Object raw=data==null?null:data.get("apexes");
+        List<String> tokens=DomainBatch.tokens(raw==null?"":String.valueOf(raw));
+        var resource=resource("domains");
+        List<Map<String,Object>> items=new ArrayList<>();
+        for(String token:tokens) {
+            try {
+                Object created=resource.add(actor,body(resource,Map.of("apex",token)));
+                var bean=new BeanWrapperImpl(created);
+                Map<String,Object> item=new LinkedHashMap<>();
+                item.put("apex",bean.getPropertyValue("apex"));
+                item.put("status",bean.getPropertyValue("status"));
+                item.put("nameservers",bean.getPropertyValue("nameservers"));
+                Object error=bean.getPropertyValue("errorMessage");
+                if(error!=null&&!String.valueOf(error).isBlank()) item.put("error",String.valueOf(error));
+                items.add(item);
+            } catch(RuntimeException failure) {
+                Map<String,Object> item=new LinkedHashMap<>();
+                item.put("apex",token);
+                String message=failure.getMessage();
+                item.put("error",message==null||message.isBlank()?"接入失败":message);
+                items.add(item);
+            }
+        }
+        return Result.ok(Map.of("items",items));
     }
     @PutMapping("/{domain}/{id:[0-9]+}")
     public Result<Object> edit(@PathVariable String domain,@PathVariable long id,@RequestBody Map<String,Object> data) {
