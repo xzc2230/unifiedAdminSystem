@@ -32,15 +32,20 @@ public final class ClickHouseAppLogAdapter implements AppLogPort {
     private static final DateTimeFormatter MILLIS = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS").withZone(SHANGHAI);
     private static final String INSERT = "INSERT INTO jeecg_analytics.app_request_log SETTINGS async_insert=1, wait_for_async_insert=1 FORMAT JSONEachRow";
     private static final String COLUMNS = "id, package_name, req_path, req_host, req_ip, req_params, req_headers, req_method, result_msg, error_msg, toString(req_time, 'Asia/Shanghai') AS req_time, is_mobile";
-    /** Qualify req_time. The SELECT alias has the same name and would otherwise replace the column in comparisons. */
-    private static final String FILTER = """
+    /**
+     * SELECT qualifies req_time because {@code toString(req_time) AS req_time} would hide the column.
+     * Lightweight DELETE cannot resolve that qualified name, so it uses the bare column.
+     */
+    private static final String FILTER_PREDICATE = """
             WHERE package_name IN {packages:Array(String)}
               AND ({name:String} = '' OR positionCaseInsensitiveUTF8(package_name, {name:String}) > 0)
               AND ({host:String} = '' OR positionCaseInsensitiveUTF8(req_host, {host:String}) > 0)
               AND ({bounded:UInt8} = 0 OR (
-                    jeecg_analytics.app_request_log.req_time >= parseDateTime64BestEffort({start:String}, 3, 'Asia/Shanghai')
-                AND jeecg_analytics.app_request_log.req_time < parseDateTime64BestEffort({end:String}, 3, 'Asia/Shanghai')))
+                    %s >= parseDateTime64BestEffort({start:String}, 3, 'Asia/Shanghai')
+                AND %s < parseDateTime64BestEffort({end:String}, 3, 'Asia/Shanghai')))
             """;
+    private static final String FILTER = predicate("jeecg_analytics.app_request_log.req_time");
+    private static final String DELETE_FILTER = predicate("req_time");
     private static final int MAX_RESPONSE = 16 * 1024 * 1024;
 
     private final boolean enabled;
@@ -139,7 +144,7 @@ public final class ClickHouseAppLogAdapter implements AppLogPort {
         if (allowedPackages == null || allowedPackages.isEmpty()) return 0;
         long matched = count(filter, allowedPackages);
         if (matched == 0) return 0;
-        String sql = "DELETE FROM jeecg_analytics.app_request_log " + FILTER;
+        String sql = "DELETE FROM jeecg_analytics.app_request_log " + DELETE_FILTER;
         request(parameters(filter, allowedPackages, null, null), sql, writerAuth);
         return matched;
     }
@@ -266,6 +271,10 @@ public final class ClickHouseAppLogAdapter implements AppLogPort {
     }
 
     private static String text(String value) { return value == null ? "" : value; }
+
+    private static String predicate(String timeColumn) {
+        return FILTER_PREDICATE.formatted(timeColumn, timeColumn);
+    }
 
     private static void checkId(String id) {
         if (id == null || id.length() < 8 || id.length() > 64) throw new PackageFailure(400, "无效日志编号");

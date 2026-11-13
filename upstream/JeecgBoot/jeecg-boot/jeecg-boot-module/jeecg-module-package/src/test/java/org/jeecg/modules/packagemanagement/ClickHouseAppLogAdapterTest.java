@@ -130,6 +130,8 @@ class ClickHouseAppLogAdapterTest {
             assertEquals(2, adapter.clean(filter, List.of("com.test")));
             assertTrue(calls.get(0).body.contains("count()"));
             assertTrue(calls.get(1).body.startsWith("DELETE FROM jeecg_analytics.app_request_log"));
+            assertTrue(calls.get(1).body.contains("req_time >= parseDateTime64BestEffort({start:String}"));
+            assertFalse(calls.get(1).body.contains("jeecg_analytics.app_request_log.req_time"));
             assertEquals(basic("writer", "writer-secret"), calls.get(1).auth);
             assertEquals(1, adapter.export(filter, List.of("com.test")).size());
         } finally { server.stop(0); }
