@@ -224,6 +224,9 @@ test('app editor leaves ios apple id optional and defaults the store region', ()
   assert.match(source, /key === 'url' \|\| key === 'mark' \? 'span-all' : 'span-third'/);
   assert.match(source, /v-show="riskAdvancedOpen"/);
   assert.match(source, /高级配置/);
+  assert.match(source, /const referrerOpen = ref\(false\)/);
+  assert.match(source, /v-show="referrerOpen"/);
+  assert.match(source, /class="format-label format-toggle"/);
   assert.doesNotMatch(source, /class="full-width"\s+extra="商店查询会自动拼接/);
 });
 test('actual package bodyCell slot preserves Ant Table custom checkbox and index renderers',async()=>{

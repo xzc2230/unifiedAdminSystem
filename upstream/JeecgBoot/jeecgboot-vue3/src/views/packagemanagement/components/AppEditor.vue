@@ -207,10 +207,12 @@
 
     <section v-if="referrerField" class="editor-section" aria-labelledby="app-referrer-heading">
       <header class="section-heading"
-        ><div><h3 id="app-referrer-heading">来源黑名单</h3><p>配置 InstallReferrer 黑名单模板</p></div
-        ><span class="format-label">JSON</span></header
+        ><div><h3 id="app-referrer-heading">来源黑名单</h3><p>{{ referrerOpen ? '配置 InstallReferrer 黑名单模板' : 'JSON 模板默认收起' }}</p></div
+        ><button type="button" class="format-label format-toggle" :aria-expanded="referrerOpen" aria-controls="app-referrer-json" @click="referrerOpen = !referrerOpen">JSON</button></header
       >
       <a-form-item
+        v-show="referrerOpen"
+        id="app-referrer-json"
         name="referrerBlacklistJson"
         :rules="rulesFor(referrerField)"
         class="json-form-item"
@@ -303,6 +305,7 @@
     return customCount || customWindow;
   }
   const riskAdvancedOpen = ref(hasCustomRisk(props.model));
+  const referrerOpen = ref(false);
   const statusField = computed(() => props.fields.find((field) => field.key === 'status'));
   const areasField = computed(() => props.fields.find((field) => field.key === 'areas'));
   const providerField = computed(() => props.fields.find((field) => field.key === 'blockedProviders'));
@@ -565,6 +568,14 @@
     font:
       11px/18px Consolas,
       monospace;
+  }
+  .format-toggle {
+    cursor: pointer;
+    background: transparent;
+  }
+  .format-toggle[aria-expanded='true'] {
+    border-color: #1677ff;
+    color: #1677ff;
   }
   .json-editor {
     padding: 12px 14px;
