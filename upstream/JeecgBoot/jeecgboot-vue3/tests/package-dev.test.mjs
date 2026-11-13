@@ -77,7 +77,7 @@ test('actual dev table slot masks secrets while preserving ordinary Ant custom c
  const {createSSRApp,h,compile}=require('vue');const {renderToString}=require('vue/server-renderer');const {Table,Space,Tooltip}=require('ant-design-vue');
  const source=fs.readFileSync(path.join(root,'src/views/packagemanagement/components/DevRecordPage.vue'),'utf8');
  const slot=source.match(/(<template #bodyCell[\s\S]*?)\s*<\/BasicTable>/)[1];
- const app=createSSRApp({render:compile(`<a-table :columns="columns" :data-source="rows" :pagination="false" row-key="id">${slot}</a-table>`),setup:()=>({columns:[{key:'token',dataIndex:'token'},{key:'index',customRender:()=>h('span',{'data-custom':true},'1')}],rows:[{id:1,token:'abcdefgh12345678'}],maskToken:dev.maskToken,prettyJson:dev.prettyJson,path:'openapi/token'})});
+ const app=createSSRApp({render:compile(`<a-table :columns="columns" :data-source="rows" :pagination="false" row-key="id">${slot}</a-table>`),setup:()=>({columns:[{key:'token',dataIndex:'token'},{key:'index',customRender:()=>h('span',{'data-custom':true},'1')}],rows:[{id:1,token:'abcdefgh12345678'}],maskToken:dev.maskToken,prettyJson:dev.prettyJson,path:'openapi/token',domain:'openapi-token'})});
  app.component('a-table',Table);app.component('a-space',Space);app.component('a-tooltip',Tooltip);app.directive('auth',{});
  const html=await renderToString(app);assert.match(html,/abcd\*{8}5678/);assert.doesNotMatch(html,/abcdefgh12345678/);assert.match(html,/data-custom="true"/);
 });

@@ -244,7 +244,8 @@ test('actual package bodyCell slot preserves Ant Table custom checkbox and index
   const app=createSSRApp({
     render:compile(`<a-table :columns="columns" :data-source="rows" :pagination="false" row-key="id">${slot}</a-table>`),
     setup:()=>({columns:[{key:'customSelection',customRender:()=>h(Checkbox,{checked:true})},{key:'index',customRender:()=>h('span',{'data-index':true},'1')},{key:'appName',dataIndex:'appName'}],
-      rows:[{id:1,appName:'Visible application'}],fieldsByKey:{appName:{key:'appName'}},definition:{domain:'apps'},displayValue:(_key,value)=>value}),
+      rows:[{id:1,appName:'Visible application'}],fieldsByKey:{appName:{key:'appName'}},definition:{domain:'apps'},displayValue:(_key,value)=>value,
+      showHover:(column)=>column.dataIndex==='appName',hoverText:(_column,_record,value)=>value || '',hoverCopy:(_column,_record,value)=>value,copyValue:()=>{}}),
   });
   app.component('a-table',Table);
   app.component('a-space',Space);app.component('a-image',Image);app.component('a-tooltip',Tooltip);app.directive('auth',{});

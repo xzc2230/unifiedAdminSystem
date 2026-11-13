@@ -49,6 +49,19 @@
           <a v-if="definition.domain === 'apps' && canManageRow(record)" v-auth="'package:risk:query'" @click="openAuto(record)">自动拉黑</a>
         </a-space></template>
         <a-image v-else-if="['appIcon','appAdvertising','notifyIcon','headPortraitUrl'].includes(column.dataIndex) && text" :src="fileUrl(String(text).split(',')[0])" :width="40" :height="40" />
+        <a-tooltip v-else-if="showHover(column, record, text)" placement="topLeft" :overlayClassName="column.dataIndex === 'reqParams' ? 'cell-preview-overlay is-wide' : 'cell-preview-overlay'">
+          <template #title><pre class="cell-preview-body">{{ hoverText(column, record, text) }}</pre><a @click="copyValue(hoverCopy(column, record, text))">复制</a></template>
+          <span class="cell-preview-trigger">
+            <a v-if="column.dataIndex === 'storeUrl' && marketLink(record)" :href="marketLink(record).href" target="_blank" rel="noopener noreferrer">{{ marketLink(record).label }}</a>
+            <template v-else-if="column.dataIndex === 'paymentTotal'">{{ money(text) }}</template>
+            <a-tag v-else-if="definition.domain === 'apps' && column.dataIndex === 'platform'" :color="text === 'ios' ? 'blue' : 'green'">{{ displayValue(column.dataIndex, text) || '安卓' }}</a-tag>
+            <a-tag v-else-if="definition.domain === 'apps' && column.dataIndex === 'status'" :color="appStatusColor(text)">{{ displayValue(column.dataIndex, text) || '—' }}</a-tag>
+            <a-tag v-else-if="definition.domain === 'apps' && ['whetherRestrict','whetherUs'].includes(column.dataIndex)" :color="Number(text) === 1 ? 'orange' : 'default'">{{ displayValue(column.dataIndex, text) || '—' }}</a-tag>
+            <span v-else-if="definition.domain === 'apps' && column.dataIndex === 'appleAppId'" class="apple-id">{{ text || '—' }}</span>
+            <template v-else-if="definition.domain === 'store' && column.dataIndex === 'status'">{{ record.productStatus || displayValue(column.dataIndex, text) }}</template>
+            <template v-else>{{ displayValue(column.dataIndex, text) }}</template>
+          </span>
+        </a-tooltip>
         <a v-else-if="column.dataIndex === 'storeUrl' && marketLink(record)" :href="marketLink(record).href" target="_blank" rel="noopener noreferrer">{{ marketLink(record).label }}</a>
         <a v-else-if="column.dataIndex === 'appHost' && definition.domain === 'pwa' && record.appHost && record.appSub" :href="promotionUrl(record)" target="_blank" rel="noopener noreferrer">{{ promotionUrl(record) }}</a>
         <template v-else-if="column.dataIndex === 'paymentTotal'">{{ money(text) }}</template>
@@ -219,6 +232,31 @@ function displayValue(key:string,value:any) {
 }
 function displayDetail(value:any) { return prettyJson(value); }
 function dictRemark(key:string,value:any){return optionsFor(fieldsByKey[key]).find(o=>String(o.value)===String(value))?.remark || '';}
+function showHover(column:any, record:Record<string,any>, text:any) {
+  return ['apps','store','request-logs'].includes(definition.domain) && !!column?.dataIndex && column.key !== 'action' && hoverText(column, record, text) !== '';
+}
+function hoverText(column:any, record:Record<string,any>, text:any) {
+  const key = column?.dataIndex;
+  if (!key) return '';
+  if (definition.domain === 'request-logs' && ['reqParams','reqHeards','resultMsg','errorMsg'].includes(key)) {
+    const pretty = prettyJson(text);
+    return pretty === '—' ? '' : pretty;
+  }
+  if (key === 'storeUrl') return marketLink(record)?.href || '';
+  if (definition.domain === 'store' && key === 'status') {
+    const shown = record.productStatus || displayValue(key, text);
+    return shown == null || shown === '' ? '' : String(shown);
+  }
+  if (definition.domain === 'apps' && key === 'platform') return String(displayValue(key, text) || '安卓');
+  if (definition.domain === 'apps' && ['status','whetherRestrict','whetherUs'].includes(key)) return String(displayValue(key, text) || '—');
+  if (definition.domain === 'apps' && key === 'appleAppId') return text == null || text === '' ? '' : String(text);
+  const shown = displayValue(key, text);
+  return shown == null || shown === '' ? '' : String(shown);
+}
+function hoverCopy(column:any, record:Record<string,any>, text:any) {
+  if (definition.domain === 'request-logs' && text != null && text !== '') return typeof text === 'string' ? text : prettyJson(text);
+  return hoverText(column, record, text);
+}
 async function copyValue(value:any){try{if(!copyTextToClipboard(typeof value==='string'?value:prettyJson(value)))throw new Error('copy');message.success('已复制');}catch{message.error('复制失败，请手动复制');}}
 const backend=useGlobSetting().domainUrl;
 const fileUrl=(value:string)=>legacyImageUrl(value,backend);
@@ -371,6 +409,7 @@ onMounted(()=>{loadChoices();if(definition.domain==='statistics') loadTotal();})
   :deep(.ant-tag){margin-inline-end:0;border-radius:4px;line-height:20px}
   :deep(.ant-table-tbody > tr > td){vertical-align:middle}
 }
+.cell-preview-trigger{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}
 .record-editor{--editor-surface:#fff;--editor-border:#e4e9f0;--editor-text:#243247;--editor-muted:#66758a;color:var(--editor-text)}
 .editor-section{padding:22px 24px 4px;border:1px solid var(--editor-border);border-radius:12px;background:var(--editor-surface)}
 .section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:20px}
@@ -417,4 +456,7 @@ onMounted(()=>{loadChoices();if(definition.domain==='statistics') loadTotal();})
     --editor-text: #e5e7eb;
     --editor-muted: #a1aab8;
   }
+  .cell-preview-overlay .ant-tooltip-inner { max-width: 480px; }
+  .cell-preview-overlay.is-wide .ant-tooltip-inner { max-width: 760px; }
+  .cell-preview-body { max-width: 100%; max-height: 360px; margin: 0 0 8px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
 </style>
