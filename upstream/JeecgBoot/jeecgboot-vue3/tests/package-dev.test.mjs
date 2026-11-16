@@ -81,6 +81,21 @@ test('actual dev table slot masks secrets while preserving ordinary Ant custom c
  app.component('a-table',Table);app.component('a-space',Space);app.component('a-tooltip',Tooltip);app.directive('auth',{});
  const html=await renderToString(app);assert.match(html,/abcd\*{8}5678/);assert.doesNotMatch(html,/abcdefgh12345678/);assert.match(html,/data-custom="true"/);
 });
+test('packstat hover leaves the checkbox and index cells on their custom renderers',async()=>{
+ const {createSSRApp,h,compile}=require('vue');const {renderToString}=require('vue/server-renderer');const {Table,Checkbox,Space,Tooltip}=require('ant-design-vue');
+ const source=fs.readFileSync(path.join(root,'src/views/packagemanagement/components/DevRecordPage.vue'),'utf8');
+ const slot=source.match(/(<template #bodyCell[\s\S]*?)\s*<\/BasicTable>/)[1];
+ const row={id:1,storeUrl:'https://example.com/app',passDate:'2026-10-31',customerUseDate:'2026-10-31'};
+ const app=createSSRApp({render:compile(`<a-table :columns="columns" :data-source="rows" :pagination="false" row-key="id">${slot}</a-table>`),setup:()=>({
+  columns:[{key:'j-custom-selected-column',customRender:()=>h(Checkbox,{checked:true})},{key:'index',customRender:()=>h('span',{'data-index':true},'3')},{key:'storeUrl',dataIndex:'storeUrl'}],
+  rows:[row],domain:'packstat',path:'packstat',displayDuration:dev.displayDuration,copy:()=>{},
+  packCellText:(_column,_record,text)=>text==null||text===''?'':String(text),
+ })});
+ app.component('a-table',Table);app.component('a-space',Space);app.component('a-tooltip',Tooltip);app.component('a-checkbox',Checkbox);app.directive('auth',{});
+ const html=await renderToString(app);
+ assert.match(html,/type="checkbox"/);assert.match(html,/data-index="true"/);assert.match(html,/https:\/\/example.com\/app/);
+ assert.doesNotMatch(html,/\[object Object\]/);
+});
 test('dev menu adds exactly five children and field permissions without role grants',()=>{
  const sql=fs.readFileSync(path.join(root,'../jeecg-boot/jeecg-boot-module/jeecg-module-package/src/main/resources/db/package/011-dev-menu.sql'),'utf8');
  assert.match(sql,/SET NAMES utf8mb4;[\s\S]*START TRANSACTION;/);

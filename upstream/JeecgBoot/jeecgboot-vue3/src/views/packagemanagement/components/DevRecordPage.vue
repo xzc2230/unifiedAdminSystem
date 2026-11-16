@@ -36,7 +36,7 @@
           <a v-if="!readonly" v-auth="permission('remove')" @click="remove([record.id])">删除</a>
           <a v-if="path==='openapi/token'" v-auth="permission('query')" @click="copy(record.token)">复制 Token</a>
         </a-space></template>
-        <a-tooltip v-else-if="domain==='packstat' && packCellText(column, record, text)" placement="topLeft" overlayClassName="cell-preview-overlay">
+        <a-tooltip v-else-if="domain==='packstat' && column.dataIndex && packCellText(column, record, text)" placement="topLeft" overlayClassName="cell-preview-overlay">
           <template #title><pre class="cell-preview-body">{{ packCellText(column, record, text) }}</pre><a @click="copy(packCellText(column, record, text))">复制</a></template>
           <span class="cell-preview-trigger">
             <template v-if="column.dataIndex==='aliveDays'">{{ displayDuration(record,'aliveDays','passDate') }}</template>
@@ -129,6 +129,7 @@ function remove(ids:any[]){Modal.confirm({title:`确认删除 ${ids.length} 条�
 async function showDetail(row:any){detail.value=props.readonly?row:await api.value.detail(row.id);detailOpen.value=true;}
 async function copy(value:any){try{if(!copyTextToClipboard(typeof value==='string'?value:JSON.stringify(value,null,2)))throw new Error('copy');message.success('已复制');}catch{message.error('复制失败，请从详情手动复制');}}
 function packCellText(column:any, record:Record<string,any>, text:any) {
+  if (!column?.dataIndex) return '';
   if (column?.dataIndex === 'aliveDays') return String(displayDuration(record,'aliveDays','passDate') ?? '');
   if (column?.dataIndex === 'useDays') return String(displayDuration(record,'useDays','customerUseDate') ?? '');
   if (column?.dataIndex === 'isReplenish') return Number(text) === 1 ? '是' : '否';
