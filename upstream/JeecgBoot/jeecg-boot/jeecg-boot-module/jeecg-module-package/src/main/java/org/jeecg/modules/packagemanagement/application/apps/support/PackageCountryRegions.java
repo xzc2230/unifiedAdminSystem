@@ -30,12 +30,13 @@ public final class PackageCountryRegions {
         return displayReqIp(reqIp, LABELS);
     }
 
-    /** Map a two-letter code with the supplied dictionary. Missing codes stay unchanged. */
+    /** Map the leading English country name or code with the supplied dictionary. Missing values stay unchanged. */
     public static String displayReqIp(String reqIp, Map<String, String> labels) {
-        if (reqIp == null || reqIp.length() < 4 || reqIp.charAt(0) != '(') return reqIp;
+        if (reqIp == null || reqIp.length() < 3 || reqIp.charAt(0) != '(') return reqIp;
         int end = reqIp.indexOf(')');
-        if (end != 3) return reqIp;
-        String code = reqIp.substring(1, end).toLowerCase(Locale.ROOT);
+        if (end < 1) return reqIp;
+        String code = reqIp.substring(1, end).trim().toLowerCase(Locale.ROOT);
+        if (code.isEmpty()) return reqIp;
         String label = labels == null ? null : labels.get(code);
         if (label == null || label.isBlank()) return reqIp;
         return "(" + label + ")" + reqIp.substring(end + 1);

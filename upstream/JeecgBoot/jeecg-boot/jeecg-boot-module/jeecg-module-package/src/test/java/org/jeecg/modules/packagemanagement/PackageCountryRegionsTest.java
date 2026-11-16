@@ -37,6 +37,7 @@ class PackageCountryRegionsTest {
         assertEquals("(中国)1.1.1.1", PackageCountryRegions.displayReqIp("(中国)1.1.1.1"));
         assertEquals("203.0.113.8", PackageCountryRegions.displayReqIp("203.0.113.8"));
         assertNull(PackageCountryRegions.displayReqIp(null));
+        assertEquals("(厄瓜多尔)181.198.79.6", PackageCountryRegions.displayReqIp("(Ecuador)181.198.79.6", Map.of("ecuador", "厄瓜多尔")));
         assertEquals("(测试国)1.1.1.1", PackageCountryRegions.displayReqIp("(zz)1.1.1.1", Map.of("zz", "测试国")));
         assertEquals("(br)1.1.1.1", PackageCountryRegions.displayReqIp("(br)1.1.1.1", Map.of()));
         assertEquals("(美国)1.1.1.1", PackageCountryRegions.displayReqIp("(US)1.1.1.1", Map.of("us", "美国")));

@@ -81,7 +81,7 @@ class PackageDevFieldAndRiskTest {
   var adapter=mock(org.jeecg.modules.packagemanagement.infrastructure.integration.ElasticsearchAppLogAdapter.class);
   var log=new org.jeecg.modules.packagemanagement.domain.applog.AppLog();log.setReqParams("{\"a\":1}");log.setReqIp("(us)203.0.113.8");
   when(adapter.query(any(),anyInt(),anyInt(),any())).thenReturn(new org.jeecg.modules.packagemanagement.application.port.AppLogPort.Page(List.of(log),1));
-  var areas=Map.of("us","美国","br","巴西","sg","新加坡","zz","自定义地区");
+  var areas=Map.of("us","美国","br","巴西","sg","新加坡","zz","自定义地区","ecuador","厄瓜多尔");
   var service=new org.jeecg.modules.packagemanagement.application.applog.EsAppLogServiceImpl(adapter,()->areas);
   var listed=service.list(new org.jeecg.modules.packagemanagement.domain.applog.AppLog(),1,10,List.of("com.test")).rows().get(0);
   assertTrue(listed.getReqParams().contains("\n"));
@@ -93,5 +93,6 @@ class PackageDevFieldAndRiskTest {
   assertEquals("(新加坡)203.0.113.8",service.export(new org.jeecg.modules.packagemanagement.domain.applog.AppLog(),List.of("com.test")).get(0).getReqIp());
   log.setReqIp("(zz)203.0.113.9");assertEquals("(自定义地区)203.0.113.9",service.export(new org.jeecg.modules.packagemanagement.domain.applog.AppLog(),List.of("com.test")).get(0).getReqIp());
   log.setReqIp("(jp)1.1.1.1");assertEquals("(jp)1.1.1.1",service.export(new org.jeecg.modules.packagemanagement.domain.applog.AppLog(),List.of("com.test")).get(0).getReqIp());
+  log.setReqIp("(Ecuador)181.198.79.6");assertEquals("(厄瓜多尔)181.198.79.6",service.export(new org.jeecg.modules.packagemanagement.domain.applog.AppLog(),List.of("com.test")).get(0).getReqIp());
  }
 }
