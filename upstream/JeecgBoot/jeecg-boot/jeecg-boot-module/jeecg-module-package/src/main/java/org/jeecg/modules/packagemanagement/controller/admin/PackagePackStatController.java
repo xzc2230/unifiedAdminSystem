@@ -1,6 +1,11 @@
 package org.jeecg.modules.packagemanagement.controller.admin;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import jakarta.servlet.http.HttpServletResponse;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.modules.packagemanagement.application.packstat.PackStatCommissionWorkbook;
 import org.jeecg.modules.packagemanagement.application.packstat.PackStatService;
 import org.jeecg.modules.packagemanagement.domain.packstat.*;
 import org.springframework.web.bind.annotation.*;
@@ -21,4 +26,11 @@ public class PackagePackStatController {
  @PostMapping public Result<Integer> add(@RequestBody PackStat row){return Result.ok(service.add(row,guard.actor("packstat","add")));}
  @PutMapping public Result<Integer> edit(@RequestBody PackStat row){return Result.ok(service.edit(row,guard.actor("packstat","edit")));}
  @DeleteMapping("/{ids}") public Result<Integer> delete(@PathVariable Long[] ids){return Result.ok(service.delete(ids,guard.actor("packstat","remove")));}
+ @PostMapping("/export") public void export(@RequestParam String useMonth,@RequestParam String customerCategory,@RequestParam(required=false) String packer,HttpServletResponse response) throws IOException {
+  var report=service.commission(useMonth,customerCategory,packer,guard.actor("packstat","export"));
+  String encoded=URLEncoder.encode(report.fileName(),StandardCharsets.UTF_8).replace("+","%20");
+  response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+  response.setHeader("Content-Disposition","attachment; filename=\"packstat.xlsx\"; filename*=UTF-8''"+encoded);
+  PackStatCommissionWorkbook.write(report,response.getOutputStream());
+ }
 }

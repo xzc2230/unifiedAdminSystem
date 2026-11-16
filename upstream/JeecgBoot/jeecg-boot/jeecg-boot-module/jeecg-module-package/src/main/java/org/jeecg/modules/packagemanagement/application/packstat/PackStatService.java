@@ -38,6 +38,23 @@ public class PackStatService {
   return mapper.deletePackStatByIds(ids);
  }
  public List<String> authors(PackageActor actor){PackStat scope=new PackStat();PackStatAccess.scope(scope,actor);List<String> result=mapper.selectDistinctPackers(scope);return result==null?List.of():result;}
+ public PackStatCommission.Report commission(String useMonth,String category,String packer,PackageActor actor){
+  if(useMonth==null||!useMonth.matches("\\d{4}-\\d{2}"))throw new PackageFailure(400,"请选择月份");
+  YearMonth month;try{month=YearMonth.parse(useMonth);}catch(RuntimeException invalid){throw new PackageFailure(400,"请选择月份");}
+  if(!"公司".equals(category)&&!"CT".equals(category))throw new PackageFailure(400,"分类无效");
+  String person=packer==null?"":packer.trim();
+  PackStat query=new PackStat();PackStatAccess.scope(query,actor);query.setUseMonth(useMonth);query.setCustomerCategory(category);if(!person.isEmpty())query.setPacker(person);
+  List<PackStat> rows=list(query,actor);if(rows==null)rows=List.of();
+  return PackStatCommission.build(category,person,month,LocalDate.now(ZoneId.of("Asia/Shanghai")),rows.stream().map(PackStatService::source).toList());
+ }
+ private static PackStatCommission.Source source(PackStat row){
+  return new PackStatCommission.Source(row.getPlatform(),row.getPacker(),row.getStoreUrl(),row.getCustomer(),Integer.valueOf(1).equals(row.getIsReplenish()),row.getReplenishUrl(),date(row.getCustomerUseDate()),date(row.getDropDate()));
+ }
+ private static LocalDate date(java.util.Date value){
+  if(value==null)return null;
+  if(value instanceof java.sql.Date sql)return sql.toLocalDate();
+  return value.toInstant().atZone(ZoneId.of("Asia/Shanghai")).toLocalDate();
+ }
  public List<PackStatRegion> regions(){return regions.selectEnabledRegions();}
  public Map<String,Object> summary(String packer,String month,PackageActor actor){
   LinkedHashMap<String,Object> result=new LinkedHashMap<>();

@@ -1,16 +1,26 @@
 <template>
   <DevRecordPage ref="page" title="包统计" path="packstat" domain="packstat" :fields="fields" :filters="filters" :defaults="defaults" :refreshChoices="loadChoices" @query="queryChanged" @changed="loadChoicesAndSummary">
     <template #summary><a-card v-if="summaryQuery.packer" title="包存活 / 使用时间分布" size="small" class="summary"><a-alert v-if="summaryError" :message="summaryError" type="error" /><a-table :columns="summaryColumns" :dataSource="summaryRows(summary)" :loading="summaryLoading" :pagination="false" rowKey="metric" size="small" bordered /><p>7～14 天为独立分桶，15 天包含 15 天及以上。</p></a-card></template>
+    <template #actions><a-button v-auth="'package:packstat:export'" @click="exportOpen=true">导出</a-button></template>
   </DevRecordPage>
+  <a-modal v-model:open="exportOpen" title="导出绩效" :width="960" wrapClassName="app-editor-modal" :bodyStyle="{padding:'20px 24px',background:'var(--app-editor-background, #f5f7fa)'}" :confirmLoading="exporting" okText="导出" cancelText="取消" :maskClosable="false" @ok="downloadExport">
+    <a-form layout="vertical">
+      <a-form-item label="月份" required><a-date-picker v-model:value="exportForm.useMonth" picker="month" valueFormat="YYYY-MM" style="width:100%" /></a-form-item>
+      <a-form-item label="分类" required><a-select v-model:value="exportForm.customerCategory" :options="[{value:'公司',label:'公司'},{value:'CT',label:'CT'}]" /></a-form-item>
+      <a-form-item label="出包人"><a-select v-model:value="exportForm.packer" :options="authors.map(a=>({value:a,label:a}))" allowClear showSearch optionFilterProp="label" placeholder="不选则导出该分类下全部出包人" /></a-form-item>
+    </a-form>
+  </a-modal>
 </template>
 <script setup lang="ts">
 defineOptions({ name: "Packagepackstat" });
-import {computed,onMounted,ref} from 'vue';
-import {packstatAuthors,packstatRegions,packstatSummary} from '/@/api/packagemanagement/dev';
+import {computed,onMounted,reactive,ref} from 'vue';
+import {message} from 'ant-design-vue';
+import {exportPackstat,packstatAuthors,packstatRegions,packstatSummary} from '/@/api/packagemanagement/dev';
 import DevRecordPage from '../components/DevRecordPage.vue';
 import {SURVIVE_DAY_KEYS,summaryRows} from '../package-dev.mjs';
 const page=ref(),authors=ref<string[]>([]),regions=ref<any[]>([]),summaryQuery=ref<Record<string,any>>({}),summary=ref<any>({noRecord:true}),summaryLoading=ref(false),summaryError=ref('');
 const day=new Date();const today=`${day.getFullYear()}-${String(day.getMonth()+1).padStart(2,'0')}-${String(day.getDate()).padStart(2,'0')}`;
+const exportOpen=ref(false),exporting=ref(false),exportForm=reactive({useMonth:today.slice(0,7),customerCategory:'公司',packer:undefined as string|undefined});
 const defaults={platform:'android',isReplenish:0,passDate:today,customerUseDate:today,customerCategory:'公司'};
 const fields=computed(()=>[
  {key:'platform',label:'系统',required:true,options:[{value:'android',label:'Android'},{value:'ios',label:'iOS'}]},
@@ -27,5 +37,6 @@ async function queryChanged(query:any){summaryQuery.value={packer:query.packer,p
 async function loadSummary(){const version=++generation;if(!summaryQuery.value.packer){summary.value={noRecord:true};return;}summaryLoading.value=true;summaryError.value='';try{const value=await packstatSummary(summaryQuery.value);if(version===generation)summary.value=value;}catch{if(version===generation){summary.value={noRecord:true};summaryError.value='统计加载失败，请重试';}}finally{if(version===generation)summaryLoading.value=false;}}
 async function loadChoices(){const [a,r]=await Promise.all([packstatAuthors(),packstatRegions()]);authors.value=(a||[]).map(v=>typeof v==='string'?v:v.packer||v.author||v.name).filter(Boolean);regions.value=r||[];}
 async function loadChoicesAndSummary(){await loadChoices();await loadSummary();}
+async function downloadExport(){if(!exportForm.useMonth){message.warning('请选择月份');return;}if(!exportForm.customerCategory){message.warning('请选择分类');return;}exporting.value=true;try{await exportPackstat({useMonth:exportForm.useMonth,customerCategory:exportForm.customerCategory,packer:exportForm.packer||''});exportOpen.value=false;}catch(e:any){message.error(e.message||'导出失败');}finally{exporting.value=false;}}
 onMounted(loadChoicesAndSummary);
 </script><style scoped>.summary{margin-bottom:16px}.summary p{margin:10px 0 0;color:#666}</style>

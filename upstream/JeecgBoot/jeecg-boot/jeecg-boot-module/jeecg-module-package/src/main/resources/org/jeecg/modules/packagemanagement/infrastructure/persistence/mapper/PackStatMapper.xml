@@ -47,6 +47,11 @@
             <if test="packer != null and packer != ''">and packer = #{packer}</if>
             <if test="regionCode != null and regionCode != ''">and region_code = #{regionCode}</if>
             <if test="customer != null and customer != ''">and customer like concat('%', #{customer}, '%')</if>
+            <if test="customerCategory != null and customerCategory != ''">and customer_category = #{customerCategory}</if>
+            <if test="useMonth != null and useMonth != ''">
+                and customer_use_date &gt;= str_to_date(concat(#{useMonth}, '-01'), '%Y-%m-%d')
+                and customer_use_date &lt;= last_day(str_to_date(concat(#{useMonth}, '-01'), '%Y-%m-%d'))
+            </if>
             <if test="passMonth != null and passMonth != ''">
                 and pass_date &gt;= str_to_date(concat(#{passMonth}, '-01'), '%Y-%m-%d')
                 and pass_date &lt;= last_day(str_to_date(concat(#{passMonth}, '-01'), '%Y-%m-%d'))

@@ -5,6 +5,7 @@
       <template #tableTitle>
         <div v-if="editorShell" class="list-actions">
           <a-button v-if="!readonly" v-auth="permission('add')" type="primary" @click="openEditor()">新增</a-button>
+          <slot name="actions" />
           <a-button v-if="!readonly" v-auth="permission('remove')" danger :disabled="!selected.length" @click="remove(selected)">批量删除</a-button>
         </div>
         <template v-else>

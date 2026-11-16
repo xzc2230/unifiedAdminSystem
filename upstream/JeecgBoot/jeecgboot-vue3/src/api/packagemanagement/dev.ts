@@ -11,6 +11,13 @@ export const devApi=(path:string)=>({
 export const packstatAuthors=()=>defHttp.get<any[]>({url:`${base}/packstat/authors`});
 export const packstatRegions=()=>defHttp.get<any[]>({url:`${base}/packstat/regions`});
 export const packstatSummary=(params:PackageRecord)=>defHttp.get<PackageRecord>({url:`${base}/packstat/surviveSummary`,params});
+export const exportPackstat=async(params:PackageRecord)=>{
+ const blob=await defHttp.post<Blob>({url:`${base}/packstat/export`,params,responseType:'blob'},{isTransformResponse:false,joinParamsToUrl:true});
+ if(blob.type?.includes('json'))throw new Error(await blob.text());
+ const packer=String(params.packer||'').trim();
+ const name=packer?`包统计绩效-${params.customerCategory}-${packer}-${params.useMonth}.xlsx`:`包统计绩效-${params.customerCategory}-${params.useMonth}.xlsx`;
+ const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
 export const lookupAsn=(asn:string)=>defHttp.get<PackageRecord>({url:`${base}/risk/asn/lookup/${encodeURIComponent(asn)}`});
 export const autoBlacklist=(pkg:string,type?:string)=>defHttp.get<any[]>({url:`${base}/risk/auto/list`,params:{pkg,type}});
 export const removeAutoBlacklist=(pkg:string,type:string,value:string)=>defHttp.delete({url:`${base}/risk/auto`,params:{pkg,type,value}},{joinParamsToUrl:true});

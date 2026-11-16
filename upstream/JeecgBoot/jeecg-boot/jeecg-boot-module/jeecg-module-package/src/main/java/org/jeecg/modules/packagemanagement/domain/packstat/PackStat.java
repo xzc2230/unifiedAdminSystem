@@ -45,6 +45,9 @@ public class PackStat extends PackageEntity
     /** Query only: yyyy-MM filter on pass_date. */
     private String passMonth;
 
+    /** Query only: yyyy-MM filter on customer_use_date. */
+    private String useMonth;
+
     public Long getId()
     {
         return id;
@@ -213,5 +216,15 @@ public class PackStat extends PackageEntity
     public void setPassMonth(String passMonth)
     {
         this.passMonth = passMonth;
+    }
+
+    public String getUseMonth()
+    {
+        return useMonth;
+    }
+
+    public void setUseMonth(String useMonth)
+    {
+        this.useMonth = useMonth;
     }
 }
