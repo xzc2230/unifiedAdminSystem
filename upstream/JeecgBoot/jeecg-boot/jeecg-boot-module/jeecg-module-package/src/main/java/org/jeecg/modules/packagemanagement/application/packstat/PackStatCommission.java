@@ -17,8 +17,6 @@ public final class PackStatCommission {
     public static final int[] IOS = {400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000};
     public static final int[] PICKUP = {50, 50, 50, 50, 50, 50, 50, 50, 100};
     public static final int[] DESIGN = {25, 25, 25, 25, 25, 25, 25, 25, 50};
-    /** The reference workbook gives every payable Android package to this pickup role. */
-    public static final String PICKUP_NAME = "章新坤";
 
     private PackStatCommission() {}
 
@@ -60,7 +58,7 @@ public final class PackStatCommission {
                 Map<String, int[]> target = "ios".equals(platform) ? ios : "android".equals(platform) ? android : null;
                 if (target != null) target.computeIfAbsent(name, key -> new int[DAYS.length])[day - 7]++;
                 if ("android".equals(platform)) {
-                    pickup.computeIfAbsent(PICKUP_NAME, key -> new int[DAYS.length])[day - 7]++;
+                    pickup.computeIfAbsent(name, key -> new int[DAYS.length])[day - 7]++;
                     String artist = row.designer() == null ? "" : row.designer().trim();
                     if (!artist.isEmpty()) design.computeIfAbsent(artist, key -> new int[DAYS.length])[day - 7]++;
                 }

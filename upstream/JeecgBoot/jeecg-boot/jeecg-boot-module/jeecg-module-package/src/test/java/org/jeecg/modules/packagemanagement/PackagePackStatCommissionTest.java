@@ -49,10 +49,13 @@ class PackagePackStatCommissionTest {
         assertEquals(1, wu.counts()[8]);
         assertEquals(1200, wu.amount());
         assertEquals(2000, report.ios().get(0).amount());
-        assertEquals("章新坤", report.pickup().get(0).packer());
-        assertEquals(1, report.pickup().get(0).counts()[1]);
-        assertEquals(1, report.pickup().get(0).counts()[8]);
-        assertEquals(150, report.pickup().get(0).amount());
+        PackStatCommission.Person pickupHuang = report.pickup().stream().filter(person -> "黄汉锦".equals(person.packer())).findFirst().orElseThrow();
+        PackStatCommission.Person pickupWu = report.pickup().stream().filter(person -> "吴泽浩".equals(person.packer())).findFirst().orElseThrow();
+        assertEquals(2, report.pickup().size());
+        assertEquals(1, pickupHuang.counts()[1]);
+        assertEquals(50, pickupHuang.amount());
+        assertEquals(1, pickupWu.counts()[8]);
+        assertEquals(100, pickupWu.amount());
         PackStatCommission.Person li = report.design().stream().filter(person -> "李井".equals(person.packer())).findFirst().orElseThrow();
         PackStatCommission.Person shi = report.design().stream().filter(person -> "施美辉".equals(person.packer())).findFirst().orElseThrow();
         assertEquals(25, li.amount());
@@ -77,7 +80,8 @@ class PackagePackStatCommissionTest {
             assertEquals(1, sheet.getRow(9).getCell(1).getNumericCellValue());
             assertEquals(300, sheet.getRow(9).getCell(10).getNumericCellValue());
             assertEquals("提包数量合计", labelCell(sheet, "提包数量合计"));
-            assertEquals(50, amountFor(sheet, "章新坤"));
+            assertEquals("出包人", sectionName(sheet, "提包数量"));
+            assertEquals(50, sectionAmount(sheet, "提包数量", "黄汉锦"));
             assertEquals("美工/A面数量合计", labelCell(sheet, "美工/A面数量合计"));
             assertEquals(25, amountFor(sheet, "李井"));
             assertEquals(375, amountFor(sheet, "总合计"));
@@ -96,6 +100,35 @@ class PackagePackStatCommissionTest {
             if (cell != null && label.equals(cell.getStringCellValue())) return cell.getStringCellValue();
         }
         return "";
+    }
+
+    private static String text(org.apache.poi.ss.usermodel.Cell cell) {
+        return cell != null && cell.getCellType() == org.apache.poi.ss.usermodel.CellType.STRING ? cell.getStringCellValue() : "";
+    }
+
+    private static String sectionName(org.apache.poi.ss.usermodel.Sheet sheet, String heading) {
+        for (int i = 0; i <= sheet.getLastRowNum(); i++) {
+            var row = sheet.getRow(i);
+            if (row != null && heading.equals(text(row.getCell(1)))) return text(row.getCell(0));
+        }
+        return "";
+    }
+
+    private static double sectionAmount(org.apache.poi.ss.usermodel.Sheet sheet, String heading, String name) {
+        boolean inside = false;
+        for (int i = 0; i <= sheet.getLastRowNum(); i++) {
+            var row = sheet.getRow(i);
+            if (row == null) continue;
+            String headingText = text(row.getCell(1));
+            if (!inside && heading.equals(headingText)) {
+                inside = true;
+                continue;
+            }
+            if (!inside) continue;
+            if (name.equals(text(row.getCell(0)))) return row.getCell(10).getNumericCellValue();
+            if (!headingText.isBlank()) break;
+        }
+        return -1;
     }
 
     private static double amountFor(org.apache.poi.ss.usermodel.Sheet sheet, String label) {
@@ -120,6 +153,7 @@ class PackagePackStatCommissionTest {
         when(mapper.selectPackStatList(any())).thenReturn(List.of(stored));
         PackStatCommission.Report report = service.commission("2026-11", "公司", " 黄汉锦 ", actor);
         assertEquals(300, report.android().get(0).amount());
+        assertEquals("黄汉锦", report.pickup().get(0).packer());
         assertEquals(50, report.pickup().get(0).amount());
         assertEquals(25, report.design().get(0).amount());
         var captor = org.mockito.ArgumentCaptor.forClass(PackStat.class);

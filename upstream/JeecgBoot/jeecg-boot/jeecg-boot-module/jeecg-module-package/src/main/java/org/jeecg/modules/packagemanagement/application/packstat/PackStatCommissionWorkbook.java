@@ -30,7 +30,7 @@ public final class PackStatCommissionWorkbook {
             rate(sheet.createRow(6), "美工/A面", PackStatCommission.DESIGN);
             int row = section(sheet, 8, "出包人", "Android出包数量", "数量合计", report.android(), PackStatCommission.ANDROID);
             row = section(sheet, row + 1, "出包人", "iOS出包数量", "数量合计", report.ios(), PackStatCommission.IOS);
-            row = section(sheet, row + 1, "姓名", "提包数量", "提包数量合计", report.pickup(), PackStatCommission.PICKUP);
+            row = section(sheet, row + 1, "出包人", "提包数量", "提包数量合计", report.pickup(), PackStatCommission.PICKUP);
             row = section(sheet, row + 1, "姓名", "美工/A面", "美工/A面数量合计", report.design(), PackStatCommission.DESIGN);
             Row total = sheet.createRow(row + 1);
             text(total, 0, "总合计");
