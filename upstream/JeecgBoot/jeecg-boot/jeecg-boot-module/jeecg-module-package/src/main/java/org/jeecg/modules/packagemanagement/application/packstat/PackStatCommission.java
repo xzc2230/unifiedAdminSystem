@@ -17,6 +17,8 @@ public final class PackStatCommission {
     public static final int[] IOS = {400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000};
     public static final int[] PICKUP = {50, 50, 50, 50, 50, 50, 50, 50, 100};
     public static final int[] DESIGN = {25, 25, 25, 25, 25, 25, 25, 25, 50};
+    /** The reference workbook gives every payable Android package to this pickup role. */
+    public static final String PICKUP_NAME = "章新坤";
 
     private PackStatCommission() {}
 
@@ -46,6 +48,8 @@ public final class PackStatCommission {
     public static Report build(String category, String packer, YearMonth month, LocalDate today, List<Source> rows) {
         Map<String, int[]> android = new LinkedHashMap<>();
         Map<String, int[]> ios = new LinkedHashMap<>();
+        Map<String, int[]> pickup = new LinkedHashMap<>();
+        Map<String, int[]> design = new LinkedHashMap<>();
         List<Detail> details = new ArrayList<>();
         for (Source row : rows == null ? List.<Source>of() : rows) {
             int days = survivalDays(row.useDate(), row.dropDate(), today);
@@ -55,6 +59,11 @@ public final class PackStatCommission {
             if (day != null && !name.isEmpty()) {
                 Map<String, int[]> target = "ios".equals(platform) ? ios : "android".equals(platform) ? android : null;
                 if (target != null) target.computeIfAbsent(name, key -> new int[DAYS.length])[day - 7]++;
+                if ("android".equals(platform)) {
+                    pickup.computeIfAbsent(PICKUP_NAME, key -> new int[DAYS.length])[day - 7]++;
+                    String artist = row.designer() == null ? "" : row.designer().trim();
+                    if (!artist.isEmpty()) design.computeIfAbsent(artist, key -> new int[DAYS.length])[day - 7]++;
+                }
             }
             details.add(new Detail(row.storeUrl(), row.customer(), row.replenish(), row.replenishUrl(), name,
                     row.useDate(), row.dropDate(), days < 0 ? null : days, category, platform));
@@ -63,7 +72,7 @@ public final class PackStatCommission {
                 .thenComparing(Detail::packer, Comparator.nullsLast(String::compareTo)));
         String person = packer == null ? "" : packer.trim();
         return new Report(title(category, person, month), fileName(category, person, month), category, person, month,
-                people(android, ANDROID), people(ios, IOS), details);
+                people(android, ANDROID), people(ios, IOS), people(pickup, PICKUP), people(design, DESIGN), details);
     }
 
     private static String title(String category, String packer, YearMonth month) {
@@ -86,7 +95,7 @@ public final class PackStatCommission {
     }
 
     public record Source(String platform, String packer, String storeUrl, String customer, boolean replenish,
-            String replenishUrl, LocalDate useDate, LocalDate dropDate) {}
+            String replenishUrl, LocalDate useDate, LocalDate dropDate, String designer) {}
 
     public record Person(String packer, int[] counts, int amount) {}
 
@@ -94,5 +103,5 @@ public final class PackStatCommission {
             LocalDate useDate, LocalDate dropDate, Integer days, String category, String platform) {}
 
     public record Report(String title, String fileName, String category, String packer, YearMonth month,
-            List<Person> android, List<Person> ios, List<Detail> details) {}
+            List<Person> android, List<Person> ios, List<Person> pickup, List<Person> design, List<Detail> details) {}
 }

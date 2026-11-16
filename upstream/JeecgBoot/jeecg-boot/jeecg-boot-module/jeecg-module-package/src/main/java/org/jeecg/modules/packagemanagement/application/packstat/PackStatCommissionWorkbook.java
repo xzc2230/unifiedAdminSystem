@@ -8,14 +8,14 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-/** Writes the fixed commission sheet: rates, Android and iOS packers, then the package detail. */
+/** Writes the fixed commission sheet: rates, packer, pickup and design counts, then the package detail. */
 public final class PackStatCommissionWorkbook {
     private PackStatCommissionWorkbook() {}
 
     public static void write(PackStatCommission.Report report, OutputStream out) throws IOException {
         try (XSSFWorkbook book = new XSSFWorkbook()) {
             Sheet sheet = book.createSheet("绩效提成");
-            sheet.setColumnWidth(0, 22 * 256);
+            sheet.setColumnWidth(0, 24 * 256);
             for (int i = 1; i <= 9; i++) sheet.setColumnWidth(i, 10 * 256);
             sheet.setColumnWidth(10, 14 * 256);
             Row title = sheet.createRow(0);
@@ -28,11 +28,13 @@ public final class PackStatCommissionWorkbook {
             rate(sheet.createRow(4), "ios绩效", PackStatCommission.IOS);
             rate(sheet.createRow(5), "提包绩效", PackStatCommission.PICKUP);
             rate(sheet.createRow(6), "美工/A面", PackStatCommission.DESIGN);
-            int row = section(sheet, 8, "Android出包数量", report.android(), PackStatCommission.ANDROID);
-            row = section(sheet, row + 1, "iOS出包数量", report.ios(), PackStatCommission.IOS);
+            int row = section(sheet, 8, "出包人", "Android出包数量", "数量合计", report.android(), PackStatCommission.ANDROID);
+            row = section(sheet, row + 1, "出包人", "iOS出包数量", "数量合计", report.ios(), PackStatCommission.IOS);
+            row = section(sheet, row + 1, "姓名", "提包数量", "提包数量合计", report.pickup(), PackStatCommission.PICKUP);
+            row = section(sheet, row + 1, "姓名", "美工/A面", "美工/A面数量合计", report.design(), PackStatCommission.DESIGN);
             Row total = sheet.createRow(row + 1);
             text(total, 0, "总合计");
-            number(total, 10, sectionAmount(report.android()) + sectionAmount(report.ios()));
+            number(total, 10, sectionAmount(report.android()) + sectionAmount(report.ios()) + sectionAmount(report.pickup()) + sectionAmount(report.design()));
             detail(sheet, row + 3, report.details());
             book.write(out);
         }
@@ -43,9 +45,9 @@ public final class PackStatCommissionWorkbook {
         for (int i = 0; i < rates.length; i++) number(row, i + 1, rates[i]);
     }
 
-    private static int section(Sheet sheet, int start, String heading, List<PackStatCommission.Person> people, int[] rates) {
+    private static int section(Sheet sheet, int start, String nameTitle, String heading, String countTitle, List<PackStatCommission.Person> people, int[] rates) {
         Row head = sheet.createRow(start);
-        text(head, 0, "出包人");
+        text(head, 0, nameTitle);
         text(head, 1, heading);
         sheet.addMergedRegion(new CellRangeAddress(start, start, 1, 9));
         text(head, 10, "绩效金额");
@@ -63,7 +65,7 @@ public final class PackStatCommissionWorkbook {
             number(line, 10, person.amount());
         }
         Row countRow = sheet.createRow(row++);
-        text(countRow, 0, "数量合计");
+        text(countRow, 0, countTitle);
         for (int i = 0; i < counts.length; i++) number(countRow, i + 1, counts[i]);
         text(countRow, 10, "本月合计");
         Row moneyRow = sheet.createRow(row++);

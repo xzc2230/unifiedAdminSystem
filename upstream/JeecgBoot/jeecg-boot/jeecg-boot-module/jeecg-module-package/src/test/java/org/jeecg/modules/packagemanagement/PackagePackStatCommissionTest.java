@@ -21,7 +21,11 @@ import static org.mockito.Mockito.*;
 
 class PackagePackStatCommissionTest {
     private static PackStatCommission.Source row(String platform, String packer, LocalDate use, LocalDate drop) {
-        return new PackStatCommission.Source(platform, packer, "https://example.com/" + packer, "客户", false, null, use, drop);
+        return row(platform, packer, use, drop, null);
+    }
+
+    private static PackStatCommission.Source row(String platform, String packer, LocalDate use, LocalDate drop, String designer) {
+        return new PackStatCommission.Source(platform, packer, "https://example.com/" + packer, "客户", false, null, use, drop, designer);
     }
 
     @Test void survivalDayUsesCustomerUseDateAndPutsFifteenOrMoreIntoDayFifteen() {
@@ -32,10 +36,10 @@ class PackagePackStatCommissionTest {
         assertEquals(15, PackStatCommission.bucket(30));
         assertNull(PackStatCommission.bucket(6));
         PackStatCommission.Report report = PackStatCommission.build("公司", "", YearMonth.of(2026, 11), LocalDate.of(2026, 12, 1), List.of(
-                row("android", "黄汉锦", use, LocalDate.of(2026, 11, 9)),
-                row("android", "黄汉锦", use, LocalDate.of(2026, 11, 6)),
-                row("android", "吴泽浩", use, LocalDate.of(2026, 11, 20)),
-                row("ios", "黄光普", use, null)));
+                row("android", "黄汉锦", use, LocalDate.of(2026, 11, 9), "李井"),
+                row("android", "黄汉锦", use, LocalDate.of(2026, 11, 6), "李井"),
+                row("android", "吴泽浩", use, LocalDate.of(2026, 11, 20), "施美辉"),
+                row("ios", "黄光普", use, null, "施美辉")));
         assertEquals("公司2026年11月绩效提成表", report.title());
         assertEquals("包统计绩效-公司-2026-11.xlsx", report.fileName());
         PackStatCommission.Person huang = report.android().stream().filter(person -> "黄汉锦".equals(person.packer())).findFirst().orElseThrow();
@@ -45,14 +49,22 @@ class PackagePackStatCommissionTest {
         assertEquals(1, wu.counts()[8]);
         assertEquals(1200, wu.amount());
         assertEquals(2000, report.ios().get(0).amount());
+        assertEquals("章新坤", report.pickup().get(0).packer());
+        assertEquals(1, report.pickup().get(0).counts()[1]);
+        assertEquals(1, report.pickup().get(0).counts()[8]);
+        assertEquals(150, report.pickup().get(0).amount());
+        PackStatCommission.Person li = report.design().stream().filter(person -> "李井".equals(person.packer())).findFirst().orElseThrow();
+        PackStatCommission.Person shi = report.design().stream().filter(person -> "施美辉".equals(person.packer())).findFirst().orElseThrow();
+        assertEquals(25, li.amount());
+        assertEquals(50, shi.amount());
         assertTrue(report.details().stream().anyMatch(item -> Integer.valueOf(5).equals(item.days())));
     }
 
     @Test void workbookShowsPackerCountsRatesAndUnpaidDetail() throws Exception {
         LocalDate use = LocalDate.of(2026, 11, 1);
         PackStatCommission.Report report = PackStatCommission.build("CT", "黄汉锦", YearMonth.of(2026, 11), LocalDate.of(2026, 11, 20), List.of(
-                row("android", "黄汉锦", use, LocalDate.of(2026, 11, 8)),
-                row("android", "黄汉锦", use, LocalDate.of(2026, 11, 6))));
+                row("android", "黄汉锦", use, LocalDate.of(2026, 11, 8), "李井"),
+                row("android", "黄汉锦", use, LocalDate.of(2026, 11, 6), "李井")));
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         PackStatCommissionWorkbook.write(report, out);
         try (XSSFWorkbook book = new XSSFWorkbook(new ByteArrayInputStream(out.toByteArray()))) {
@@ -64,6 +76,11 @@ class PackagePackStatCommissionTest {
             assertEquals("黄汉锦", sheet.getRow(9).getCell(0).getStringCellValue());
             assertEquals(1, sheet.getRow(9).getCell(1).getNumericCellValue());
             assertEquals(300, sheet.getRow(9).getCell(10).getNumericCellValue());
+            assertEquals("提包数量合计", labelCell(sheet, "提包数量合计"));
+            assertEquals(50, amountFor(sheet, "章新坤"));
+            assertEquals("美工/A面数量合计", labelCell(sheet, "美工/A面数量合计"));
+            assertEquals(25, amountFor(sheet, "李井"));
+            assertEquals(375, amountFor(sheet, "总合计"));
             boolean unpaid = false;
             for (int i = 0; i <= sheet.getLastRowNum(); i++) {
                 var cell = sheet.getRow(i) == null ? null : sheet.getRow(i).getCell(7);
@@ -73,6 +90,23 @@ class PackagePackStatCommissionTest {
         }
     }
 
+    private static String labelCell(org.apache.poi.ss.usermodel.Sheet sheet, String label) {
+        for (int i = 0; i <= sheet.getLastRowNum(); i++) {
+            var cell = sheet.getRow(i) == null ? null : sheet.getRow(i).getCell(0);
+            if (cell != null && label.equals(cell.getStringCellValue())) return cell.getStringCellValue();
+        }
+        return "";
+    }
+
+    private static double amountFor(org.apache.poi.ss.usermodel.Sheet sheet, String label) {
+        for (int i = 0; i <= sheet.getLastRowNum(); i++) {
+            var row = sheet.getRow(i);
+            var cell = row == null ? null : row.getCell(0);
+            if (cell != null && label.equals(cell.getStringCellValue())) return row.getCell(10).getNumericCellValue();
+        }
+        return -1;
+    }
+
     @Test void exportQueryRequiresCategoryAndMonthAndKeepsTheChosenPacker() {
         PackStatMapper mapper = mock(PackStatMapper.class);
         PackStatService service = new PackStatService(mapper, mock(PackStatRegionMapper.class));
@@ -80,11 +114,14 @@ class PackagePackStatCommissionTest {
         PackStat stored = new PackStat();
         stored.setPlatform("android");
         stored.setPacker("黄汉锦");
+        stored.setDesigner("李井");
         stored.setCustomerUseDate(java.sql.Date.valueOf(LocalDate.of(2026, 11, 1)));
         stored.setDropDate(java.sql.Date.valueOf(LocalDate.of(2026, 11, 8)));
         when(mapper.selectPackStatList(any())).thenReturn(List.of(stored));
         PackStatCommission.Report report = service.commission("2026-11", "公司", " 黄汉锦 ", actor);
         assertEquals(300, report.android().get(0).amount());
+        assertEquals(50, report.pickup().get(0).amount());
+        assertEquals(25, report.design().get(0).amount());
         var captor = org.mockito.ArgumentCaptor.forClass(PackStat.class);
         verify(mapper).selectPackStatList(captor.capture());
         assertEquals("2026-11", captor.getValue().getUseMonth());

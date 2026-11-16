@@ -48,7 +48,7 @@ public class PackStatService {
   return PackStatCommission.build(category,person,month,LocalDate.now(ZoneId.of("Asia/Shanghai")),rows.stream().map(PackStatService::source).toList());
  }
  private static PackStatCommission.Source source(PackStat row){
-  return new PackStatCommission.Source(row.getPlatform(),row.getPacker(),row.getStoreUrl(),row.getCustomer(),Integer.valueOf(1).equals(row.getIsReplenish()),row.getReplenishUrl(),date(row.getCustomerUseDate()),date(row.getDropDate()));
+  return new PackStatCommission.Source(row.getPlatform(),row.getPacker(),row.getStoreUrl(),row.getCustomer(),Integer.valueOf(1).equals(row.getIsReplenish()),row.getReplenishUrl(),date(row.getCustomerUseDate()),date(row.getDropDate()),row.getDesigner());
  }
  private static LocalDate date(java.util.Date value){
   if(value==null)return null;
