@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.time.Clock;
 import org.jeecg.modules.packagemanagement.application.apps.IAppManagerService;
+import org.jeecg.modules.packagemanagement.application.apps.support.PackageCountryRegions;
 import org.jeecg.modules.packagemanagement.application.port.GeoPort;
 import org.jeecg.modules.packagemanagement.application.port.AppLogPort;
 import org.jeecg.modules.packagemanagement.application.legacy.AESUtils;
@@ -49,7 +50,7 @@ public class App2ClientService {
 
         String ipAddress = geo.getIpAddress(request);
         Map<String, String> cityNameByIp = geo.getFourPathCountryAndCountryCodeByIP(ipAddress);
-        appLog.setReqIp("(" + cityNameByIp.get("country") + ")" + ipAddress);
+        appLog.setReqIp("(" + PackageCountryRegions.accessCode(cityNameByIp) + ")" + ipAddress);
 
         AppManager app = appRepository.selectAppManagerByPackageName(packageName);
         if (app == null) {

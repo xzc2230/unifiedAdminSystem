@@ -1472,7 +1472,7 @@ public class ClientServiceImpl implements ClientService {
         appLog.setPackageName(packageName);
         String ipAddress = geo.getIpAddress(request);
         Map<String, String> cityNameByIp = geo.getCountryAndCountryCodeByIP(ipAddress);
-        appLog.setReqIp("(" + cityNameByIp.get("country") + ")" + ipAddress);
+        appLog.setReqIp("(" + PackageCountryRegions.accessCode(cityNameByIp) + ")" + ipAddress);
         AppManager app = appRepository.selectAppManagerByPackageName(packageName);
         if (app == null || app.getStatus() == 0) {
             try {
@@ -1586,7 +1586,7 @@ public class ClientServiceImpl implements ClientService {
         appLog.setPackageName(packageName);
         String ipAddress = geo.getIpAddress(request);
         Map<String, String> cityNameByIp = geo.getCountryAndCountryCodeByIP(ipAddress);
-        appLog.setReqIp("(" + cityNameByIp.get("country") + ")" + ipAddress);
+        appLog.setReqIp("(" + PackageCountryRegions.accessCode(cityNameByIp) + ")" + ipAddress);
         AppManager app = appRepository.selectAppManagerByPackageName(packageName);
         if (app == null || app.getStatus() == 0) {
             try {

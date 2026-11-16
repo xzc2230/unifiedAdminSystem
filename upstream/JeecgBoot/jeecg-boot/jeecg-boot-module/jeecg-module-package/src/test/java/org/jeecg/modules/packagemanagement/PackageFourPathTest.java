@@ -114,6 +114,7 @@ class PackageFourPathTest {
         assertEquals("cn",JSONObject.parseObject(plain.getString("data")).getString("cityCode"));
         var saved=org.mockito.ArgumentCaptor.forClass(AppLog.class); verify(logs).save(saved.capture());
         assertEquals("/a/b/c/d",saved.getValue().getReqPath());
+        assertEquals("(cn)192.0.2.1",saved.getValue().getReqIp());
         assertNotNull(JSONObject.parseObject(saved.getValue().getReqParams()).getJSONObject("p"));
         assertEquals(1700000000000L,saved.getValue().getReqTime().getTime());
     }
