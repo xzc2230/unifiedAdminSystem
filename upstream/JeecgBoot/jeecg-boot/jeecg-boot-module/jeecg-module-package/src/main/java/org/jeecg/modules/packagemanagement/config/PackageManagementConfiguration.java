@@ -14,7 +14,12 @@ public class PackageManagementConfiguration {
  @Bean public HttpPort packageHttpPort(){return new JdkHttpAdapter();}
  @Bean public GeoPort packageGeoPort(HttpPort http,PackageManagementProperties settings){return new GeoHttpAdapter(http,settings);}
  @Bean public ClickHouseAppLogAdapter packageAppLogPort(RequestLogClickHouseProperties clickHouse){return new ClickHouseAppLogAdapter(clickHouse);}
- @Bean public org.jeecg.modules.packagemanagement.application.applog.EsAppLogServiceImpl packageAppLogService(ClickHouseAppLogAdapter adapter){return new org.jeecg.modules.packagemanagement.application.applog.EsAppLogServiceImpl(adapter);}
+ @Bean public org.jeecg.modules.packagemanagement.application.applog.EsAppLogServiceImpl packageAppLogService(ClickHouseAppLogAdapter adapter,org.jeecg.common.api.CommonAPI dicts){return new org.jeecg.modules.packagemanagement.application.applog.EsAppLogServiceImpl(adapter,()->appAreaLabels(dicts));}
+ private static java.util.Map<String,String> appAreaLabels(org.jeecg.common.api.CommonAPI dicts){
+  var items=dicts.queryEnableDictItemsByCode("app_area");var labels=new java.util.HashMap<String,String>();
+  if(items!=null)for(var item:items){if(item.getValue()==null||item.getText()==null||item.getText().isBlank())continue;String code=item.getValue().trim().toLowerCase(java.util.Locale.ROOT);if(code.matches("[a-z]{2}"))labels.putIfAbsent(code,item.getText().trim());}
+  return labels;
+ }
  @Bean public StoreProbePort packageStoreProbe(HttpPort http){return url->{
   var reply=http.exchange("GET",url,null,java.util.Map.of());
   byte[] bytes=(reply.body()==null?"":reply.body()).getBytes(java.nio.charset.StandardCharsets.UTF_8);

@@ -27,12 +27,17 @@ public final class PackageCountryRegions {
     private PackageCountryRegions() {}
     /** Show a stored `(countryCode)ip` value with the shared Chinese country name. */
     public static String displayReqIp(String reqIp) {
+        return displayReqIp(reqIp, LABELS);
+    }
+
+    /** Map a two-letter code with the supplied dictionary. Missing codes stay unchanged. */
+    public static String displayReqIp(String reqIp, Map<String, String> labels) {
         if (reqIp == null || reqIp.length() < 4 || reqIp.charAt(0) != '(') return reqIp;
         int end = reqIp.indexOf(')');
         if (end != 3) return reqIp;
         String code = reqIp.substring(1, end).toLowerCase(Locale.ROOT);
-        String label = LABELS.get(code);
-        if (label == null) return reqIp;
+        String label = labels == null ? null : labels.get(code);
+        if (label == null || label.isBlank()) return reqIp;
         return "(" + label + ")" + reqIp.substring(end + 1);
     }
     public static String code(String value) {

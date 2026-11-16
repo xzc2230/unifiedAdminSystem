@@ -37,6 +37,9 @@ class PackageCountryRegionsTest {
         assertEquals("(中国)1.1.1.1", PackageCountryRegions.displayReqIp("(中国)1.1.1.1"));
         assertEquals("203.0.113.8", PackageCountryRegions.displayReqIp("203.0.113.8"));
         assertNull(PackageCountryRegions.displayReqIp(null));
+        assertEquals("(测试国)1.1.1.1", PackageCountryRegions.displayReqIp("(zz)1.1.1.1", Map.of("zz", "测试国")));
+        assertEquals("(br)1.1.1.1", PackageCountryRegions.displayReqIp("(br)1.1.1.1", Map.of()));
+        assertEquals("(美国)1.1.1.1", PackageCountryRegions.displayReqIp("(US)1.1.1.1", Map.of("us", "美国")));
     }
     @Test void countryCodeLinkWinsOverLegacyAliasesAndUnmatchedLinkUsesDefault() {
         JSONObject links = JSONObject.of("巴西", "old", "br", "new", "PH", "philippines");
