@@ -328,7 +328,6 @@
     appName: '输入应用名称',
     author: '输入出包人（选填）',
     applicationCode: '保存时生成 6 位唯一编码',
-    userName: '当前登录用户',
     packageCode: '例如 com.example.app',
     url: 'https://example.com',
   };
