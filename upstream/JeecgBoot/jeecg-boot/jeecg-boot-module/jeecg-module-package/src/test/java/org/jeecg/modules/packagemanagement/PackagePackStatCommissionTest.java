@@ -5,6 +5,8 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 import org.jeecg.modules.packagemanagement.application.packstat.PackStatCommission;
@@ -73,18 +75,33 @@ class PackagePackStatCommissionTest {
         try (XSSFWorkbook book = new XSSFWorkbook(new ByteArrayInputStream(out.toByteArray()))) {
             var sheet = book.getSheetAt(0);
             assertEquals("CT2026年11月绩效提成表-黄汉锦", sheet.getRow(0).getCell(0).getStringCellValue());
+            assertEquals(38f, sheet.getRow(0).getHeightInPoints());
+            assertEquals(HorizontalAlignment.CENTER, sheet.getRow(0).getCell(0).getCellStyle().getAlignment());
+            assertEquals(24, ((XSSFCellStyle) sheet.getRow(0).getCell(0).getCellStyle()).getFont().getFontHeightInPoints());
             assertEquals("android绩效", sheet.getRow(3).getCell(0).getStringCellValue());
             assertEquals(300, sheet.getRow(3).getCell(1).getNumericCellValue());
+            assertEquals(HorizontalAlignment.CENTER, sheet.getRow(3).getCell(1).getCellStyle().getAlignment());
+            assertFill(sheet.getRow(3).getCell(1), 0xFFFF00);
             assertEquals("出包人", sheet.getRow(8).getCell(0).getStringCellValue());
             assertEquals("黄汉锦", sheet.getRow(9).getCell(0).getStringCellValue());
             assertEquals(1, sheet.getRow(9).getCell(1).getNumericCellValue());
             assertEquals(300, sheet.getRow(9).getCell(10).getNumericCellValue());
+            assertEquals(HorizontalAlignment.CENTER, sheet.getRow(9).getCell(10).getCellStyle().getAlignment());
+            assertFill(sheet.getRow(9).getCell(10), 0xFFFF00);
+            assertTrue(sheet.getRow(9).getCell(10).getCellStyle().getDataFormatString().contains("0.00"));
+            var countTotal = rowLabeled(sheet, "数量合计");
+            assertFill(countTotal.getCell(0), 0x92D050);
+            assertFill(countTotal.getCell(10), 0xFFC000);
             assertEquals("提包数量合计", labelCell(sheet, "提包数量合计"));
             assertEquals("出包人", sectionName(sheet, "提包数量"));
             assertEquals(50, sectionAmount(sheet, "提包数量", "黄汉锦"));
             assertEquals("美工/A面数量合计", labelCell(sheet, "美工/A面数量合计"));
             assertEquals(25, amountFor(sheet, "李井"));
-            assertEquals(375, amountFor(sheet, "总合计"));
+            var grand = rowLabeled(sheet, "总合计");
+            assertEquals(375, grand.getCell(1).getNumericCellValue());
+            assertEquals(HorizontalAlignment.RIGHT, grand.getCell(1).getCellStyle().getAlignment());
+            assertFill(grand.getCell(1), 0xF8CBAD);
+            assertFill(rowLabeled(sheet, "商店链接").getCell(0), 0x277C4F);
             boolean unpaid = false;
             for (int i = 0; i <= sheet.getLastRowNum(); i++) {
                 var cell = sheet.getRow(i) == null ? null : sheet.getRow(i).getCell(7);
@@ -92,6 +109,21 @@ class PackagePackStatCommissionTest {
             }
             assertTrue(unpaid);
         }
+    }
+
+    private static org.apache.poi.ss.usermodel.Row rowLabeled(org.apache.poi.ss.usermodel.Sheet sheet, String label) {
+        for (int i = 0; i <= sheet.getLastRowNum(); i++) {
+            var row = sheet.getRow(i);
+            if (row != null && label.equals(text(row.getCell(0)))) return row;
+        }
+        throw new AssertionError(label);
+    }
+
+    private static void assertFill(org.apache.poi.ss.usermodel.Cell cell, int rgb) {
+        byte[] actual = ((XSSFCellStyle) cell.getCellStyle()).getFillForegroundColorColor().getRGB();
+        assertEquals((byte) ((rgb >> 16) & 0xFF), actual[actual.length - 3]);
+        assertEquals((byte) ((rgb >> 8) & 0xFF), actual[actual.length - 2]);
+        assertEquals((byte) (rgb & 0xFF), actual[actual.length - 1]);
     }
 
     private static String labelCell(org.apache.poi.ss.usermodel.Sheet sheet, String label) {
