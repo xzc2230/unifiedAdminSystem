@@ -197,6 +197,7 @@ test('app editor offers android and ios store fields', () => {
     assert.match(page, /\{value:1,label:'已上架'\}/);
     assert.match(page, /\{value:2,label:'已下架'\}/);
     assert.match(page, /\{value:'ios:预购',label:'预购'\}/);
+    assert.match(page, /'待上架':'gold','已上架':'green','已下架':'red','预购':'blue'/);
     assert.doesNotMatch(page, /准备提交/);
     assert.doesNotMatch(page, /可供销售/);
     assert.doesNotMatch(page, /被开发者下架/);
