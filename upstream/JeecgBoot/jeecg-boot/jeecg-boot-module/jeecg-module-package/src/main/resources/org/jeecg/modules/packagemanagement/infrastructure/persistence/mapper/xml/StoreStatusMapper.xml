@@ -76,6 +76,27 @@
         </where>
     </select>
 
+    <select id="selectStoreStatusByTenant" resultMap="StoreStatusResult">
+        select s.id,
+               s.package_code,
+               s.platform,
+               s.apple_app_id,
+               s.store_region,
+               s.status,
+               s.product_status,
+               s.store_url,
+               s.create_date,
+               s.success_date,
+               s.fail_date,
+               s.success_email,
+               s.fail_email
+        from pkg_store_status s
+        join pkg_resource_owner o
+          on o.resource_id = s.id
+         and o.resource_type = 'pkg_store_status'
+         and o.tenant_id = #{tenantId}
+    </select>
+
     <select id="selectStoreStatusById" parameterType="Long" resultMap="StoreStatusResult">
         <include refid="StoreStatus"/>
         where id = #{id}

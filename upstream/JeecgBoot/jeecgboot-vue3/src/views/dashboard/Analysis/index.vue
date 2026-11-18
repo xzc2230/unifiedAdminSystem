@@ -1,4 +1,5 @@
 <template>
+  <PackageHomeSummary />
   <IndexChart v-if="indexStyle === 0"></IndexChart>
   <IndexDef v-if="indexStyle === 1"></IndexDef>
   <IndexBdc v-if="indexStyle == 2"></IndexBdc>
@@ -19,6 +20,7 @@
   import IndexChart from './homePage/IndexChart.vue';
   import IndexBdc from './homePage/IndexBdc.vue';
   import IndexTask from './homePage/IndexTask.vue';
+  import PackageHomeSummary from './PackageHomeSummary.vue';
 
   const indexStyle = ref(0);
 </script>

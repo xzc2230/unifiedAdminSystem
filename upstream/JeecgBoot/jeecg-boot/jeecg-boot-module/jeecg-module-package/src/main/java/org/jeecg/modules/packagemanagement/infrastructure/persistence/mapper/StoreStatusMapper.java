@@ -26,6 +26,9 @@ public interface StoreStatusMapper
      */
     public List<StoreStatus> selectStoreStatusList(StoreStatus storeStatus);
 
+    /** Store rows registered to the tenant, including every packer's rows. */
+    public List<StoreStatus> selectStoreStatusByTenant(@Param("tenantId") int tenantId);
+
 
     /**
      * 新增包状态
