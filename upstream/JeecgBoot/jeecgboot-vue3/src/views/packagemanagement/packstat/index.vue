@@ -28,7 +28,7 @@ const fields=computed(()=>[
  {key:'customerCategory',label:'分类',required:true,options:[{value:'CT',label:'CT'},{value:'公司',label:'公司'}]},{key:'customer',label:'客户'},{key:'isReplenish',label:'是否补包',required:true,options:[{value:0,label:'否'},{value:1,label:'是'}]},{key:'replenishUrl',label:'补包链接'},
  {key:'packer',label:'出包人',required:true},{key:'notifyEmail',label:'通知邮箱'},
  {key:'passDate',label:'过包日期',type:'date',required:true},{key:'customerUseDate',label:'客户使用日期',type:'date',required:true},{key:'dropDate',label:'掉包日期',type:'date'},
- {key:'aliveDays',label:'存活时长',readonly:true},{key:'useDays',label:'使用时长',readonly:true},{key:'designer',label:'美工'},{key:'remark',label:'备注',type:'textarea'},
+ {key:'aliveDays',label:'存活时长',readonly:true},{key:'useDays',label:'使用时间',readonly:true},{key:'designer',label:'美工'},{key:'remark',label:'备注',type:'textarea'},
 ]);
 const filters=computed(()=>[{field:'packer',label:'出包人',component:'Select',componentProps:{options:authors.value.map(a=>({value:a,label:a})),showSearch:true,allowClear:true},colProps:{span:8}},{field:'passMonth',label:'过包月份',component:'DatePicker',componentProps:{picker:'month',valueFormat:'YYYY-MM'},colProps:{span:8}}]);
 const summaryColumns=[{title:'指标',key:'metric',dataIndex:'metric'},...SURVIVE_DAY_KEYS.map(d=>({title:d===15?'15天及以上':`${d}天`,key:'d'+d,dataIndex:'d'+d}))];

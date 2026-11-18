@@ -41,7 +41,10 @@ test('domain nameserver copy puts each apex and its names on one line', () => {
 test('packstat durations and payload retain date and replenish semantics',()=>{
  assert.equal(dev.displayDuration({passDate:'2026-11-01',dropDate:'2026-11-10'},'aliveDays','passDate'),9);
  assert.equal(dev.displayDuration({aliveDays:0},'aliveDays','passDate'),0);
- assert.equal(dev.displayDuration({passDate:'2026-11-01'},'aliveDays','passDate'),'');
+ assert.equal(dev.displayDuration({passDate:'2026-11-01'},'aliveDays','passDate','2026-11-16'),15);
+ assert.equal(dev.displayDuration({surviveDays:7},'aliveDays','passDate','2026-11-16'),7);
+ assert.equal(dev.displayDuration({customerUseDate:'2026-11-08'},'useDays','customerUseDate','2026-11-16'),8);
+ assert.equal(dev.displayDuration({},'useDays','customerUseDate','2026-11-16'),0);
  assert.equal(dev.packstatPayload({isReplenish:0,replenishUrl:'discard',customer:''}).replenishUrl,null);
  assert.throws(()=>dev.packstatPayload({isReplenish:1,replenishUrl:''}),/补包链接/);
  assert.equal(dev.summaryRows({s7:3,u7:2,s15:1})[0].d7,3);

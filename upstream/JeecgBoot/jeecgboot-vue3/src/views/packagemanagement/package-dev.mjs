@@ -40,12 +40,17 @@ export function summaryRows(data={}) {
  if(data.noRecord===true || data.noRecord===1 || data.noRecord==='true') return [];
  return [['s','存活时间'],['u','使用时间']].map(([prefix,metric])=>Object.assign({metric},Object.fromEntries(SURVIVE_DAY_KEYS.map(d=>['d'+d,data[prefix+d]??(prefix==='s'?data[d]:0)??0]))));
 }
-export function displayDuration(row,key,start) {
- const value=row[key]??(key==='aliveDays'?row.surviveDays:undefined);
- if(value!=null && value!=='') return value;
- if(!row.dropDate || !row[start]) return '';
+function shanghaiToday() {
+ return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+}
+export function displayDuration(row,key,start,today) {
+ if(!row) return '';
+ const stored=row[key]??(key==='aliveDays'?row.surviveDays:undefined);
+ if(stored!=null && stored!=='') return stored;
+ const end=row.dropDate||today||shanghaiToday();
+ if(!row[start]) return end?0:'';
  const date=v=>Date.parse(String(v).slice(0,10)+'T00:00:00Z');
- const diff=Math.round((date(row.dropDate)-date(row[start]))/86400000);
+ const diff=Math.round((date(end)-date(row[start]))/86400000);
  return Number.isFinite(diff)?Math.max(0,diff):'';
 }
 export function formatDomainNameservers(rows) {

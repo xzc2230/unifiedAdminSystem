@@ -1,4 +1,6 @@
 package org.jeecg.modules.packagemanagement;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import org.junit.jupiter.api.Test;import static org.junit.jupiter.api.Assertions.*;import static org.mockito.Mockito.*;
 import org.jeecg.modules.packagemanagement.application.packstat.PackStatService;
@@ -21,4 +23,20 @@ class PackagePackStatServiceTest {
  }
  @Test void summaryPassesMonthAndTrustedScopeAndNormalizesKeys(){when(mapper.selectSurviveSummary("demo","2026-09",8,"alice")).thenReturn(Map.of("S7",3,"u7",2));Map<String,Object> result=service.summary("demo","2026-09",actor);assertEquals(3,result.get("s7"));assertEquals(2,result.get("u7"));assertEquals(18,result.size());}
  @Test void futureMonthHasNoRecordAndDoesNotQuery(){assertEquals(Map.of("noRecord",true),service.summary("demo","2999-01",actor));verifyNoInteractions(mapper);}
+ @Test void openPackageDurationsUseTodayAndKeepStoredOrDroppedValues(){
+  LocalDate today=LocalDate.now(ZoneId.of("Asia/Shanghai"));
+  PackStat open=new PackStat();open.setPassDate(java.sql.Date.valueOf(LocalDate.of(2026,11,1)));open.setCustomerUseDate(java.sql.Date.valueOf(LocalDate.of(2026,11,8)));
+  when(mapper.selectPackStatList(any())).thenReturn(List.of(open));
+  PackStat listed=service.list(new PackStat(),actor).get(0);
+  assertNull(listed.getDropDate());
+  assertEquals((int)ChronoUnit.DAYS.between(LocalDate.of(2026,11,1),today),listed.getSurviveDays());
+  assertEquals((int)ChronoUnit.DAYS.between(LocalDate.of(2026,11,8),today),listed.getUseDays());
+  PackStat stored=owned();stored.setSurviveDays(4);stored.setUseDays(2);stored.setPassDate(java.sql.Date.valueOf(LocalDate.of(2026,11,1)));
+  when(mapper.selectPackStatById(4L)).thenReturn(stored);
+  assertEquals(4,service.detail(4L,actor).getSurviveDays());assertEquals(2,service.detail(4L,actor).getUseDays());
+  PackStat dropped=owned();dropped.setDropDate(java.sql.Date.valueOf(LocalDate.of(2026,11,10)));dropped.setPassDate(java.sql.Date.valueOf(LocalDate.of(2026,11,1)));
+  when(mapper.selectPackStatById(5L)).thenReturn(dropped);
+  assertNull(service.detail(5L,actor).getSurviveDays());
+ }
+ private PackStat owned(){PackStat row=new PackStat();row.setTenantId(8);row.setOwnerUserId("alice");return row;}
 }

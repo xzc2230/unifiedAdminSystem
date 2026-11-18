@@ -89,7 +89,7 @@
       </a-row></a-form>
       <a-alert v-if="path==='openapi/token'" message="Token 留空时由服务端生成；有效期留空表示永久有效。" type="info" showIcon />
     </a-modal>
-    <a-drawer v-model:open="detailOpen" :title="`${title}详情`" width="760"><a-descriptions bordered :column="1"><a-descriptions-item v-for="field in fields" :key="field.key" :label="field.label"><pre class="json-value">{{ prettyJson(detail[field.key]) }}</pre><a v-if="detail[field.key]!=null" @click="copy(detail[field.key])">复制</a></a-descriptions-item></a-descriptions></a-drawer>
+    <a-drawer v-model:open="detailOpen" :title="`${title}详情`" width="760"><a-descriptions bordered :column="1"><a-descriptions-item v-for="field in fields" :key="field.key" :label="field.label"><pre class="json-value">{{ detailText(field, detail) }}</pre><a v-if="detailText(field, detail)!=='—'" @click="copy(detailText(field, detail))">复制</a></a-descriptions-item></a-descriptions></a-drawer>
   </div>
 </template>
 <script setup lang="ts">
@@ -128,6 +128,13 @@ async function save(){await formRef.value.validate();saving.value=true;try{let d
 function remove(ids:any[]){Modal.confirm({title:`确认删除 ${ids.length} 条记录？`,onOk:async()=>{await api.value.remove(ids);message.success('删除成功');await refresh();}});}
 async function showDetail(row:any){detail.value=props.readonly?row:await api.value.detail(row.id);detailOpen.value=true;}
 async function copy(value:any){try{if(!copyTextToClipboard(typeof value==='string'?value:JSON.stringify(value,null,2)))throw new Error('copy');message.success('已复制');}catch{message.error('复制失败，请从详情手动复制');}}
+function detailText(field:any, record:Record<string,any>) {
+  if (field?.key === 'aliveDays' || field?.key === 'useDays') {
+    const value = displayDuration(record, field.key, field.key === 'aliveDays' ? 'passDate' : 'customerUseDate');
+    return value === '' || value == null ? '—' : String(value);
+  }
+  return prettyJson(record?.[field?.key]);
+}
 function packCellText(column:any, record:Record<string,any>, text:any) {
   if (!column?.dataIndex) return '';
   if (column?.dataIndex === 'aliveDays') return String(displayDuration(record,'aliveDays','passDate') ?? '');

@@ -13,8 +13,8 @@ public class PackStatService {
  private final PackStatMapper mapper;
  private final PackStatRegionMapper regions;
  public PackStatService(PackStatMapper mapper,PackStatRegionMapper regions){this.mapper=mapper;this.regions=regions;}
- public List<PackStat> list(PackStat query,PackageActor actor){PackStatAccess.scope(query,actor);return mapper.selectPackStatList(query);}
- public PackStat detail(long id,PackageActor actor){return PackStatAccess.require(mapper.selectPackStatById(id),actor);}
+ public List<PackStat> list(PackStat query,PackageActor actor){PackStatAccess.scope(query,actor);List<PackStat> rows=mapper.selectPackStatList(query);presentOpenDurations(rows);return rows;}
+ public PackStat detail(long id,PackageActor actor){PackStat row=PackStatAccess.require(mapper.selectPackStatById(id),actor);presentOpenDurations(List.of(row));return row;}
  @Transactional public int add(PackStat row,PackageActor actor){
   row.setId(null);row.setTenantId(actor.tenantId());row.setOwnerUserId(actor.userId());hints(row);
   Date today=java.sql.Date.valueOf(LocalDate.now());
@@ -49,6 +49,15 @@ public class PackStatService {
  }
  private static PackStatCommission.Source source(PackStat row){
   return new PackStatCommission.Source(row.getPlatform(),row.getPacker(),row.getStoreUrl(),row.getCustomer(),Integer.valueOf(1).equals(row.getIsReplenish()),row.getReplenishUrl(),date(row.getCustomerUseDate()),date(row.getDropDate()),row.getDesigner());
+ }
+ private static void presentOpenDurations(List<PackStat> rows){
+  if(rows==null)return;
+  LocalDate today=LocalDate.now(ZoneId.of("Asia/Shanghai"));
+  for(PackStat row:rows){
+   if(row==null||row.getDropDate()!=null)continue;
+   if(row.getSurviveDays()==null)row.setSurviveDays(PackStatDateCalc.surviveDays(date(row.getPassDate()),today));
+   if(row.getUseDays()==null)row.setUseDays(PackStatDateCalc.useDays(date(row.getCustomerUseDate()),today));
+  }
  }
  private static LocalDate date(java.util.Date value){
   if(value==null)return null;
