@@ -28,30 +28,41 @@ public final class PackageHomeCounts {
                 else if (row.getStatus() == 2) delisted.add(key);
             }
         }
-        Set<String> packed = new HashSet<>();
-        Set<String> dropped = new HashSet<>();
+        Set<String> openPack = new HashSet<>();
+        Set<String> droppedPack = new HashSet<>();
         if (stats != null) {
             for (PackStat row : stats) {
                 String key = statKey(row);
                 if (key == null) continue;
-                packed.add(key);
-                if (row.getDropDate() != null) dropped.add(key);
+                if (row.getDropDate() == null) openPack.add(key);
+                else droppedPack.add(key);
             }
         }
-        return new Report(bucket("android", listed, pending, delisted, packed, dropped),
-                bucket("ios", listed, pending, delisted, packed, dropped));
+        return new Report(bucket("android", listed, pending, delisted, openPack, droppedPack),
+                bucket("ios", listed, pending, delisted, openPack, droppedPack));
     }
 
+    /** Same package name or Apple ID counts once. A name that appears on only one side still counts. */
     private static Counts bucket(String platform, Set<String> listed, Set<String> pending, Set<String> delisted,
-            Set<String> packed, Set<String> dropped) {
+            Set<String> openPack, Set<String> droppedPack) {
         String prefix = platform + ":";
-        return new Counts(overlap(listed, packed, prefix), size(pending, prefix), overlap(delisted, dropped, prefix));
+        return new Counts(union(listed, openPack, prefix), size(pending, prefix), dropped(delisted, droppedPack, listed, prefix));
     }
 
-    private static int overlap(Set<String> left, Set<String> right, String prefix) {
-        int count = 0;
-        for (String key : left) if (key.startsWith(prefix) && right.contains(key)) count++;
-        return count;
+    private static int union(Set<String> left, Set<String> right, String prefix) {
+        Set<String> keys = new HashSet<>();
+        for (String key : left) if (key.startsWith(prefix)) keys.add(key);
+        for (String key : right) if (key.startsWith(prefix)) keys.add(key);
+        return keys.size();
+    }
+
+    /** 已上架 stays online even when packstat already has a drop date. */
+    private static int dropped(Set<String> delisted, Set<String> droppedPack, Set<String> listed, String prefix) {
+        Set<String> keys = new HashSet<>();
+        for (String key : delisted) if (key.startsWith(prefix)) keys.add(key);
+        for (String key : droppedPack) if (key.startsWith(prefix)) keys.add(key);
+        keys.removeAll(listed);
+        return keys.size();
     }
 
     private static int size(Set<String> keys, String prefix) {

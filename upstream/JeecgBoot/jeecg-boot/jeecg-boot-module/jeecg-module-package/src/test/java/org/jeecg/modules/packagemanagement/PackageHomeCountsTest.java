@@ -10,13 +10,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PackageHomeCountsTest {
-    @Test void onlineRequiresListedStoreAndAPackstatLink() {
+    @Test void onlineCountsEveryListedPackageAndEveryOpenPackstatLink() {
         var report = PackageHomeCounts.count(List.of(
                 store("android", "com.live.app", null, 1, null),
-                store("android", "com.missing.app", null, 1, null)),
+                store("android", "com.listed.only", null, 1, null)),
                 List.of(stat("https://play.google.com/store/apps/details?id=com.live.app", null),
-                        stat("https://play.google.com/store/apps/details?id=com.live.app", null)));
-        assertEquals(1, report.android().online());
+                        stat("https://play.google.com/store/apps/details?id=com.live.app", null),
+                        stat("https://play.google.com/store/apps/details?id=com.pack.only", null)));
+        assertEquals(3, report.android().online());
         assertEquals(0, report.android().dropped());
     }
 
@@ -35,7 +36,7 @@ class PackageHomeCountsTest {
                 List.of(stat("https://play.google.com/store/apps/details?id=com.review.app", null)));
         assertEquals(1, report.android().review());
         assertEquals(1, report.ios().review());
-        assertEquals(0, report.android().online());
+        assertEquals(1, report.android().online());
     }
 
     @Test void preorderIsNotPendingReview() {
@@ -47,16 +48,17 @@ class PackageHomeCountsTest {
         assertEquals(1, report.ios().online());
     }
 
-    @Test void droppedRequiresDelistedStoreAndADropDate() {
+    @Test void droppedCountsDelistedPackagesAndPackstatDropDates() {
         var report = PackageHomeCounts.count(List.of(
                 store("android", "com.gone.app", null, 2, null),
                 store("android", "com.quiet.app", null, 2, null),
                 store("ios", "ios.gone", "555", 2, null)),
                 List.of(stat("https://play.google.com/store/apps/details?id=com.gone.app", new Date()),
                         stat("https://play.google.com/store/apps/details?id=com.quiet.app", null),
+                        stat("https://play.google.com/store/apps/details?id=com.drop.only", new Date()),
                         stat("https://apps.apple.com/us/app/gone/id555", new Date())));
-        assertEquals(1, report.android().dropped());
-        assertEquals(0, report.android().online());
+        assertEquals(3, report.android().dropped());
+        assertEquals(1, report.android().online());
         assertEquals(1, report.ios().dropped());
     }
 
