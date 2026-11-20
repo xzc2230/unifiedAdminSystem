@@ -56,7 +56,7 @@
             <template v-else-if="column.dataIndex === 'paymentTotal'">{{ money(text) }}</template>
             <a-tag v-else-if="definition.domain === 'apps' && column.dataIndex === 'platform'" :color="text === 'ios' ? 'blue' : 'green'">{{ displayValue(column.dataIndex, text) || '安卓' }}</a-tag>
             <a-tag v-else-if="definition.domain === 'apps' && column.dataIndex === 'status'" :color="appStatusColor(text)">{{ displayValue(column.dataIndex, text) || '—' }}</a-tag>
-            <a-tag v-else-if="definition.domain === 'apps' && ['whetherRestrict','whetherUs'].includes(column.dataIndex)" :color="Number(text) === 1 ? 'orange' : 'default'">{{ displayValue(column.dataIndex, text) || '—' }}</a-tag>
+            <a-tag v-else-if="definition.domain === 'apps' && ['whetherRestrict','whetherUs'].includes(column.dataIndex)" :color="Number(text) === 1 ? 'orange' : 'default'">{{ appSwitchLabel(column.dataIndex, text) }}</a-tag>
             <span v-else-if="definition.domain === 'apps' && column.dataIndex === 'appleAppId'" class="apple-id">{{ appleIdText(record, text) }}</span>
             <a-tag v-else-if="definition.domain === 'store' && column.dataIndex === 'status'" :color="storeStatusColor(storeStatusLabel(record, text))">{{ storeStatusLabel(record, text) || '—' }}</a-tag>
             <template v-else>{{ displayValue(column.dataIndex, text) }}</template>
@@ -68,7 +68,7 @@
         <a-tooltip v-else-if="definition.domain === 'request-logs' && column.dataIndex === 'reqParams'" placement="topLeft"><template #title><pre class="detail-value">{{ prettyJson(text) }}</pre><a @click="copyValue(text)">复制</a></template><span>{{ text }}</span></a-tooltip>
         <a-tag v-else-if="definition.domain === 'apps' && column.dataIndex === 'platform'" :color="text === 'ios' ? 'blue' : 'green'">{{ displayValue(column.dataIndex, text) || '安卓' }}</a-tag>
         <a-tag v-else-if="definition.domain === 'apps' && column.dataIndex === 'status'" :color="appStatusColor(text)">{{ displayValue(column.dataIndex, text) || '—' }}</a-tag>
-        <a-tag v-else-if="definition.domain === 'apps' && ['whetherRestrict','whetherUs'].includes(column.dataIndex)" :color="Number(text) === 1 ? 'orange' : 'default'">{{ displayValue(column.dataIndex, text) || '—' }}</a-tag>
+        <a-tag v-else-if="definition.domain === 'apps' && ['whetherRestrict','whetherUs'].includes(column.dataIndex)" :color="Number(text) === 1 ? 'orange' : 'default'">{{ appSwitchLabel(column.dataIndex, text) }}</a-tag>
         <span v-else-if="definition.domain === 'apps' && column.dataIndex === 'appleAppId'" class="apple-id">{{ appleIdText(record, text) }}</span>
         <a-tooltip v-else-if="fieldsByKey[column.dataIndex] && fieldsByKey[column.dataIndex].dict && dictRemark(column.dataIndex,text)" :title="dictRemark(column.dataIndex,text)">{{ displayValue(column.dataIndex,text) }}</a-tooltip>
         <a-tag v-else-if="definition.domain === 'store' && column.dataIndex === 'status'" :color="storeStatusColor(storeStatusLabel(record, text))">{{ storeStatusLabel(record, text) || '—' }}</a-tag>
@@ -273,7 +273,8 @@ function hoverText(column:any, record:Record<string,any>, text:any) {
     return shown == null || shown === '' ? '' : String(shown);
   }
   if (definition.domain === 'apps' && key === 'platform') return String(displayValue(key, text) || '安卓');
-  if (definition.domain === 'apps' && ['status','whetherRestrict','whetherUs'].includes(key)) return String(displayValue(key, text) || '—');
+  if (definition.domain === 'apps' && key === 'status') return String(displayValue(key, text) || '—');
+  if (definition.domain === 'apps' && ['whetherRestrict','whetherUs'].includes(key)) return appSwitchLabel(key, text);
   if (definition.domain === 'apps' && key === 'appleAppId') return appleIdText(record, text);
   const shown = displayValue(key, text);
   return shown == null || shown === '' ? '' : String(shown);
@@ -321,6 +322,7 @@ if(definition.domain==='request-logs'){
 }
 const appColumnWidths:Record<string,number>={appName:168,platform:88,appleAppId:132,packageCode:220,url:240,status:96,whetherRestrict:96,areas:180,whetherUs:100,blockedProviders:220,mark:180,updateDate:168};
 function appStatusColor(value:any){return ({0:'default',1:'green',2:'blue',3:'gold'} as Record<string,string>)[String(value)] || 'default';}
+function appSwitchLabel(key:string, text:any){if(text==null || text==='') return '关闭';const label=displayValue(key, text);if(label==null || label==='' || label==='0') return Number(text)===1?'开启':'关闭';return String(label);}
 function appleIdText(record:Record<string,any>, text:any){if(record?.platform!=='ios')return '';const value=text==null?'':String(text).trim();return value;}
 function storeStatusLabel(record:Record<string,any>, text:any){const shown=record?.productStatus || displayValue('status', text);return shown==null || shown===''?'':String(shown);}
 function storeStatusColor(label:string){return ({'待上架':'gold','已上架':'green','已下架':'red','预购':'blue'} as Record<string,string>)[label] || 'default';}

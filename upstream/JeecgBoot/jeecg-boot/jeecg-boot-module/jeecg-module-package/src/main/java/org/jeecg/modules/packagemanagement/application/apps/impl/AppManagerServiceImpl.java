@@ -83,7 +83,17 @@ public class AppManagerServiceImpl implements IAppManagerService {
             return -1;
         } else {
             syncStore(appManager, null, false);
-            appManager.setCreateDate(DateUtils.getNowDate());
+            java.util.Date created = DateUtils.getNowDate();
+            appManager.setCreateDate(created);
+            if (appManager.getUpdateDate() == null) {
+                appManager.setUpdateDate(created);
+            }
+            if (appManager.getWhetherRestrict() == null) {
+                appManager.setWhetherRestrict(0);
+            }
+            if (appManager.getWhetherUs() == null) {
+                appManager.setWhetherUs(0);
+            }
             int count=appManagerMapper.insertAppManager(appManager);refresh(appManager.getPackageCode());return count;
         }
     }

@@ -36,7 +36,7 @@ class PackageBusinessTest {
  @Test void newPackageEnsuresStoreAndPreservesNumericOwner(){
   var mapper=mock(AppManagerMapper.class);var stores=mock(StoreStatusMapper.class);var service=new AppManagerServiceImpl();inject(service,"appManagerMapper",mapper);inject(service,"storeStatusMapper",stores);
   AppManager app=new AppManager();app.setPackageCode("com.test");app.setUserId(17L);when(mapper.selectAppManagerByPlatformAndPackage("android","com.test")).thenReturn(null);when(stores.selectStoreStatusByPlatformAndPackage("android","com.test")).thenReturn(null);when(mapper.insertAppManager(app)).thenReturn(1);
-  assertEquals(1,service.insertAppManager(app));verify(stores).insertStoreStatus(argThat(s->"android".equals(s.getPlatform())&&s.getStatus()==0&&s.getPackageCode().equals("com.test")&&s.getStoreUrl().endsWith("id=com.test")));assertEquals(17L,app.getUserId());assertNotNull(app.getCreateDate());
+  assertEquals(1,service.insertAppManager(app));verify(stores).insertStoreStatus(argThat(s->"android".equals(s.getPlatform())&&s.getStatus()==0&&s.getPackageCode().equals("com.test")&&s.getStoreUrl().endsWith("id=com.test")));assertEquals(17L,app.getUserId());assertNotNull(app.getCreateDate());assertEquals(app.getCreateDate(),app.getUpdateDate());assertEquals(0,app.getWhetherRestrict());assertEquals(0,app.getWhetherUs());
  }
  @Test void statisticsCountersAndAmountRoundHalfUpToTwoDecimals(){
   var mapper=mock(AppStatisticsMapper.class);var service=new AppStatisticsServiceImpl();inject(service,"appStatisticsMapper",mapper);
