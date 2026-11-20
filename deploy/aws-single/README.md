@@ -24,9 +24,9 @@
 | `/opt/middleware/data` | 三项中间件持久化数据 |
 | `/opt/middleware/secrets` | 初始化凭证，root 可读 |
 
-当前入口：`http://13.222.19.112/`。Nginx 监听 TCP 80，后端监听 `127.0.0.1:18080`；MySQL、Redis、ClickHouse 分别只映射 `127.0.0.1:3306`、`:6379`、`:18123`。应用容器使用 Linux host 网络，与现有生产模板中的回环地址一致。Docker 开机启用，五个运行服务均配置 `restart: unless-stopped`。
+当前入口：`http://13.222.19.112/`。Nginx 监听 TCP 80，后端监听 `127.0.0.1:18080`；MySQL、Redis 只映射 `127.0.0.1:3306`、`:6379`，ClickHouse 映射 `0.0.0.0:18123`。应用容器使用 Linux host 网络，与现有生产模板中的回环地址一致。Docker 开机启用，五个运行服务均配置 `restart: unless-stopped`。
 
-没有域名和证书时仅提供 HTTP；配置域名和 HTTPS 后，需同步修改 Nginx、前端运行时地址、`JEECG_PUBLIC_URL`。数据库、Redis、后端和 ClickHouse 无需公网安全组规则。
+没有域名和证书时仅提供 HTTP；配置域名和 HTTPS 后，需同步修改 Nginx、前端运行时地址、`JEECG_PUBLIC_URL`。数据库、Redis 和后端无需公网安全组规则。ClickHouse 的 18123 监听所有网卡，安全组放行后可从公网访问。
 
 ## 首次初始化（已执行，不要重复）
 
