@@ -96,6 +96,7 @@ test('packstat hover leaves the checkbox and index cells on their custom rendere
  })});
  app.component('a-table',Table);app.component('a-space',Space);app.component('a-tooltip',Tooltip);app.component('a-checkbox',Checkbox);app.directive('auth',{});
  const html=await renderToString(app);
+ assert.match(source,/domain==='packstat' && column\.dataIndex==='storeUrl'/);
  assert.match(html,/type="checkbox"/);assert.match(html,/data-index="true"/);assert.match(html,/https:\/\/example.com\/app/);
  assert.doesNotMatch(html,/\[object Object\]/);
 });

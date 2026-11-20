@@ -206,6 +206,7 @@ test('app editor offers android and ios store fields', () => {
     assert.match(page, /v-if="definition\.domain !== 'apps'" v-auth="permission\('query'\)" @click="showDetail\(record\)">详情/);
     assert.match(page, /function appleIdText\(record:Record<string,any>, text:any\)\{if\(record\?\.platform!=='ios'\)return '';/);
     assert.match(page, /function appSwitchLabel\(key:string, text:any\)\{if\(text==null \|\| text===''\) return '关闭';/);
+    assert.match(page, /hoverFields:Record<string,string\[\]>=\{apps:\['url','mark'\],store:\['storeUrl'\],'request-logs':\['reqPath','reqParams','errorMsg'\]\}/);
     assert.match(page, /whetherRestrict:0,whetherUs:0/);
     assert.doesNotMatch(page, /appleAppId'" class="apple-id">\{\{ text \|\| '—'/);
     assert.match(page, /https:\/\/apps\.apple\.com\/\$\{region\}\/app\/id\$\{appleId\}/);

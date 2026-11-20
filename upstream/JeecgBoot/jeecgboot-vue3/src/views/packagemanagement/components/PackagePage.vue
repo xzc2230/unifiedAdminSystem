@@ -257,13 +257,14 @@ function displayValue(key:string,value:any) {
 }
 function displayDetail(value:any) { return prettyJson(value); }
 function dictRemark(key:string,value:any){return optionsFor(fieldsByKey[key]).find(o=>String(o.value)===String(value))?.remark || '';}
+const hoverFields:Record<string,string[]>={apps:['url','mark'],store:['storeUrl'],'request-logs':['reqPath','reqParams','errorMsg']};
 function showHover(column:any, record:Record<string,any>, text:any) {
-  return ['apps','store','request-logs'].includes(definition.domain) && !!column?.dataIndex && column.key !== 'action' && hoverText(column, record, text) !== '';
+  return (hoverFields[definition.domain] || []).includes(column?.dataIndex) && hoverText(column, record, text) !== '';
 }
 function hoverText(column:any, record:Record<string,any>, text:any) {
   const key = column?.dataIndex;
-  if (!key) return '';
-  if (definition.domain === 'request-logs' && ['reqParams','reqHeards','resultMsg','errorMsg'].includes(key)) {
+  if (!key || !(hoverFields[definition.domain] || []).includes(key)) return '';
+  if (definition.domain === 'request-logs' && ['reqParams','errorMsg'].includes(key)) {
     const pretty = prettyJson(text);
     return pretty === '—' ? '' : pretty;
   }

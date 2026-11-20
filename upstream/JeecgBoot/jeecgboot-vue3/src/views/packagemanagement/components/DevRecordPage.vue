@@ -36,7 +36,7 @@
           <a v-if="!readonly" v-auth="permission('remove')" @click="remove([record.id])">删除</a>
           <a v-if="path==='openapi/token'" v-auth="permission('query')" @click="copy(record.token)">复制 Token</a>
         </a-space></template>
-        <a-tooltip v-else-if="domain==='packstat' && column.dataIndex && packCellText(column, record, text)" placement="topLeft" overlayClassName="cell-preview-overlay">
+        <a-tooltip v-else-if="domain==='packstat' && column.dataIndex==='storeUrl' && packCellText(column, record, text)" placement="topLeft" overlayClassName="cell-preview-overlay">
           <template #title><pre class="cell-preview-body">{{ packCellText(column, record, text) }}</pre><a @click="copy(packCellText(column, record, text))">复制</a></template>
           <span class="cell-preview-trigger">
             <template v-if="column.dataIndex==='aliveDays'">{{ displayDuration(record,'aliveDays','passDate') }}</template>
