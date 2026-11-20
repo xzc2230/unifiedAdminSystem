@@ -57,7 +57,7 @@
             <a-tag v-else-if="definition.domain === 'apps' && column.dataIndex === 'platform'" :color="text === 'ios' ? 'blue' : 'green'">{{ displayValue(column.dataIndex, text) || '安卓' }}</a-tag>
             <a-tag v-else-if="definition.domain === 'apps' && column.dataIndex === 'status'" :color="appStatusColor(text)">{{ displayValue(column.dataIndex, text) || '—' }}</a-tag>
             <a-tag v-else-if="definition.domain === 'apps' && ['whetherRestrict','whetherUs'].includes(column.dataIndex)" :color="Number(text) === 1 ? 'orange' : 'default'">{{ displayValue(column.dataIndex, text) || '—' }}</a-tag>
-            <span v-else-if="definition.domain === 'apps' && column.dataIndex === 'appleAppId'" class="apple-id">{{ text || '—' }}</span>
+            <span v-else-if="definition.domain === 'apps' && column.dataIndex === 'appleAppId'" class="apple-id">{{ appleIdText(record, text) }}</span>
             <a-tag v-else-if="definition.domain === 'store' && column.dataIndex === 'status'" :color="storeStatusColor(storeStatusLabel(record, text))">{{ storeStatusLabel(record, text) || '—' }}</a-tag>
             <template v-else>{{ displayValue(column.dataIndex, text) }}</template>
           </span>
@@ -69,7 +69,7 @@
         <a-tag v-else-if="definition.domain === 'apps' && column.dataIndex === 'platform'" :color="text === 'ios' ? 'blue' : 'green'">{{ displayValue(column.dataIndex, text) || '安卓' }}</a-tag>
         <a-tag v-else-if="definition.domain === 'apps' && column.dataIndex === 'status'" :color="appStatusColor(text)">{{ displayValue(column.dataIndex, text) || '—' }}</a-tag>
         <a-tag v-else-if="definition.domain === 'apps' && ['whetherRestrict','whetherUs'].includes(column.dataIndex)" :color="Number(text) === 1 ? 'orange' : 'default'">{{ displayValue(column.dataIndex, text) || '—' }}</a-tag>
-        <span v-else-if="definition.domain === 'apps' && column.dataIndex === 'appleAppId'" class="apple-id">{{ text || '—' }}</span>
+        <span v-else-if="definition.domain === 'apps' && column.dataIndex === 'appleAppId'" class="apple-id">{{ appleIdText(record, text) }}</span>
         <a-tooltip v-else-if="fieldsByKey[column.dataIndex] && fieldsByKey[column.dataIndex].dict && dictRemark(column.dataIndex,text)" :title="dictRemark(column.dataIndex,text)">{{ displayValue(column.dataIndex,text) }}</a-tooltip>
         <a-tag v-else-if="definition.domain === 'store' && column.dataIndex === 'status'" :color="storeStatusColor(storeStatusLabel(record, text))">{{ storeStatusLabel(record, text) || '—' }}</a-tag>
         <template v-else-if="definition.domain === 'domains' && column.dataIndex === 'status'">
@@ -274,7 +274,7 @@ function hoverText(column:any, record:Record<string,any>, text:any) {
   }
   if (definition.domain === 'apps' && key === 'platform') return String(displayValue(key, text) || '安卓');
   if (definition.domain === 'apps' && ['status','whetherRestrict','whetherUs'].includes(key)) return String(displayValue(key, text) || '—');
-  if (definition.domain === 'apps' && key === 'appleAppId') return text == null || text === '' ? '' : String(text);
+  if (definition.domain === 'apps' && key === 'appleAppId') return appleIdText(record, text);
   const shown = displayValue(key, text);
   return shown == null || shown === '' ? '' : String(shown);
 }
@@ -321,6 +321,7 @@ if(definition.domain==='request-logs'){
 }
 const appColumnWidths:Record<string,number>={appName:168,platform:88,appleAppId:132,packageCode:220,url:240,status:96,whetherRestrict:96,areas:180,whetherUs:100,blockedProviders:220,mark:180,updateDate:168};
 function appStatusColor(value:any){return ({0:'default',1:'green',2:'blue',3:'gold'} as Record<string,string>)[String(value)] || 'default';}
+function appleIdText(record:Record<string,any>, text:any){if(record?.platform!=='ios')return '';const value=text==null?'':String(text).trim();return value;}
 function storeStatusLabel(record:Record<string,any>, text:any){const shown=record?.productStatus || displayValue('status', text);return shown==null || shown===''?'':String(shown);}
 function storeStatusColor(label:string){return ({'待上架':'gold','已上架':'green','已下架':'red','预购':'blue'} as Record<string,string>)[label] || 'default';}
 const columns=(definition.columns || definition.fields.map(f=>f.key).filter(k=>!['startReqTime','endReqTime'].includes(k))).filter(key=>definition.domain!=='apps'||key!=='applicationCode'&&canAppField(appPermissions.value,'query',key)).map(key=>({title:fieldsByKey[key]?.label || key,dataIndex:key,key,align:definition.domain==='domains'&&key==='status'?'center':undefined,width:definition.domain==='apps'?appColumnWidths[key] || 140:definition.domain==='domains'&&key==='status'?240:['appName','packageCode','packageName','reqTime','apex'].includes(key)?180:150,ellipsis:!(definition.domain==='domains'&&key==='status')}));

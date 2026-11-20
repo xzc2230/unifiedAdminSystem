@@ -204,6 +204,8 @@ test('app editor offers android and ios store fields', () => {
     assert.doesNotMatch(page, /iOS\$\{label\}/);
     assert.match(page, /statusQuery/);
     assert.match(page, /v-if="definition\.domain !== 'apps'" v-auth="permission\('query'\)" @click="showDetail\(record\)">详情/);
+    assert.match(page, /function appleIdText\(record:Record<string,any>, text:any\)\{if\(record\?\.platform!=='ios'\)return '';/);
+    assert.doesNotMatch(page, /appleAppId'" class="apple-id">\{\{ text \|\| '—'/);
     assert.match(page, /https:\/\/apps\.apple\.com\/\$\{region\}\/app\/id\$\{appleId\}/);
     assert.match(page, /label:'App Store'/);
     assert.match(page, /const link=marketLink\(model\);if\(link\) payload\.storeUrl=link\.href/);
