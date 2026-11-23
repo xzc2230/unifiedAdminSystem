@@ -103,4 +103,26 @@ class PackagePersistenceMappingTest {
         assertEquals(List.of("id", "packageCode"), bound.getParameterMappings().stream()
                 .map(mapping -> mapping.getProperty()).toList(), sql);
     }
+
+    @Test
+    void appAndStoreListsUseNewestCreateTimeFirst() throws Exception {
+        AppManager filtered = new AppManager();
+        filtered.setUpdateDate(new java.util.Date());
+        String apps = listSql("AppManager", "selectAppManagerList", filtered);
+        assertTrue(apps.endsWith("order by create_date desc, id desc"), apps);
+        assertFalse(apps.contains("order by update_date"), apps);
+        String store = listSql("StoreStatus", "selectStoreStatusList", new StoreStatus());
+        assertTrue(store.endsWith("order by create_date desc, id desc"), store);
+    }
+
+    private String listSql(String name, String statement, Object parameter) throws Exception {
+        Configuration config = new Configuration();
+        String resource = ROOT + name + "Mapper.xml";
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream(resource)) {
+            assertNotNull(input, resource);
+            new XMLMapperBuilder(input, config, resource, config.getSqlFragments()).parse();
+        }
+        return config.getMappedStatement(MAPPER_PACKAGE + name + "Mapper." + statement)
+                .getBoundSql(parameter).getSql().replaceAll("\\s+", " ").trim().toLowerCase(java.util.Locale.ROOT);
+    }
 }

@@ -58,7 +58,7 @@
             </if>
             <if test="storeUrl != null and storeUrl != ''">and store_url like concat('%', #{storeUrl}, '%')</if>
         </where>
-        order by id desc
+        order by create_time desc, id desc
     </select>
 
     <select id="selectPackStatById" parameterType="Long" resultMap="PackStatResult">

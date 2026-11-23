@@ -15,7 +15,7 @@ class PackagePackStatMapperTest {
  }
  private String sql(Configuration c,String statement,Object data){return c.getMappedStatement(BASE+"PackStatMapper."+statement).getBoundSql(data).getSql().replaceAll("\\s+"," ").trim().toLowerCase(Locale.ROOT);}
  @Test void allMappersBindAndListHasTrustedScope(){Configuration c=config();PackStat row=new PackStat();row.setTenantId(8);row.setOwnerUserId("alice");
-  String sql=sql(c,"selectPackStatList",row);assertTrue(sql.contains("tenant_id = ?"));assertTrue(sql.contains("owner_user_id = ?"));
+  String sql=sql(c,"selectPackStatList",row);assertTrue(sql.contains("tenant_id = ?"));assertTrue(sql.contains("owner_user_id = ?"));assertTrue(sql.contains("order by create_time desc, id desc"));
  }
  @Test void summaryKeepsExclusiveBucketsAndScopesOwner(){Configuration c=config();Map<String,Object> q=new HashMap<>();q.put("tenantId",8);q.put("ownerUserId","alice");q.put("packer","demo");q.put("passMonth","2026-09");
   String sql=sql(c,"selectSurviveSummary",q);assertTrue(sql.contains("tenant_id = ?"));assertTrue(sql.contains("owner_user_id = ?"));

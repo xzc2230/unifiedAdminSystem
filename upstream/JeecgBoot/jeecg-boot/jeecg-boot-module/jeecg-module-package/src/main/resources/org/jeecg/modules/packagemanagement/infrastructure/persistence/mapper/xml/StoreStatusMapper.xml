@@ -74,6 +74,7 @@
             <if test="appleAppId != null and appleAppId != ''">and apple_app_id = #{appleAppId}</if>
             <if test="storeUrl != null  and store_url != ''">and store_url = #{storeUrl}</if>
         </where>
+        order by create_date desc, id desc
     </select>
 
     <select id="selectStoreStatusByTenant" resultMap="StoreStatusResult">

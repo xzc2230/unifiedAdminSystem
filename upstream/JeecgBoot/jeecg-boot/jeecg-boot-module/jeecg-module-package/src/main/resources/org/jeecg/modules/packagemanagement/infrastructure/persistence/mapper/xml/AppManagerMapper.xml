@@ -88,17 +88,7 @@
             <if test="whetherUs != null ">and whether_us = #{whetherUs}</if>
             <if test="whetherUse != null ">and whether_use = #{whetherUse}</if>
         </where>
-
-        <!-- 排序：优先按 update_date 降序，如果没有 update_date 则按 create_date 降序 -->
-        <choose>
-            <when test="updateDate != null">
-                ORDER BY update_date DESC
-            </when>
-            <otherwise>
-                ORDER BY create_date DESC
-            </otherwise>
-        </choose>
-
+        order by create_date desc, id desc
     </select>
 
     <select id="selectAppManagerById" parameterType="Long" resultMap="AppManagerResult">
