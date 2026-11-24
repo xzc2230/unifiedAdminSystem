@@ -29,6 +29,8 @@ import java.util.stream.Collectors;
 @Service
 public class StoreStatusServiceImpl implements IStoreStatusService {
     private static final Pattern ITUNES_RESULT_COUNT = Pattern.compile("\"resultCount\"\\s*:\\s*(\\d+)");
+    /** Apple lookup returns resultCount 0 for the Java client identity. A browser identity returns the listing. */
+    private static final Map<String, String> ITUNES_HEADERS = Map.of("User-Agent", "Mozilla/5.0");
     @Autowired
     private org.jeecg.modules.packagemanagement.application.port.HttpPort http;
     @Autowired
@@ -217,7 +219,7 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
             }
             try {
                 String lookupUrl = "https://itunes.apple.com/lookup?id=" + appleAppId + "&country=" + region;
-                var reply = http.exchange("GET", lookupUrl, null, Map.of());
+                var reply = http.exchange("GET", lookupUrl, null, ITUNES_HEADERS);
                 if (!reply.success()) {
                     org.slf4j.LoggerFactory.getLogger(getClass()).warn("iOS store probe lookup failed package={} status={}", storeStatus.getPackageCode(), reply.status());
                     return null;
