@@ -73,7 +73,7 @@ class StoreProbeTest {
         when(mapper.selectStoreStatusList(any())).thenReturn(List.of(ios, android));
         when(http.exchange(eq("GET"), eq("https://itunes.apple.com/lookup?id=123456&country=cn"), isNull(), argThat(headers -> headers != null && "Mozilla/5.0".equals(headers.get("User-Agent")))))
                 .thenThrow(new RuntimeException("network down"));
-        when(probe.getStatus(android.getStoreUrl())).thenReturn(true);
+        when(probe.getStatus(android.getStoreUrl())).thenReturn(StoreProbePort.Result.listed());
         service.getStatus();
         assertEquals(0, ios.getStatus());
         assertEquals(1, android.getStatus());
@@ -105,6 +105,8 @@ class StoreProbeTest {
                 .thenReturn(new HttpPort.Reply(200, "{\"resultCount\":0}"));
         service.getStatus();
         assertEquals(2, ios.getStatus());
+        assertEquals("iTunes lookup resultCount=0, country=cn", ios.getFailReason());
+        verify(mapper).updateStoreStatusAndDate(argThat(row -> "iTunes lookup resultCount=0, country=cn".equals(row.getFailReason())));
         verify(mail).sendEmail(anyString(), eq("App Store下架"), eq(ios.getStoreUrl()));
         verifyNoInteractions(probe);
     }
@@ -168,7 +170,7 @@ class StoreProbeTest {
         when(apps.selectAppManagerByPlatformAndPackage("android", "com.android")).thenReturn(androidApp);
         when(http.exchange(eq("GET"), eq("https://itunes.apple.com/lookup?id=123456&country=us"), isNull(), argThat(headers -> headers != null && "Mozilla/5.0".equals(headers.get("User-Agent")))))
                 .thenReturn(new HttpPort.Reply(200, "{\"resultCount\":1}"));
-        when(probe.getStatus(android.getStoreUrl())).thenReturn(true);
+        when(probe.getStatus(android.getStoreUrl())).thenReturn(StoreProbePort.Result.listed());
         service.getStatus("ios");
         assertEquals(1, ios.getStatus());
         assertEquals(0, android.getStatus());

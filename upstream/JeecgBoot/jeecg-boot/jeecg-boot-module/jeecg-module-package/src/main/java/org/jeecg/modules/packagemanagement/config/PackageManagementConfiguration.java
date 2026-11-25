@@ -25,7 +25,7 @@ public class PackageManagementConfiguration {
   byte[] bytes=(reply.body()==null?"":reply.body()).getBytes(java.nio.charset.StandardCharsets.UTF_8);
   String peek=new String(bytes,0,Math.min(2048,bytes.length),java.nio.charset.StandardCharsets.UTF_8);
   org.slf4j.LoggerFactory.getLogger("package.store.probe").info("Store probe url={} status={} headers={} body={}",url,reply.status(),reply.headers(),peek);
-  return reply.success();
+  return reply.success()?StoreProbePort.Result.listed():StoreProbePort.Result.delisted(org.jeecg.modules.packagemanagement.application.store.StoreDelistReason.http(reply.status(),reply.body()));
  };}
  @Bean public MailPort packageMailPort(PackageManagementProperties settings){return new SmtpMailAdapter(settings);}
  @Bean public PwaGateway packagePwaGateway(HttpPort http,PackageManagementProperties settings){return new NpmPwaAdapter(http,settings);}

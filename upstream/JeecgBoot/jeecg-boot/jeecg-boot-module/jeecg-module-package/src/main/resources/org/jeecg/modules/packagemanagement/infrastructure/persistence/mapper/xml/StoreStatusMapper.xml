@@ -16,6 +16,7 @@
         <result property="createDate"   column="create_date"/>
         <result property="successDate"   column="success_date"/>
         <result property="failDate"   column="fail_date"/>
+        <result property="failReason" column="fail_reason"/>
         <result property="successEmail"   column="success_email"/>
         <result property="failEmail"   column="fail_email"/>
     </resultMap>
@@ -32,6 +33,7 @@
                create_date,
                success_date,
                fail_date,
+               fail_reason,
                success_email,
                fail_email
         from pkg_store_status
@@ -89,6 +91,7 @@
                s.create_date,
                s.success_date,
                s.fail_date,
+               s.fail_reason,
                s.success_email,
                s.fail_email
         from pkg_store_status s
@@ -154,6 +157,7 @@
             status = #{status},
             success_date = NULL,
             fail_date = NULL,
+            fail_reason = NULL,
             apple_app_id = #{appleAppId},
             store_region = #{storeRegion},
             product_status = NULL
@@ -172,6 +176,7 @@
             <if test="storeUrl != null">store_url = #{storeUrl},</if>
             <if test="successDate != null">success_date = #{successDate},</if>
             <if test="failDate != null">fail_date = #{failDate},</if>
+            <if test="failReason != null">fail_reason = #{failReason},</if>
             <if test="successEmail != null">success_email = #{successEmail},</if>
             <if test="failEmail != null">fail_email = #{failEmail},</if>
         </trim>
@@ -190,6 +195,7 @@
             <if test="storeUrl != null">store_url = #{storeUrl},</if>
             <if test="successDate != null">success_date = #{successDate},</if>
             <if test="failDate != null">fail_date = #{failDate},</if>
+            <if test="failReason != null">fail_reason = #{failReason},</if>
             <if test="successEmail != null">success_email = #{successEmail},</if>
             <if test="failEmail != null">fail_email = #{failEmail},</if>
         </trim>

@@ -5,7 +5,9 @@ import org.jeecg.modules.packagemanagement.domain.app.AppManager;
 import org.jeecg.modules.packagemanagement.domain.store.StoreStatus;
 import org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.AppManagerMapper;
 import org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.StoreStatusMapper;
+import org.jeecg.modules.packagemanagement.application.port.StoreProbePort;
 import org.jeecg.modules.packagemanagement.application.store.IStoreStatusService;
+import org.jeecg.modules.packagemanagement.application.store.StoreDelistReason;
 import org.jeecg.modules.packagemanagement.application.store.StoreStatusQuery;
 
 
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class StoreStatusServiceImpl implements IStoreStatusService {
+    private record ProbeObservation(Boolean online, String reason) {}
     private static final Pattern ITUNES_RESULT_COUNT = Pattern.compile("\"resultCount\"\\s*:\\s*(\\d+)");
     /** Apple lookup returns resultCount 0 for the Java client identity. A browser identity returns the listing. */
     private static final Map<String, String> ITUNES_HEADERS = Map.of("User-Agent", "Mozilla/5.0");
@@ -143,10 +146,11 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
             for (StoreStatus s : filteredList) {
                 try {
                     String previousProduct = s.getProductStatus();
-                    Boolean isOnline = resolveOnline(s);
-                    if (isOnline == null) {
+                    ProbeObservation observed = resolveOnline(s);
+                    if (observed.online() == null) {
                         continue;
                     }
+                    boolean isOnline = observed.online();
                     boolean productChanged = s.getProductStatus() != null && !s.getProductStatus().equals(previousProduct);
                     if (s.getStatus() == 0 && isOnline) {
                         org.slf4j.LoggerFactory.getLogger(getClass()).info("Store transition package={} status=0->1", s.getPackageCode());
@@ -159,9 +163,11 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
                         }
                         sendTransitionEmail(stringBuffer.toString(), listingEmailSubject(s), s.getStoreUrl());
                     } else if (s.getStatus() == 1 && !isOnline) {
-                        org.slf4j.LoggerFactory.getLogger(getClass()).info("Store transition package={} status=1->2", s.getPackageCode());
+                        String reason = observed.reason() == null || observed.reason().isBlank() ? "商店页面未返回成功状态" : observed.reason();
+                        org.slf4j.LoggerFactory.getLogger(getClass()).info("Store transition package={} status=1->2 reason={}", s.getPackageCode(), reason);
                         s.setStatus(2);
                         s.setFailDate(DateUtils.getNowDate());
+                        s.setFailReason(reason);
                         storeStatusMapper.updateStoreStatusAndDate(s);
                         StringBuilder stringBuffer = new StringBuilder(settings.getStoreRecipients());
                         if (s.getFailEmail() != null && !s.getFailEmail().isEmpty()) {
@@ -196,22 +202,24 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
         return platform;
     }
 
-    private Boolean resolveOnline(StoreStatus storeStatus) {
+    private ProbeObservation resolveOnline(StoreStatus storeStatus) {
         String platform = storeStatus.getPlatform();
         if (platform == null || platform.isEmpty() || "android".equalsIgnoreCase(platform)) {
             try {
-                return probe.getStatus(storeStatus.getStoreUrl());
+                StoreProbePort.Result result = probe.getStatus(storeStatus.getStoreUrl());
+                if (result == null) return new ProbeObservation(null, null);
+                return new ProbeObservation(result.online(), result.online() ? null : result.reason());
             } catch (RuntimeException failure) {
                 org.slf4j.LoggerFactory.getLogger(getClass()).warn("Play store probe failed package={}", storeStatus.getPackageCode(), failure);
-                return null;
+                return new ProbeObservation(null, null);
             }
         }
         if ("ios".equalsIgnoreCase(platform)) {
             String appleAppId = storeStatus.getAppleAppId();
-            if (appleAppId == null || appleAppId.isBlank()) return null;
+            if (appleAppId == null || appleAppId.isBlank()) return new ProbeObservation(null, null);
             if (!appleAppId.matches("\\d+")) {
                 org.slf4j.LoggerFactory.getLogger(getClass()).warn("iOS store probe skipped, invalid apple app id package={} appleAppId={}", storeStatus.getPackageCode(), appleAppId);
-                return null;
+                return new ProbeObservation(null, null);
             }
             String region = storeStatus.getStoreRegion();
             if (region == null || region.isEmpty()) {
@@ -222,26 +230,26 @@ public class StoreStatusServiceImpl implements IStoreStatusService {
                 var reply = http.exchange("GET", lookupUrl, null, ITUNES_HEADERS);
                 if (!reply.success()) {
                     org.slf4j.LoggerFactory.getLogger(getClass()).warn("iOS store probe lookup failed package={} status={}", storeStatus.getPackageCode(), reply.status());
-                    return null;
+                    return new ProbeObservation(null, null);
                 }
                 Integer resultCount = parseResultCount(reply.body());
                 if (resultCount == null) {
                     org.slf4j.LoggerFactory.getLogger(getClass()).warn("iOS store probe lookup missing resultCount package={}", storeStatus.getPackageCode());
-                    return null;
+                    return new ProbeObservation(null, null);
                 }
                 if (resultCount >= 1) {
                     storeStatus.setProductStatus(preorder(reply.body()) ? "预购" : "已上架");
-                    return true;
+                    return new ProbeObservation(true, null);
                 }
                 storeStatus.setProductStatus(storeStatus.getStatus() != null && storeStatus.getStatus() == 1 ? "已下架" : "待上架");
-                return false;
+                return new ProbeObservation(false, StoreDelistReason.itunesMiss(region));
             } catch (RuntimeException failure) {
                 org.slf4j.LoggerFactory.getLogger(getClass()).warn("iOS store probe failed package={}", storeStatus.getPackageCode(), failure);
-                return null;
+                return new ProbeObservation(null, null);
             }
         }
         org.slf4j.LoggerFactory.getLogger(getClass()).warn("Store probe skipped, unknown platform package={} platform={}", storeStatus.getPackageCode(), platform);
-        return null;
+        return new ProbeObservation(null, null);
     }
 
     private static boolean preorder(String body) {

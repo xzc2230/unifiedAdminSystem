@@ -257,7 +257,7 @@ function displayValue(key:string,value:any) {
 }
 function displayDetail(value:any) { return prettyJson(value); }
 function dictRemark(key:string,value:any){return optionsFor(fieldsByKey[key]).find(o=>String(o.value)===String(value))?.remark || '';}
-const hoverFields:Record<string,string[]>={apps:['url','mark'],store:['storeUrl'],'request-logs':['reqPath','reqParams','errorMsg']};
+const hoverFields:Record<string,string[]>={apps:['url','mark'],store:['storeUrl','failReason'],'request-logs':['reqPath','reqParams','errorMsg']};
 function showHover(column:any, record:Record<string,any>, text:any) {
   return (hoverFields[definition.domain] || []).includes(column?.dataIndex) && hoverText(column, record, text) !== '';
 }

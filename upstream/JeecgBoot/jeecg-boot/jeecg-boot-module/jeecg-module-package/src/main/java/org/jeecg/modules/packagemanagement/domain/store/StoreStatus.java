@@ -68,6 +68,9 @@ public class StoreStatus extends PackageEntity {
 
     private String failEmail;
 
+    /** Why the latest probe changed an online package to 已下架. */
+    private String failReason;
+
 
     public Long getId() {
         return id;
@@ -216,6 +219,14 @@ public class StoreStatus extends PackageEntity {
 
     public void setFailEmail(String failEmail) {
         this.failEmail = failEmail;
+    }
+
+    public String getFailReason() {
+        return failReason;
+    }
+
+    public void setFailReason(String failReason) {
+        this.failReason = failReason;
     }
 
     @Override

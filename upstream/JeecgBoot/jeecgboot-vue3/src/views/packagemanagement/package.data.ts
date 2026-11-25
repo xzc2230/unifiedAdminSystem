@@ -33,7 +33,7 @@ export const definitions: Record<string,PackageDefinition> = {
     field('referrerBlacklistJson','InstallReferrer 黑名单模板（JSON）',{type:'textarea'}),field('userName','归属用户',{readonly:true}),field('updateDate','更新时间',{type:'datetime',readonly:true})]},
   store:{domain:'store',title:'上架状态',export:false,filters:['packageCode','status','appleAppId'],fields:[{...pkg,immutable:false},field('platform','平台',{readonly:true,options:[{value:'android',label:'安卓'},{value:'ios',label:'iOS'}]}),field('appleAppId','Apple ID',{readonly:true}),field('status','上架状态',{type:'number'}),
     field('successEmail','过审邮箱'),field('failEmail','下架邮箱'),field('storeUrl','市场链接',{readonly:true}),
-    field('successDate','过审日期',{readonly:true}),field('failDate','下架日期',{readonly:true})]},
+    field('successDate','过审日期',{readonly:true}),field('failDate','下架日期',{readonly:true}),field('failReason','下架原因',{readonly:true,type:'textarea'})]},
   statistics:{domain:'statistics',title:'应用统计',filters:['packageCode','subAreas'],fields:[pkg,status,field('url','主链接'),field('shunt','是否分流',{type:'switch'}),field('subAreas','隐藏地区',{type:'dict',dict:'app_area'}),field('subUrl','隐藏链接'),
     field('reigisterNum','注册总数',{readonly:true}),field('paymentNum','充值总数',{readonly:true}),field('paymentTotal','充值总额',{readonly:true})]},
   'event-configs':{domain:'event-configs',title:'事件配置',filters:['packageId'],fields:[field('appName','应用名称',{required:true}),field('packageId','包名',{required:true}),field('packageToken','FB token',{required:true}),field('packagePixel','FB pixel',{required:true}),field('url','落地页地址')]},

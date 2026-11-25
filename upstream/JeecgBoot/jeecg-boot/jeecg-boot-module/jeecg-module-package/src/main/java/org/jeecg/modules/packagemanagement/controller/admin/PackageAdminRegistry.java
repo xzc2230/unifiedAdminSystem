@@ -39,7 +39,7 @@ public final class PackageAdminRegistry {
         resources.put("store",new ManagedResource<>("pkg_store_status",StoreStatus.class,StoreStatus::getId,
                 store::selectStoreStatusList,store::selectStoreStatusById,store::insertStoreStatus,store::updateStoreStatus,
                 store::deleteStoreStatusByIds,(r,a)->{},List.of("packageCode","storeUrl","status","successEmail","failEmail"),
-                cols("packageCode","包名","platform","平台","storeUrl","商店地址","status","状态","successDate","成功时间","failDate","失败时间"),access,tx));
+                cols("packageCode","包名","platform","平台","storeUrl","商店地址","status","状态","successDate","成功时间","failDate","失败时间","failReason","下架原因"),access,tx));
         resources.put("statistics",new ManagedResource<>("pkg_app_statistics",AppStatistics.class,AppStatistics::getId,
                 statistics::selectAppStatisticsList,statistics::selectAppStatisticsById,statistics::insertAppStatistics,
                 statistics::updateAppStatistics,statistics::deleteAppStatisticsByIds,
