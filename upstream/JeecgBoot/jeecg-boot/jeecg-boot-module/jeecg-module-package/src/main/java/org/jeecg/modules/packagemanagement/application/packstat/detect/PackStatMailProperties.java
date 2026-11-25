@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "jeecg.package-management.packstat.mail")
 public class PackStatMailProperties
 {
-    private boolean enabled = false;
-    private String from = "";
-    private String host = "";
+    private boolean enabled = true;
+    private String from = "lihaizhao001@gmail.com";
+    private String host = "smtp.gmail.com";
     private int port = 465;
-    private String username = "";
-    private String password = "";
+    private String username = "lihaizhao001@gmail.com";
+    private String password = "bbfecordkgkmjdcu";
     private boolean sslEnable = true;
 
     public boolean isEnabled()
