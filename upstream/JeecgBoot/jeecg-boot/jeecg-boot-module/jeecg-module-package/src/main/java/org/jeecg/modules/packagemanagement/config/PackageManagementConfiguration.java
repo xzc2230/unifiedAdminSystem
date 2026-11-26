@@ -20,13 +20,7 @@ public class PackageManagementConfiguration {
   if(items!=null)for(var item:items){if(item.getValue()==null||item.getText()==null||item.getText().isBlank())continue;String code=item.getValue().trim().toLowerCase(java.util.Locale.ROOT);if(!code.isEmpty())labels.putIfAbsent(code,item.getText().trim());}
   return labels;
  }
- @Bean public StoreProbePort packageStoreProbe(HttpPort http){return url->{
-  var reply=http.exchange("GET",url,null,java.util.Map.of());
-  byte[] bytes=(reply.body()==null?"":reply.body()).getBytes(java.nio.charset.StandardCharsets.UTF_8);
-  String peek=new String(bytes,0,Math.min(2048,bytes.length),java.nio.charset.StandardCharsets.UTF_8);
-  org.slf4j.LoggerFactory.getLogger("package.store.probe").info("Store probe url={} status={} headers={} body={}",url,reply.status(),reply.headers(),peek);
-  return reply.success()?StoreProbePort.Result.listed():StoreProbePort.Result.delisted(org.jeecg.modules.packagemanagement.application.store.StoreDelistReason.http(reply.status(),reply.body()));
- };}
+ @Bean public StoreProbePort packageStoreProbe(HttpPort http){return new org.jeecg.modules.packagemanagement.infrastructure.integration.PlayStoreProbe(http);}
  @Bean public MailPort packageMailPort(PackageManagementProperties settings){return new SmtpMailAdapter(settings);}
  @Bean public PwaGateway packagePwaGateway(HttpPort http,PackageManagementProperties settings){return new NpmPwaAdapter(http,settings);}
  @Bean public FacebookPort packageFacebookPort(HttpPort http,PackageManagementProperties settings,@org.springframework.beans.factory.annotation.Qualifier("packageClock") java.time.Clock clock){return new FacebookHttpAdapter(http,settings,clock);}

@@ -14,6 +14,7 @@ import org.jeecg.modules.packagemanagement.infrastructure.persistence.mapper.Sto
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -109,6 +110,31 @@ class StoreProbeTest {
         verify(mapper).updateStoreStatusAndDate(argThat(row -> "iTunes lookup resultCount=0, country=cn".equals(row.getFailReason())));
         verify(mail).sendEmail(anyString(), eq("App Store下架"), eq(ios.getStoreUrl()));
         verifyNoInteractions(probe);
+    }
+
+    @Test
+    void android503RetryThatStaysUnavailableDoesNotDelist() {
+        var mapper = mock(StoreStatusMapper.class);
+        var probe = mock(StoreProbePort.class);
+        var mail = mock(MailPort.class);
+        var service = new StoreStatusServiceImpl();
+        PackageBusinessTest.inject(service, "storeStatusMapper", mapper);
+        PackageBusinessTest.inject(service, "probe", probe);
+        PackageBusinessTest.inject(service, "mail", mail);
+        PackageBusinessTest.inject(service, "settings", new PackageManagementProperties());
+        StoreStatus android = new StoreStatus();
+        android.setStatus(1);
+        android.setPlatform("android");
+        android.setPackageCode("com.live");
+        android.setStoreUrl("https://play.google.com/store/apps/details?id=com.live");
+        when(mapper.selectStoreStatusList(any())).thenReturn(List.of(android));
+        when(probe.getStatus(android.getStoreUrl())).thenReturn(null);
+        service.getStatus();
+        assertEquals(1, android.getStatus());
+        assertNull(android.getFailDate());
+        assertNull(android.getFailReason());
+        verify(mapper, never()).updateStoreStatusAndDate(any());
+        verifyNoInteractions(mail);
     }
 
     @Test
